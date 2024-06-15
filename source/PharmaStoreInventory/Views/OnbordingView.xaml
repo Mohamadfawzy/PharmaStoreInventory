@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PharmaStoreInventory.Views.OnbordingView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
+    Title="OnbordingView"
+    NavigationPage.HasNavigationBar="False">
+    <Grid RowDefinitions="*,1.1*" BackgroundColor="Red">
+        <Image
+            x:Name="OnBordimage"
+            Aspect="AspectFill"
+            Source="onbord2.jpg" />
+
+        <Border
+            Grid.Row="1"
+            Margin="0,-40,0,0"
+            StrokeShape="RoundRectangle 40 40 0 0 "
+            StrokeThickness="0"
+            Background="{AppThemeBinding Light={StaticResource White},
+                                         Dark={StaticResource Black}}">
+            <ScrollView>
+                <StackLayout>
+
+                    <!--  Welcom text  -->
+                    <Label
+                        Text="مرحبًا بك في تطبيق  e-stock  لجرد الصيدلية"
+                        HorizontalTextAlignment="Center"
+                        FontSize="30"
+                        HorizontalOptions="Center"
+                        FontFamily="{StaticResource KufiSemiBold}"
+                        TextColor="{StaticResource PrimaryDarkColor}" />
+
+                    <!--  Indicator  -->
+                    <IndicatorView
+                        x:Name="indicatorView"
+                        Margin="0,20"
+                        VerticalOptions="Start"
+                        IndicatorColor="{StaticResource BackgroundDarkColor}"
+                        SelectedIndicatorColor="{StaticResource PrimaryColor}"
+                        HorizontalOptions="Center" />
+
+                    <!--  Carousel  -->
+                    <CarouselView
+                        x:Name="OnboardingTextCV"
+                        Margin="0,0,0,100"
+                        VerticalOptions="FillAndExpand"
+                        IsSwipeEnabled="True"
+                        Loop="True"
+                        IndicatorView="indicatorView"
+                        PositionChanged="OnboardingTextCV_PositionChanged">
+                        <CarouselView.ItemTemplate>
+                            <DataTemplate>
+                                <Label
+                                    x:Name="OnboardingText2"
+                                    Padding="20,0"
+                                    VerticalOptions="Center"
+                                    Text="{Binding .}"
+                                    FontSize="{StaticResource Small}"
+                                    HorizontalOptions="Center"
+                                    FontFamily="{StaticResource KufiRegular}"
+                                    HorizontalTextAlignment="Center"
+                                    TextColor="{StaticResource PrimaryDarkColor}" />
+
+                            </DataTemplate>
+                        </CarouselView.ItemTemplate>
+                    </CarouselView>
+
+                    <!--  Login Actions Layout  -->
+                    <StackLayout
+                        x:Name="LoginActionsLayout"
+                        VerticalOptions="CenterAndExpand"
+                        IsVisible="False"
+                        Spacing="10">
+                        <Button
+                            Margin="30,0"
+                            Text="Login"
+                            VerticalOptions="Center"
+                            Clicked="GoToLogin" />
+                        <Button
+                            Margin="30,0"
+                            Text="Create Account"
+                            VerticalOptions="Center"
+                            Clicked="GoToRegister" />
+                    </StackLayout>
+
+                </StackLayout>
+            </ScrollView>
+        </Border>
+
+        <!--  Arrow for Next  -->
+        <Button
+            x:Name="ArrowNext"
+            Grid.Row="1"
+            Margin="0,40"
+            ImageSource="{StaticResource ArrowNextIconImageSource}"
+            VerticalOptions="EndAndExpand"
+            Clicked="Button_Clicked"
+            CornerRadius="25"
+            WidthRequest="50"
+            HeightRequest="50"
+            BackgroundColor="{AppThemeBinding Light={StaticResource Primary},
+                                              Dark={StaticResource Primary}}" />
+    </Grid>
+</ContentPage>

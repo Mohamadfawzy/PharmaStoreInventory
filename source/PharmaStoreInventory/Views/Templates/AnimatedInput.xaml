@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="PharmaStoreInventory.Views.Templates.AnimatedInput"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="ThisPage">
+    <Grid
+        x:Name="container"
+        Padding="0,0,0,15"
+        FlowDirection="RightToLeft"
+        RowDefinitions="*,Auto"
+        BindingContext="{x:Reference ThisPage}">
+        <Border
+            x:Name="border"
+            Stroke="{Binding UnFocusColor}"
+            StrokeThickness="1"
+            StrokeShape="RoundRectangle 10"
+            HorizontalOptions="Fill"
+            VerticalOptions="Center"
+            HeightRequest="{Binding borderHeight}">
+            <Entry
+                x:Name="entry"
+                Margin="10,0"
+                TextChanged="entry_TextChanged"
+                VerticalTextAlignment="Center"
+                VerticalOptions="Center"
+                TextColor="Black"
+                Text="{Binding InputText}"
+                Focused="Entry_Focused"
+                Unfocused="Entry_Unfocused" />
+        </Border>
+
+        <Label
+            x:Name="label"
+            Margin="20,0"
+            Text="{Binding InputPlaceholder}"
+            TextColor="{Binding UnFocusColor}"
+            BackgroundColor="{Binding InputBackgroundColor}"
+            HorizontalOptions="Start"
+            VerticalOptions="Center"
+            VerticalTextAlignment="Center"
+            FontFamily="{StaticResource KufiRegular}"
+            FontSize="{StaticResource Body}" />
+
+        <Label
+            Grid.Row="1"
+            Margin="10,10"
+            TextColor="{StaticResource ErrorColor}"
+            HorizontalOptions="Start"
+            VerticalOptions="End"
+            FontFamily="{StaticResource KufiRegular}"
+            FontSize="{StaticResource Small}"
+            IsVisible="{Binding InvalidInput}"
+            Text="اكتب هنا رسالة توضح الخطأ" />
+
+    </Grid>
+</ContentView>

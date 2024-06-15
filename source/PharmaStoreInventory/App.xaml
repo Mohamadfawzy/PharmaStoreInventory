@@ -1,10 +1,36 @@
-﻿<?xml version = "1.0" encoding = "UTF-8" ?>
-<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:PharmaStoreInventory"
-             x:Class="PharmaStoreInventory.App">
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Application
+    x:Class="PharmaStoreInventory.App"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:PharmaStoreInventory"
+    xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers">
     <Application.Resources>
         <ResourceDictionary>
+            <!--  Fonts  -->
+            <x:String x:Key="IconFont">IconFontMaterial</x:String>
+
+            <x:String x:Key="KufiExtraLight">KufiExtraLight</x:String>
+            <x:String x:Key="KufiRegular">KufiRegular</x:String>
+            <x:String x:Key="KufiSemiBold">KufiSemiBold</x:String>
+
+            <x:Double x:Key="Header">34</x:Double>
+            <x:Double x:Key="Title">20</x:Double>
+            <x:Double x:Key="SubTitle">16</x:Double>
+            <x:Double x:Key="Body">14</x:Double>
+            <x:Double x:Key="Small">12</x:Double>
+            <x:Double x:Key="VerySmall">9</x:Double>
+
+
+            <FontImageSource
+                x:Key="ArrowNextIconImageSource"
+                FontAutoScalingEnabled="True"
+                FontFamily="{StaticResource IconFont}"
+                Size="22"
+                Glyph="{x:Static icon:IconFont.ChevronDoubleRight}"
+                Color="{AppThemeBinding Light=White,
+                                        Dark=White}" />
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />

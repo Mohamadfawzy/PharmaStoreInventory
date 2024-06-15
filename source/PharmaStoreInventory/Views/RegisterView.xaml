@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PharmaStoreInventory.Views.RegisterView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates"
+    xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
+    x:Name="ThisPage"
+    Title="RegisterView"
+    BackgroundColor="White"
+    NavigationPage.HasNavigationBar="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="template:AnimatedInput">
+                <Setter Property="UnFocusColor" Value="{StaticResource GreyColor}" />
+                <Setter Property="FocusColor" Value="{StaticResource PrimaryDarkColor}" />
+                <Setter Property="InputBackgroundColor" Value="{StaticResource whiteColor}" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.BindingContext>
+        <vm:RegisterViewModel />
+    </ContentPage.BindingContext>
+    <VerticalStackLayout
+        Margin="0"
+        Padding="0"
+        Spacing="0">
+        <Border
+            Margin="0,0,0,30"
+            StrokeThickness="0"
+            BackgroundColor="{StaticResource PrimaryDarkColor}"
+            StrokeShape="RoundRectangle 0 0 30 30"
+            HeightRequest="150">
+            <Label
+                FontSize="20"
+                TextColor="{StaticResource whiteColor}"
+                Text="Register"
+                VerticalOptions="Center"
+                HorizontalOptions="Center" />
+        </Border>
+
+        <!--  Content  -->
+        <StackLayout x:Name="InputsContainer" Padding="20">
+            <template:AnimatedInput
+                x:Name="fullName"
+                InputPlaceholder="الاسم كاملاً"
+                InputText="{Binding Name}" />
+
+            <template:AnimatedInput
+                x:Name="PName"
+                InputPlaceholder="اسم الصيدلية"
+                InvalidInput="False"
+                InvalidMessage="ادخل اسم الصيدلية صحيح" />
+
+            <Button
+                Margin="0,30"
+                Text="unfuc"
+                Clicked="Button_Clicked" />
+
+            <Button
+                Margin="0,30"
+                Text="unfuc"
+                Command="{Binding GetNameCommand}" />
+        </StackLayout>
+    </VerticalStackLayout>
+</ContentPage>

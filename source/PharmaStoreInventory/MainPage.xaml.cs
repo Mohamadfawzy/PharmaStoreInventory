@@ -1,8 +1,9 @@
-﻿namespace PharmaStoreInventory
+﻿using PharmaStoreInventory.Views;
+
+namespace PharmaStoreInventory
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
 
         public MainPage()
         {
@@ -11,15 +12,24 @@
 
         private void OnCounterClicked(object sender, EventArgs e)
         {
-            count++;
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
-
-            SemanticScreenReader.Announce(CounterBtn.Text);
         }
+        
+        private void GoToOnbording1(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new OnbordingView());
+        }
+        
+        private void GoToLogin(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new LoginView());
+        }
+        
+        private void GoToRegister(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new RegisterView());
+        }
+
     }
 
 }

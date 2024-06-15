@@ -1,6 +1,8 @@
 ﻿using Android.App;
 using Android.Content.PM;
+using Android.Content.Res;
 using Android.OS;
+using Java.Util.Logging;
 
 namespace PharmaStoreInventory
 {

@@ -5,12 +5,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:PharmaStoreInventory"
     xmlns:views="clr-namespace:PharmaStoreInventory.Views"
-    Shell.FlyoutBehavior="Disabled"
-    Title="PharmaStoreInventory">
+    Title="PharmaStoreInventory"
+    Shell.FlyoutBehavior="Disabled">
 
     <ShellContent
         Title="Home"
-        ContentTemplate="{DataTemplate views:StockDetails}"
+        ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
 
 </Shell>
