@@ -1,11 +1,9 @@
-﻿namespace PharmaStoreInventory
+﻿namespace PharmaStoreInventory;
+public partial class App : Application
 {
-    public partial class App : Application
+    public App()
     {
-        public App()
-        {
-            InitializeComponent();
-            MainPage = new NavigationPage(new MainPage());
-        }
+        InitializeComponent();
+        MainPage = new NavigationPage(new MainPage());
     }
 }

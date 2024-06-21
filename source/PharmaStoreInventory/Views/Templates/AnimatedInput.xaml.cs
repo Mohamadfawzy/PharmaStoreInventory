@@ -1,13 +1,27 @@
 namespace PharmaStoreInventory.Views.Templates;
 using CommunityToolkit.Maui.Core.Platform;
 using Microsoft.Maui.Controls;
+using PharmaStoreInventory.Validations;
 using System.Xml.Linq;
 
 public partial class AnimatedInput : ContentView
 {
-    private uint length = 250;
+    public double BorderHeight => 50.0;
+
+    public enum KeyboardEnum
+    {
+        Default,
+        Text,
+        Chat,
+        Url,
+        Email,
+        Telephone,
+        Numeric,
+    }
+    private double height = 25.0;
     private Easing easing = Easing.SinInOut;
-    public double borderHeight => 50.0;
+
+    #region BindableProperty
 
     public static readonly BindableProperty UnFocusColorProperty =
         BindableProperty.Create(
@@ -37,19 +51,21 @@ public partial class AnimatedInput : ContentView
         typeof(AnimatedInput),
         null, BindingMode.TwoWay);
 
-    public static readonly BindableProperty InvalidInputProperty =
-    BindableProperty.Create(
-        nameof(InvalidInput),
+    public static readonly BindableProperty IsErrorProperty =
+        BindableProperty.Create(
+        nameof(IsError),
         typeof(bool),
         typeof(AnimatedInput),
-        false, BindingMode.OneWay);
+        false,
+        BindingMode.TwoWay,
+        propertyChanged: OnIsErrorChanged);
 
-    public static readonly BindableProperty InvalidMessageProperty =
+    public static readonly BindableProperty ErrorMessageProperty =
         BindableProperty.Create(
-        nameof(InvalidMessage),
+        nameof(ErrorMessage),
         typeof(string),
         typeof(AnimatedInput),
-        null, BindingMode.TwoWay);
+        string.Empty, BindingMode.TwoWay);
 
     public static readonly BindableProperty TranslateDurationProperty =
     BindableProperty.Create(
@@ -65,6 +81,26 @@ public partial class AnimatedInput : ContentView
         typeof(AnimatedInput),
         default, BindingMode.TwoWay);
 
+    public static readonly BindableProperty IsPasswordProperty =
+        BindableProperty.Create(
+        nameof(IsPassword),
+        typeof(bool),
+        typeof(AnimatedInput),
+        false, BindingMode.TwoWay);
+
+    public static readonly BindableProperty HasEyeIconProperty =
+        BindableProperty.Create(
+        nameof(HasEyeIcon),
+        typeof(bool),
+        typeof(AnimatedInput),
+        false, BindingMode.TwoWay);
+
+    public static BindableProperty KeyboardProperty =
+        BindableProperty.Create(
+            nameof(EntryKeyboard),
+            typeof(KeyboardEnum),
+            typeof(AnimatedInput),
+            KeyboardEnum.Default, BindingMode.TwoWay);
 
     public Color UnFocusColor
     {
@@ -90,16 +126,16 @@ public partial class AnimatedInput : ContentView
         set => SetValue(InputTextProperty, value);
     }
 
-    public bool InvalidInput
+    public bool IsError
     {
-        get => (bool)GetValue(InvalidInputProperty);
-        set => SetValue(InvalidInputProperty, value);
+        get => (bool)GetValue(IsErrorProperty);
+        set => SetValue(IsErrorProperty, value);
     }
 
-    public string InvalidMessage
+    public string ErrorMessage
     {
-        get => (string)GetValue(InvalidMessageProperty);
-        set => SetValue(InvalidMessageProperty, value);
+        get => (string)GetValue(ErrorMessageProperty);
+        set => SetValue(ErrorMessageProperty, value);
     }
 
     public int TranslateDuration
@@ -114,11 +150,56 @@ public partial class AnimatedInput : ContentView
         set => SetValue(InputPlaceholderProperty, value);
     }
 
+    public bool IsPassword
+    {
+        get => (bool)GetValue(IsPasswordProperty);
+        set => SetValue(IsPasswordProperty, value);
+    }
+
+    public bool HasEyeIcon
+    {
+        get => (bool)GetValue(HasEyeIconProperty);
+        set => SetValue(HasEyeIconProperty, value);
+    }
+
+    public KeyboardEnum EntryKeyboard
+    {
+        get => (KeyboardEnum)GetValue(KeyboardProperty);
+        set
+        {
+            SetValue(KeyboardProperty, value);
+            SetKeyboard();
+        }
+    }
+    #endregion
+
+    private static void OnIsErrorChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var control = (AnimatedInput)bindable;
+        var isError = (bool)newValue;
+        control.UpdateErrorState(isError);
+    }
+
+    private void UpdateErrorState(bool isError)
+    {
+        if (isError)
+        {
+            if (!error.IsVisible)
+            {
+                error.IsVisible = true;
+                AnimateErrorMessage(0, height, 0, 1); // Adjust the height as needed
+            }
+        }
+        else
+        {
+            AnimateErrorMessage(height, 0, 1, 0); // Adjust the height as needed
+        }
+    }
+
     // CONSTRUCTOR
     public AnimatedInput()
     {
         InitializeComponent();
-
     }
 
     protected override void OnParentSet()
@@ -136,43 +217,98 @@ public partial class AnimatedInput : ContentView
         }
         return true;
     }
+
     public bool EntryIsFocused() => entry.IsFocused;
+
     private async void Entry_Focused(object sender, FocusEventArgs e)
     {
         SetFocusColors();
-        //InvalidInput = false;
-        await AnimateLabel(CalculateTranslationX(), CalculateTranslationY(), 0.8);
+        await AnimatePlaceholder(CalculateTranslationX(), CalculateTranslationY(), 0.8);
     }
 
     private async void Entry_Unfocused(object sender, FocusEventArgs e)
     {
         if (string.IsNullOrEmpty(entry.Text))
         {
-            await AnimateLabel();
+            await AnimatePlaceholder();
             SetUnFocusColors();
+        }
+        Validation();
+    }
+
+    private void Validation()
+    {
+        if (EntryKeyboard == KeyboardEnum.Email)
+        {
+            if (!Validator.IsValidEmail(InputText))
+                IsError = true;
+        }
+        if (EntryKeyboard == KeyboardEnum.Telephone)
+        {
+            if (!Validator.IsValidTelephone(InputText))
+                IsError = true;
         }
     }
 
-    private async Task AnimateLabel(double translationX = 0, double translationY = 0, double scale = 1)
+    private async void AnimateErrorMessage(double startHeight, double endHeight, double startOpacity, double endOpacity)
     {
-        var scaleTask = label.ScaleTo(scale, (uint)TranslateDuration, easing);
-        var translateTask = label.TranslateTo(translationX, translationY, (uint)TranslateDuration, easing);
+        try
+        {
+            await Task.Run(() =>
+            {
+                new Animation
+                {
+                    { 0, 1, new Animation (v => error.HeightRequest = v,startHeight, endHeight) },
+                    { 0, 1, new Animation (v => error.Opacity = v, startOpacity ,endOpacity )}
+                }.Commit(this, "InvalidMessage", 16, 500, easing: easing, (v, c) =>
+                {
+                    if (endOpacity == 0)
+                        error.IsVisible = false;
+                });
+            });
+        }
+        catch (Exception ex)
+        {
+            error.IsVisible = false;
+            Helpers.CatchingException.PharmaDisplayAlert(ex.Message);
+        }
+    }
+
+    private void TogglePasswordVisibility(object sender, TappedEventArgs e)
+    {
+        IsPassword = !IsPassword;
+
+        if (IsPassword)
+        {
+            eyeIcon.Text = DrasatHealthMobile.Helpers.IconFont.EyeOutline; // Set to eye icon
+        }
+        else
+        {
+            eyeIcon.Text = DrasatHealthMobile.Helpers.IconFont.EyeOffOutline; // Set to eye-off icon
+        }
+    }
+
+    private async Task AnimatePlaceholder(double translationX = 0, double translationY = 0, double scale = 1)
+    {
+        var scaleTask = placeholder.ScaleTo(scale, (uint)TranslateDuration, easing);
+        var translateTask = placeholder.TranslateTo(translationX, translationY, (uint)TranslateDuration, easing);
         await Task.WhenAll(scaleTask, translateTask);
     }
 
     private async void PositioningOfPlaceHolder()
     {
-        await Task.Run(async () =>
+        if (!string.IsNullOrEmpty(InputText)) // InputText is have value
         {
             await Task.Delay(300);
-            if (!string.IsNullOrEmpty(InputText))
+
+            await Task.Run(() =>
             {
                 SetFocusColors();
-                label.Scale = 0.8;
-                label.TranslationX = CalculateTranslationX();
-                label.TranslationY = CalculateTranslationY();
-            }
-        });
+                placeholder.Scale = 0.8;
+                placeholder.TranslationX = CalculateTranslationX();
+                placeholder.TranslationY = CalculateTranslationY();
+            });
+        }
     }
 
     private double CalculateTranslationX()
@@ -182,23 +318,56 @@ public partial class AnimatedInput : ContentView
 
     private double CalculateTranslationY()
     {
-        return borderHeight / -2;
+        return BorderHeight / -2;
     }
 
     private void SetFocusColors()
     {
         border.Stroke = FocusColor;
-        label.TextColor = FocusColor;
+        placeholder.TextColor = FocusColor;
     }
 
     private void SetUnFocusColors()
     {
-        label.TextColor = UnFocusColor;
+        placeholder.TextColor = UnFocusColor;
         border.Stroke = UnFocusColor;
     }
 
-    private void entry_TextChanged(object sender, TextChangedEventArgs e)
+    private void InputTextChanged(object sender, TextChangedEventArgs e)
     {
-        if (InvalidInput) InvalidInput = false;
+        if (IsError) IsError = false;
+        //PositioningOfPlaceHolder();
+    }
+
+    private void SetKeyboard()
+    {
+        switch (EntryKeyboard)
+        {
+
+            case KeyboardEnum.Default:
+                entry.Keyboard = Keyboard.Default;
+                break;
+            case KeyboardEnum.Text:
+                entry.Keyboard = Keyboard.Text;
+                break;
+            case KeyboardEnum.Chat:
+                entry.Keyboard = Keyboard.Chat;
+                break;
+            case KeyboardEnum.Url:
+                entry.Keyboard = Keyboard.Url;
+                break;
+            case KeyboardEnum.Email:
+                entry.Keyboard = Keyboard.Email;
+                break;
+            case KeyboardEnum.Telephone:
+                entry.Keyboard = Keyboard.Telephone;
+                break;
+            case KeyboardEnum.Numeric:
+                entry.Keyboard = Keyboard.Numeric;
+                break;
+            default:
+                entry.Keyboard = Keyboard.Default;
+                break;
+        }
     }
 }

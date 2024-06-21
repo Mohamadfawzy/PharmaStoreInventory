@@ -3,6 +3,7 @@
     x:Class="PharmaStoreInventory.Views.Templates.AnimatedInput"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
     x:Name="ThisPage">
     <Grid
         x:Name="container"
@@ -10,6 +11,22 @@
         FlowDirection="RightToLeft"
         RowDefinitions="*,Auto"
         BindingContext="{x:Reference ThisPage}">
+
+        <!--  InvalidMessage  -->
+        <Label
+            x:Name="error"
+            Grid.Row="1"
+            Margin="10,0"
+            TextColor="{StaticResource ErrorColor}"
+            HorizontalOptions="Start"
+            VerticalOptions="End"
+            Opacity="0"
+            HeightRequest="0"
+            FontFamily="{StaticResource KufiRegular}"
+            FontSize="{StaticResource Small}"
+            IsVisible="False"
+            Text="{Binding ErrorMessage}" />
+
         <Border
             x:Name="border"
             Stroke="{Binding UnFocusColor}"
@@ -17,21 +34,39 @@
             StrokeShape="RoundRectangle 10"
             HorizontalOptions="Fill"
             VerticalOptions="Center"
-            HeightRequest="{Binding borderHeight}">
-            <Entry
-                x:Name="entry"
-                Margin="10,0"
-                TextChanged="entry_TextChanged"
-                VerticalTextAlignment="Center"
-                VerticalOptions="Center"
-                TextColor="Black"
-                Text="{Binding InputText}"
-                Focused="Entry_Focused"
-                Unfocused="Entry_Unfocused" />
-        </Border>
+            BackgroundColor="{Binding InputBackgroundColor}"
+            HeightRequest="{Binding BorderHeight}">
+            <StackLayout Orientation="Horizontal">
+                <Entry
+                    x:Name="entry"
+                    Margin="10,0"
+                    HorizontalOptions="FillAndExpand"
+                    TextChanged="InputTextChanged"
+                    VerticalTextAlignment="Center"
+                    VerticalOptions="Center"
+                    TextColor="Black"
+                    Text="{Binding InputText}"
+                    IsPassword="{Binding IsPassword}"
+                    Focused="Entry_Focused"
+                    Unfocused="Entry_Unfocused" />
+                <!--  Eye Icon  -->
+                <Label
+                    x:Name="eyeIcon"
+                    Padding="20,0"
+                    IsVisible="{Binding HasEyeIcon}"
+                    FontFamily="{StaticResource IconFont}"
+                    Text="{x:Static icon:IconFont.EyeOutline}"
+                    VerticalOptions="Center">
 
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TogglePasswordVisibility" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </StackLayout>
+        </Border>
+        <!--  Placeholder Label  -->
         <Label
-            x:Name="label"
+            x:Name="placeholder"
             Margin="20,0"
             Text="{Binding InputPlaceholder}"
             TextColor="{Binding UnFocusColor}"
@@ -42,16 +77,6 @@
             FontFamily="{StaticResource KufiRegular}"
             FontSize="{StaticResource Body}" />
 
-        <Label
-            Grid.Row="1"
-            Margin="10,10"
-            TextColor="{StaticResource ErrorColor}"
-            HorizontalOptions="Start"
-            VerticalOptions="End"
-            FontFamily="{StaticResource KufiRegular}"
-            FontSize="{StaticResource Small}"
-            IsVisible="{Binding InvalidInput}"
-            Text="اكتب هنا رسالة توضح الخطأ" />
 
     </Grid>
 </ContentView>

@@ -1,12 +1,100 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PharmaStoreInventory.Views.LoginView"
-             Title="LoginView">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+<ContentPage
+    x:Class="PharmaStoreInventory.Views.LoginView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates"
+    xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Name="ThisPage"
+    Title="LoginView"
+    BackgroundColor="White"
+    FlowDirection="RightToLeft"
+    NavigationPage.HasNavigationBar="False">
+    <!--  20.6.2024 9:08PM  -->
+
+    <ContentPage.BindingContext>
+        <vm:RegisterViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <StackLayout
+            Margin="0"
+            Padding="0,0,0,50"
+            Spacing="0">
+
+            <!--  Login Title  -->
+            <Border
+                Margin="0,0,0,30"
+                StrokeThickness="0"
+                BackgroundColor="{StaticResource PrimaryDarkColor}"
+                StrokeShape="RoundRectangle 0 0 30 30"
+                HeightRequest="150">
+                <Label
+                    FontSize="20"
+                    TextColor="{StaticResource whiteColor}"
+                    Text="تسجيل دخول"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center" />
+            </Border>
+
+            <!--  Inputs  -->
+            <VerticalStackLayout x:Name="inputsContainer" Padding="20,0">
+                <template:AnimatedInput
+                    x:Name="Email"
+                    EntryKeyboard="Email"
+                    ErrorMessage="أدخر الايميل بشكل صحيح"
+                    InputPlaceholder="البريد الالكتروني" />
+
+                <template:AnimatedInput
+                    x:Name="password"
+                    IsPassword="True"
+                    HasEyeIcon="True"
+                    InputPlaceholder="الرقم السري" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Padding="20,0">
+                <!--  submit Create Aount  -->
+                <Button
+                    Margin="0,30,0,0"
+                    Text="سجل دخول"
+                    Command="{Binding GetNameCommand}" />
+
+                <!--  Have Acount? sign in  -->
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <!--  label  -->
+                    <Label Text="هل لديك حساب؟" VerticalOptions="Center" />
+                    <!--  login button  -->
+                    <Button Style="{StaticResource Anchor}" Text="إنشاء حساب">
+                        <Button.Behaviors>
+                            <toolkit:TouchBehavior
+                                DefaultAnimationDuration="250"
+                                DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+                                PressedOpacity="0.6"
+                                PressedScale="0.8" />
+                        </Button.Behaviors>
+                    </Button>
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+
+            <VerticalStackLayout VerticalOptions="EndAndExpand">
+                <Label
+                    Text="اتصل بنا"
+                    TextColor="{StaticResource PrimaryColor}"
+                    HorizontalOptions="Center" />
+                <Label
+                    Text="الاصدار 1.0"
+                    VerticalOptions="EndAndExpand"
+                    FontSize="{StaticResource VerySmall}"
+                    TextColor="{StaticResource AccentDarkColor}"
+                    HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+            </StackLayout.GestureRecognizers>
+        </StackLayout>
+    </ScrollView>
+
 </ContentPage>
