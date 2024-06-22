@@ -4,22 +4,37 @@
 
     <!--  Note: For Android please see also Platforms\Android\Resources\values\colors.xml  -->
 
+    <!--  Fonts  -->
+    <x:String x:Key="IconFont">IconFontMaterial</x:String>
+
+    <x:String x:Key="KufiExtraLight">KufiExtraLight</x:String>
+    <x:String x:Key="KufiRegular">KufiRegular</x:String>
+    <x:String x:Key="KufiSemiBold">KufiSemiBold</x:String>
+
+    <x:Double x:Key="Header">34</x:Double>
+    <x:Double x:Key="Title">20</x:Double>
+    <x:Double x:Key="SubTitle">16</x:Double>
+    <x:Double x:Key="Body">14</x:Double>
+    <x:Double x:Key="Small">12</x:Double>
+    <x:Double x:Key="VerySmall">9</x:Double>
+
+
     <!--  Primary Colors  -->
-    <Color x:Key="PrimaryColor">#0056A9</Color>
-    <Color x:Key="PrimaryLightColor">#007BFF</Color>
-    <Color x:Key="PrimaryDarkColor">#004085</Color>
+    <Color x:Key="Primary">#0069cb</Color>
+    <Color x:Key="PrimaryLight">#0a88ed</Color>
+    <Color x:Key="PrimaryDark">#0056a9</Color>
 
     <!--  Secondary Colors  -->
-    <Color x:Key="SecondaryColor">#FF9800</Color>
-    <Color x:Key="SecondaryLightColor">#FFC947</Color>
-    <Color x:Key="SecondaryDarkColor">#C66900</Color>
+    <Color x:Key="Secondary">#FF9800</Color>
+    <Color x:Key="SecondaryLight">#FFC947</Color>
+    <Color x:Key="SecondaryDark">#C66900</Color>
 
     <!--  Neutral Colors  -->
-    <Color x:Key="whiteColor">#FFFFFF</Color>
-    <Color x:Key="LightGreyColor">#F5F5F5</Color>
-    <Color x:Key="GreyColor">#9E9E9E</Color>
-    <Color x:Key="DarkGreyColor">#424242</Color>
-    <Color x:Key="BlackColor">#000000</Color>
+    <Color x:Key="White">#FFFFFF</Color>
+    <Color x:Key="LightGrey">#F5F5F5</Color>
+    <Color x:Key="Grey">#9E9E9E</Color>
+    <Color x:Key="DarkGrey">#424242</Color>
+    <Color x:Key="Black">#000000</Color>
 
     <!--  Accent Colors  -->
     <Color x:Key="AccentColor">#FFC107</Color>
@@ -32,9 +47,10 @@
     <Color x:Key="BackgroundDarkColor">#E0E0E0</Color>
 
     <!--  Text Colors  -->
-    <Color x:Key="TextPrimaryColor">#EEEEEE</Color>
-    <Color x:Key="TextSecondaryColor">#757575</Color>
-    <Color x:Key="TextSecondaryDarkColor">#555555</Color>
+    <Color x:Key="TextPrimaryColor">#141414</Color>
+    <Color x:Key="TextBrandColor">#000000</Color>
+    <Color x:Key="TextSecondaryColor">#FFC107</Color>
+    <Color x:Key="TextSecondaryDarkColor">#B38900</Color>
     <Color x:Key="TextDisabledColor">#BDBDBD</Color>
     <Color x:Key="TextInverseColor">#FFFFFF</Color>
 
@@ -65,18 +81,44 @@
 
 
 
-    <Color x:Key="Primary">#512BD4</Color>
+    <!--<Color x:Key="Primary">#512BD4</Color>
     <Color x:Key="PrimaryDark">#ac99ea</Color>
     <Color x:Key="PrimaryDarkText">#242424</Color>
     <Color x:Key="Secondary">#DFD8F7</Color>
     <Color x:Key="SecondaryDarkText">#9880e5</Color>
-    <Color x:Key="Tertiary">#2B0B98</Color>
+    <Color x:Key="Tertiary">#2B0B98</Color>-->
 
-    <Color x:Key="White">White</Color>
-    <Color x:Key="Black">Black</Color>
+    <!--<Color x:Key="White">White</Color>
+    <Color x:Key="Black">Black</Color>-->
     <Color x:Key="Magenta">#D600AA</Color>
     <Color x:Key="MidnightBlue">#190649</Color>
     <Color x:Key="OffBlack">#1f1f1f</Color>
+
+    <!--  Shades of #0056a9 from 50 to 950  -->
+    <Color x:Key="Primary050">#f0f7ff</Color>
+    <Color x:Key="Primary100">#dfeeff</Color>
+    <Color x:Key="Primary200">#b9ddfe</Color>
+    <Color x:Key="Primary300">#7bc2fe</Color>
+    <Color x:Key="Primary400">#34a3fc</Color>
+    <Color x:Key="Primary500">#0a88ed</Color>
+    <Color x:Key="Primary600">#0069cb</Color>
+    <Color x:Key="Primary700">#0056a9</Color>
+    <Color x:Key="Primary800">#054887</Color>
+    <Color x:Key="Primary900">#0a3c70</Color>
+    <Color x:Key="Primary950">#07264a</Color>
+
+    <!--  Shades of #dcdc05 from 50 to 950  -->
+    <Color x:Key="Secondary050">#fbfee8</Color>
+    <Color x:Key="Secondary100">#f5ffc2</Color>
+    <Color x:Key="Secondary200">#f0ff89</Color>
+    <Color x:Key="Secondary300">#f0ff45</Color>
+    <Color x:Key="Secondary400">#f3fd12</Color>
+    <Color x:Key="Secondary500">#dcdc05</Color>
+    <Color x:Key="Secondary600">#ccbc02</Color>
+    <Color x:Key="Secondary700">#a38805</Color>
+    <Color x:Key="Secondary800">#866a0d</Color>
+    <Color x:Key="Secondary900">#725711</Color>
+    <Color x:Key="Secondary950">#432f05</Color>
 
     <Color x:Key="Gray100">#E1E1E1</Color>
     <Color x:Key="Gray200">#C8C8C8</Color>
@@ -88,7 +130,7 @@
     <Color x:Key="Gray950">#141414</Color>
 
 
-    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}" />
+    <!--<SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}" />
     <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}" />
     <SolidColorBrush x:Key="TertiaryBrush" Color="{StaticResource Tertiary}" />
     <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}" />
@@ -101,5 +143,5 @@
     <SolidColorBrush x:Key="Gray500Brush" Color="{StaticResource Gray500}" />
     <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}" />
     <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}" />
-    <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}" />
+    <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}" />-->
 </ResourceDictionary>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PharmaStoreInventory.Views.WaitingApprovalView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates"
+    xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
+    x:Name="ThisPage"
+    Title="WaitingApprovalView"
+    BackgroundColor="White"
+    FlowDirection="RightToLeft"
+    NavigationPage.HasNavigationBar="False">
+    <!--  21.6.2024 4:20PM  -->
+
+    <ScrollView>
+        <StackLayout
+            Margin="0"
+            Padding="0,0,0,50"
+            Spacing="0">
+
+            <!--  Login Title  -->
+            <Border Style="{StaticResource TitleBorderStyle}">
+                <Label Style="{StaticResource TitleCenter}" Text="مرحبا دكتور محمد أحمد" />
+            </Border>
+            <Label
+                Margin="20,0"
+                Style="{StaticResource Titleline}"
+                Text="نقدر إنتظاركم ونعمل علي إعتماد استخدامكم للتطبيق  شكرا لاستخدامكم e-stock" />
+
+            <Image Source="mslogo" />
+
+            <Border
+                Margin="15"
+                Padding="10,3"
+                BackgroundColor="{StaticResource Primary050}"
+                StrokeThickness="1"
+                HorizontalOptions="Start"
+                Stroke="{StaticResource Primary400}"
+                StrokeShape="RoundRectangle 15">
+                <StackLayout
+                    Padding="15,0"
+                    Orientation="Horizontal"
+                    Spacing="20">
+                    <Label Text="تسجيل خروج" HorizontalOptions="StartAndExpand" />
+                    <Label Style="{StaticResource Iconline}" Text="{x:Static icon:IconFont.Logout}" />
+                </StackLayout>
+            </Border>
+
+            <VerticalStackLayout VerticalOptions="EndAndExpand">
+                <Label
+                    Text="اتصل بنا"
+                    TextColor="{StaticResource Primary}"
+                    HorizontalOptions="Center" />
+                <Label
+                    Text="الاصدار 1.0"
+                    VerticalOptions="EndAndExpand"
+                    FontSize="{StaticResource VerySmall}"
+                    TextColor="{StaticResource AccentDarkColor}"
+                    HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

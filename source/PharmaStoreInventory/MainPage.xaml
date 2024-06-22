@@ -12,6 +12,9 @@
             <Button Text="Obbording" Clicked="GoToOnbording1" />
             <Button Text="Login" Clicked="GoToLogin" />
             <Button Text="Register" Clicked="GoToRegister" />
+            <Button Text="WaitingApprovalView" Clicked="GoToWaitingApprovalView" />
+            <Button Text="CreateBranchView" Clicked="GoToCreateBranchView" />
+            <Button Text="AllStockView" Clicked="GoToAllStockView" />
         </VerticalStackLayout>
     </ScrollView>
 

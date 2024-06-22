@@ -44,7 +44,6 @@
                     TextChanged="InputTextChanged"
                     VerticalTextAlignment="Center"
                     VerticalOptions="Center"
-                    TextColor="Black"
                     Text="{Binding InputText}"
                     IsPassword="{Binding IsPassword}"
                     Focused="Entry_Focused"

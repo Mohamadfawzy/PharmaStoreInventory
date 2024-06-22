@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage
+    x:Class="PharmaStoreInventory.Views.PharmaTabbedPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:PharmaStoreInventory.Views"
+    xmlns:main="clr-namespace:PharmaStoreInventory"
+    xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
+    xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
+    Title="PharmaTabbedPage"
+    android:TabbedPage.ToolbarPlacement="Bottom"
+    android:TabbedPage.IsSmoothScrollEnabled="False">
+
+    <!--<main:MainPage Title="Home">
+        <main:MainPage.IconImageSource>
+            <FontImageSource
+                Glyph="{x:Static icon:IconFont.MicrophoneOff}"
+                FontFamily="{StaticResource IconFont}"
+                Size="44" />
+        </main:MainPage.IconImageSource>
+    </main:MainPage>
+
+    <NavigationPage Title="Approval">
+        <x:Arguments>
+            <local:WaitingApprovalView />
+        </x:Arguments>
+    </NavigationPage>
+
+    <NavigationPage Title="All Stock">
+        <x:Arguments>
+            <local:AllStockView />
+        </x:Arguments>
+    </NavigationPage>
+
+    <NavigationPage Title="Login">
+        <x:Arguments>
+            <local:LoginView />
+        </x:Arguments>
+    </NavigationPage>-->
+</TabbedPage>

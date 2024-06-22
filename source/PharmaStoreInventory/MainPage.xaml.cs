@@ -29,7 +29,22 @@ namespace PharmaStoreInventory
         {
             Navigation.PushAsync(new RegisterView());
         }
+        
+        private void GoToWaitingApprovalView(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new WaitingApprovalView());
+        }
+        private void GoToCreateBranchView(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new CreateBranchView());
+        }
+        
+        private void GoToAllStockView(object sender, EventArgs e)
+        {
+            //Navigation.PushAsync(new PharmaTabbedPage());
+            var parentTabbedPage = this.Parent as PharmaTabbedPage;
+            parentTabbedPage?.GoToAllStockView();
 
+        }
     }
-
 }

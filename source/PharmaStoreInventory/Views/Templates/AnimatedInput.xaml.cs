@@ -2,7 +2,6 @@ namespace PharmaStoreInventory.Views.Templates;
 using CommunityToolkit.Maui.Core.Platform;
 using Microsoft.Maui.Controls;
 using PharmaStoreInventory.Validations;
-using System.Xml.Linq;
 
 public partial class AnimatedInput : ContentView
 {
@@ -65,7 +64,7 @@ public partial class AnimatedInput : ContentView
         nameof(ErrorMessage),
         typeof(string),
         typeof(AnimatedInput),
-        string.Empty, BindingMode.TwoWay);
+        "Make sure you enter correct values", BindingMode.TwoWay);
 
     public static readonly BindableProperty TranslateDurationProperty =
     BindableProperty.Create(
@@ -250,7 +249,7 @@ public partial class AnimatedInput : ContentView
         }
     }
 
-    private async void AnimateErrorMessage(double startHeight, double endHeight, double startOpacity, double endOpacity)
+    private async void AnimateErrorMessage(double fromHeight, double toHeight, double fromOpacity, double toOpacity)
     {
         try
         {
@@ -258,11 +257,11 @@ public partial class AnimatedInput : ContentView
             {
                 new Animation
                 {
-                    { 0, 1, new Animation (v => error.HeightRequest = v,startHeight, endHeight) },
-                    { 0, 1, new Animation (v => error.Opacity = v, startOpacity ,endOpacity )}
+                    { 0, 1, new Animation (v => error.HeightRequest = v,fromHeight, toHeight) },
+                    { 0, 1, new Animation (v => error.Opacity = v, fromOpacity ,toOpacity )}
                 }.Commit(this, "InvalidMessage", 16, 500, easing: easing, (v, c) =>
                 {
-                    if (endOpacity == 0)
+                    if (toOpacity == 0)
                         error.IsVisible = false;
                 });
             });

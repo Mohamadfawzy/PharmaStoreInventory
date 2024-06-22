@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="PharmaStoreInventory.Views.RegisterView"
+    x:Class="PharmaStoreInventory.Views.CreateBranchView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates"
     xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
-    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     x:Name="ThisPage"
-    Title="RegisterView"
+    Title="CreateBranchView"
+    BackgroundColor="White"
     FlowDirection="RightToLeft"
     NavigationPage.HasNavigationBar="False">
 
@@ -31,7 +31,7 @@
                 <Label
                     FontSize="20"
                     TextColor="{StaticResource White}"
-                    Text="إنشاء حساب"
+                    Text="إضافة فرع"
                     VerticalOptions="Center"
                     HorizontalOptions="Center" />
             </Border>
@@ -40,68 +40,34 @@
             <VerticalStackLayout x:Name="inputsContainer" Padding="20,0">
                 <template:AnimatedInput
                     x:Name="fullName"
-                    InputPlaceholder="الاسم كاملاً"
+                    InputPlaceholder="اسم الفرع"
                     InputText="{Binding Name}"
                     ErrorMessage="{Binding InvalidMessage, Mode=TwoWay}"
                     IsError="{Binding ShowError, Mode=TwoWay}" />
-
-                <template:AnimatedInput x:Name="pharmacyName" InputPlaceholder="اسم الصيدلية" />
-
-                <template:AnimatedInput
-                    x:Name="Email"
-                    EntryKeyboard="Email"
-                    ErrorMessage="ايميل خاطئ"
-                    InputPlaceholder="البريد الالكتروني" />
 
                 <template:AnimatedInput
                     x:Name="telephone"
                     EntryKeyboard="Telephone"
                     ErrorMessage="رقم هاتف غير صحيح"
-                    InputPlaceholder="التليفون" />
+                    InputPlaceholder="تليفون الفرع" />
+
+                <template:AnimatedInput x:Name="pharmacyName" InputPlaceholder="عنوان IP" />
+
+                <template:AnimatedInput x:Name="Email" InputPlaceholder="اسم المستخدم" />
 
                 <template:AnimatedInput
                     x:Name="password"
                     IsPassword="True"
                     HasEyeIcon="True"
                     InputPlaceholder="الرقم السري" />
-                <!--  Confirm Password  -->
-                <template:AnimatedInput
-                    x:Name="confirmPassword"
-                    HasEyeIcon="False"
-                    InputPlaceholder="تأكيد الرقم السري">
-                    <template:AnimatedInput.Triggers>
-                        <DataTrigger
-                            TargetType="template:AnimatedInput"
-                            Binding="{Binding Source={x:Reference password}, Path=IsPassword}"
-                            Value="True">
-                            <Setter Property="IsPassword" Value="True" />
-                        </DataTrigger>
-                    </template:AnimatedInput.Triggers>
-                </template:AnimatedInput>
             </VerticalStackLayout>
 
             <VerticalStackLayout Padding="20,0">
-                <!--  submit Create Aount  -->
+                <!--  submit Create Branch  -->
                 <Button
                     Margin="0,30,0,0"
-                    Text="إنشاء حساب"
+                    Text="إضافة فرع"
                     Command="{Binding GetNameCommand}" />
-
-                <!--  Have Acount? sign in  -->
-                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                    <!--  label  -->
-                    <Label Text="ليس لديك حساب؟" VerticalOptions="Center" />
-                    <!--  login button  -->
-                    <Button Style="{StaticResource Anchor}" Text="إنشاء حساب">
-                        <Button.Behaviors>
-                            <toolkit:TouchBehavior
-                                DefaultAnimationDuration="250"
-                                DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
-                                PressedOpacity="0.6"
-                                PressedScale="0.8" />
-                        </Button.Behaviors>
-                    </Button>
-                </HorizontalStackLayout>
             </VerticalStackLayout>
 
             <VerticalStackLayout.GestureRecognizers>

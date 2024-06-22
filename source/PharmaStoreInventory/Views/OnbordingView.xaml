@@ -29,7 +29,7 @@
                         FontSize="30"
                         HorizontalOptions="Center"
                         FontFamily="{StaticResource KufiSemiBold}"
-                        TextColor="{StaticResource PrimaryDarkColor}" />
+                        TextColor="{StaticResource PrimaryDark}" />
 
                     <!--  Indicator  -->
                     <IndicatorView
@@ -37,7 +37,7 @@
                         Margin="0,20"
                         VerticalOptions="Start"
                         IndicatorColor="{StaticResource BackgroundDarkColor}"
-                        SelectedIndicatorColor="{StaticResource PrimaryColor}"
+                        SelectedIndicatorColor="{StaticResource Primary}"
                         HorizontalOptions="Center" />
 
                     <!--  Carousel  -->
@@ -60,7 +60,7 @@
                                     HorizontalOptions="Center"
                                     FontFamily="{StaticResource KufiRegular}"
                                     HorizontalTextAlignment="Center"
-                                    TextColor="{StaticResource PrimaryDarkColor}" />
+                                    TextColor="{StaticResource PrimaryDark}" />
 
                             </DataTemplate>
                         </CarouselView.ItemTemplate>

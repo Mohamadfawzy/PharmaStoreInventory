@@ -8,7 +8,6 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     x:Name="ThisPage"
     Title="LoginView"
-    BackgroundColor="White"
     FlowDirection="RightToLeft"
     NavigationPage.HasNavigationBar="False">
     <!--  20.6.2024 9:08PM  -->
@@ -27,12 +26,12 @@
             <Border
                 Margin="0,0,0,30"
                 StrokeThickness="0"
-                BackgroundColor="{StaticResource PrimaryDarkColor}"
+                BackgroundColor="{StaticResource PrimaryDark}"
                 StrokeShape="RoundRectangle 0 0 30 30"
                 HeightRequest="150">
                 <Label
                     FontSize="20"
-                    TextColor="{StaticResource whiteColor}"
+                    TextColor="{StaticResource White}"
                     Text="تسجيل دخول"
                     VerticalOptions="Center"
                     HorizontalOptions="Center" />
@@ -81,7 +80,7 @@
             <VerticalStackLayout VerticalOptions="EndAndExpand">
                 <Label
                     Text="اتصل بنا"
-                    TextColor="{StaticResource PrimaryColor}"
+                    TextColor="{StaticResource Primary}"
                     HorizontalOptions="Center" />
                 <Label
                     Text="الاصدار 1.0"
