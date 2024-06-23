@@ -6,4 +6,9 @@ public partial class AllStockView : ContentPage
 	{
 		InitializeComponent();
 	}
+
+    private void AllStockList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
 }

@@ -41,9 +41,9 @@ namespace PharmaStoreInventory
         
         private void GoToAllStockView(object sender, EventArgs e)
         {
-            //Navigation.PushAsync(new PharmaTabbedPage());
-            var parentTabbedPage = this.Parent as PharmaTabbedPage;
-            parentTabbedPage?.GoToAllStockView();
+            Navigation.PushAsync(new AllStockView());
+            //var parentTabbedPage = this.Parent as PharmaTabbedPage;
+            //parentTabbedPage?.GoToAllStockView();
 
         }
     }

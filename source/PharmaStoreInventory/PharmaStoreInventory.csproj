@@ -76,6 +76,9 @@
 	  <None Remove="Resources\Images\msLogo.png" />
 	  <None Remove="Resources\Images\onbord1.jpg" />
 	  <None Remove="Resources\Images\Onbord2.jpg" />
+	  <None Remove="Resources\Images\pharma1.jpg" />
+	  <None Remove="Resources\Images\pharma2.jpg" />
+	  <None Remove="Resources\Images\pharma3.jpg" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -118,6 +121,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Templates\AnimatedInput.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Templates\SearchBoxTemplate.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\WaitingApprovalView.xaml">

@@ -15,11 +15,13 @@
         <vm:RegisterViewModel />
     </ContentPage.BindingContext>
 
-    <ScrollView>
+    <ScrollView x:Name="scroll">
         <VerticalStackLayout
-            Margin="0"
+            x:Name="manStack"
+            Margin="0,0,0,0"
             Padding="0,0,0,50"
             Spacing="0">
+
 
             <!--  Register Title  -->
             <Border
@@ -35,7 +37,6 @@
                     VerticalOptions="Center"
                     HorizontalOptions="Center" />
             </Border>
-
             <!--  Inputs  -->
             <VerticalStackLayout x:Name="inputsContainer" Padding="20,0">
                 <template:AnimatedInput
@@ -90,9 +91,12 @@
                 <!--  Have Acount? sign in  -->
                 <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
                     <!--  label  -->
-                    <Label Text="ليس لديك حساب؟" VerticalOptions="Center" />
+                    <Label
+                        Text="ليس لديك حساب؟"
+                        VerticalOptions="Center"
+                        FontSize="{StaticResource Small}" />
                     <!--  login button  -->
-                    <Button Style="{StaticResource Anchor}" Text="إنشاء حساب">
+                    <Button Style="{StaticResource Anchor}" Text="تسجيل دخول">
                         <Button.Behaviors>
                             <toolkit:TouchBehavior
                                 DefaultAnimationDuration="250"

@@ -53,7 +53,8 @@
                     x:Name="eyeIcon"
                     Padding="20,0"
                     IsVisible="{Binding HasEyeIcon}"
-                    FontFamily="{StaticResource IconFont}"
+                    FontFamily="IconFontMaterial"
+                    TextColor="{Binding UnFocusColor}"
                     Text="{x:Static icon:IconFont.EyeOutline}"
                     VerticalOptions="Center">
 

@@ -17,16 +17,6 @@ public partial class OnbordingView : ContentPage
 
     private async void Button_Clicked(object sender, EventArgs e)
     {
-        //await OnboardingText1.TranslateTo(-Width, 0, easing: Easing.SinInOut);
-
-        //OnboardingText2.TranslationX = Width;
-        //OnboardingText2.IsVisible = true;
-        //new Animation
-        //{
-        //    { 0, 1.0, new Animation (v => OnboardingText1.TranslationX = v,0, -Width) },
-        //    { 0, 1.0, new Animation (v => OnboardingText2.TranslationX = v, Width, 0)}
-        //}.Commit(this, "ChildAnimations", 16, 500, easing: Easing.SinInOut);
-
         if (OnboardingTextCV.Position == 0)
         {
             OnboardingTextCV.Position = 1;
@@ -43,20 +33,20 @@ public partial class OnbordingView : ContentPage
 
     private void OnboardingTextCV_PositionChanged(object sender, PositionChangedEventArgs e)
     {
-        // OnboardingTextCV.Loop = true;
+        OnboardingTextCV.Loop = true;
         if (OnboardingTextCV.Position == 0)
         {
-            OnBordimage.Source = "onbord2.jpg";
+            OnBordimage.Source = "pharma2.jpg";
         }
         else
         {
-            OnBordimage.Source = "onbord1.jpg";
+            OnBordimage.Source = "pharma1.jpg";
         }
     }
 
     private void GoToLogin(object sender, EventArgs e)
     {
-        //Navigation.PushAsync(new LoginView());
+        Navigation.PushAsync(new LoginView());
         //App.Current.MainPage = new NavigationPage(new PharmaTabbedPage());
     }
 

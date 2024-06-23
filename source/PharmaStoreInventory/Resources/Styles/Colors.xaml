@@ -20,9 +20,9 @@
 
 
     <!--  Primary Colors  -->
-    <Color x:Key="Primary">#0069cb</Color>
-    <Color x:Key="PrimaryLight">#0a88ed</Color>
-    <Color x:Key="PrimaryDark">#0056a9</Color>
+    <Color x:Key="Primary">#0056a9</Color>
+    <Color x:Key="PrimaryLight">#0069cb</Color>
+    <Color x:Key="PrimaryDark">#054887</Color>
 
     <!--  Secondary Colors  -->
     <Color x:Key="Secondary">#FF9800</Color>

@@ -4,26 +4,36 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
+    xmlns:res="clr-namespace:PharmaStoreInventory.Languages"
     xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates">
 
     <!--  Custom Control styles  -->
 
     <!--  Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}"  -->
     <Style TargetType="template:AnimatedInput">
-        <Setter Property="UnFocusColor" Value="{AppThemeBinding Light={StaticResource Primary100}, Dark={StaticResource Primary600}}" />
+        <Setter Property="UnFocusColor" Value="{AppThemeBinding Light={StaticResource Primary300}, Dark={StaticResource Primary600}}" />
         <Setter Property="FocusColor" Value="{AppThemeBinding Light={StaticResource PrimaryDark}, Dark={StaticResource Primary050}}" />
         <Setter Property="InputBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Primary950}}" />
     </Style>
+    <!--  End Custom Control styles  -->
 
-    <!--  End My styles  -->
+    <FontImageSource
+        x:Key="ArrowNextIconImageSource"
+        FontAutoScalingEnabled="True"
+        FontFamily="{StaticResource IconFont}"
+        Size="22"
+        Glyph="{x:Static res:AppResources.IconDoubleArrow}"
+        Color="{AppThemeBinding Light=White,
+                                Dark=White}" />
 
     <Style TargetType="ActivityIndicator">
         <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
     </Style>
 
     <Style TargetType="IndicatorView">
-        <Setter Property="IndicatorColor" Value="{AppThemeBinding Light={StaticResource Primary200}, Dark={StaticResource Primary500}}" />
-        <Setter Property="SelectedIndicatorColor" Value="{AppThemeBinding Light={StaticResource Primary950}, Dark={StaticResource Primary100}}" />
+        <Setter Property="IndicatorColor" Value="{AppThemeBinding Light={StaticResource Primary200}, Dark={StaticResource Primary800}}" />
+        <Setter Property="SelectedIndicatorColor" Value="{AppThemeBinding Light={StaticResource Primary600}, Dark={StaticResource Primary500}}" />
     </Style>
 
     <Style TargetType="Border">
@@ -45,8 +55,8 @@
     </Style>
 
     <Style TargetType="Button">
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextInverseColor}, Dark={StaticResource TextPrimaryColor}}" />
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+        <Setter Property="TextColor" Value="{StaticResource Primary050}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary700}}" />
         <Setter Property="FontFamily" Value="KufiSemiBold" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="BorderWidth" Value="0" />
@@ -77,7 +87,7 @@
         <Setter Property="CornerRadius" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="FontFamily" Value="KufiSemiBold" />
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="{StaticResource Small}" />
         <Setter Property="BorderWidth" Value="0" />
         <Setter Property="BorderColor" Value="Transparent" />
         <Setter Property="HorizontalOptions" Value="Start" />
@@ -137,7 +147,7 @@
     </Style>
 
     <Style x:Key="Headline" TargetType="Label">
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Primary900}, Dark={StaticResource White}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary200}}" />
         <Setter Property="FontSize" Value="32" />
         <Setter Property="HorizontalOptions" Value="Center" />
         <Setter Property="HorizontalTextAlignment" Value="Center" />
@@ -151,9 +161,17 @@
     </Style>
 
     <Style x:Key="Titleline" TargetType="Label">
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Primary900}, Dark={StaticResource White}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Primary900}, Dark={StaticResource Primary100}}" />
         <Setter Property="FontSize" Value="20" />
         <Setter Property="HorizontalOptions" Value="Start" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="Infoline" TargetType="Label">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Primary900}, Dark={StaticResource Primary400}}" />
+        <Setter Property="FontSize" Value="{StaticResource Small}" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
         <Setter Property="HorizontalTextAlignment" Value="Center" />
     </Style>
 
@@ -186,11 +204,6 @@
         <Setter Property="Padding" Value="0" />
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Primary950}}" />
     </Style>
-
-    <!--<Style TargetType="ContentPage" ApplyToDerivedTypes="True">
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Primary950}}" />
-    </Style>-->
 
     <Style TargetType="NavigationPage">
         <Setter Property="BarBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />

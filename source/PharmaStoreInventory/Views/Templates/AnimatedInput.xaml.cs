@@ -201,11 +201,6 @@ public partial class AnimatedInput : ContentView
         InitializeComponent();
     }
 
-    protected override void OnParentSet()
-    {
-        base.OnParentSet();
-        PositioningOfPlaceHolder();
-    }
 
     public bool HideKeyBoard()
     {
@@ -219,6 +214,12 @@ public partial class AnimatedInput : ContentView
 
     public bool EntryIsFocused() => entry.IsFocused;
 
+    protected override void OnParentSet()
+    {
+        base.OnParentSet();
+        PositioningOfPlaceHolder();
+    }
+
     private async void Entry_Focused(object sender, FocusEventArgs e)
     {
         SetFocusColors();
@@ -229,8 +230,8 @@ public partial class AnimatedInput : ContentView
     {
         if (string.IsNullOrEmpty(entry.Text))
         {
-            await AnimatePlaceholder();
             SetUnFocusColors();
+            await AnimatePlaceholder();
         }
         Validation();
     }
@@ -324,12 +325,14 @@ public partial class AnimatedInput : ContentView
     {
         border.Stroke = FocusColor;
         placeholder.TextColor = FocusColor;
+        eyeIcon.TextColor = FocusColor;
     }
 
     private void SetUnFocusColors()
     {
         placeholder.TextColor = UnFocusColor;
         border.Stroke = UnFocusColor;
+        eyeIcon.TextColor = UnFocusColor;
     }
 
     private void InputTextChanged(object sender, TextChangedEventArgs e)

@@ -10,20 +10,20 @@ public partial class LoginView : ContentPage
 		InitializeComponent();
 	}
 
-    short count = 0;
-    protected override bool OnBackButtonPressed()
-    {
-        if (count == 0)
-        {
-            count = 1; 
-            inputsContainer.ClearFocusFromAllInputs();
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+    //short count = 0;
+    //protected override bool OnBackButtonPressed()
+    //{
+    //    if (count == 0)
+    //    {
+    //        count = 1; 
+    //        inputsContainer.ClearFocusFromAllInputs();
+    //        return true;
+    //    }
+    //    else
+    //    {
+    //        return false;
+    //    }
+    //}
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
         inputsContainer.ClearFocusFromAllInputs();

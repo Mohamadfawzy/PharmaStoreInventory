@@ -61,6 +61,15 @@ namespace PharmaStoreInventory.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &amp;#f013d;.
+        /// </summary>
+        internal static string IconDoubleArrow {
+            get {
+                return ResourceManager.GetString("IconDoubleArrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to نحن هنا لمساعدتك على تنظيم وإدارة مخزون الأدوية بسهولة وكفاءة. باستخدام هذا التطبيق، يمكنك تتبع الكميات وتواريخ انتهاء الصلاحية لكل منتج في صيدليتك في أي وقت. لن تكون بحاجة للقلق بشأن نسيان إعادة الطلب أو انتهاء صلاحية الأدوية بعد الآن. نحن هنا لنذكرك بكل ما تحتاجه..
         /// </summary>
         internal static string onbording_OnboardingText1 {
