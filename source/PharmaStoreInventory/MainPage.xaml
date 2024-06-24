@@ -19,6 +19,7 @@
             <Button Text="WaitingApprovalView" Clicked="GoToWaitingApprovalView" />
             <Button Text="CreateBranchView" Clicked="GoToCreateBranchView" />
             <Button Text="AllStockView" Clicked="GoToAllStockView" />
+            <Button Text="Barcode Reader View" Clicked="GoToBarcodeReaderView" />
         </VerticalStackLayout>
     </ScrollView>
 

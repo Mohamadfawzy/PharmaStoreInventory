@@ -206,8 +206,10 @@ public partial class AnimatedInput : ContentView
     {
         if (entry.IsFocused)
         {
+#if ANDROID
             entry.Unfocus();
             entry.HideKeyboardAsync(CancellationToken.None);
+#endif
         }
         return true;
     }

@@ -15,7 +15,7 @@ public partial class OnbordingView : ContentPage
         OnboardingTextCV.ItemsSource = OnboardingTextList;
     }
 
-    private async void Button_Clicked(object sender, EventArgs e)
+    private void Button_Clicked(object sender, EventArgs e)
     {
         if (OnboardingTextCV.Position == 0)
         {

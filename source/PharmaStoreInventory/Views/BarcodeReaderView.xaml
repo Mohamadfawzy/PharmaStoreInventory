@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PharmaStoreInventory.Views.BarcodeReaderView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:scanner="clr-namespace:BarcodeScanning;assembly=BarcodeScanning.Native.Maui"
+    Title="BarcodeReaderView">
+    <!--  xmlns:barcode="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"  -->
+
+
+    <Grid Padding="0,150">
+        <!--<barcode:CameraBarcodeReaderView
+            x:Name="barcodeReader"
+            HeightRequest="300"
+            WidthRequest="300"
+            IsTorchOn="False"
+            BarcodesDetected="barcodeReader_BarcodesDetected" />-->
+
+        <scanner:CameraView
+            x:Name="nativeBarcode"
+            OnDetectionFinished="CameraView_OnDetectionFinished_1"
+            HeightRequest="350"
+            TorchOn="True" />
+        <Button
+            Text="Flash"
+            Clicked="Button_Clicked"
+            HorizontalOptions="Start"
+            VerticalOptions="Start" />
+
+        <Button
+            Text="Flash"
+            Clicked="Button_Clicked1"
+            HorizontalOptions="End"
+            VerticalOptions="Start" />
+    </Grid>
+</ContentPage>

@@ -44,7 +44,11 @@ namespace PharmaStoreInventory
             Navigation.PushAsync(new AllStockView());
             //var parentTabbedPage = this.Parent as PharmaTabbedPage;
             //parentTabbedPage?.GoToAllStockView();
-
+        }
+        
+        private void GoToBarcodeReaderView(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new BarcodeReaderView());
         }
     }
 }
