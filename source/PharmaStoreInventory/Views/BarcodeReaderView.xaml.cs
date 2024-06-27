@@ -1,4 +1,5 @@
 using BarcodeScanning;
+using PharmaStoreInventory.Views.Templates;
 using ZXing.Net.Maui;
 using ZXing.Net.Maui.Controls;
 
@@ -8,41 +9,33 @@ public partial class BarcodeReaderView : ContentPage
 {
     public BarcodeReaderView()
     {
+        this.FlowDirection = FlowDirection.RightToLeft;
         InitializeComponent();
-        //barcodeReader.Options = new ZXing.Net.Maui.BarcodeReaderOptions
-        //{
-        //    //Formats = ZXing.Net.Maui.BarcodeFormat.DataMatrix,
-        //    Formats = BarcodeFormats.OneDimensional,
-        //    AutoRotate = true,
-        //    Multiple = true
-        //};
 
         Methods.AskForRequiredPermissionAsync();
 
-
-        nativeBarcode.CameraEnabled = true;
-        
     }
-
-    private void barcodeReader_BarcodesDetected(object sender, ZXing.Net.Maui.BarcodeDetectionEventArgs e)
+    protected override void OnAppearing()
     {
-        //barcodeReader.IsTorchOn = !barcodeReader.IsTorchOn;
-
-        var first = e.Results.FirstOrDefault();
-        if (first is null)
-            return;
-
-
-        Dispatcher.DispatchAsync(async () =>
-        {
-            await DisplayAlert("Barcode Detected", first.Value, "OK");
-
-            //});
-            //barcodeReader.IsDetecting = false;
-            //barcodeReader.IsVisible = false;//.AutoFocus();
-
-        });
+        base.OnAppearing();
+        nativeBarcode.CameraEnabled = true;
+        nativeBarcode.PauseScanning = false;
     }
+    //private void barcodeReader_BarcodesDetected(object sender, ZXing.Net.Maui.BarcodeDetectionEventArgs e)
+    //{
+
+
+    //    var first = e.Results.FirstOrDefault();
+    //    if (first is null)
+    //        return;
+
+
+    //    Dispatcher.DispatchAsync(async () =>
+    //    {
+    //        await DisplayAlert("Barcode Detected", first.Value, "OK");
+
+    //    });
+    //}
 
 
     private void CameraView_OnDetectionFinished_1(object sender, OnDetectionFinishedEventArg e)
@@ -53,22 +46,30 @@ public partial class BarcodeReaderView : ContentPage
 
         Dispatcher.DispatchAsync(async () =>
         {
-            await DisplayAlert("Barcode Detected", first.DisplayValue, "OK");
+            //await DisplayAlert("Barcode Detected", first.DisplayValue, "OK");
+            await Navigation.PushAsync(new StockDetailsView(first.DisplayValue) ,false);
 
         });
         nativeBarcode.PauseScanning = true;
         
     }
 
-    private void Button_Clicked(object sender, EventArgs e)
-    {
-        // barcodeReader.IsTorchOn = !barcodeReader.IsTorchOn;
-        nativeBarcode.TorchOn = !nativeBarcode.TorchOn;
-    }
-    
     private void Button_Clicked1(object sender, EventArgs e)
     {
         nativeBarcode.CameraEnabled = false;
         nativeBarcode.IsVisible = false;
+    }
+
+    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        nativeBarcode.TorchOn = !nativeBarcode.TorchOn;
+        //cameraViewContianer.IsVisible = false;
+    }
+
+    private async void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
+    {
+        //cameraViewContianer.Remove(nativeBarcode);
+        await Navigation.PopAsync();
+
     }
 }

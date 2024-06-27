@@ -4,3 +4,15 @@
     x:Name="ThisPage"
     xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
     NavigationPage.HasNavigationBar="False"
+
+
+
+
+
+<Button.Behaviors>
+    <toolkit:TouchBehavior
+        DefaultAnimationDuration="250"
+        DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+        PressedOpacity="0.6"
+        PressedScale="0.8" />
+</Button.Behaviors>

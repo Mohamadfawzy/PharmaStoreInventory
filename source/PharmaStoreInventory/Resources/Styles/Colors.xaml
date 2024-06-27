@@ -45,6 +45,7 @@
     <Color x:Key="BackgroundColor">#F4F4F4</Color>
     <Color x:Key="BackgroundLightColor">#FFFFFF</Color>
     <Color x:Key="BackgroundDarkColor">#E0E0E0</Color>
+    <Color x:Key="BackgroundTransparence">#50000000</Color>
 
     <!--  Text Colors  -->
     <Color x:Key="TextPrimaryColor">#141414</Color>

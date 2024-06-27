@@ -16,9 +16,9 @@ namespace PharmaStoreInventory
                 {
                     // Remove underline
                     handler.PlatformView.BackgroundTintList = ColorStateList.ValueOf(Android.Graphics.Color.Transparent);
-
+                    //handler.PlatformView?.TextCursorDrawable?.SetTint(Colors.Red.ToPlatform());
                     // Change placeholder text color
-                   // handler.PlatformView.SetHintTextColor(ColorStateList.ValueOf(Android.Graphics.Color.Red));
+                    // handler.PlatformView.SetHintTextColor(ColorStateList.ValueOf(Android.Graphics.Color.Red));
                 }
             });
 

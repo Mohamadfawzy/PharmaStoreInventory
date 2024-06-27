@@ -51,12 +51,14 @@
                 <!--  Eye Icon  -->
                 <Label
                     x:Name="eyeIcon"
-                    Padding="20,0"
+                    Padding="20,00"
                     IsVisible="{Binding HasEyeIcon}"
                     FontFamily="IconFontMaterial"
                     TextColor="{Binding UnFocusColor}"
                     Text="{x:Static icon:IconFont.EyeOutline}"
-                    VerticalOptions="Center">
+                    FontSize="20"
+                    VerticalTextAlignment="Center"
+                    VerticalOptions="Fill">
 
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Tapped="TogglePasswordVisibility" />
