@@ -16,3 +16,19 @@
         PressedOpacity="0.6"
         PressedScale="0.8" />
 </Button.Behaviors>
+
+
+    public static readonly BindableProperty ABCDEF_Property =
+    BindableProperty.Create(
+    nameof(ABCDEF_),
+    typeof(Color),
+    typeof(?????),
+    default, BindingMode.OneWay);
+
+    public Color ABCDEF_
+    {
+        get => (Color)GetValue(ABCDEF_Property);
+        set => SetValue(ABCDEF_Property, value);
+    }
+    
+    

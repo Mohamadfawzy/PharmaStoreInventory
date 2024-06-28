@@ -134,6 +134,9 @@
 	  <MauiXaml Update="Views\Templates\SearchBoxTemplate.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Templates\StepperField.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\WaitingApprovalView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

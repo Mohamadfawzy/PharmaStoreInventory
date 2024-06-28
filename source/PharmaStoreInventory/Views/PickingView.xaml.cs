@@ -7,7 +7,7 @@ public partial class PickingView : ContentPage
 {
     PickingViewModel viewModel;
     public PickingView()
-	{
+    {
         this.FlowDirection = FlowDirection.RightToLeft;
         InitializeComponent();
         //viewModel = new PickingViewModel();
@@ -38,7 +38,6 @@ public partial class PickingView : ContentPage
 
         });
         nativeBarcode.PauseScanning = true;
-
     }
 
     private void ToggleFlashLight(object sender, TappedEventArgs e)
@@ -75,5 +74,44 @@ public partial class PickingView : ContentPage
         }
     }
 
+    private void ClosePopupTapped(object sender, TappedEventArgs e)
+    {
+        ClosePopup();
+    }
 
+    private void collection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (collection.SelectedItem == null) return;
+        if (collection.SelectedItem != null)
+        {
+            //popup.IsVisible = true;
+            //backgroundTransparence.IsVisible = true;
+        }
+        collection.SelectedItem = null;
+    }
+
+    private void Save_Clicked(object sender, EventArgs e)
+    {
+        ClosePopup();
+    }
+
+
+    private void OpenPopupTapped(object sender, TappedEventArgs e)
+    {
+        OpenPopup();
+    }
+
+    void ClosePopup()
+    {
+        popup.IsVisible = false;
+        backgroundTransparence.IsVisible = false;
+        nativeBarcode.PauseScanning = false;
+    }
+
+    void OpenPopup()
+    {
+        popup.IsVisible = true;
+        backgroundTransparence.IsVisible = true;
+        nativeBarcode.PauseScanning = true;
+    }
 }

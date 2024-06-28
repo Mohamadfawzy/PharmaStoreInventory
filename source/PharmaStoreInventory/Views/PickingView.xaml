@@ -12,6 +12,7 @@
     Title="PickingView"
     FlowDirection="LeftToRight"
     BackgroundColor="White">
+
     <ContentPage.Resources>
         <ResourceDictionary>
 
@@ -33,7 +34,6 @@
                 <Setter Property="StrokeThickness" Value="2" />
                 <Setter Property="Stroke" Value="{StaticResource Secondary700}" />
             </Style>
-
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -200,7 +200,10 @@
                 Grid.Row="1"
                 Margin="0,5,0,0"
                 ItemsSource="{Binding ListOfStoc}"
+                SelectionMode="Single"
+                SelectionChanged="collection_SelectionChanged"
                 VerticalScrollBarVisibility="Always">
+
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <SwipeView SwipeStarted="SwipeView_SwipeStarted">
@@ -234,15 +237,13 @@
                                     </SwipeItemView>
                                 </SwipeItems>
                             </SwipeView.RightItems>
-
                             <!--  Content  -->
                             <Grid
                                 Grid.Row="2"
                                 ColumnDefinitions="45,*,45"
-                                RowDefinitions="*,18"
+                                RowDefinitions="*,1"
                                 BackgroundColor="{StaticResource White}">
                                 <!--  checkbox icon  -->
-
                                 <Label
                                     Margin="10,0"
                                     Text="{x:Static icon:IconFont.CheckboxMarkedCircle}"
@@ -304,7 +305,6 @@
                                         FontSize="9" />
                                 </VerticalStackLayout>
                                 <!--  Edit Icon  -->
-
                                 <Label
                                     Grid.Column="2"
                                     Padding="10,0"
@@ -313,20 +313,68 @@
                                     VerticalTextAlignment="Center"
                                     HorizontalOptions="EndAndExpand" />
                                 <!--  line separator  -->
-
                                 <BoxView
                                     Grid.Row="1"
                                     Grid.ColumnSpan="3"
                                     HeightRequest="0.5"
                                     Color="{StaticResource Primary300}" />
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OpenPopupTapped" />
+                                </Grid.GestureRecognizers>
                             </Grid>
-
                         </SwipeView>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-
         </Grid>
+
+        <!--  Popup  -->
+        <BoxView
+            x:Name="backgroundTransparence"
+            Grid.RowSpan="3"
+            IsVisible="False"
+            BackgroundColor="{StaticResource BackgroundTransparence}">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Tapped="ClosePopupTapped" />
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <Border
+            x:Name="popup"
+            Grid.RowSpan="3"
+            Margin="10,0"
+            IsVisible="False"
+            VerticalOptions="Center"
+            MinimumHeightRequest="350"
+            Stroke="#00C49B33"
+            StrokeThickness="1"
+            FlowDirection="RightToLeft"
+            StrokeShape="RoundRectangle 6"
+            BackgroundColor="{AppThemeBinding Light={StaticResource Primary050},
+                                              Dark={StaticResource Primary950}}">
+            <VerticalStackLayout Padding="20,20" Spacing="20">
+                <Label Text="الكمية " HorizontalOptions="CenterAndExpand" />
+                <!--  StepperS  -->
+                <StackLayout
+                    Padding="0,0"
+                    Orientation="Horizontal"
+                    HorizontalOptions="FillAndExpand">
+                    <template:StepperField Text="{Binding MajorUnitQuantity}" HorizontalOptions="StartAndExpand" />
+                    <template:StepperField Text="{Binding MicroUnitQuantity}" />
+                </StackLayout>
+                <!--  date Label  -->
+                <Label Text="تاريخ إنتهاء الصلاحية" />
+                <!--  Date Entry  -->
+                <Border
+                    Padding="10,0"
+                    Stroke="#C49B33"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 6">
+                    <Entry Text="1545" Keyboard="Numeric" />
+                </Border>
+                <Button Text="حفظ" Clicked="Save_Clicked" />
+            </VerticalStackLayout>
+        </Border>
 
     </Grid>
 </ContentPage>

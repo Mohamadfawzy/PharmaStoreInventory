@@ -11,6 +11,8 @@ public class PickingViewModel : ObservableObject
     private string nameEn = string.Empty;
     private string nameAr = string.Empty;
     private string barcode = "6221068000977";
+    private string microUnitQuantity = "0";
+    private string majorUnitQuantity = "0";
 
     public string NameEn
     {
@@ -29,6 +31,18 @@ public class PickingViewModel : ObservableObject
         get => barcode;
         set => SetProperty(ref barcode, value);
     }
+    
+    public string MicroUnitQuantity
+    {
+        get => microUnitQuantity;
+        set => SetProperty(ref microUnitQuantity, value);
+    }
+    
+    public string MajorUnitQuantity
+    {
+        get => majorUnitQuantity;
+        set => SetProperty(ref majorUnitQuantity, value);
+    }
     public ObservableCollection<StockModel> ListOfStoc { get; set; }
     public ICommand CopySelectedItemCommand => new Command<StockModel>(CopySelectedItem);
 
@@ -42,6 +56,7 @@ public class PickingViewModel : ObservableObject
     void CopySelectedItem(StockModel stock)
     {
         ListOfStoc.Add(stock);
+        //Helpers.CatchingException.PharmaDisplayAlert(MajorUnitQuantity);
     }
     public void GetStockDetails(string code)
     {

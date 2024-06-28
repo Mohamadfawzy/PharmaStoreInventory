@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="PharmaStoreInventory.Views.Templates.StepperField"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates"
+    xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
+    x:Name="ThisView">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <Style x:Key="StepperButton" TargetType="Button">
+                <Setter Property="Margin" Value="1" />
+                <Setter Property="Padding" Value="7,0" />
+                <Setter Property="CornerRadius" Value="0" />
+                <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
+                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Primary950}, Dark={StaticResource Primary050}}" />
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary050}, Dark={StaticResource Primary900}}" />
+                <Setter Property="FontSize" Value="18" />
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <!--  Stepper  -->
+    <Border
+        Padding="0"
+        Stroke="#C49B33"
+        StrokeThickness="1"
+        StrokeShape="RoundRectangle 6"
+        Background="{AppThemeBinding Light={StaticResource Primary050},
+                                     Dark={StaticResource Primary950}}">
+        <StackLayout Orientation="Horizontal">
+            <Button
+                Style="{StaticResource StepperButton}"
+                Text="{x:Static icon:IconFont.Plus}"
+                Clicked="Plus_Clicked" />
+
+            <Entry
+                x:Name="entry"
+                BindingContext="{x:Reference ThisView}"
+                Text="{Binding Text}"
+                HorizontalTextAlignment="Center"
+                HorizontalOptions="FillAndExpand"
+                Keyboard="Numeric" />
+            <Button
+                Style="{StaticResource StepperButton}"
+                Text="{x:Static icon:IconFont.Minus}"
+                Clicked="Minus_Clicked" />
+
+        </StackLayout>
+    </Border>
+</ContentView>
