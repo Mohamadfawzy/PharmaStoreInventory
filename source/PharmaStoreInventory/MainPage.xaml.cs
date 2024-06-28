@@ -51,6 +51,11 @@ public partial class MainPage : ContentPage
         Navigation.PushAsync(new BarcodeReaderView());
     }
     
+    private void GoToPickingView(object sender, EventArgs e)
+    {
+        Navigation.PushAsync(new PickingView());
+    }
+    
     private void GoToStockDetailsView(object sender, EventArgs e)
     {
         Navigation.PushAsync(new StockDetailsView("6221068000977"));

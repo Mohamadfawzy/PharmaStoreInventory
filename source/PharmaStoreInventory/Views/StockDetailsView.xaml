@@ -36,16 +36,16 @@
     </ContentPage.BindingContext>-->
 
     <!--  Body  -->
-    <Grid Padding="0" RowDefinitions="Auto,*">
+    <Grid Padding="0" RowDefinitions="Auto,Auto,*">
 
         <!--  Header  -->
         <VerticalStackLayout
             Grid.Row="0"
             Padding="0,10"
-            BackgroundColor="{StaticResource PrimaryDark}"
-            Spacing="10">
+            BackgroundColor="{StaticResource PrimaryDark}">
             <Label
                 x:Name="nameEn"
+                Padding="20,1"
                 Text="{Binding NameEn}"
                 Style="{StaticResource TitleCenter}"
                 FontFamily="OpenSansSemibold"
@@ -54,26 +54,32 @@
             <Label
                 x:Name="nameAr"
                 Text="{Binding NameAr}"
+                FontSize="{StaticResource Body}"
                 Style="{StaticResource TitleCenter}"
-                FontFamily="{StaticResource KufiRegular}"
-                TextColor="{AppThemeBinding Light={StaticResource Primary050},
-                                            Dark={StaticResource Primary500}}" />
-
-            <Label
-                x:Name="barcode"
-                Text="{Binding Barcode}"
-                Style="{StaticResource TitleCenter}"
-                FontSize="Body"
                 FontFamily="{StaticResource KufiRegular}"
                 TextColor="{AppThemeBinding Light={StaticResource Primary050},
                                             Dark={StaticResource Primary500}}" />
 
         </VerticalStackLayout>
 
+        <Frame
+            Grid.Row="1"
+            Padding="0"
+            BackgroundColor="{StaticResource Primary300}">
+            <Label
+                x:Name="barcode"
+                Text="{Binding Barcode}"
+                Style="{StaticResource TitleCenter}"
+                FontSize="Body"
+                FontFamily="{StaticResource KufiRegular}"
+                TextColor="{AppThemeBinding Light={StaticResource Primary950},
+                                            Dark={StaticResource Primary500}}" />
+        </Frame>
         <!--  DataTemplateStockDetails  -->
         <CollectionView
             x:Name="collection"
-            Grid.Row="1"
+            Grid.Row="2"
+            Margin="0,5,0,0"
             ItemsSource="{Binding ListOfStoc}"
             VerticalScrollBarVisibility="Always">
             <CollectionView.ItemTemplate>

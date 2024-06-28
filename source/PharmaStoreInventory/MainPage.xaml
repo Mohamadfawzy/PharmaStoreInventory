@@ -20,6 +20,7 @@
             <Button Text="CreateBranchView" Clicked="GoToCreateBranchView" />
             <Button Text="AllStockView" Clicked="GoToAllStockView" />
             <Button Text="Barcode Reader View" Clicked="GoToBarcodeReaderView" />
+            <Button Text="PickingView" Clicked="GoToPickingView" />
             <Button Text="Stock Details View" Clicked="GoToStockDetailsView" />
         </VerticalStackLayout>
     </ScrollView>

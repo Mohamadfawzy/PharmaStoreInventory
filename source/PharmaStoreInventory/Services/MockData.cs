@@ -19,6 +19,20 @@ public static class MockData
                 Barcode = "6221068000977"
 
             },
+        
+          new StockModel
+            {
+                Id = 1,
+                ItemNameArabic = "سبكتون",
+                ItemNameEnglish = "Spectone",
+                Quantity = 36,
+                Price = 27.25m,
+                ExpiryDate = new DateOnly(2026, 11, 1),
+                IsCounted = true,
+                Distributor = "شركة القاهرة للأدوية والصناعات الكيماوية",
+                Barcode = "6221068000977"
+
+            },
             new StockModel
             {
                 Id = 2,

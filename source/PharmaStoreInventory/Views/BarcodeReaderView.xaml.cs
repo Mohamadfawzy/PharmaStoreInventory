@@ -1,7 +1,4 @@
 using BarcodeScanning;
-using PharmaStoreInventory.Views.Templates;
-using ZXing.Net.Maui;
-using ZXing.Net.Maui.Controls;
 
 namespace PharmaStoreInventory.Views;
 
@@ -9,6 +6,7 @@ public partial class BarcodeReaderView : ContentPage
 {
     public BarcodeReaderView()
     {
+
         this.FlowDirection = FlowDirection.RightToLeft;
         InitializeComponent();
 
