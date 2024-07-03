@@ -1,33 +1,32 @@
-using Android.Graphics.Drawables.Shapes;
 using Microsoft.Maui.Controls.Shapes;
 
 namespace PharmaStoreInventory.Views.Trash;
 
 public partial class AnimateBoxes : ContentPage
 {
-    private double screenWidth = (DeviceDisplay.Current.MainDisplayInfo.Width / DeviceDisplay.Current.MainDisplayInfo.Density);
+    private readonly double  screenWidth = (DeviceDisplay.Current.MainDisplayInfo.Width / DeviceDisplay.Current.MainDisplayInfo.Density);
 
     public double ScreenWidth
     {
         get => screenWidth;
     }
 
-    private List<View> _images;
+    private readonly List<View> element;
     private int _currentImageIndex = 1;
 
     public AnimateBoxes()
     {
         InitializeComponent();
-        _images = new List<View> { box1, box2, box3, box4, box5 };
-        // _images = new List<View> { box5, box4, box3, box2, box1 };
+        element = [box1, box2, box3, box4, box5];
+        // element = new List<View> { box5, box4, box3, box2, box1 };
 
     }
 
     private async void OnAnimateButtonClicked(object sender, EventArgs e)
     {
-        if (_currentImageIndex < _images.Count)
+        if (_currentImageIndex < element.Count)
         {
-            var currentImage = _images[_currentImageIndex];
+            var currentImage = element[_currentImageIndex];
             await AnimateFromLeftToRight(currentImage);
             _currentImageIndex++;
         }
@@ -38,28 +37,22 @@ public partial class AnimateBoxes : ContentPage
         if (_currentImageIndex > 1)
         {
             _currentImageIndex--;
-            var currentImage = _images[_currentImageIndex];
+            var currentImage = element[_currentImageIndex];
             await AnimateFromRightToLeft(currentImage);
         }
     }
 
 
-    public async Task AnimateFromLeftToRight(View view, uint duration = 500)
+    private async static Task AnimateFromLeftToRight(View view, uint duration = 250)
     {
         //view.TranslationX = view.Width;
         await view.TranslateTo(0, 0, duration);
     }
 
-    public async Task AnimateFromRightToLeft(View view, uint duration = 500)
+    private async Task AnimateFromRightToLeft(View view, uint duration = 250)
     {
         //view.TranslationX = -view.Width;
         await view.TranslateTo(screenWidth, 0, duration);
     }
 
-    // test try
-    void tryDrowRectangle()
-    {
-        Rectangle rec= new Rectangle();
-        
-    }
 }

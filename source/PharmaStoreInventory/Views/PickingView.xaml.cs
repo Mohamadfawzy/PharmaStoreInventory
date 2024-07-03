@@ -6,25 +6,17 @@ namespace PharmaStoreInventory.Views;
 
 public partial class PickingView : ContentPage
 {
-    PickingViewModel viewModel;
+    readonly PickingViewModel viewModel;
     public PickingView()
     {
         this.FlowDirection = FlowDirection.RightToLeft;
         InitializeComponent();
-        //viewModel = new PickingViewModel();
-        //this.BindingContext = viewModel;
-
-        // this.BindingContext = new PickingViewModel();
-        viewModel = (BindingContext as PickingViewModel);
-
-
+        viewModel = (PickingViewModel)BindingContext;
         Methods.AskForRequiredPermissionAsync();
     }
     protected override void OnAppearing()
     {
-        //base.OnAppearing();
-        //nativeBarcode.CameraEnabled = true;
-        //nativeBarcode.PauseScanning = false;
+
     }
 
     private void CameraOnDetectionFinished(object sender, OnDetectionFinishedEventArg e)
@@ -33,9 +25,9 @@ public partial class PickingView : ContentPage
         if (first is null)
             return;
 
-        Dispatcher.DispatchAsync(async () =>
+        Dispatcher.DispatchAsync(() =>
         {
-            (BindingContext as PickingViewModel).GetStockDetails(first.DisplayValue);
+            viewModel.GetStockDetails(first.DisplayValue);
 
         });
         //nativeBarcode.PauseScanning = true;
@@ -63,8 +55,7 @@ public partial class PickingView : ContentPage
         {
             var swip = sender as SwipeView;
             //var first = swip?.LeftItems.First() as SwipeItemView;
-            var checkIcon = swip?.FindByName("checkIcon") as Label;
-            if (checkIcon != null)
+            if (swip?.FindByName("checkIcon") is Label checkIcon)
             {
                 await checkIcon.TranslateTo(0, 10);
                 await checkIcon.ScaleTo(1.2, 400);
@@ -72,6 +63,10 @@ public partial class PickingView : ContentPage
                 await checkIcon.ScaleTo(1, 400);
                 await checkIcon.TranslateTo(0, 0);
             }
+
+
+
+
         }
     }
 
@@ -80,7 +75,7 @@ public partial class PickingView : ContentPage
         ClosePopup();
     }
 
-    private void collection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void Collection_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (collection.SelectedItem == null) return;
         if (collection.SelectedItem != null)

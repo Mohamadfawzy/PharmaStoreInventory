@@ -9,5 +9,5 @@ public class StockModel
     public DateOnly ExpiryDate { get; set; }
     public bool IsCounted { get; set; }
     public string? Distributor { get; set; }
-    public string Barcode { get; set; }
+    public string Barcode { get; set; } = string.Empty;
 }
