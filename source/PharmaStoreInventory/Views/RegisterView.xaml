@@ -49,7 +49,7 @@
                 <template:AnimatedInput x:Name="pharmacyName" InputPlaceholder="اسم الصيدلية" />
 
                 <template:AnimatedInput
-                    x:Name="Email"
+                    x:Name="email"
                     EntryKeyboard="Email"
                     ErrorMessage="ايميل خاطئ"
                     InputPlaceholder="البريد الالكتروني" />

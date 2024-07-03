@@ -250,7 +250,7 @@
                                     Style="{StaticResource Iconline}" />
                                 <VerticalStackLayout Grid.Column="1" Spacing="0">
                                     <!--  Date  -->
-
+                                    <!--  dd, mm, yyyy  -->
                                     <Label
                                         Text="{Binding ExpiryDate}"
                                         FlowDirection="LeftToRight"
@@ -269,7 +269,8 @@
                                                 <Label
                                                     Margin="0"
                                                     Padding="0"
-                                                    Text="{Binding Quantity}"
+                                                    FontSize="20"
+                                                    Text="456465"
                                                     VerticalTextAlignment="End" />
                                                 <Label
                                                     Text="Stock"
@@ -282,7 +283,7 @@
                                         <Frame
                                             Padding="15,0"
                                             HasShadow="False"
-                                            BackgroundColor="{StaticResource Primary100}"
+                                            BackgroundColor="Transparent"
                                             CornerRadius="6">
                                             <HorizontalStackLayout Spacing="3">
                                                 <Label
@@ -350,6 +351,7 @@
             StrokeThickness="1"
             FlowDirection="RightToLeft"
             StrokeShape="RoundRectangle 6"
+            InputTransparent="False"
             BackgroundColor="{AppThemeBinding Light={StaticResource Primary050},
                                               Dark={StaticResource Primary950}}">
             <VerticalStackLayout Padding="20,20" Spacing="20">
@@ -370,10 +372,16 @@
                     Stroke="#C49B33"
                     StrokeThickness="1"
                     StrokeShape="RoundRectangle 6">
-                    <Entry Text="1545" Keyboard="Numeric" />
+                    <Entry
+                        x:Name="entry"
+                        Text="1545"
+                        Keyboard="Numeric" />
                 </Border>
                 <Button Text="حفظ" Clicked="Save_Clicked" />
             </VerticalStackLayout>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer />
+            </Border.GestureRecognizers>
         </Border>
 
     </Grid>

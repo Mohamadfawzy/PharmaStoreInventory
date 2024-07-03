@@ -204,13 +204,15 @@ public partial class AnimatedInput : ContentView
 
     public bool HideKeyBoard()
     {
-        if (entry.IsFocused)
-        {
-#if ANDROID
-            entry.Unfocus();
-            entry.HideKeyboardAsync(CancellationToken.None);
-#endif
-        }
+        entry.Unfocus();
+        entry.HideSoftInputAsync(CancellationToken.None);
+//        if (entry.IsFocused)
+//        {
+//#if ANDROID
+//            entry.Unfocus();
+//            entry.HideKeyboardAsync(CancellationToken.None);
+//#endif
+//        }
         return true;
     }
 

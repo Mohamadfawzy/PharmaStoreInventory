@@ -1,4 +1,5 @@
 using BarcodeScanning;
+using CommunityToolkit.Maui.Core.Platform;
 using PharmaStoreInventory.ViewModels;
 
 namespace PharmaStoreInventory.Views;
@@ -37,7 +38,7 @@ public partial class PickingView : ContentPage
             (BindingContext as PickingViewModel).GetStockDetails(first.DisplayValue);
 
         });
-        nativeBarcode.PauseScanning = true;
+        //nativeBarcode.PauseScanning = true;
     }
 
     private void ToggleFlashLight(object sender, TappedEventArgs e)
@@ -106,6 +107,7 @@ public partial class PickingView : ContentPage
         popup.IsVisible = false;
         backgroundTransparence.IsVisible = false;
         nativeBarcode.PauseScanning = false;
+        entry.HideSoftInputAsync(CancellationToken.None);
     }
 
     void OpenPopup()

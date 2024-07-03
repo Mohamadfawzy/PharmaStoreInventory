@@ -1,63 +1,33 @@
 ﻿using PharmaStoreInventory.Views;
+using System.Windows.Input;
 
 namespace PharmaStoreInventory;
 
 public partial class MainPage : ContentPage
 {
+    public ICommand NavigateCommand { get; private set; }
 
     public MainPage()
     {
         InitializeComponent();
+
+        NavigateCommand = new Command<Type?>(
+            async (Type? pageType) =>
+            {
+                if (pageType != null)
+                {
+                    Page? page = Activator.CreateInstance(pageType) as Page;
+                    await Navigation.PushAsync(page);
+                }
+            });
+
+        BindingContext = this;
+
     }
 
-    private void OnCounterClicked(object sender, EventArgs e)
-    {
-
-    }
-    
-    private void GoToOnbording1(object sender, EventArgs e)
-    {
-        Navigation.PushAsync(new OnbordingView());
-    }
-    
-    private void GoToLogin(object sender, EventArgs e)
-    {
-        Navigation.PushAsync(new LoginView());
-    }
-    
-    private void GoToRegister(object sender, EventArgs e)
-    {
-        Navigation.PushAsync(new RegisterView());
-    }
-    
-    private void GoToWaitingApprovalView(object sender, EventArgs e)
-    {
-        Navigation.PushAsync(new WaitingApprovalView());
-    }
-    private void GoToCreateBranchView(object sender, EventArgs e)
-    {
-        Navigation.PushAsync(new CreateBranchView());
-    }
-    
-    private void GoToAllStockView(object sender, EventArgs e)
-    {
-        Navigation.PushAsync(new AllStockView());
-        //var parentTabbedPage = this.Parent as PharmaTabbedPage;
-        //parentTabbedPage?.GoToAllStockView();
-    }
-    
-    private void GoToBarcodeReaderView(object sender, EventArgs e)
-    {
-        Navigation.PushAsync(new BarcodeReaderView());
-    }
-    
-    private void GoToPickingView(object sender, EventArgs e)
-    {
-        Navigation.PushAsync(new PickingView());
-    }
-    
     private void GoToStockDetailsView(object sender, EventArgs e)
     {
         Navigation.PushAsync(new StockDetailsView("6221068000977"));
     }
+
 }

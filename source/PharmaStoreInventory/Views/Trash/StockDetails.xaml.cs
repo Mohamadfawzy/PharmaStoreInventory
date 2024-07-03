@@ -1,4 +1,4 @@
-namespace PharmaStoreInventory.Views;
+namespace PharmaStoreInventory.Views.Trash;
 
 public partial class StockDetails : ContentPage
 {

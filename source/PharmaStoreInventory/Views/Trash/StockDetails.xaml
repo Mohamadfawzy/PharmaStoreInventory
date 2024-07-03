@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="PharmaStoreInventory.Views.StockDetails"
+    x:Class="PharmaStoreInventory.Views.Trash.StockDetails"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="StockDetails">
     <VerticalStackLayout Padding="0">
 
-        <StackLayout Padding="0,20" BackgroundColor="#1A4F63" Spacing="10">
-            <Label Text="Kemagel silicone gel 30 gm" HorizontalOptions="Center" FontSize="30" />
-            <Label Text="كيماجل سيليكون جل 30 جرام" HorizontalOptions="Center" FontSize="28" />
+        <StackLayout
+            Padding="0,20"
+            BackgroundColor="#1A4F63"
+            Spacing="10">
+            <Label
+                Text="Kemagel silicone gel 30 gm"
+                HorizontalOptions="Center"
+                FontSize="30" />
+            <Label
+                Text="كيماجل سيليكون جل 30 جرام"
+                HorizontalOptions="Center"
+                FontSize="28" />
         </StackLayout>
 
 
@@ -17,7 +26,10 @@
                 <!--  Left  -->
                 <SwipeView.LeftItems>
                     <SwipeItems Mode="Execute">
-                        <SwipeItem Text="Inventory done" BackgroundColor="LightPink" Invoked="OnDeleteSwipeItemInvoked" />
+                        <SwipeItem
+                            Text="Inventory done"
+                            BackgroundColor="LightPink"
+                            Invoked="OnDeleteSwipeItemInvoked" />
                     </SwipeItems>
                 </SwipeView.LeftItems>
                 <!--  Right  -->
@@ -29,13 +41,19 @@
                                 Padding="20"
                                 BackgroundColor="Crimson"
                                 VerticalOptions="Center">
-                                <Label Text="Copy" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" />
+                                <Label
+                                    Text="Copy"
+                                    VerticalOptions="CenterAndExpand"
+                                    HorizontalOptions="Center" />
                             </StackLayout>
                         </SwipeItemView>
                     </SwipeItems>
                 </SwipeView.RightItems>
                 <!--  Content  -->
-                <Grid Margin="10" HeightRequest="200" BackgroundColor="LightGray">
+                <Grid
+                    Margin="10"
+                    HeightRequest="200"
+                    BackgroundColor="LightGray">
                     <StackLayout Padding="10,15" Spacing="10">
                         <Label
                             Text="01/12/2026"
@@ -43,7 +61,10 @@
                             HorizontalOptions="Center"
                             FontSize="28" />
 
-                        <Grid RowDefinitions="*,Auto" ColumnDefinitions="*,*" RowSpacing="10">
+                        <Grid
+                            RowDefinitions="*,Auto"
+                            ColumnDefinitions="*,*"
+                            RowSpacing="10">
                             <Label
                                 Text="الكمية"
                                 HorizontalOptions="Center"
@@ -82,7 +103,10 @@
                             </Frame>
                         </Grid>
 
-                        <Label Text="دار الطب المصري" HorizontalOptions="Center" TextColor="#1A4F63" />
+                        <Label
+                            Text="دار الطب المصري"
+                            HorizontalOptions="Center"
+                            TextColor="#1A4F63" />
                     </StackLayout>
                 </Grid>
             </SwipeView>
@@ -93,7 +117,10 @@
                 <!--  Left  -->
                 <SwipeView.LeftItems>
                     <SwipeItems Mode="Execute">
-                        <SwipeItem Text="Inventory done" BackgroundColor="LightPink" Invoked="OnDeleteSwipeItemInvoked" />
+                        <SwipeItem
+                            Text="Inventory done"
+                            BackgroundColor="LightPink"
+                            Invoked="OnDeleteSwipeItemInvoked" />
                     </SwipeItems>
                 </SwipeView.LeftItems>
                 <!--  Right  -->
@@ -105,13 +132,19 @@
                                 Padding="20"
                                 BackgroundColor="Crimson"
                                 VerticalOptions="Center">
-                                <Label Text="Copy" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" />
+                                <Label
+                                    Text="Copy"
+                                    VerticalOptions="CenterAndExpand"
+                                    HorizontalOptions="Center" />
                             </StackLayout>
                         </SwipeItemView>
                     </SwipeItems>
                 </SwipeView.RightItems>
                 <!--  Content  -->
-                <Grid Margin="10" HeightRequest="200" BackgroundColor="LightGray">
+                <Grid
+                    Margin="10"
+                    HeightRequest="200"
+                    BackgroundColor="LightGray">
                     <StackLayout Padding="10,15" Spacing="10">
                         <Label
                             Text="01/12/2027"
@@ -119,7 +152,10 @@
                             HorizontalOptions="Center"
                             FontSize="28" />
 
-                        <Grid RowDefinitions="*,Auto" ColumnDefinitions="*,*" RowSpacing="10">
+                        <Grid
+                            RowDefinitions="*,Auto"
+                            ColumnDefinitions="*,*"
+                            RowSpacing="10">
                             <Label
                                 Text="الكمية"
                                 HorizontalOptions="Center"
@@ -158,7 +194,10 @@
                             </Frame>
                         </Grid>
 
-                        <Label Text="دار الطب المصري" HorizontalOptions="Center" TextColor="#1A4F63" />
+                        <Label
+                            Text="دار الطب المصري"
+                            HorizontalOptions="Center"
+                            TextColor="#1A4F63" />
                     </StackLayout>
                 </Grid>
             </SwipeView>

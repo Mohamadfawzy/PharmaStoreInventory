@@ -25,6 +25,7 @@ public partial class RegisterView : ContentPage
     //}
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
+        //email.HideKeyBoard();
         inputsContainer.ClearFocusFromAllInputs();
     }
 

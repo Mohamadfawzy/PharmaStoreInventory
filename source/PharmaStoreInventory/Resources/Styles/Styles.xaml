@@ -23,7 +23,7 @@
         FontAutoScalingEnabled="True"
         FontFamily="{StaticResource IconFont}"
         Size="22"
-        Glyph="{x:Static res:AppResources.IconDoubleArrow}"
+        Glyph="{x:Static icon:IconFont.ChevronDoubleLeft}"
         Color="{AppThemeBinding Light=White,
                                 Dark=White}" />
 

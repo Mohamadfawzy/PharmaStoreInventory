@@ -1,4 +1,7 @@
-namespace PharmaStoreInventory.Views;
+using Android.Graphics.Drawables.Shapes;
+using Microsoft.Maui.Controls.Shapes;
+
+namespace PharmaStoreInventory.Views.Trash;
 
 public partial class AnimateBoxes : ContentPage
 {
@@ -51,5 +54,12 @@ public partial class AnimateBoxes : ContentPage
     {
         //view.TranslationX = -view.Width;
         await view.TranslateTo(screenWidth, 0, duration);
+    }
+
+    // test try
+    void tryDrowRectangle()
+    {
+        Rectangle rec= new Rectangle();
+        
     }
 }

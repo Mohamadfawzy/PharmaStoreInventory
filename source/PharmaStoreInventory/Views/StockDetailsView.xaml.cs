@@ -6,7 +6,7 @@ namespace PharmaStoreInventory.Views;
 public partial class StockDetailsView : ContentPage
 {
 
-    public StockDetailsView(string code)
+    public StockDetailsView(string code= "6221068000977")
     {
         InitializeComponent();
         this.BindingContext = new StockDetailsViewModel(code);

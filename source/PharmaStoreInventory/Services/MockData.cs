@@ -137,8 +137,48 @@ public static class MockData
             },
         };
 
+    public static List<StoresModel> StoresModelList = new List<StoresModel>
+    {
+        new StoresModel { Id = 2, IsSelected = false , Name="المخزن الخارجي"},
+        new StoresModel { Id = 3, IsSelected = false , Name="مخزن شبين"},
+        new StoresModel { Id = 1, IsSelected = true , Name="الصيدلية"},
+        new StoresModel { Id = 4, IsSelected = false , Name="مخزن طنطا"},
+        
+        //new StoresModel { Id = 2, IsSelected = false , Name="المخزن الخارجي"},
+        //new StoresModel { Id = 3, IsSelected = false , Name="مخزن شبين"},
+        //new StoresModel { Id = 1, IsSelected = true , Name="الصيدلية"},
+        //new StoresModel { Id = 4, IsSelected = false , Name="مخزن طنطا"},
+        
+        
+        //new StoresModel { Id = 2, IsSelected = false , Name="المخزن الخارجي"},
+        //new StoresModel { Id = 3, IsSelected = false , Name="مخزن شبين"},
+        //new StoresModel { Id = 1, IsSelected = true , Name="الصيدلية"},
+        //new StoresModel { Id = 4, IsSelected = false , Name="مخزن طنطا"},
+        
+        //new StoresModel { Id = 2, IsSelected = false , Name="المخزن الخارجي"},
+        //new StoresModel { Id = 3, IsSelected = false , Name="مخزن شبين"},
+        //new StoresModel { Id = 1, IsSelected = true , Name="الصيدلية"},
+        //new StoresModel { Id = 4, IsSelected = false , Name="مخزن طنطا"},
+        
+        //new StoresModel { Id = 2, IsSelected = false , Name="المخزن الخارجي"},
+        //new StoresModel { Id = 3, IsSelected = false , Name="مخزن شبين"},
+        //new StoresModel { Id = 1, IsSelected = true , Name="الصيدلية"},
+        //new StoresModel { Id = 4, IsSelected = false , Name="مخزن طنطا"},
+        
+        
+        //new StoresModel { Id = 2, IsSelected = false , Name="المخزن الخارجي"},
+        //new StoresModel { Id = 3, IsSelected = false , Name="مخزن شبين"},
+        //new StoresModel { Id = 1, IsSelected = true , Name="الصيدلية"},
+        //new StoresModel { Id = 4, IsSelected = false , Name="مخزن طنطا"}
+    };
     public static List<StockModel>  GetStockByBarcode(string code)
     {
         return StockModelList.Where(x => x.Barcode == code).ToList();
+    }
+    
+    
+    public static List<StoresModel> GetStores(string code)
+    {
+        return StoresModelList.ToList();
     }
 }
