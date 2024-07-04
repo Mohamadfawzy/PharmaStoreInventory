@@ -26,6 +26,8 @@
             <Button Text="PickingView" CommandParameter="{x:Type views:PickingView}" />
             <Button Text="Stock Details View" Clicked="GoToStockDetailsView" />
             <Button Text="Dashboard View" CommandParameter="{x:Type views:DashboardView}" />
+            <Button Text="UserView View" CommandParameter="{x:Type views:UserView}" />
+            <Button Text="VerificationView" CommandParameter="{x:Type views:VerificationView}" />
 
             <HorizontalStackLayout Spacing="5">
                 <Button Text="AnimateBoxes" CommandParameter="{x:Type trash:AnimateBoxes}" />

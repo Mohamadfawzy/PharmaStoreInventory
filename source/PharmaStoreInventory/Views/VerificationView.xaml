@@ -7,13 +7,161 @@
     xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
+    xmlns:res="clr-namespace:PharmaStoreInventory.Languages"
+    xmlns:help="clr-namespace:PharmaStoreInventory.Helpers"
     x:Name="ThisPage"
     Title="VerificationView"
-    NavigationPage.HasNavigationBar="False">
-    <VerticalStackLayout>
-        <Label
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center"
-            HorizontalOptions="Center" />
+    NavigationPage.HasNavigationBar="False"
+    Loaded="ThisPage_Loaded"
+    FlowDirection="{x:Static help:FlowDirectionManager.CurentFlowDirection}"
+    NavigatedTo="ThisPage_NavigatedTo">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Entry">
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+                <Setter Property="WidthRequest" Value="50" />
+                <Setter Property="HeightRequest" Value="50" />
+                <Setter Property="Keyboard" Value="Numeric" />
+                <Setter Property="MaxLength" Value="1" />
+                <Setter Property="IsReadOnly" Value="True" />
+            </Style>
+
+            <Style TargetType="Frame">
+                <Setter Property="CornerRadius" Value="8" />
+            </Style>
+
+            <Style x:Key="ParagrapherLabel" TargetType="Label">
+                <Setter Property="Margin" Value="30,0" />
+                <Setter Property="TextColor" Value="{StaticResource Secondary100}" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="FontSize" Value="14" />
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <VerticalStackLayout x:Name="container">
+        <!--  Login Title  -->
+        <Border Style="{StaticResource TitleBorderStyle}">
+            <VerticalStackLayout Padding="0,30" Spacing="0">
+                <!--  Verification Code  -->
+                <Label
+                    Style="{StaticResource TitleCenter}"
+                    VerticalOptions="Start"
+                    Text="رمز التحقق" />
+                <!--  Plese enter  -->
+                <Label
+                    Style="{StaticResource ParagrapherLabel}"
+                    Text="من فضلك أدخل رمز التحقق الذي تم إرساله"
+                    TextColor="{StaticResource AccentDarkColor}" />
+                <!--  الايميل  -->
+                <Label Style="{StaticResource ParagrapherLabel}">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span TextColor="{StaticResource AccentDarkColor}" Text="إلى" />
+                            <Span Text="  " />
+                            <Span
+                                FontAttributes="Bold"
+                                TextColor="{StaticResource Secondary050}"
+                                Text="yourEmail@gmail.com" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <!--  Entries  -->
+                <HorizontalStackLayout
+                    x:Name="entriesContainer"
+                    Padding="0,50,0,0"
+                    FlowDirection="LeftToRight"
+                    HorizontalOptions="Center">
+
+                    <!--  Entry 1  -->
+                    <Frame Margin="10" Padding="0">
+                        <Entry
+                            x:Name="entry1"
+                            IsReadOnly="False"
+                            TextChanged="Entry_TextChanged"
+                            Focused="OnFocused"
+                            ReturnCommandParameter="1" />
+                    </Frame>
+                    <!--  Entry 2  -->
+                    <Frame Margin="10" Padding="0">
+                        <Entry
+                            x:Name="entry2"
+                            TextChanged="Entry_TextChanged"
+                            Focused="OnFocused"
+                            ReturnCommandParameter="2" />
+                    </Frame>
+                    <!--  Entry 3  -->
+                    <Frame Margin="10" Padding="0">
+                        <Entry
+                            x:Name="entry3"
+                            TextChanged="Entry_TextChanged"
+                            Focused="OnFocused"
+                            ReturnCommandParameter="3" />
+                    </Frame>
+                    <!--  Entry 4  -->
+                    <Frame Margin="10" Padding="0">
+                        <Entry
+                            x:Name="entry4"
+                            TextChanged="Entry_TextChanged"
+                            Focused="OnFocused"
+                            ReturnCommandParameter="4" />
+                    </Frame>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Label
+                        Margin="10,0"
+                        Style="{StaticResource ParagrapherLabel}"
+                        TextColor="{StaticResource AccentDarkColor}"
+                        Text="لم تستلم الرمز؟" />
+                    <Button
+                        x:Name="ResendCodeButton"
+                        VerticalOptions="Center"
+                        FontSize="14"
+                        TextColor="{StaticResource Primary050}"
+                        Style="{StaticResource Anchor}"
+                        Text="إعادة إرسال"
+                        FontFamily="{StaticResource KufiRegular}"
+                        IsEnabled="False"
+                        Clicked="OnResendCodeClicked" />
+                </HorizontalStackLayout>
+
+                <Label
+                    x:Name="TimerLabel"
+                    TextColor="{StaticResource ErrorColor}"
+                    Text="You can resend the code in 60 seconds"
+                    IsVisible="False"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" />
+
+            </VerticalStackLayout>
+        </Border>
+        <!--  Verify Button  -->
+        <Button
+            Margin="30,20"
+            Text="تأكيد"
+            Clicked="Button_Clicked" />
+        <!--  Back to  -->
+        <HorizontalStackLayout HorizontalOptions="Center">
+            <Label
+                Margin="0"
+                Style="{StaticResource ParagrapherLabel}"
+                TextColor="{StaticResource Primary}"
+                FontFamily="{StaticResource IconFont}"
+                Text="{x:Static help:IconFontManager.ArrowIcon}" />
+
+            <Label
+                Margin="10,0"
+                Style="{StaticResource ParagrapherLabel}"
+                TextColor="{StaticResource Primary}"
+                Text="العودة للخلف" />
+            <HorizontalStackLayout.GestureRecognizers>
+                <TapGestureRecognizer Tapped="PopTapped" />
+            </HorizontalStackLayout.GestureRecognizers>
+        </HorizontalStackLayout>
+
     </VerticalStackLayout>
 </ContentPage>

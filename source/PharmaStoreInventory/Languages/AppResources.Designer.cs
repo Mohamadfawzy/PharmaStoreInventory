@@ -61,7 +61,7 @@ namespace PharmaStoreInventory.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;#f013d;.
+        ///   Looks up a localized string similar to \\U000f0004.
         /// </summary>
         internal static string IconDoubleArrow {
             get {

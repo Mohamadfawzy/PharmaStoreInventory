@@ -39,7 +39,7 @@
     <!--  Accent Colors  -->
     <Color x:Key="AccentColor">#FFC107</Color>
     <Color x:Key="AccentLightColor">#FFECB5</Color>
-    <Color x:Key="AccentDarkColor">#B38900</Color>
+    <Color x:Key="AccentDarkColor">#C66900</Color>
 
     <!--  Background Colors  -->
     <Color x:Key="BackgroundColor">#F4F4F4</Color>

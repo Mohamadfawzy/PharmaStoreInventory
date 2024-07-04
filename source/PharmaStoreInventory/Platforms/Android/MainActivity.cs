@@ -3,6 +3,7 @@ using Android.Content.PM;
 using Android.Content.Res;
 using Android.OS;
 using Java.Util.Logging;
+using System.Globalization;
 
 namespace PharmaStoreInventory
 {
@@ -15,7 +16,17 @@ namespace PharmaStoreInventory
             base.OnCreate(savedInstanceState);
             if (Window != null)
             {
-                Window.DecorView.LayoutDirection = Android.Views.LayoutDirection.Rtl;
+                var ss = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+                if (ss == "ar")
+                {
+                    Window.DecorView.LayoutDirection = Android.Views.LayoutDirection.Rtl;
+                }
+                else
+                {
+                    Window.DecorView.LayoutDirection = Android.Views.LayoutDirection.Ltr;
+
+                }
+                //Window.DecorView.LayoutDirection = Android.Views.LayoutDirection.Rtl;
             }
         }
     }

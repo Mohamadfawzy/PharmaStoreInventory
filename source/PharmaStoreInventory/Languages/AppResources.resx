@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="IconDoubleArrow" xml:space="preserve">
-    <value>&amp;#f013d;</value>
+    <value>\\U000f0004</value>
   </data>
   <data name="onbording_OnboardingText1" xml:space="preserve">
     <value>نحن هنا لمساعدتك على تنظيم وإدارة مخزون الأدوية بسهولة وكفاءة. باستخدام هذا التطبيق، يمكنك تتبع الكميات وتواريخ انتهاء الصلاحية لكل منتج في صيدليتك في أي وقت. لن تكون بحاجة للقلق بشأن نسيان إعادة الطلب أو انتهاء صلاحية الأدوية بعد الآن. نحن هنا لنذكرك بكل ما تحتاجه.</value>

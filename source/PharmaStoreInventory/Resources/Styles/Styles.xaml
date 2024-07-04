@@ -45,9 +45,9 @@
     <Style x:Key="TitleBorderStyle" TargetType="Border">
         <Setter Property="Margin" Value="0,0,0,30" />
         <Setter Property="StrokeThickness" Value="0" />
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary700}, Dark={StaticResource Primary950}}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource PrimaryDark}, Dark={StaticResource Primary950}}" />
         <Setter Property="StrokeShape" Value="RoundRectangle 0 0 30 30" />
-        <Setter Property="HeightRequest" Value="150" />
+        <Setter Property="MinimumHeightRequest" Value="150" />
     </Style>
 
     <Style TargetType="BoxView">
@@ -93,6 +93,20 @@
         <Setter Property="HorizontalOptions" Value="Start" />
         <Setter Property="VerticalOptions" Value="Start" />
         <Setter Property="Margin" Value="0" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Primary400}, Dark={StaticResource Primary700}}" />
+                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=Transparent, Dark=Transparent}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="PointerOver" />
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
     </Style>
 
     <Style TargetType="Entry">

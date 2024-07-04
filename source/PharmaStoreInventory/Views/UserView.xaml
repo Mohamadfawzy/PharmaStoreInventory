@@ -3,8 +3,19 @@
     x:Class="PharmaStoreInventory.Views.UserView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates"
+    xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
+    x:Name="ThisPage"
     Title="UserView"
-    NavigatedFrom="ContentPage_NavigatedFrom">
+    NavigationPage.HasNavigationBar="False"
+    NavigatedFrom="ContentPage_NavigatedFrom"
+    NavigatedTo="ContentPage_NavigatedTo"
+    NavigatingFrom="ContentPage_NavigatingFrom"
+    Disappearing="ContentPage_Disappearing"
+    Loaded="ContentPage_Loaded"
+    Unloaded="ContentPage_Unloaded">
 
 
     <NavigationPage.TitleView>
@@ -22,12 +33,22 @@
         <ToolbarItem Text="item 3" Order="Secondary" />
         <ToolbarItem Text="item 4" Order="Secondary" />
     </ContentPage.ToolbarItems>
-
-
-    <VerticalStackLayout Margin="0,0,0,0" BackgroundColor="Red" >
-        <Label
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center"
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <ScrollView VerticalOptions="FillAndExpand" Background="Crimson">
+        <StackLayout
+            x:Name="container"
+            Padding="0,50,0,0"
+            VerticalOptions="FillAndExpand"
+            BackgroundColor="Red">
+            <Grid>
+                <BoxView HeightRequest="20" ZIndex="0" />
+                <BoxView HeightRequest="20" ZIndex="1" />
+                <BoxView
+                    HeightRequest="20"
+                    ZIndex="4"
+                    Color="Green" />
+                <BoxView HeightRequest="20" ZIndex="2" />
+                <BoxView HeightRequest="20" ZIndex="3" />
+            </Grid>
+        </StackLayout>
+    </ScrollView>
 </ContentPage>
