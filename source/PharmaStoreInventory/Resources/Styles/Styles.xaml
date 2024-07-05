@@ -54,6 +54,13 @@
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary950}, Dark={StaticResource Primary200}}" />
     </Style>
 
+    <Style x:Key="SeparatorStyle" TargetType="BoxView">
+        <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary200}, Dark={StaticResource Primary800}}" />
+        <Setter Property="HeightRequest" Value="0.5" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+        <Setter Property="Margin" Value="0,0,0,15" />
+    </Style>
+
     <Style TargetType="Button">
         <Setter Property="TextColor" Value="{StaticResource Primary050}" />
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary700}}" />
@@ -196,6 +203,31 @@
         <Setter Property="HorizontalOptions" Value="Start" />
         <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="HorizontalTextAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="icon-sm" TargetType="Label">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource SuccessColor}, Dark={StaticResource Primary100}}" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
+        <Setter Property="HorizontalOptions" Value="Start" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    </Style>
+    <!--  end label  -->
+
+    <!--  StackLayout  -->
+    <Style x:Key="vStack-fluid-gap-5" TargetType="StackLayout">
+        <Setter Property="Orientation" Value="Vertical" />
+        <Setter Property="Spacing" Value="5" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+        <Setter Property="VerticalOptions" Value="FillAndExpand" />
+    </Style>
+
+    <Style x:Key="hStack-fluid-gap-5" TargetType="StackLayout">
+        <Setter Property="Orientation" Value="Horizontal" />
+        <Setter Property="Spacing" Value="5" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+        <Setter Property="VerticalOptions" Value="FillAndExpand" />
     </Style>
 
     <Style TargetType="RefreshView">

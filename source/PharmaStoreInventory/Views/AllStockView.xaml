@@ -14,13 +14,14 @@
     <ContentPage.BindingContext>
         <vm:AllStockViewModel />
     </ContentPage.BindingContext>
-    <VerticalStackLayout Spacing="20">
 
+    <Grid RowDefinitions="Auto,*">
         <!--  SEARCH BOX  -->
         <template:SearchBoxTemplate Command="{Binding SearchBoxTypingCommand}" HeightRequest="50" />
 
         <CollectionView
             x:Name="allStockList"
+            Grid.Row="1"
             Margin="5,0"
             FlowDirection="LeftToRight"
             BackgroundColor="{StaticResource White}"
@@ -46,28 +47,64 @@
                                 Color="{StaticResource Primary}" />
 
                             <Grid
-                                Padding="6,0"
+                                Padding="10,0"
                                 HorizontalOptions="FillAndExpand"
                                 BackgroundColor="{StaticResource White}"
                                 RowDefinitions="Auto,Auto,*">
                                 <Label Text="{Binding ItemNameEnglish}" Style="{StaticResource Titleline}" />
-                                <Label
-                                    Text="{x:Static icon:IconFont.CheckboxMarkedCircle}"
-                                    Style="{StaticResource Iconline}"
-                                    HorizontalOptions="End" />
 
+                                <!--  icon  -->
                                 <Label
-                                    Grid.Row="1"
-                                    Text="{Binding ExpiryDate}"
-                                    TextColor="{StaticResource Primary500}" />
-                                <Label
-                                    Grid.Row="2"
-                                    Text="{Binding Price}"
-                                    TextColor="{StaticResource Secondary700}" />
-                                <Label
-                                    Grid.Row="2"
+                                    Text="{x:Static icon:IconFont.CheckboxBlankCircle}"
+                                    Style="{StaticResource Iconline}"
+                                    TextColor="{StaticResource Primary200}"
                                     HorizontalOptions="End"
-                                    Text="{Binding Quantity}" />
+                                    VerticalOptions="Center">
+                                    <Label.Triggers>
+                                        <DataTrigger
+                                            TargetType="Label"
+                                            Binding="{Binding IsCounted}"
+                                            Value="True">
+                                            <Setter Property="Text" Value="{x:Static icon:IconFont.CheckboxMarkedCircle}" />
+                                            <Setter Property="TextColor" Value="{StaticResource Primary700}" />
+                                            <!--  Multiple Setter elements are allowed  -->
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+
+
+
+                                <!--  Quantity  -->
+                                <HorizontalStackLayout Grid.Row="2" Spacing="3">
+                                    <Label
+                                        Margin="0"
+                                        Padding="0"
+                                        FontSize="20"
+                                        Text="{Binding Quantity}"
+                                        TextColor="{StaticResource ErrorDarkColor}"
+                                        VerticalTextAlignment="End" />
+                                    <Label
+                                        Text="Stock"
+                                        VerticalTextAlignment="End"
+                                        FontSize="10" />
+                                </HorizontalStackLayout>
+
+                                <!--  Price Group  -->
+                                <HorizontalStackLayout
+                                    Grid.Row="2"
+                                    Spacing="3"
+                                    HorizontalOptions="End">
+                                    <Label
+                                        Margin="0"
+                                        Padding="0"
+                                        Text="{Binding Price}"
+                                        VerticalTextAlignment="End" />
+                                    <Label
+                                        Text="L.E"
+                                        VerticalTextAlignment="End"
+                                        FontSize="10" />
+                                </HorizontalStackLayout>
+
                             </Grid>
                         </StackLayout>
                     </Border>
@@ -75,5 +112,5 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-    </VerticalStackLayout>
+    </Grid>
 </ContentPage>

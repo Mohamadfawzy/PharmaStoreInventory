@@ -206,13 +206,13 @@ public partial class AnimatedInput : ContentView
     {
         entry.Unfocus();
         entry.HideSoftInputAsync(CancellationToken.None);
-//        if (entry.IsFocused)
-//        {
-//#if ANDROID
-//            entry.Unfocus();
-//            entry.HideKeyboardAsync(CancellationToken.None);
-//#endif
-//        }
+        //        if (entry.IsFocused)
+        //        {
+        //#if ANDROID
+        //            entry.Unfocus();
+        //            entry.HideKeyboardAsync(CancellationToken.None);
+        //#endif
+        //        }
         return true;
     }
 
@@ -315,6 +315,14 @@ public partial class AnimatedInput : ContentView
         }
     }
 
+    public void ClearText()
+    {
+        InputText = string.Empty;
+        SetUnFocusColors();
+        placeholder.TranslationX = 0; 
+        placeholder.TranslationY = 0; 
+        placeholder.Scale = 1;
+    }
     private double CalculateTranslationX()
     {
         return container.FlowDirection == FlowDirection.RightToLeft ? 10 : -10;

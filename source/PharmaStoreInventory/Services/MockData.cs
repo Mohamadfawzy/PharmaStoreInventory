@@ -1,5 +1,5 @@
 ﻿using PharmaStoreInventory.Models;
-
+using System.Linq;
 namespace PharmaStoreInventory.Services;
 
 public static class MockData
@@ -139,7 +139,7 @@ public static class MockData
 
     public static List<StoresModel> StoresModelList = new List<StoresModel>
     {
-        new StoresModel { Id = 2, IsSelected = false , Name="المخزن الخارجي"},
+        new StoresModel { Id = 2, IsSelected = false , Name="المخزن الخارجي", },
         new StoresModel { Id = 3, IsSelected = false , Name="مخزن شبين"},
         new StoresModel { Id = 1, IsSelected = true , Name="الصيدلية"},
         new StoresModel { Id = 4, IsSelected = false , Name="مخزن طنطا"},
@@ -171,6 +171,21 @@ public static class MockData
         //new StoresModel { Id = 1, IsSelected = true , Name="الصيدلية"},
         //new StoresModel { Id = 4, IsSelected = false , Name="مخزن طنطا"}
     };
+    public static List<StockModel>  GetStocks()
+    {
+        return StockModelList.ToList();
+    }
+    
+    public static List<StockModel>  GetStocksNonRepet()
+    {
+        return StockModelList.DistinctBy(i=>i.Barcode).ToList();
+    }
+    
+    public static List<StockModel>?  GetStocksByText(string text)
+    {
+        return StockModelList.Where(x=>x.ItemNameEnglish.ToLower().Contains(text)).ToList();
+    }
+    
     public static List<StockModel>  GetStockByBarcode(string code)
     {
         return StockModelList.Where(x => x.Barcode == code).ToList();

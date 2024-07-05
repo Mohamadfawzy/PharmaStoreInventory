@@ -5,11 +5,11 @@ namespace PharmaStoreInventory.Views;
 
 public partial class UserView : ContentPage
 {
-    private PopupWin popup;
+    private PopupWin popupWin;
     public UserView()
     {
         InitializeComponent();
-        
+        popupWin = new PopupWin();
     }
     protected override void OnAppearing()
     {
@@ -36,60 +36,12 @@ public partial class UserView : ContentPage
         {
             //for (int i = 0; i < 10; i++)
             //{
-
+            //var inputFaild1 = new AnimatedInput();
+            //inputFaild1.InputPlaceholder = "حقل جديد";
+            //container.Add(inputFaild1);
             //}
-
-            var inputFaild1 = new AnimatedInput();
-            inputFaild1.InputPlaceholder = "حقل جديد";
-            container.Add(inputFaild1);
-
-
-            var inputFaild2 = new AnimatedInput();
-            inputFaild2.InputPlaceholder = "حقل جديد";
-            container.Add(inputFaild2);
-
-
-            var inputFaild3 = new AnimatedInput();
-            inputFaild3.InputPlaceholder = "حقل جديد";
-            container.Add(inputFaild3);
-
-
-            var inputFaild4 = new AnimatedInput();
-            inputFaild4.InputPlaceholder = "حقل جديد";
-            container.Add(inputFaild4);
-
-
-            var inputFaild5 = new AnimatedInput();
-            inputFaild5.InputPlaceholder = "حقل جديد";
-            container.Add(inputFaild5);
-
-
-            var inputFaild6 = new AnimatedInput();
-            inputFaild6.InputPlaceholder = "حقل جديد";
-            container.Add(inputFaild6);
-
-            var inputFaild7 = new AnimatedInput();
-            inputFaild7.InputPlaceholder = "حقل جديد";
-            container.Add(inputFaild7);
-
-            var inputFaild8 = new AnimatedInput();
-            inputFaild8.InputPlaceholder = "حقل جديد";
-            container.Add(inputFaild8);
-
-            var inputFaild9 = new AnimatedInput();
-            inputFaild9.InputPlaceholder = "حقل جديد";
-            container.Add(inputFaild9);
-
-
-
-
-            var btn = new Button();
-            btn.Text = "OK";
-            btn.Clicked += Button_Clicked;
-
-            container.Add(btn);
         }
-        
+
     }
 
 
@@ -119,14 +71,72 @@ public partial class UserView : ContentPage
     {
         // c 5
         //container.Clear();
-        popup?.Close();  
+        popupWin?.Close();
     }
 
 
     private void Button_Clicked(object sender, EventArgs e)
     {
         Navigation.PushAsync(new Views.VerificationView());
-        popup = new PopupWin();
-        this.ShowPopup(popup);
+        popupWin ??= new PopupWin();
+        this.ShowPopup(popupWin);
     }
+
+    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        saveButton.IsVisible = true;
+        editIcon.IsVisible = false;
+        nameStack.BackgroundColor = Color.FromArgb("#f0f7ff");
+        nameEntry.IsReadOnly = false;
+        nameEntry.Focus();
+
+    }
+
+    private void saveButton_Clicked(object sender, EventArgs e)
+    {
+        saveButton.IsVisible = false;
+        editIcon.IsVisible = true;
+        nameStack.BackgroundColor = Colors.Transparent;
+        nameEntry.Unfocus();
+        nameEntry.IsReadOnly = true;
+    }
+
+    private void MenuItemTapped(object sender, TappedEventArgs e)
+    {
+
+    }
+
+    private void ClosePopupClicked(object sender, EventArgs e)
+    {
+        ClosePopup();
+
+    }
+
+    private void LogoutTapped(object sender, TappedEventArgs e)
+    {
+
+    }
+
+    private void ResetPasswordTapped(object sender, TappedEventArgs e)
+    {
+        OpenPopup();
+    }
+
+    void ClosePopup()
+    {
+        backgroundTransparence.IsVisible = false;
+        
+        popup.IsVisible = false;
+        oldPassword.ClearText();
+        password.ClearText();
+        confirmPassword.ClearText();
+    }
+
+    void OpenPopup()
+    {
+        backgroundTransparence.IsVisible = true;
+        popup.IsVisible = true;
+    }
+
+
 }

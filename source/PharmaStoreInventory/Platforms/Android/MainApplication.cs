@@ -21,6 +21,8 @@ namespace PharmaStoreInventory
                     // handler.PlatformView.SetHintTextColor(ColorStateList.ValueOf(Android.Graphics.Color.Red));
                 }
             });
+            
+            
 
 
         }

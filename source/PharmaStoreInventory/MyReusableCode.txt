@@ -1,6 +1,7 @@
 ﻿    xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates"
     xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:help="clr-namespace:PharmaStoreInventory.Helpers"
     x:Name="ThisPage"
     xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
     NavigationPage.HasNavigationBar="False"

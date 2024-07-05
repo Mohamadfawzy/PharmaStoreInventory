@@ -7,6 +7,7 @@
     xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
+    xmlns:help="clr-namespace:PharmaStoreInventory.Helpers"
     x:Name="ThisPage"
     Title="UserView"
     NavigationPage.HasNavigationBar="False"
@@ -17,38 +18,208 @@
     Loaded="ContentPage_Loaded"
     Unloaded="ContentPage_Unloaded">
 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="MenuItemBorderStyle" TargetType="Border">
+                <Setter Property="Padding" Value="25,5" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 20" />
+                <Setter Property="Margin" Value="0,0,0,10" />
+            </Style>
 
-    <NavigationPage.TitleView>
-        <StackLayout Background="Green">
-            <Label Text="htiiiiis" />
-        </StackLayout>
-    </NavigationPage.TitleView>
+            <Style x:Key="MenuItemTestStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="HorizontalOptions" Value="StartAndExpand" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid>
+        <ScrollView VerticalOptions="FillAndExpand">
+            <StackLayout
+                x:Name="container"
+                Padding="20,10"
+                VerticalOptions="FillAndExpand"
+                Background="White">
+                <!--  BackButton  -->
+                <Button
+                    Padding="0"
+                    HeightRequest="30"
+                    WidthRequest="30"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Start"
+                    CornerRadius="20"
+                    FontFamily="{StaticResource IconFont}"
+                    Text="{x:Static help:IconFontManager.ArrowIcon}" />
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem
-            IsEnabled="True"
-            Order="Secondary"
-            Text="item 1" />
-        <ToolbarItem Text="item 2" Order="Secondary" />
-        <ToolbarItem Text="item 3" Order="Secondary" />
-        <ToolbarItem Text="item 4" Order="Secondary" />
-    </ContentPage.ToolbarItems>
-    <ScrollView VerticalOptions="FillAndExpand" Background="Crimson">
-        <StackLayout
-            x:Name="container"
-            Padding="0,50,0,0"
-            VerticalOptions="FillAndExpand"
-            BackgroundColor="Red">
-            <Grid>
-                <BoxView HeightRequest="20" ZIndex="0" />
-                <BoxView HeightRequest="20" ZIndex="1" />
-                <BoxView
-                    HeightRequest="20"
-                    ZIndex="4"
-                    Color="Green" />
-                <BoxView HeightRequest="20" ZIndex="2" />
-                <BoxView HeightRequest="20" ZIndex="3" />
-            </Grid>
-        </StackLayout>
-    </ScrollView>
+                <!--  Acount Icon  -->
+                <Label
+                    HorizontalOptions="Center"
+                    Text="{x:Static icon:IconFont.AccountCircle}"
+                    FontSize="100"
+                    FontFamily="{StaticResource IconFont}" />
+
+                <!--  Name Group  -->
+                <HorizontalStackLayout
+                    x:Name="nameStack"
+                    Padding="10,0"
+                    HorizontalOptions="Center">
+                    <Label
+                        x:Name="editIcon"
+                        Padding="3,0"
+                        Text="{x:Static icon:IconFont.SquareEditOutline}"
+                        FontFamily="{StaticResource IconFont}"
+                        VerticalTextAlignment="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Entry
+                        x:Name="nameEntry"
+                        Text="محمد سعيد محمود"
+                        IsReadOnly="True" />
+                    <Button
+                        x:Name="saveButton"
+                        Padding="0"
+                        Text="حفظ"
+                        IsVisible="False"
+                        MaximumHeightRequest="30"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        FontSize="10"
+                        Clicked="saveButton_Clicked" />
+                </HorizontalStackLayout>
+
+                <!--  Email Group  -->
+                <Label Text="البريد الالكتروني" FontSize="{StaticResource Body}" />
+                <Entry Text="email@aia.cm" />
+                <BoxView Style="{StaticResource SeparatorStyle}" />
+
+                <!--  PharmaName Group  -->
+                <Label Text="اسم الصيدلية" FontSize="{StaticResource Body}" />
+                <Entry Text="صيدلية المتوكل علي الله" />
+                <BoxView Style="{StaticResource SeparatorStyle}" />
+
+                <!--  Phone Group  -->
+                <Label Text="رقم الهاتف" FontSize="{StaticResource Body}" />
+                <Entry Text="051505451054" />
+                <BoxView Style="{StaticResource SeparatorStyle}" />
+
+
+                <!--  Branches  -->
+                <Border Style="{StaticResource MenuItemBorderStyle}">
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="الفروع" Style="{StaticResource MenuItemTestStyle}" />
+                        <Label
+                            VerticalTextAlignment="Center"
+                            Text="{x:Static icon:IconFont.SourceBranch}"
+                            FontFamily="{StaticResource IconFont}" />
+                    </StackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="MenuItemTapped" CommandParameter="1" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!--  reset password  -->
+                <Border Style="{StaticResource MenuItemBorderStyle}">
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="تغيير_الرقم_السري" Style="{StaticResource MenuItemTestStyle}" />
+                        <Label
+                            VerticalTextAlignment="Center"
+                            Text="{x:Static icon:IconFont.LockReset}"
+                            FontFamily="{StaticResource IconFont}" />
+                    </StackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="ResetPasswordTapped" CommandParameter="2" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!--  Logout  -->
+                <Border Style="{StaticResource MenuItemBorderStyle}">
+                    <StackLayout Orientation="Horizontal">
+                        <Label Style="{StaticResource MenuItemTestStyle}" Text="تسجيل_خروج" />
+                        <Label
+                            VerticalTextAlignment="Center"
+                            Text="{x:Static icon:IconFont.Logout}"
+                            FontFamily="{StaticResource IconFont}" />
+                    </StackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="LogoutTapped" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+            </StackLayout>
+        </ScrollView>
+
+        <!--  Popup  -->
+        <BoxView
+            x:Name="backgroundTransparence"
+            IsVisible="Hidden"
+            HorizontalOptions="Fill"
+            BackgroundColor="{StaticResource BackgroundTransparence}">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer   />
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <Border
+            x:Name="popup"
+            Margin="15,0"
+            IsVisible="Hidden"
+            VerticalOptions="Center"
+            MinimumHeightRequest="350"
+            Stroke="#00C49B33"
+            StrokeThickness="1"
+            FlowDirection="RightToLeft"
+            StrokeShape="RoundRectangle 6"
+            InputTransparent="False"
+            BackgroundColor="{AppThemeBinding Light={StaticResource White},
+                                              Dark={StaticResource Primary950}}">
+            <StackLayout Padding="20">
+                <Button
+                    Margin="-10"
+                    Padding="0"
+                    BackgroundColor="White"
+                    TextColor="{StaticResource Primary}"
+                    FontSize="20"
+                    Text="{x:Static icon:IconFont.Close}"
+                    HorizontalOptions="End"
+                    Clicked="ClosePopupClicked"
+                    FontFamily="{StaticResource IconFont}" />
+                <Label
+                    Margin="0,20"
+                    Text="العنوان"
+                    HorizontalTextAlignment="Center" />
+
+                <!--  old password  -->
+                <template:AnimatedInput
+                    x:Name="oldPassword"
+                    IsPassword="True"
+                    HasEyeIcon="True"
+                    InputPlaceholder="الرقم السري القديم" />
+                <!--  new Password  -->
+                <template:AnimatedInput
+                    x:Name="password"
+                    IsPassword="True"
+                    HasEyeIcon="True"
+                    InputPlaceholder="الرقم السري الجديد" />
+
+                <!--  Confirm Password  -->
+                <template:AnimatedInput
+                    x:Name="confirmPassword"
+                    HasEyeIcon="False"
+                    InputPlaceholder="تأكيد الرقم السري">
+                    <template:AnimatedInput.Triggers>
+                        <DataTrigger
+                            TargetType="template:AnimatedInput"
+                            Binding="{Binding Source={x:Reference password}, Path=IsPassword}"
+                            Value="True">
+                            <Setter Property="IsPassword" Value="True" />
+                        </DataTrigger>
+                    </template:AnimatedInput.Triggers>
+                </template:AnimatedInput>
+            </StackLayout>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer />
+            </Border.GestureRecognizers>
+        </Border>
+    </Grid>
 </ContentPage>

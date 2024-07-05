@@ -73,6 +73,7 @@
 	  <None Remove="Resources\Fonts\NotoKufiArabic-ExtraLight.ttf" />
 	  <None Remove="Resources\Fonts\NotoKufiArabic-Regular.ttf" />
 	  <None Remove="Resources\Fonts\NotoKufiArabic-SemiBold.ttf" />
+	  <None Remove="Resources\Images\logout.svg" />
 	  <None Remove="Resources\Images\msLogo.png" />
 	  <None Remove="Resources\Images\onbord1.jpg" />
 	  <None Remove="Resources\Images\Onbord2.jpg" />
