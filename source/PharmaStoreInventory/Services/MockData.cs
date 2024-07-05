@@ -14,12 +14,77 @@ public static class MockData
                 Quantity = 36,
                 Price = 27.25m,
                 ExpiryDate = new DateOnly(2026, 11, 1),
+                IsCounted = false,
+                Distributor = "شركة القاهرة للأدوية والصناعات الكيماوية",
+                Barcode = "6221068000977"
+
+            },
+            new StockModel
+            {
+                Id = 1,
+                ItemNameArabic = "سبكتون",
+                ItemNameEnglish = "Spectone",
+                Quantity = 36,
+                Price = 27.25m,
+                ExpiryDate = new DateOnly(2026, 11, 1),
                 IsCounted = true,
                 Distributor = "شركة القاهرة للأدوية والصناعات الكيماوية",
                 Barcode = "6221068000977"
 
             },
-        
+            new StockModel
+            {
+                Id = 1,
+                ItemNameArabic = "سبكتون",
+                ItemNameEnglish = "Spectone",
+                Quantity = 36,
+                Price = 27.25m,
+                ExpiryDate = new DateOnly(2026, 11, 1),
+                IsCounted = false,
+                Distributor = "شركة القاهرة للأدوية والصناعات الكيماوية",
+                Barcode = "6221068000977"
+
+            },
+            new StockModel
+            {
+                Id = 1,
+                ItemNameArabic = "سبكتون",
+                ItemNameEnglish = "Spectone",
+                Quantity = 36,
+                Price = 27.25m,
+                ExpiryDate = new DateOnly(2026, 11, 1),
+                IsCounted = true,
+                Distributor = "شركة القاهرة للأدوية والصناعات الكيماوية",
+                Barcode = "6221068000977"
+
+            },
+            new StockModel
+            {
+                Id = 1,
+                ItemNameArabic = "سبكتون",
+                ItemNameEnglish = "Spectone",
+                Quantity = 36,
+                Price = 27.25m,
+                ExpiryDate = new DateOnly(2026, 11, 1),
+                IsCounted = true,
+                Distributor = "شركة القاهرة للأدوية والصناعات الكيماوية",
+                Barcode = "6221068000977"
+
+            },
+             new StockModel
+            {
+                Id = 1,
+                ItemNameArabic = "سبكتون",
+                ItemNameEnglish = "Spectone",
+                Quantity = 36,
+                Price = 27.25m,
+                ExpiryDate = new DateOnly(2026, 11, 1),
+                IsCounted = false,
+                Distributor = "شركة القاهرة للأدوية والصناعات الكيماوية",
+                Barcode = "6221068000977"
+
+            },
+
           new StockModel
             {
                 Id = 1,
@@ -41,7 +106,7 @@ public static class MockData
                 Quantity = 40,
                 Price = 22.25m,
                 ExpiryDate = new DateOnly(2025, 10, 1),
-                IsCounted = true,
+                IsCounted = false,
                 Distributor = "Hochster",
                 Barcode = "6224007751008"
             },
@@ -119,7 +184,7 @@ public static class MockData
                 Quantity = 5,
                 Price = 23.25m,
                 ExpiryDate = new DateOnly(2025, 3, 1),
-                IsCounted = true,
+                IsCounted = false,
                 Distributor = "Hochster",
                 Barcode = "6224007751008"
             },
@@ -171,27 +236,27 @@ public static class MockData
         //new StoresModel { Id = 1, IsSelected = true , Name="الصيدلية"},
         //new StoresModel { Id = 4, IsSelected = false , Name="مخزن طنطا"}
     };
-    public static List<StockModel>  GetStocks()
+    public static List<StockModel> GetStocks()
     {
         return StockModelList.ToList();
     }
-    
-    public static List<StockModel>  GetStocksNonRepet()
+
+    public static List<StockModel> GetStocksNonRepet()
     {
-        return StockModelList.DistinctBy(i=>i.Barcode).ToList();
+        return StockModelList.DistinctBy(i => i.Barcode).ToList();
     }
-    
-    public static List<StockModel>?  GetStocksByText(string text)
+
+    public static List<StockModel>? GetStocksByText(string text)
     {
-        return StockModelList.Where(x=>x.ItemNameEnglish.ToLower().Contains(text)).ToList();
+        return StockModelList.Where(x => x.ItemNameEnglish.ToLower().Contains(text)).ToList();
     }
-    
-    public static List<StockModel>  GetStockByBarcode(string code)
+
+    public static List<StockModel> GetStockByBarcode(string code)
     {
         return StockModelList.Where(x => x.Barcode == code).ToList();
     }
-    
-    
+
+
     public static List<StoresModel> GetStores(string code)
     {
         return StoresModelList.ToList();

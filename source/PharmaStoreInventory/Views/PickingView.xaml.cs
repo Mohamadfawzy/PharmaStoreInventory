@@ -30,7 +30,15 @@ public partial class PickingView : ContentPage
             viewModel.GetStockDetails(first.DisplayValue);
 
         });
-        //nativeBarcode.PauseScanning = true;
+        cameraViewContianer.SetRow(gridData,1);
+        nativeBarcode.PauseScanning = true;
+        nativeBarcode.CameraEnabled=false;
+    }
+    private void NewScanTapped(object sender, TappedEventArgs e)
+    {
+        nativeBarcode.PauseScanning = false;
+        nativeBarcode.CameraEnabled = true;
+        cameraViewContianer.SetRow(gridData, 2);
     }
 
     private void ToggleFlashLight(object sender, TappedEventArgs e)
@@ -63,9 +71,6 @@ public partial class PickingView : ContentPage
                 await checkIcon.ScaleTo(1, 400);
                 await checkIcon.TranslateTo(0, 0);
             }
-
-
-
 
         }
     }
@@ -110,5 +115,10 @@ public partial class PickingView : ContentPage
         popup.IsVisible = true;
         backgroundTransparence.IsVisible = true;
         nativeBarcode.PauseScanning = true;
+    }
+
+    private void ScrollView_Scrolled(object sender, ScrolledEventArgs e)
+    {
+
     }
 }

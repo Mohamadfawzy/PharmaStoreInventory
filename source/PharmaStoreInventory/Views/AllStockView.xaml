@@ -7,6 +7,7 @@
     xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
+    xmlns:help="clr-namespace:PharmaStoreInventory.Helpers"
     x:Name="ThisPage"
     Title="AllStockView"
     NavigationPage.HasNavigationBar="False">
@@ -15,14 +16,57 @@
         <vm:AllStockViewModel />
     </ContentPage.BindingContext>
 
-    <Grid RowDefinitions="Auto,*">
-        <!--  SEARCH BOX  -->
-        <template:SearchBoxTemplate Command="{Binding SearchBoxTypingCommand}" HeightRequest="50" />
+    <Grid RowDefinitions="Auto,Auto,*">
+        <!--  Header  -->
+        <StackLayout
+            Padding="10,5"
+            IsVisible="True"
+            Orientation="Horizontal"
+            BackgroundColor="{StaticResource Primary800}"
+            ZIndex="1">
+            <Label
+                Margin="10"
+                FontSize="22"
+                Style="{StaticResource ParagrapherLabel}"
+                TextColor="{StaticResource Primary050}"
+                FontFamily="{StaticResource IconFont}"
+                Text="{x:Static help:IconFontManager.ArrowIcon}" />
+            <Label Text="كل الأصناف" TextColor="{StaticResource Primary050}" />
+        </StackLayout>
 
+        <!--  SEARCH BOX  -->
+        <StackLayout
+            Grid.Row="1"
+            Orientation="Horizontal"
+            BackgroundColor="{StaticResource Primary800}">
+            <template:SearchBoxTemplate Command="{Binding SearchBoxTypingCommand}" HorizontalOptions="FillAndExpand" />
+            <!--  Filter Icon  -->
+            <Frame
+                Grid.Column="1"
+                Margin="0"
+                Padding="4"
+                BackgroundColor="Transparent"
+                BorderColor="Transparent"
+                CornerRadius="5"
+                HorizontalOptions="End"
+                VerticalOptions="Center">
+                <Label
+                    FontFamily="{StaticResource IconFont}"
+                    FontSize="30"
+                    Text="{x:Static icon:IconFont.FilterVariant}"
+                    TextColor="{StaticResource White}" />
+
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OpenFiltrFrame" />
+                </Frame.GestureRecognizers>
+            </Frame>
+        </StackLayout>
+
+        <!--  collection  -->
         <CollectionView
             x:Name="allStockList"
-            Grid.Row="1"
-            Margin="5,0"
+            Grid.Row="2"
+            Margin="5,10,5,0"
             FlowDirection="LeftToRight"
             BackgroundColor="{StaticResource White}"
             ItemsSource="{Binding StockModelList}"
@@ -98,10 +142,12 @@
                                         Margin="0"
                                         Padding="0"
                                         Text="{Binding Price}"
+                                        TextColor="{StaticResource Primary300}"
                                         VerticalTextAlignment="End" />
                                     <Label
                                         Text="L.E"
                                         VerticalTextAlignment="End"
+                                        TextColor="{StaticResource Gray300}"
                                         FontSize="10" />
                                 </HorizontalStackLayout>
 
@@ -112,5 +158,53 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
+        <!--  Popup  -->
+        <Border
+            x:Name="borderFilter"
+            Grid.RowSpan="3"
+            Margin="0,10,0,0"
+            Padding="0"
+            BackgroundColor="{StaticResource Secondary}"
+            InputTransparent="False"
+            IsVisible="False"
+            HeightRequest="800"
+            Stroke="{StaticResource Primary}"
+            StrokeThickness="1"
+            ZIndex="2"
+            TranslationY="800">
+
+
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer />
+            </Border.GestureRecognizers>
+
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="10,10,0,0" />
+            </Border.StrokeShape>
+
+            <VerticalStackLayout Padding="10,20" Spacing="20">
+
+                <!--  Hedar  -->
+                <StackLayout Orientation="Horizontal">
+                    <Label Margin="20" Text="التصفية" />
+
+                    <!--  Close icon  -->
+                    <Button
+                        Padding="0"
+                        BackgroundColor="{StaticResource Primary050}"
+                        Clicked="CloseFiltrFrame"
+                        HeightRequest="50"
+                        WidthRequest="50"
+                        CornerRadius="25"
+                        FontSize="22"
+                        HorizontalOptions="EndAndExpand"
+                        Style="{StaticResource LableIcon}"
+                        FontFamily="{StaticResource IconFont}"
+                        TextColor="{StaticResource Primary}"
+                        Text="{x:Static icon:IconFont.Close}" />
+
+                </StackLayout>
+            </VerticalStackLayout>
+        </Border>
     </Grid>
 </ContentPage>

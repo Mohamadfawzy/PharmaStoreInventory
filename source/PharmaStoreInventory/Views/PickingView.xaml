@@ -10,6 +10,7 @@
     xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
     x:Name="ThisPage"
     Title="PickingView"
+    NavigationPage.HasNavigationBar="False"
     FlowDirection="LeftToRight"
     BackgroundColor="White">
 
@@ -22,12 +23,14 @@
             </Style>
 
             <Style x:Key="TouchLabelStyle" TargetType="Label">
-                <Setter Property="Margin" Value="20" />
-                <Setter Property="FontSize" Value="18" />
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="Padding" Value="20,0" />
+                <Setter Property="FontSize" Value="28" />
                 <Setter Property="TextColor" Value="White" />
                 <Setter Property="HorizontalOptions" Value="EndAndExpand" />
+                <Setter Property="VerticalTextAlignment" Value="Center" />
                 <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
-                <Setter Property="TextColor" Value="{StaticResource Primary950}" />
+                <Setter Property="TextColor" Value="{StaticResource Primary050}" />
             </Style>
 
             <Style TargetType="Line">
@@ -41,15 +44,32 @@
         <vm:PickingViewModel />
     </ContentPage.BindingContext>
 
-    <NavigationPage.TitleView>
-        <StackLayout Orientation="Horizontal">
-            <Label Text="تفاصيل المخزون" VerticalOptions="Center" />
-            <!--  Flash Icon  -->
+
+    <Grid x:Name="cameraViewContianer" RowDefinitions="60,1.3*,*,*">
+
+        <StackLayout
+            Padding="20,0"
+            Orientation="Horizontal"
+            BackgroundColor="{StaticResource Primary800}">
+
+            <!--  barcod Icon  -->
             <Label
-                Text="{x:Static icon:IconFont.Flashlight}"
-                TextColor="{AppThemeBinding Light={StaticResource Primary500},
-                                            Dark={StaticResource Primary050}}"
-                Style="{StaticResource TouchLabelStyle}">
+                Margin="10,0"
+                Text="{x:Static icon:IconFont.BarcodeScan}"
+                FontFamily="{StaticResource IconFont}"
+                TextColor="{StaticResource Primary050}"
+                VerticalTextAlignment="Center"
+                VerticalOptions="Center"
+                FontSize="30"
+                HorizontalOptions="FillAndExpand">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="NewScanTapped" />
+                </Label.GestureRecognizers>
+            </Label>
+
+
+            <!--  Flash Icon  -->
+            <Label Text="{x:Static icon:IconFont.Flashlight}" Style="{StaticResource TouchLabelStyle}">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Tapped="ToggleFlashLight" />
                 </Label.GestureRecognizers>
@@ -62,17 +82,11 @@
                 </Label.Behaviors>
             </Label>
         </StackLayout>
-    </NavigationPage.TitleView>
-
-    <Grid x:Name="cameraViewContianer" RowDefinitions="*,*,*">
-
         <!--  Row 1  -->
         <!--  Barcode scanner view in the center  -->
         <scanner:CameraView
             x:Name="nativeBarcode"
-            Grid.Row="0"
-            Grid.Column="0"
-            Grid.ColumnSpan="3"
+            Grid.Row="1"
             VerticalOptions="FillAndExpand"
             HorizontalOptions="FillAndExpand"
             OnDetectionFinished="CameraOnDetectionFinished"
@@ -82,7 +96,7 @@
         <!--<BoxView />-->
         <!--  Lines  -->
         <Grid
-            Grid.Row="0"
+            Grid.Row="1"
             Padding="0,30,40,30"
             BackgroundColor="Transparent"
             FlowDirection="LeftToRight"
@@ -159,8 +173,10 @@
         <!--  ===================================================================================================================  -->
 
         <Grid
-            Grid.Row="1"
-            Grid.RowSpan="2"
+            x:Name="gridData"
+            Grid.Row="2"
+            Grid.RowSpan="4"
+            BackgroundColor="White"
             RowDefinitions="Auto,*">
             <!--  Product Name and Barcod  -->
             <VerticalStackLayout Grid.Row="0">
@@ -171,6 +187,8 @@
                     FlowDirection="LeftToRight"
                     FontSize="24"
                     TextColor="{StaticResource Primary800}" />
+
+                <!--  Name AR  -->
                 <Label
                     Margin="0,-5,0,0"
                     Padding="20,0"
@@ -179,16 +197,19 @@
                     FontSize="15"
                     TextColor="{StaticResource Primary300}"
                     BackgroundColor="Transparent" />
+
                 <!--  Barcod Section  -->
                 <HorizontalStackLayout
                     Padding="20,0"
                     Spacing="10"
                     BackgroundColor="{StaticResource Primary800}">
+                    <!--  barcod Icon  -->
                     <Label
                         Text="{x:Static icon:IconFont.BarcodeScan}"
                         FontFamily="{StaticResource IconFont}"
                         TextColor="{StaticResource Primary050}"
                         VerticalTextAlignment="Center" />
+                    <!--  code number  -->
                     <Label Text="{Binding Barcode}" TextColor="{StaticResource Primary050}" />
 
                 </HorizontalStackLayout>
@@ -243,12 +264,27 @@
                                 ColumnDefinitions="45,*,45"
                                 RowDefinitions="*,1"
                                 BackgroundColor="{StaticResource White}">
+
                                 <!--  checkbox icon  -->
                                 <Label
                                     Margin="10,0"
-                                    Text="{x:Static icon:IconFont.CheckboxMarkedCircle}"
-                                    Style="{StaticResource Iconline}" />
+                                    Text="{x:Static icon:IconFont.CheckboxBlankCircle}"
+                                    Style="{StaticResource Iconline}"
+                                    TextColor="{StaticResource Primary200}"
+                                    VerticalOptions="Center">
+                                    <Label.Triggers>
+                                        <DataTrigger
+                                            TargetType="Label"
+                                            Binding="{Binding IsCounted}"
+                                            Value="True">
+                                            <Setter Property="Text" Value="{x:Static icon:IconFont.CheckboxMarkedCircle}" />
+                                            <Setter Property="TextColor" Value="{StaticResource Primary700}" />
+                                            <!--  Multiple Setter elements are allowed  -->
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
                                 <VerticalStackLayout Grid.Column="1" Spacing="0">
+
                                     <!--  Date  -->
                                     <!--  dd, mm, yyyy  -->
                                     <Label
@@ -258,19 +294,19 @@
                                         TextColor="{StaticResource Primary800}" />
 
                                     <HorizontalStackLayout Spacing="15">
-                                        <!--  Quantity  -->
 
+                                        <!--  Quantity  -->
                                         <Frame
                                             Padding="15,0"
                                             HasShadow="False"
-                                            BackgroundColor="{StaticResource Primary200}"
+                                            BackgroundColor="{StaticResource Primary100}"
                                             CornerRadius="6">
                                             <HorizontalStackLayout Spacing="3">
                                                 <Label
                                                     Margin="0"
                                                     Padding="0"
-                                                    FontSize="20"
-                                                    Text="456465"
+                                                    FontSize="22"
+                                                    Text="{Binding Quantity}"
                                                     VerticalTextAlignment="End" />
                                                 <Label
                                                     Text="Stock"
@@ -278,10 +314,21 @@
                                                     FontSize="10" />
                                             </HorizontalStackLayout>
                                         </Frame>
-                                        <!--  Price  -->
 
+
+                                    </HorizontalStackLayout>
+                                    <StackLayout Orientation="Horizontal">
+
+                                        <!--  Distributor  -->
+                                        <Label
+                                            Margin="0,8,0,3"
+                                            Text="{Binding Distributor}"
+                                            FontSize="9"
+                                            VerticalOptions="End" />
+                                        <!--  Price  -->
                                         <Frame
                                             Padding="15,0"
+                                            HorizontalOptions="EndAndExpand"
                                             HasShadow="False"
                                             BackgroundColor="Transparent"
                                             CornerRadius="6">
@@ -290,6 +337,7 @@
                                                     Margin="0"
                                                     Padding="0"
                                                     Text="{Binding Price}"
+                                                    FontSize="18"
                                                     VerticalTextAlignment="End" />
                                                 <Label
                                                     Text="L.E"
@@ -297,22 +345,16 @@
                                                     FontSize="10" />
                                             </HorizontalStackLayout>
                                         </Frame>
-                                    </HorizontalStackLayout>
-                                    <!--  Distributor  -->
-
-                                    <Label
-                                        Margin="0,8,0,0"
-                                        Text="{Binding Distributor}"
-                                        FontSize="9" />
+                                    </StackLayout>
                                 </VerticalStackLayout>
                                 <!--  Edit Icon  -->
                                 <Label
                                     Grid.Column="2"
-                                    Padding="10,0"
+                                    Margin="0"
                                     Text="{x:Static icon:IconFont.SquareEditOutline}"
                                     FontFamily="{StaticResource IconFont}"
                                     VerticalTextAlignment="Center"
-                                    HorizontalOptions="EndAndExpand" />
+                                    HorizontalOptions="Start" />
                                 <!--  line separator  -->
                                 <BoxView
                                     Grid.Row="1"
@@ -332,7 +374,7 @@
         <!--  Popup  -->
         <BoxView
             x:Name="backgroundTransparence"
-            Grid.RowSpan="3"
+            Grid.RowSpan="4"
             IsVisible="False"
             BackgroundColor="{StaticResource BackgroundTransparence}">
             <BoxView.GestureRecognizers>
@@ -342,7 +384,7 @@
 
         <Border
             x:Name="popup"
-            Grid.RowSpan="3"
+            Grid.RowSpan="4"
             Margin="10,0"
             IsVisible="False"
             VerticalOptions="Center"
@@ -385,4 +427,5 @@
         </Border>
 
     </Grid>
+
 </ContentPage>
