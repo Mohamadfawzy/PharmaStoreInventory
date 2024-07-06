@@ -117,10 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="IconDoubleArrow" xml:space="preserve">
-    <value>\\U000f0004</value>
+  <data name="Common_ContactUS" xml:space="preserve">
+    <value>Contact Us</value>
+  </data>
+  <data name="Common_Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="Login_DoYouHaveAcount" xml:space="preserve">
+    <value>Dont have an Acount?</value>
+  </data>
+  <data name="Login_Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Login_EmailErrorMessage" xml:space="preserve">
+    <value>Enter your email correctly</value>
+  </data>
+  <data name="Login_Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="Login_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Login_SignUp" xml:space="preserve">
+    <value>Sing Up</value>
+  </data>
+  <data name="Login_submit" xml:space="preserve">
+    <value>Login</value>
   </data>
   <data name="onbording_OnboardingText1" xml:space="preserve">
-    <value>نحن هنا لمساعدتك على تنظيم وإدارة مخزون الأدوية بسهولة وكفاءة. باستخدام هذا التطبيق، يمكنك تتبع الكميات وتواريخ انتهاء الصلاحية لكل منتج في صيدليتك في أي وقت. لن تكون بحاجة للقلق بشأن نسيان إعادة الطلب أو انتهاء صلاحية الأدوية بعد الآن. نحن هنا لنذكرك بكل ما تحتاجه.</value>
+    <value>We are here to help you organize and manage your medication inventory easily and efficiently. Using this app, you can track quantities and expiration dates of every product in your pharmacy at any time. You won't need to worry about forgetting to reorder or expired medications anymore. We are here to remind you of everything you need.</value>
   </data>
 </root>

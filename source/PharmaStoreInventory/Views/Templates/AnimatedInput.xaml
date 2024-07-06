@@ -8,7 +8,6 @@
     <Grid
         x:Name="container"
         Padding="0,0,0,15"
-        FlowDirection="RightToLeft"
         RowDefinitions="*,Auto"
         BindingContext="{x:Reference ThisPage}">
 

@@ -283,6 +283,7 @@
                                         </DataTrigger>
                                     </Label.Triggers>
                                 </Label>
+
                                 <VerticalStackLayout Grid.Column="1" Spacing="0">
 
                                     <!--  Date  -->

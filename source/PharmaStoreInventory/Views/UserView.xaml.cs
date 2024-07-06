@@ -138,5 +138,13 @@ public partial class UserView : ContentPage
         popup.IsVisible = true;
     }
 
+    private void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
+    {
+        oldPassword.HideKeyBoard();
+    }
 
+    private async void Button_Clicked_1(object sender, EventArgs e)
+    {
+        await Navigation.PopAsync();
+    }
 }

@@ -61,16 +61,88 @@ namespace PharmaStoreInventory.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to \\U000f0004.
+        ///   Looks up a localized string similar to Contact Us.
         /// </summary>
-        internal static string IconDoubleArrow {
+        internal static string Common_ContactUS {
             get {
-                return ResourceManager.GetString("IconDoubleArrow", resourceCulture);
+                return ResourceManager.GetString("Common_ContactUS", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to نحن هنا لمساعدتك على تنظيم وإدارة مخزون الأدوية بسهولة وكفاءة. باستخدام هذا التطبيق، يمكنك تتبع الكميات وتواريخ انتهاء الصلاحية لكل منتج في صيدليتك في أي وقت. لن تكون بحاجة للقلق بشأن نسيان إعادة الطلب أو انتهاء صلاحية الأدوية بعد الآن. نحن هنا لنذكرك بكل ما تحتاجه..
+        ///   Looks up a localized string similar to Version.
+        /// </summary>
+        internal static string Common_Version {
+            get {
+                return ResourceManager.GetString("Common_Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dont have an Acount?.
+        /// </summary>
+        internal static string Login_DoYouHaveAcount {
+            get {
+                return ResourceManager.GetString("Login_DoYouHaveAcount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email.
+        /// </summary>
+        internal static string Login_Email {
+            get {
+                return ResourceManager.GetString("Login_Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter your email correctly.
+        /// </summary>
+        internal static string Login_EmailErrorMessage {
+            get {
+                return ResourceManager.GetString("Login_EmailErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        internal static string Login_Login {
+            get {
+                return ResourceManager.GetString("Login_Login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        internal static string Login_Password {
+            get {
+                return ResourceManager.GetString("Login_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sing Up.
+        /// </summary>
+        internal static string Login_SignUp {
+            get {
+                return ResourceManager.GetString("Login_SignUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        internal static string Login_submit {
+            get {
+                return ResourceManager.GetString("Login_submit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We are here to help you organize and manage your medication inventory easily and efficiently. Using this app, you can track quantities and expiration dates of every product in your pharmacy at any time. You won&apos;t need to worry about forgetting to reorder or expired medications anymore. We are here to remind you of everything you need..
         /// </summary>
         internal static string onbording_OnboardingText1 {
             get {

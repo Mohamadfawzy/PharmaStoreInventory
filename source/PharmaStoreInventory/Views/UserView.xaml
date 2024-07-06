@@ -36,7 +36,7 @@
         <ScrollView VerticalOptions="FillAndExpand">
             <StackLayout
                 x:Name="container"
-                Padding="20,10"
+                Padding="20,30"
                 VerticalOptions="FillAndExpand"
                 Background="White">
                 <!--  BackButton  -->
@@ -47,6 +47,7 @@
                     HorizontalOptions="Start"
                     VerticalOptions="Start"
                     CornerRadius="20"
+                    Clicked="Button_Clicked_1"
                     FontFamily="{StaticResource IconFont}"
                     Text="{x:Static help:IconFontManager.ArrowIcon}" />
 
@@ -156,7 +157,7 @@
             HorizontalOptions="Fill"
             BackgroundColor="{StaticResource BackgroundTransparence}">
             <BoxView.GestureRecognizers>
-                <TapGestureRecognizer   />
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1" />
             </BoxView.GestureRecognizers>
         </BoxView>
 

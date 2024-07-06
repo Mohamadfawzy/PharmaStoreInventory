@@ -16,17 +16,17 @@ namespace PharmaStoreInventory
             base.OnCreate(savedInstanceState);
             if (Window != null)
             {
-                //var ss = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-                //if (ss == "ar")
-                //{
-                //    Window.DecorView.LayoutDirection = Android.Views.LayoutDirection.Rtl;
-                //}
-                //else
-                //{
-                //    Window.DecorView.LayoutDirection = Android.Views.LayoutDirection.Ltr;
+                var ss = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+                if (ss == "ar")
+                {
+                    Window.DecorView.LayoutDirection = Android.Views.LayoutDirection.Rtl;
+                }
+                else
+                {
+                    Window.DecorView.LayoutDirection = Android.Views.LayoutDirection.Ltr;
 
-                //}
-                Window.DecorView.LayoutDirection = Android.Views.LayoutDirection.Rtl;
+                }
+                //Window.DecorView.LayoutDirection = Android.Views.LayoutDirection.Rtl;
             }
         }
     }

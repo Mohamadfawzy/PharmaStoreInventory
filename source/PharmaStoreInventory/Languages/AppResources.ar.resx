@@ -117,7 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="IconDoubleArrow" xml:space="preserve">
-    <value>&amp;#xf013e;</value>
+  <data name="Common_ContactUS" xml:space="preserve">
+    <value>اتصل بنا</value>
+  </data>
+  <data name="Common_Version" xml:space="preserve">
+    <value>الاصدار</value>
+  </data>
+  <data name="Login_DoYouHaveAcount" xml:space="preserve">
+    <value>ليس لديك حساب؟</value>
+  </data>
+  <data name="Login_Email" xml:space="preserve">
+    <value>البريد الالكتروني</value>
+  </data>
+  <data name="Login_EmailErrorMessage" xml:space="preserve">
+    <value>أدخل البريد بطريقة صحيحة</value>
+  </data>
+  <data name="Login_Login" xml:space="preserve">
+    <value>تسجيل دخول</value>
+  </data>
+  <data name="Login_Password" xml:space="preserve">
+    <value>الرقم السري</value>
+  </data>
+  <data name="Login_SignUp" xml:space="preserve">
+    <value>إنشاء حساب</value>
+  </data>
+  <data name="Login_submit" xml:space="preserve">
+    <value>سجل دخول</value>
+  </data>
+  <data name="onbording_OnboardingText1" xml:space="preserve">
+    <value>نحن هنا لمساعدتك على تنظيم وإدارة مخزون الأدوية بسهولة وكفاءة. باستخدام هذا التطبيق، يمكنك تتبع الكميات وتواريخ انتهاء الصلاحية لكل منتج في صيدليتك في أي وقت. لن تكون بحاجة للقلق بشأن نسيان إعادة الطلب أو انتهاء صلاحية الأدوية بعد الآن. نحن هنا لنذكرك بكل ما تحتاجه.</value>
   </data>
 </root>

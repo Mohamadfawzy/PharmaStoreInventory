@@ -5,10 +5,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates"
     xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
+    xmlns:res="clr-namespace:PharmaStoreInventory.Languages"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     x:Name="ThisPage"
     Title="LoginView"
-    FlowDirection="RightToLeft"
     NavigationPage.HasNavigationBar="False">
     <!--  20.6.2024 9:08PM  -->
 
@@ -32,7 +32,7 @@
                 <Label
                     FontSize="20"
                     TextColor="{StaticResource White}"
-                    Text="تسجيل دخول"
+                    Text="{x:Static res:AppResources.Login_Login}"
                     VerticalOptions="Center"
                     HorizontalOptions="Center" />
             </Border>
@@ -42,29 +42,29 @@
                 <template:AnimatedInput
                     x:Name="Email"
                     EntryKeyboard="Email"
-                    ErrorMessage="أدخر الايميل بشكل صحيح"
-                    InputPlaceholder="البريد الالكتروني" />
+                    ErrorMessage="{x:Static res:AppResources.Login_EmailErrorMessage}"
+                    InputPlaceholder="{x:Static res:AppResources.Login_Email}" />
 
                 <template:AnimatedInput
                     x:Name="password"
                     IsPassword="True"
                     HasEyeIcon="True"
-                    InputPlaceholder="الرقم السري" />
+                    InputPlaceholder="{x:Static res:AppResources.Login_Password}" />
             </VerticalStackLayout>
 
             <VerticalStackLayout Padding="20,0">
                 <!--  submit Create Aount  -->
                 <Button
                     Margin="0,30,0,0"
-                    Text="سجل دخول"
+                    Text="{x:Static res:AppResources.Login_submit}"
                     Command="{Binding GetNameCommand}" />
 
                 <!--  Have Acount? sign in  -->
                 <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
                     <!--  label  -->
-                    <Label Text="هل لديك حساب؟" VerticalOptions="Center" />
+                    <Label Text="{x:Static res:AppResources.Login_DoYouHaveAcount}" VerticalOptions="Center" />
                     <!--  login button  -->
-                    <Button Style="{StaticResource Anchor}" Text="إنشاء حساب">
+                    <Button Style="{StaticResource Anchor}" Text="{x:Static res:AppResources.Login_SignUp}">
                         <Button.Behaviors>
                             <toolkit:TouchBehavior
                                 DefaultAnimationDuration="250"
@@ -79,15 +79,21 @@
 
             <VerticalStackLayout VerticalOptions="EndAndExpand">
                 <Label
-                    Text="اتصل بنا"
+                    Text="{x:Static res:AppResources.Common_ContactUS}"
                     TextColor="{StaticResource Primary}"
                     HorizontalOptions="Center" />
                 <Label
-                    Text="الاصدار 1.0"
                     VerticalOptions="EndAndExpand"
                     FontSize="{StaticResource VerySmall}"
                     TextColor="{StaticResource AccentDarkColor}"
-                    HorizontalOptions="Center" />
+                    HorizontalOptions="Center">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{x:Static res:AppResources.Common_Version}" />
+                            <Span Text="1.0" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
             </VerticalStackLayout>
 
             <StackLayout.GestureRecognizers>

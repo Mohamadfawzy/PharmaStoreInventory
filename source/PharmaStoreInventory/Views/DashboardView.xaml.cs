@@ -14,7 +14,8 @@ public partial class DashboardView : ContentPage
 
     private void GoToScanPage(object sender, TappedEventArgs e)
     {
-        Navigation.PushAsync(new Views.BarcodeReaderView());
+        //Navigation.PushAsync(new Views.BarcodeReaderView());
+        Navigation.PushAsync(new Views.AllStockView());
     }
 
     private void OpenPopupTapped(object sender, TappedEventArgs e)
