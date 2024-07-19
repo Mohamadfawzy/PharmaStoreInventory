@@ -1,4 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using DataAccess;
+using DataAccess.Dtos;
+using DataAccess.Entities;
+using DataAccess.Repository;
 using PharmaStoreInventory.Models;
 using System.Windows.Input;
 
@@ -6,15 +10,30 @@ namespace PharmaStoreInventory.ViewModels;
 
 public class AllStockViewModel: ObservableObject
 {
+    private ProductAmountRepo repo;
+    private AppDb context;
+
+    // ########*Public*########
+    public ProductQueryParameters ProductQueryParam { get; set; }
     public List<StockModel> StockModelListTemp;
-    public List<StockModel> StockModelList { get; set; }
+    public List<ProductDto> StockModelList { get; set; }
     public ICommand SearchBoxTypingCommand => new Command<string>(SearchBoxTyping);
+
+    // #######*Constructor*#########
+    //     ################
     public AllStockViewModel()
     {
+        //DataAccess.Helper.Constants.IP = "192.168.1.103";
+        //DataAccess.Helper.Constants.Port = "1433";
+        //context = new AppDb();
         StockModelList = new();
         StockModelListTemp = new();
+        ProductQueryParam = new();
+        repo = new();
         GetStockModelList();
     }
+
+    // #######################################
     private async void SearchBoxTyping(string text)
     {
         await GetFromSearch(text);
@@ -25,13 +44,14 @@ public class AllStockViewModel: ObservableObject
         {
             if (string.IsNullOrEmpty(text))
             {
-                StockModelList = StockModelListTemp;
+                //StockModelList = StockModelListTemp;
                 OnPropertyChanged(nameof(StockModelList));
                 return;
             }
+            ProductQueryParam.Text = text;
+            StockModelList = repo.GetAllProducts(ProductQueryParam);
+            //StockModelList = Services.MockData.GetStocksByText(text.ToLower());
 
-            StockModelList = Services.MockData.GetStocksByText(text.ToLower());
-            
             OnPropertyChanged(nameof(StockModelList));
         }
         catch (Exception ex)
@@ -41,6 +61,7 @@ public class AllStockViewModel: ObservableObject
     }
     void GetStockModelList()
     {
-        StockModelList = StockModelListTemp= Services.MockData.GetStocksNonRepet();
+        StockModelList = repo.GetAllProducts(ProductQueryParam);
+        //StockModelList = StockModelListTemp= Services.MockData.GetStocksNonRepet();
     }
 }

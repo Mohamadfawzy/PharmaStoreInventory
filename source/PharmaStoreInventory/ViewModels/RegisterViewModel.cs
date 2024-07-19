@@ -11,6 +11,9 @@ public class RegisterViewModel : ObservableObject
     public RegisterViewModel()
     {
         //name = "الاسم من الفيو موديل";
+        Task.Delay(5000);
+        Awaiting();
+        
     }
 
     public string Name
@@ -19,6 +22,15 @@ public class RegisterViewModel : ObservableObject
         set => SetProperty(ref name, value);
     }
 
+    async void  Awaiting()
+    {
+        await Task.Delay(5000);
+        Awaiting2();
+    } 
+    async void Awaiting2()
+    {
+        await Task.Delay(5000);
+    }
     public string InvalidMessage
     {
         get => invalidMessage;

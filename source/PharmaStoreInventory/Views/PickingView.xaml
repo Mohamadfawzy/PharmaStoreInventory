@@ -52,24 +52,11 @@
             Orientation="Horizontal"
             BackgroundColor="{StaticResource Primary800}">
 
-            <!--  barcod Icon  -->
-            <Label
-                Margin="10,0"
-                Text="{x:Static icon:IconFont.BarcodeScan}"
-                FontFamily="{StaticResource IconFont}"
-                TextColor="{StaticResource Primary050}"
-                VerticalTextAlignment="Center"
-                VerticalOptions="Center"
-                FontSize="30"
-                HorizontalOptions="FillAndExpand">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="NewScanTapped" />
-                </Label.GestureRecognizers>
-            </Label>
-
-
             <!--  Flash Icon  -->
-            <Label Text="{x:Static icon:IconFont.Flashlight}" Style="{StaticResource TouchLabelStyle}">
+            <Label
+                Text="{x:Static icon:IconFont.Flashlight}"
+                HorizontalOptions="FillAndExpand"
+                Style="{StaticResource TouchLabelStyle}">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Tapped="ToggleFlashLight" />
                 </Label.GestureRecognizers>
@@ -81,6 +68,23 @@
                         PressedScale="0.98" />
                 </Label.Behaviors>
             </Label>
+
+            <!--  barcod Icon  -->
+            <Label
+                Margin="10,0"
+                Text="{x:Static icon:IconFont.BarcodeScan}"
+                FontFamily="{StaticResource IconFont}"
+                TextColor="{StaticResource Primary050}"
+                VerticalTextAlignment="Center"
+                VerticalOptions="Center"
+                FontSize="30">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="NewScanTapped" />
+                </Label.GestureRecognizers>
+            </Label>
+
+
+
         </StackLayout>
         <!--  Row 1  -->
         <!--  Barcode scanner view in the center  -->

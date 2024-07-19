@@ -19,6 +19,20 @@ public static class MockData
                 Barcode = "6221068000977"
 
             },
+        
+        new StockModel
+            {
+                Id = 1,
+                ItemNameArabic = "الاسم بالعربي",
+                ItemNameEnglish = "EVA NATURAL GLOW FACIAL WASH NORMAL TO DRY SKIN 100ML",
+                Quantity = 36,
+                Price = 27.25m,
+                ExpiryDate = new DateOnly(2026, 11, 1),
+                IsCounted = false,
+                Distributor = "شركة القاهرة للأدوية والصناعات الكيماوية",
+                Barcode = "6221068000917"
+
+            },
             new StockModel
             {
                 Id = 1,

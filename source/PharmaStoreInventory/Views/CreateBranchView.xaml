@@ -9,7 +9,8 @@
     Title="CreateBranchView"
     BackgroundColor="White"
     FlowDirection="RightToLeft"
-    NavigationPage.HasNavigationBar="False">
+    NavigationPage.HasNavigationBar="False"
+    NavigatedTo="ThisPage_NavigatedTo">
 
     <ContentPage.BindingContext>
         <vm:RegisterViewModel />
@@ -20,7 +21,6 @@
             Margin="0"
             Padding="0,0,0,50"
             Spacing="0">
-
             <!--  Register Title  -->
             <Border
                 Margin="0,0,0,30"
@@ -37,41 +37,57 @@
             </Border>
 
             <!--  Inputs  -->
-            <VerticalStackLayout x:Name="inputsContainer" Padding="20,0">
+            <VerticalStackLayout
+                x:Name="inputsContainer"
+                Padding="20,0"
+                IsVisible="True">
                 <template:AnimatedInput
-                    x:Name="fullName"
+                    x:Name="brachName"
                     InputPlaceholder="اسم الفرع"
-                    InputText="{Binding Name}"
+                    InputText="شبين الكوم"
                     ErrorMessage="{Binding InvalidMessage, Mode=TwoWay}"
                     IsError="{Binding ShowError, Mode=TwoWay}" />
 
                 <template:AnimatedInput
                     x:Name="telephone"
                     EntryKeyboard="Telephone"
+                    InputText="0402555540"
                     ErrorMessage="رقم هاتف غير صحيح"
                     InputPlaceholder="تليفون الفرع" />
 
-                <template:AnimatedInput x:Name="pharmacyName" InputPlaceholder="عنوان IP" />
+                <template:AnimatedInput
+                    x:Name="ipAdrress"
+                    InputText="192.168.1.103"
+                    InputPlaceholder="عنوان IP" />
+                <template:AnimatedInput
+                    x:Name="port"
+                    InputText="1433"
+                    InputPlaceholder="المنفذPort" />
 
-                <template:AnimatedInput x:Name="Email" InputPlaceholder="اسم المستخدم" />
+                <template:AnimatedInput
+                    x:Name="username"
+                    InputText="admin"
+                    InputPlaceholder="اسم المستخدم علي النظام" />
 
                 <template:AnimatedInput
                     x:Name="password"
+                    InputText="admin"
                     IsPassword="True"
                     HasEyeIcon="True"
-                    InputPlaceholder="الرقم السري" />
+                    InputPlaceholder="الرقم السري علي النظام" />
             </VerticalStackLayout>
 
             <VerticalStackLayout Padding="20,0">
                 <!--  submit Create Branch  -->
                 <Button
+                    x:Name="submitButton"
                     Margin="0,30,0,0"
                     Text="إضافة فرع"
-                    Command="{Binding GetNameCommand}" />
+                    Clicked="SubmitButton" />
             </VerticalStackLayout>
 
             <VerticalStackLayout.GestureRecognizers>
-                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                <TapGestureRecognizer Tapped="ClearFocusFromAllInputsTapped" />
             </VerticalStackLayout.GestureRecognizers>
         </VerticalStackLayout>
     </ScrollView>

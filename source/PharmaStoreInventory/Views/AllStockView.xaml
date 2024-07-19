@@ -27,7 +27,6 @@
             <Label
                 Margin="10"
                 FontSize="22"
-                Style="{StaticResource ParagrapherLabel}"
                 TextColor="{StaticResource Primary050}"
                 FontFamily="{StaticResource IconFont}"
                 Text="{x:Static help:IconFontManager.ArrowIcon}" />
@@ -95,7 +94,13 @@
                                 HorizontalOptions="FillAndExpand"
                                 BackgroundColor="{StaticResource White}"
                                 RowDefinitions="Auto,Auto,*">
-                                <Label Text="{Binding ItemNameEnglish}" Style="{StaticResource Titleline}" />
+
+                                <Label
+                                    Text="{Binding Name}"
+                                    Style="{StaticResource Titleline}"
+                                    HorizontalTextAlignment="Start"
+                                    MaxLines="2"
+                                    FontSize="15" />
 
                                 <!--  icon  -->
                                 <Label
@@ -141,7 +146,7 @@
                                     <Label
                                         Margin="0"
                                         Padding="0"
-                                        Text="{Binding Price}"
+                                        Text="{Binding SalePrice}"
                                         TextColor="{StaticResource Primary300}"
                                         VerticalTextAlignment="End" />
                                     <Label
@@ -198,7 +203,6 @@
                         CornerRadius="25"
                         FontSize="22"
                         HorizontalOptions="EndAndExpand"
-                        Style="{StaticResource LableIcon}"
                         FontFamily="{StaticResource IconFont}"
                         TextColor="{StaticResource Primary}"
                         Text="{x:Static icon:IconFont.Close}" />

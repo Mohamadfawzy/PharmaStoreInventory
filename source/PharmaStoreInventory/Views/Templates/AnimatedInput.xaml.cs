@@ -1,6 +1,7 @@
 namespace PharmaStoreInventory.Views.Templates;
 using CommunityToolkit.Maui.Core.Platform;
 using Microsoft.Maui.Controls;
+using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Validations;
 
 public partial class AnimatedInput : ContentView
@@ -48,7 +49,7 @@ public partial class AnimatedInput : ContentView
         nameof(InputText),
         typeof(string),
         typeof(AnimatedInput),
-        null, BindingMode.TwoWay);
+        "", BindingMode.TwoWay);
 
     public static readonly BindableProperty IsErrorProperty =
         BindableProperty.Create(
@@ -325,7 +326,14 @@ public partial class AnimatedInput : ContentView
     }
     private double CalculateTranslationX()
     {
-        return container.FlowDirection == FlowDirection.RightToLeft ? 10 : -10;
+        //return container.FlowDirection == FlowDirection.RightToLeft ? 10 : -10;
+
+        if (AppConstants.Language == "ar")
+        {
+            return 10;
+        }
+        else return  -10;
+        //return container.FlowDirection == FlowDirection.RightToLeft ? 10 : -10;
     }
 
     private double CalculateTranslationY()
