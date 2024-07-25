@@ -1,0 +1,36 @@
+    public List<ProductDetailsDto> GetProductDetails(bool hasQuantity, string productId, string storeId)
+    {
+        string whereQuantity = hasQuantity ? " AND pAmount.amount > 0 " : "";
+        string whereStoreId = string.IsNullOrEmpty(storeId) ? "" : $" AND pAmount.store_id = {storeId} ";
+        string sql = @$"SELECT
+                        pAmount.product_id AS [ProductId],
+                        pAmount.store_id AS [StoreId],
+                        pAmount.counter_id AS [CounterId],
+                        pAmount.vendor_id AS [VendorId],
+                        pAmount.exp_date AS [ExpDate],
+                        pAmount.amount AS [Amount],
+                        pAmount.sell_price AS [SellPrice],
+                        pAmount.product_update AS [IsInventoried],
+                        p.product_name_ar AS [ProductNameAr],
+                        p.product_name_en AS [ProductNameEn],
+                        p.product_unit1 AS [ProductUnit1],
+                        p.product_unit1_3 AS [ProductUnit13],
+                        vendor.vendor_name_ar AS [VendorNameAr],
+                        companys.co_name_ar AS [CompanyNameAr]
+                    FROM products as p
+                        INNER JOIN Product_Amount as pAmount ON p.product_id = pAmount.product_id  
+                        INNER JOIN companys ON p.company_id = companys.company_id 
+                        INNER JOIN product_units ON p.product_unit1 = product_units.unit_id 
+                        LEFT OUTER JOIN vendor ON pAmount.vendor_id = vendor.vendor_id 
+                    {whereStatement} 
+                    {whereStoreId} 
+                     AND pAmount.product_id = {productId} 
+                     {whereQuantity} 
+                     order by pAmount.counter_id desc";
+
+        var list = context.Database
+            .SqlQueryRaw<ProductDetailsDto>(sql)
+            .Where(x => x.ProductId == 22)
+            .ToList();
+        return list;
+    }

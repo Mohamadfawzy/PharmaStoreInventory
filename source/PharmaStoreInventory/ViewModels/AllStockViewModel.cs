@@ -1,21 +1,19 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using DataAccess;
 using DataAccess.Dtos;
-using DataAccess.Entities;
 using DataAccess.Repository;
 using PharmaStoreInventory.Models;
 using System.Windows.Input;
 
 namespace PharmaStoreInventory.ViewModels;
 
-public class AllStockViewModel: ObservableObject
+public class AllStockViewModel : ObservableObject
 {
     private ProductAmountRepo repo;
-    private AppDb context;
 
     // ########*Public*########
     public ProductQueryParameters ProductQueryParam { get; set; }
-    public List<StockModel> StockModelListTemp;
+    public List<ProductDto> StockModelListTemp;
     public List<ProductDto> StockModelList { get; set; }
     public ICommand SearchBoxTypingCommand => new Command<string>(SearchBoxTyping);
 
@@ -23,9 +21,8 @@ public class AllStockViewModel: ObservableObject
     //     ################
     public AllStockViewModel()
     {
-        //DataAccess.Helper.Constants.IP = "192.168.1.103";
-        //DataAccess.Helper.Constants.Port = "1433";
-        //context = new AppDb();
+        DataAccess.Helper.Constants.IP = "192.168.1.103";
+        DataAccess.Helper.Constants.Port = "1433";
         StockModelList = new();
         StockModelListTemp = new();
         ProductQueryParam = new();
@@ -44,7 +41,7 @@ public class AllStockViewModel: ObservableObject
         {
             if (string.IsNullOrEmpty(text))
             {
-                //StockModelList = StockModelListTemp;
+                StockModelList = StockModelListTemp;
                 OnPropertyChanged(nameof(StockModelList));
                 return;
             }
@@ -56,12 +53,12 @@ public class AllStockViewModel: ObservableObject
         }
         catch (Exception ex)
         {
-            Helpers.CatchingException.PharmaDisplayAlert(ex.Message) ;
+            await Helpers.CatchingException.PharmaDisplayAlert(ex.Message);
         }
     }
     void GetStockModelList()
     {
-        StockModelList = repo.GetAllProducts(ProductQueryParam);
+        StockModelList = StockModelListTemp = repo.GetAllProducts(ProductQueryParam);
         //StockModelList = StockModelListTemp= Services.MockData.GetStocksNonRepet();
     }
 }

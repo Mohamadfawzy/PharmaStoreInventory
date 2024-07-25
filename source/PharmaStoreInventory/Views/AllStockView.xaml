@@ -103,7 +103,8 @@
                                     FontSize="15" />
 
                                 <!--  icon  -->
-                                <Label
+                                <!--<Label
+                                    IsVisible="False"
                                     Text="{x:Static icon:IconFont.CheckboxBlankCircle}"
                                     Style="{StaticResource Iconline}"
                                     TextColor="{StaticResource Primary200}"
@@ -116,15 +117,17 @@
                                             Value="True">
                                             <Setter Property="Text" Value="{x:Static icon:IconFont.CheckboxMarkedCircle}" />
                                             <Setter Property="TextColor" Value="{StaticResource Primary700}" />
-                                            <!--  Multiple Setter elements are allowed  -->
                                         </DataTrigger>
                                     </Label.Triggers>
-                                </Label>
+                                </Label>-->
 
 
 
                                 <!--  Quantity  -->
-                                <HorizontalStackLayout Grid.Row="2" Spacing="3">
+                                <HorizontalStackLayout
+                                    Grid.Row="2"
+                                    Spacing="3"
+                                    HorizontalOptions="End">
                                     <Label
                                         Margin="0"
                                         Padding="0"
@@ -139,10 +142,7 @@
                                 </HorizontalStackLayout>
 
                                 <!--  Price Group  -->
-                                <HorizontalStackLayout
-                                    Grid.Row="2"
-                                    Spacing="3"
-                                    HorizontalOptions="End">
+                                <HorizontalStackLayout Grid.Row="2" Spacing="3">
                                     <Label
                                         Margin="0"
                                         Padding="0"
