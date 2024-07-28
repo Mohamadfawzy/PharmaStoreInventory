@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DataAccess.Contexts;
+using DataAccess.DomainModel;
 using DataAccess.Dtos;
-using System.Text.RegularExpressions;
-using DataAccess.Helper;
 using DataAccess.Entities;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using DataAccess.Helper;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
+using System.Text.RegularExpressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DataAccess.Repository;
 public class ProductAmountRepo
@@ -97,11 +100,11 @@ public class ProductAmountRepo
         var result = query.ToList();
         return result;
     }
-    
+
     public ProductDetailsDto? GetProductById(int id)
     {
-        var pro =context.Product_Amount
-            .FirstOrDefault(x=>x.pa_id == id);
+        var pro = context.Product_Amount
+            .FirstOrDefault(x => x.pa_id == id);
         return (ProductDetailsDto?)pro;
     }
 
@@ -114,7 +117,6 @@ public class ProductAmountRepo
         var row = query.ExecuteUpdate(s => s.SetProperty(e => e.Product_update, e => status));
         return (row > 0);
     }
-
 
     public bool InsertProductAmout(Product_Amount item)
     {
@@ -152,18 +154,18 @@ public class ProductAmountRepo
         return false;
     }
 
-    public (bool success, string message) CopyProductAmout(int id, decimal quantity, DateTime? expDate)
+    public ContextResponse CopyProductAmout(int id, int productId, decimal quantity, DateTime? expDate)
     {
-        Product_Amount? insertedRow;
+        ContextResponse res = new ContextResponse(false, "fail");
 
-        var expiryBatchID = context.Product_Amount.Max(x => x.counter_id);
+        var expiryBatchID = context.Product_Amount.Count(x => x.product_id == productId);
 
         var product = context.Product_Amount
             .AsNoTracking()
             .FirstOrDefault(x => x.pa_id == id);
 
         if (product == null)
-            return (false, "fail");
+            return res;
 
         product.pa_id = 0;
         product.amount = quantity;
@@ -173,22 +175,16 @@ public class ProductAmountRepo
         product.update_uid = Helper.Constants.UserId;
         product.Product_update = "1";
 
-        context.Product_Amount
-            .Add(product);
-        context.SaveChanges();
-
-        return (true, "success");
-
-        //if (current != null)
-        //{
-        //    current.counter_id;
-        //    current.pa_id = 0;
-
-        //    insertedRow = context.Add(item).Entity;
-        //    var effectedRow = context.SaveChanges();
-        //    if (effectedRow > 0)
-        //        return true;
-        //}
+        context.Product_Amount.Add(product);
+        var effectedRow = context.SaveChanges();
+        if (effectedRow > 0)
+        {
+            res.Success = true;
+            res.Message = $"{effectedRow} row effected";
+            return res;
+        }
+        else
+            return res;
     }
 
     public ContextResponse UpdateQuantity(int id, decimal oldQuantity, decimal newQuantity, DateTime? expDate)
@@ -215,7 +211,7 @@ public class ProductAmountRepo
         return new ContextResponse(false, "not updated");
     }
 
-    public ContextResponse IsExpirationDateExisting(int id , int productId, DateTime date)
+    public ContextResponse IsExpirationDateExistingExceptOne(int id, int productId, DateTime date)
     {
         try
         {
@@ -229,11 +225,79 @@ public class ProductAmountRepo
         {
             return new ContextResponse(false, "catch error"); ;
         }
+    }
 
+    public ContextResponse IsExpirationDateExisting(int id, int productId, DateTime date)
+    {
+        try
+        {
+            var result = context.Product_Amount
+                .Any(x => x.exp_date == date && x.product_id == productId);
+            if (result)
+                return new ContextResponse(result, "exp_date is Existing");
+            return new ContextResponse(false, "exp_date is not Existing");
+        }
+        catch
+        {
+            return new ContextResponse(false, "catch error"); ;
+        }
+    }
+
+    public bool SetAllProductNonInventoried(int storeId)
+    {
+        var currentDate = DateTime.Now;
+
+        var query = context.Product_Amount
+            .Where(b => b.store_id == storeId)
+            .ExecuteUpdate(setters => setters
+            .SetProperty(b => b.Product_update, "0")
+            .SetProperty(b => b.Product_update_date, currentDate)
+            .SetProperty(b => b.update_date, currentDate)
+            .SetProperty(b => b.update_uid, Helper.Constants.UserId)); 
+        return (query > 0);
     }
 
 
+    #region Statistics
+    public int GetCountAllProducts(int storeId)
+    {
+        var totalProduct = context.Product_Amount
+            .Where(p => p.amount > 0 && p.store_id == storeId)
+            .Count();
+        return totalProduct;
+    }
 
+    public int GetCountAllExpiredProducts(int storeId)
+    {
+        var totalProduct = context.Product_Amount
+            .Where(p => p.amount > 0 && p.exp_date < DateTime.Now && p.store_id == storeId)
+            .Select(p => p.product_id)
+            .Count();
+        return totalProduct;
+    }
+
+    public int GetCountAllProductsWillExpireAfter3Months(int storeId)
+    {
+        var currentDate = DateTime.Now;
+        var threeMonthsLater = currentDate.AddMonths(3);
+
+        var totalProduct = context.Product_Amount
+            .Where(p => p.amount > 0
+                        && p.exp_date > currentDate
+                        && p.exp_date < threeMonthsLater
+                        && p.store_id == storeId)
+            .Count();
+        return totalProduct;
+    }
+
+    public int GetCountAllIsInventoryed(int storeId)
+    {
+        var totalProduct = context.Product_Amount
+            .Where(p => p.amount > 0 && p.Product_update == "1" && p.store_id == storeId)
+            .Count();
+        return totalProduct;
+    }
+    #endregion
 
     #region Methods for creating queries
     string BringSelectAllProductsIncludeJoinQuery(bool isGroup)
@@ -316,6 +380,4 @@ public class ProductAmountRepo
         return "";
     }
     #endregion
-
 }
-

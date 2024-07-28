@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DataAccess.Entities;
 using DataAccess.Helper;
-namespace DataAccess;
+namespace DataAccess.Contexts;
 
 public class AppDb : DbContext
 {
@@ -39,7 +39,7 @@ public class AppDb : DbContext
             {
                 entity.HasKey(p => new { p.product_id, p.counter_id, p.store_id });
                 entity.Property(x => x.pa_id).ValueGeneratedOnAdd();
-                entity.Property(a=>a.update_date).HasDefaultValueSql("(getutcdate())");
+                entity.Property(a => a.update_date).HasDefaultValueSql("(getutcdate())");
             });
 
         modelBuilder

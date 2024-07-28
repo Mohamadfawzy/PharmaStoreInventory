@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DataAccess.Dtos;
 using DataAccess.Entities;
+using DataAccess.Contexts;
 
 namespace DataAccess.Repository;
 public class EmployeeRepo

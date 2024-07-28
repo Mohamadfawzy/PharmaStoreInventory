@@ -41,8 +41,6 @@ public class ProductDetailsDto
             Amount = item.amount,
             SellPrice = item.sell_price,
             IsInventoried = item.Product_update,
-            
-
             // Map other properties as needed
         };
     }

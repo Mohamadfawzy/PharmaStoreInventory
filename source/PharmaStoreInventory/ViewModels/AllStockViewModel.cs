@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using DataAccess;
+using DataAccess.DomainModel;
 using DataAccess.Dtos;
 using DataAccess.Repository;
 using PharmaStoreInventory.Models;
