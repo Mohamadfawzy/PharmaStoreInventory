@@ -2,6 +2,7 @@
 using DataAccess.DomainModel;
 using DataAccess.Dtos.UserDtos;
 using DataAccess.Entities;
+using DataAccess.Helper;
 using DataAccess.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,11 +13,13 @@ public class UserRepository
     readonly AppHost context;
     readonly PasswordHasher passwordHasher;
 
+
     public UserRepository()
     {
         passwordHasher = new PasswordHasher();
         context = new AppHost();
     }
+
 
     public async Task<Result> CreateAsync(UserAccountDto userDto)
     {
@@ -40,6 +43,9 @@ public class UserRepository
             // Confirm the user's email by default
             userEntity.EmailConfirmed = true;
 
+            // set lockout end 7 day form now
+            userEntity.LockoutEnd = DateTimeOffset.UtcNow.AddDays(7);
+
             // Add the new user entity to the context
             var entityEntry = await context.Users.AddAsync(userEntity);
 
@@ -48,7 +54,7 @@ public class UserRepository
             {
                 await context.SaveChangesAsync();
                 // Return a success result with the user's ID
-                result = Result.Success(entityEntry.Entity.Id.ToString());
+                result = Result.Success($"Id:{entityEntry.Entity.Id.ToString()}");
             }
             else
             {
@@ -67,17 +73,20 @@ public class UserRepository
         return result;
     }
 
+
     public Task<bool> IsEmailExistAsync(string email)
     {
         return context.Users
             .AnyAsync(e => e.Email != null && e.Email == email);
     }
 
+
     public Task<bool> IsPhoneExistAsync(string phone)
     {
         return context.Users
             .AnyAsync(e => e.PhoneNumber != null && e.PhoneNumber == phone);
     }
+
 
     public async Task<UserAccount?> FindUserByEmailAsync(string email)
     {
@@ -92,6 +101,7 @@ public class UserRepository
         }
     }
 
+
     public async Task<UserAccount?> FindUserByPhoneNumberAsync(string phone)
     {
         try
@@ -105,49 +115,129 @@ public class UserRepository
         }
     }
 
+
     public async Task IncrementAccessFailedCountAsync(UserAccount user)
     {
         user.AccessFailedCount += 1;
         await context.SaveChangesAsync();
     }
 
-    public async Task SetUserAccountIsAccessAsync(UserAccount user)
+
+    public async Task SetUserAccountIsAccessAsync(UserAccount user, string deviceId)
     {
-        user.Access = true;
+        user.IsLoggedIn = true;
         user.AccessFailedCount = 0;
+        //user.DeviceID = dviceId;
+        //user.LockoutEnd = DateTimeOffset.UtcNow.AddDays(7);
         await context.SaveChangesAsync();
     }
 
-    public async Task<Result> UpdateUserAccountIsLockoutAsync(int id)
+
+    public async Task<Result> UpdateLogoutUserAsync(int id)
     {
         var q = await context.Users
             .Where(b => b.Id == id)
             .ExecuteUpdateAsync(setters => setters
-            .SetProperty(b => b.Access, false)
-            .SetProperty(b => b.LockoutEnd, DateTimeOffset.UtcNow));
+            .SetProperty(b => b.IsLoggedIn, false)
+            .SetProperty(b => b.LoggedOutAt, DateTimeOffset.UtcNow));
         if (q > 0)
             return Result.Success("you are logout successfily");
         return Result.Failure("logout not successfily");
     }
 
-
-
-
-
-
-
-    public async Task<UserAccount?> FindById(int userId)
+    /// <summary>
+    /// Updates the password for a user identified by their user ID.
+    /// </summary>
+    /// <param name="userId">The ID of the user whose password is to be updated.</param>
+    /// <param name="newPassword">The new password to be set.</param>
+    /// <returns>A <see cref="Result"/> indicating success or failure.</returns>
+    public async Task<Result> UpdatePasswordByUserIdAsync(int userId, string newPassword)
     {
-        //return await GenericReadById<User>(u => u.Id == userId, null);
+        var query = context.Users.Where(b => b.Id == userId);
+        return await UpdatePasswordAsync(query, newPassword);
+    }
+
+    /// <summary>
+    /// Updates the password for a user identified by their email address.
+    /// </summary>
+    /// <param name="email">The email of the user whose password is to be updated.</param>
+    /// <param name="newPassword">The new password to be set.</param>
+    /// <returns>A <see cref="Result"/> indicating success or failure.</param>
+    public async Task<Result> UpdatePasswordByEmailAsync(string email, string newPassword)
+    {
+        var query = context.Users.Where(b => b.Email == email);
+        return await UpdatePasswordAsync(query, newPassword);
+    }
+
+    /// <summary>
+    /// Central method to update the password for users based on a given query.
+    /// </summary>
+    /// <param name="query">The query to identify the user(s) whose password is to be updated.</param>
+    /// <param name="newPassword">The new password to be set.</param>
+    /// <returns>A <see cref="Result"/> indicating success or failure.</param>
+    private async Task<Result> UpdatePasswordAsync(IQueryable<UserAccount> query, string newPassword)
+    {
         try
         {
-            return await context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            // Hash the new password
+            var hashPassword = passwordHasher.HashPassword(newPassword);
+            //query = query.Where(x => !x.IsLoggedIn);
+            // Execute the update
+            var rowsAffected = await query.ExecuteUpdateAsync(setters => setters
+                .SetProperty(b => b.PasswordHash, hashPassword));
+
+            // Check if the update was successful
+            if (rowsAffected > 0)
+            {
+                return Result.Success("Password updated successfully.");
+            }
+
+            return Result.Failure(ErrorCode.OperationFailed, "Failed to update the password.");
         }
-        catch (Exception)
+        catch (Exception ex)
+        {
+            // Log the exception if necessary
+            return Result.Failure(ErrorCode.OperationFailed, $"3 An error occurred while updating the password: {ex.Message}");
+        }
+    }
+
+
+    public async Task<UserAccount?> FindUserById(int userId)
+    {
+        try
+        {
+            return await context.Users.FindAsync(userId);
+        }
+        catch
         {
             return null;
         }
     }
+
+    public async Task<Result> UpdateVerificationCode(int userId,string code, DateTimeOffset vCodeExpirationTime)
+    {
+        var q = await context.Users
+            .Where(b => b.Id == userId)
+            .ExecuteUpdateAsync(setters => setters
+            .SetProperty(b => b.VerificationCode, code)
+            .SetProperty(b => b.VCodeExpirationTime, vCodeExpirationTime)
+            );
+        if (q > 0)
+            return Result.Success("We have sent you a verification code to your email.");
+        return Result.Failure();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     public async Task<UserAccount?> ReadUserIdByEmailAsync(string email)
     {
@@ -199,17 +289,6 @@ public class UserRepository
 
     //    });
     //}
-
-
-    public async Task<bool> UpdateVerificationCode(UserAccount user)
-    {
-        user.VCodeExpirationTime = DateTimeOffset.Now.AddMinutes(Helper.Constants.VerificationCodeMinutesExpires).UtcDateTime;
-        context.Attach(user);
-        context.Entry(user).Property(vc => vc.VerificationCode).IsModified = true;
-        context.Entry(user).Property(et => et.VCodeExpirationTime).IsModified = true;
-
-        return await context.SaveChangesAsync() > 0 ? true : false;
-    }
 
     public async Task<bool> CheckPassword(string password, string hashedPassword)
     {

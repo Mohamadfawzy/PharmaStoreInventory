@@ -7,9 +7,9 @@ public class UserAccount
     public string PharmcyName { get; set; } = string.Empty;
     public string? Email { get; set; } 
     public string? PhoneNumber { get; set; }
-    public string? DeviceID { get; set; }
+    public string? DeviceID { get; set; } = null;
     public string? DeviceModel { get; set; } 
-    public bool Access { get; set; }
+    public bool IsLoggedIn { get; set; }
     public bool IsActive { get; set; }
     public int AccessFailedCount { get; set; }
 
@@ -19,6 +19,7 @@ public class UserAccount
     public DateTimeOffset? VCodeExpirationTime { get; set; }
     public DateTimeOffset CreateOn { get; set; }
     public DateTimeOffset LockoutEnd { get; set; }
+    public DateTimeOffset LoggedOutAt { get; set; }
     public bool TwoFactorEnabled { get; set; }
     public string PasswordHash { get; set; } = null!;
 }

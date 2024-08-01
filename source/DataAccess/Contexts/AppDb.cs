@@ -23,9 +23,21 @@ public class AppDb : DbContext
     public DbSet<Product_units> Product_units { get; set; }
     public DbSet<Employee> Employee { get; set; }
     public DbSet<Stores> Stores { get; set; }
+    public DbSet<InventoryHistory> InventoryHistory { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder
+             .Entity<InventoryHistory>(entity =>
+             {
+                 entity.ToTable("store_stock_update_time");
+                 entity.HasKey(p => p.Ssut_id);
+                 entity.Property(x => x.Ssut_id).ValueGeneratedOnAdd();
+             });
+
+
+        
+        
         modelBuilder
             .Entity<Stores>()
             .HasKey(x => x.store_id);

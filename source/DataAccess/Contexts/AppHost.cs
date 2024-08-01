@@ -24,7 +24,6 @@ public class AppHost: DbContext
         {
             entity.HasKey(x => x.Id);
             entity.Property(e => e.CreateOn).HasDefaultValueSql("(getutcdate())");
-            entity.Property(e => e.LockoutEnd).HasDefaultValueSql("(getutcdate())");
         });
     }
 }

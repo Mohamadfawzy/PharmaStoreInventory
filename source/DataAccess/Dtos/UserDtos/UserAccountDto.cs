@@ -17,9 +17,9 @@ public class UserAccountDto
         return new UserAccount()
         {
             FullName = dto.FullName,
+            PharmcyName = dto.PharmcyName,
             Email = dto.Email,
             PhoneNumber = dto.PhoneNumber,
-            PharmcyName = dto.PharmcyName,
             DeviceID = dto.DeviceID,
         };
     }

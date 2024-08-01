@@ -1,13 +1,16 @@
-﻿namespace DataAccess.DomainModel;
+﻿using DataAccess.Helper;
+
+namespace DataAccess.DomainModel;
 
 public class Result<T>
 {
     public bool IsSuccess { get; set; }
     public string Message { get; set; } = string.Empty;
+    public int ErrorCode { get; set; }
     public T? Data { get; set; }
     public IEnumerable<string>? Errors { get; set; }
 
-    public static Result<T> Success(T data, string message = "")
+    public static Result<T> Success(T data, string message = "Success")
     {
         return new Result<T> { IsSuccess = true, Data = data, Message = message };
     }
@@ -36,7 +39,7 @@ public class Result<T>
         };
     }
     
-    public static Result<T> Failure(string message )
+    public static Result<T> Failure(string message= "Failure")
     {
         return new Result<T>
         {
@@ -50,6 +53,7 @@ public class Result
 {
     public bool IsSuccess { get; set; }
     public string Message { get; set; } = string.Empty;
+    public int ErrorCode { get; set; }
     public IEnumerable<string>? Errors { get; set; }
 
     public static Result Success(string message = "")
@@ -81,12 +85,22 @@ public class Result
         };
     }
 
-    public static Result Failure(string message)
+    public static Result Failure(string message ="Failure")
     {
         return new Result
         {
             IsSuccess = false,
             Message = message
+        };
+    }
+    
+    public static Result Failure(ErrorCode errorCode, string message ="Failure")
+    {
+        return new Result
+        {
+            IsSuccess = false,
+            Message = message,
+            ErrorCode =(int)errorCode
         };
     }
 }

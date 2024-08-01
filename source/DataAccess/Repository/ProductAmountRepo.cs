@@ -243,19 +243,7 @@ public class ProductAmountRepo
         }
     }
 
-    public bool SetAllProductNonInventoried(int storeId)
-    {
-        var currentDate = DateTime.Now;
 
-        var query = context.Product_Amount
-            .Where(b => b.store_id == storeId)
-            .ExecuteUpdate(setters => setters
-            .SetProperty(b => b.Product_update, "0")
-            .SetProperty(b => b.Product_update_date, currentDate)
-            .SetProperty(b => b.update_date, currentDate)
-            .SetProperty(b => b.update_uid, Helper.Constants.UserId)); 
-        return (query > 0);
-    }
 
 
     #region Statistics
