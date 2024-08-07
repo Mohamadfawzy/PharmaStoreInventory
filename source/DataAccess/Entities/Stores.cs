@@ -2,11 +2,11 @@
 
 public class Stores
 {
-    public decimal? store_id { get; set; }
-    public string? store_code { get; set; }
-    public string? store_name_ar { get; set; }
-    public string? store_name_en { get; set; }
-    public string? active { get; set; }
-    public DateTime? insert_date { get; set; }
-    public string? insert_uid { get; set; }
+    public decimal Store_id { get; set; }
+    public string?  Store_code { get; set; }
+    public string?  Store_name_ar { get; set; }
+    public string?  Store_name_en { get; set; } = string.Empty;
+    public string? Active { get; set; }
+    public DateTime? Insert_date { get; set; }
+    public string? Insert_uid { get; set; }
 }

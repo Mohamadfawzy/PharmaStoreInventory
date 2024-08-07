@@ -1,17 +1,19 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Views;
+using PharmaStoreInventory.Views.Templates;
 
 namespace PharmaStoreInventory.Helpers;
 
-public static class CatchingException
+public static class Alerts
 {
-    public static async Task PharmaDisplayAlert(string message)
+    public static async Task DisplayAlert(string message)
     {
         await Application.Current?.MainPage?.DisplayAlert("Exception", message, "cancel");
     }
 
 
-    public static async void DisplaySnackbar(string text)
+    public static async Task DisplaySnackbar(string text, int durationS = 3)
     {
 
         CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
@@ -30,10 +32,27 @@ public static class CatchingException
         //string text = "The branch has been contacted successfully";
         //string actionButtonText = "Click Here to Dismiss";
         //Action action = async () => await DisplayAlert("Snackbar ActionButton Tapped", "The user has tapped the Snackbar ActionButton", "OK");
-        TimeSpan duration = TimeSpan.FromSeconds(3);
+        TimeSpan duration = TimeSpan.FromSeconds(durationS);
 
-        var snackbar = Snackbar.Make(text, visualOptions: snackbarOptions,actionButtonText:"");
+        var snackbar = Snackbar.Make(text, visualOptions: snackbarOptions, duration: duration, actionButtonText: "");
 
         await snackbar.Show(cancellationTokenSource.Token);
     }
+
+    private static Popup popup;
+    public static async void DisplayActivityIndicator(Page page)
+    {
+        popup = new PopupWin();
+        await page.ShowPopupAsync(popup);
+    }
+
+    public static async void CloseActivityIndicator()
+    {
+        if (popup != null)
+        {
+            await popup.CloseAsync();
+        }
+    }
+
+
 }

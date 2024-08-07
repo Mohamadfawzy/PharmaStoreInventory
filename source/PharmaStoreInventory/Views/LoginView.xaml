@@ -9,12 +9,9 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     x:Name="ThisPage"
     Title="LoginView"
+    NavigatedTo="ThisPage_NavigatedTo"
     NavigationPage.HasNavigationBar="False">
     <!--  20.6.2024 9:08PM  -->
-
-    <ContentPage.BindingContext>
-        <vm:RegisterViewModel />
-    </ContentPage.BindingContext>
 
     <ScrollView>
         <StackLayout
@@ -40,24 +37,27 @@
             <!--  Inputs  -->
             <VerticalStackLayout x:Name="inputsContainer" Padding="20,0">
                 <template:AnimatedInput
-                    x:Name="Email"
-                    EntryKeyboard="Email"
-                    ErrorMessage="{x:Static res:AppResources.Login_EmailErrorMessage}"
-                    InputPlaceholder="{x:Static res:AppResources.Login_Email}" />
+                    InputText="mohamedfawzy733@yahoo.com"
+                    x:Name="email"
+                    ErrorMessage="أدخل الايميل أور قم الهاتف بشكل صحيح"
+                    InputPlaceholder="أدخل الايميل أو رقم الهاتف" />
 
                 <template:AnimatedInput
                     x:Name="password"
                     IsPassword="True"
                     HasEyeIcon="True"
+                    InputText="1"
                     InputPlaceholder="{x:Static res:AppResources.Login_Password}" />
             </VerticalStackLayout>
 
+
+            <!--  Submit Buttons  -->
             <VerticalStackLayout Padding="20,0">
                 <!--  submit Create Aount  -->
                 <Button
                     Margin="0,30,0,0"
                     Text="{x:Static res:AppResources.Login_submit}"
-                    Command="{Binding GetNameCommand}" />
+                    Clicked="SubmitClicked" />
 
                 <!--  Have Acount? sign in  -->
                 <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
@@ -97,7 +97,7 @@
             </VerticalStackLayout>
 
             <StackLayout.GestureRecognizers>
-                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                <TapGestureRecognizer Tapped="ClearFocusFromAllInputsTapped" />
             </StackLayout.GestureRecognizers>
         </StackLayout>
     </ScrollView>

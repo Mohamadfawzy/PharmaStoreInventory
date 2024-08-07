@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using DataAccess.Entities;
+﻿using DataAccess.Entities;
 using DataAccess.Helper;
+using Microsoft.EntityFrameworkCore;
 namespace DataAccess.Contexts;
 
 public class AppDb : DbContext
@@ -13,8 +13,8 @@ public class AppDb : DbContext
     }
     public AppDb()
     {
-        connectionString = $"Data Source=localhost\\MSSQLSERVER01; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
-        //connectionString = $"Data Source={Constants.IP},{Constants.Port}\\MSSQLSERVER01; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
+        //connectionString = $"Data Source=192.168.1.103,1433\\MSSQLSERVER01; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
+        connectionString = $"Data Source={Constants.IP},{Constants.Port}\\MSSQLSERVER01; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
     }
     public DbSet<Product_Amount> Product_Amount { get; set; }
     public DbSet<Product> Products { get; set; }
@@ -35,12 +35,9 @@ public class AppDb : DbContext
                  entity.Property(x => x.Ssut_id).ValueGeneratedOnAdd();
              });
 
-
-        
-        
         modelBuilder
             .Entity<Stores>()
-            .HasKey(x => x.store_id);
+            .HasKey(x => x.Store_id);
 
         modelBuilder
             .Entity<Employee>()

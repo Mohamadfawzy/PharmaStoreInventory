@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using DataAccess;
-using DataAccess.DomainModel;
+using DataAccess.DomainModel.QueryParams;
 using DataAccess.Dtos;
 using DataAccess.Repository;
 using PharmaStoreInventory.Models;
@@ -13,7 +13,7 @@ public class AllStockViewModel : ObservableObject
     private ProductAmountRepo repo;
 
     // ########*Public*########
-    public ProductQueryParameters ProductQueryParam { get; set; }
+    public ProductQParam ProductQueryParam { get; set; }
     public List<ProductDto> StockModelListTemp;
     public List<ProductDto> StockModelList { get; set; }
     public ICommand SearchBoxTypingCommand => new Command<string>(SearchBoxTyping);
@@ -54,7 +54,7 @@ public class AllStockViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            await Helpers.CatchingException.PharmaDisplayAlert(ex.Message);
+            await Helpers.Alerts.DisplayAlert(ex.Message);
         }
     }
     void GetStockModelList()

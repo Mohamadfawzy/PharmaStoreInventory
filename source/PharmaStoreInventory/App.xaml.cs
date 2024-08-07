@@ -7,14 +7,14 @@ using System.Globalization;
 namespace PharmaStoreInventory;
 public partial class App : Application
 {
-    public static AppDb Context = null!;
+    //public static AppDb Context = null!;
     public App()
     {
         //Context = new AppDb();
         InitializeComponent();
         GetCulture();
         MainPage = new NavigationPage(new MainPage());
-        //GetPreferencesKeys();
+        HandlePreferencesKeys();
     }
 
     void GetCulture()
@@ -26,18 +26,14 @@ public partial class App : Application
             AppConstants.Language = "en";
     }
 
-    void GetPreferencesKeys()
+    void HandlePreferencesKeys()
     {
         try
         {
-            bool hasKey = Preferences.Default.ContainsKey("Port");
-            if (hasKey)
-            {
-                DataAccess.Helper.Constants.Port = Preferences.Default.Get("Port", "1433");
-                DataAccess.Helper.Constants.IP = Preferences.Default.Get("IP", "192.168.1.103");
-            }
+            DataAccess.Helper.Constants.Port = AppPreferences.Port;
+            DataAccess.Helper.Constants.IP = AppPreferences.IP;
         }
-        catch (Exception)
+        catch
         {
         }
     }

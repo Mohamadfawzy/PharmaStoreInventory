@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PharmaStoreInventory.Validations;
 
@@ -17,13 +18,19 @@ internal static class Validator
 
     public static bool IsValidTelephone(string phoneNumber)
     {
-        if (string.IsNullOrWhiteSpace(phoneNumber))
-            return false;
-        // Define a regex pattern for a valid US phone number
-        string pattern = @"^[0-9]+$";
+        // Define a regular expression pattern for phone numbers
+        var phoneNumberPattern = @"^(\+?\d{1,4}[\s-]?)?(\(?\d{3}\)?[\s-]?)\d{3}[\s-]?\d{4}$";
 
-        // Create a Regex object and use it to match the phone number
-        Regex regex = new(pattern);
-        return regex.IsMatch(phoneNumber);
+        // Check if the text matches the pattern
+        return Regex.IsMatch(phoneNumber, phoneNumberPattern);
+
+        //if (string.IsNullOrWhiteSpace(phoneNumber))
+        //    return false;
+        //// Define a regex pattern for a valid US phone number
+        //string pattern = @"^[0-9]+$";
+
+        //// Create a Regex object and use it to match the phone number
+        //Regex regex = new(pattern);
+        //return regex.IsMatch(phoneNumber);
     }
 }

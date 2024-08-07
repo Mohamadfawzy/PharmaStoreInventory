@@ -57,7 +57,7 @@ public class StockDetailsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Helpers.CatchingException.PharmaDisplayAlert(ex.Message);
+            Helpers.Alerts.DisplayAlert(ex.Message);
         }
     }
 

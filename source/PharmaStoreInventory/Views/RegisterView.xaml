@@ -21,8 +21,6 @@
             Margin="0,0,0,0"
             Padding="0,0,0,50"
             Spacing="0">
-
-
             <!--  Register Title  -->
             <Border
                 Margin="0,0,0,30"
@@ -39,35 +37,43 @@
             </Border>
             <!--  Inputs  -->
             <VerticalStackLayout x:Name="inputsContainer" Padding="20,0">
+                <!--  FullName  -->
                 <template:AnimatedInput
                     x:Name="fullName"
                     InputPlaceholder="الاسم كاملاً"
-                    InputText="{Binding Name}"
-                    ErrorMessage="{Binding InvalidMessage, Mode=TwoWay}"
-                    IsError="{Binding ShowError, Mode=TwoWay}" />
-
-                <template:AnimatedInput x:Name="pharmacyName" InputPlaceholder="اسم الصيدلية" />
-
+                    InputText="{Binding UserRegister.FullName}"
+                    ErrorMessage="أدخل اسمك مطلوب"
+                    IsError="{Binding UserRegisterError.ErrorFullName, Mode=TwoWay}" />
+                <!--  Pharmacy  -->
+                <template:AnimatedInput
+                    x:Name="pharmacyName"
+                    InputText="{Binding UserRegister.PharmcyName}"
+                    InputPlaceholder="اسم الصيدلية" />
+                <!--  Email  -->
                 <template:AnimatedInput
                     x:Name="email"
+                    InputText="{Binding UserRegister.Email}"
                     EntryKeyboard="Email"
                     ErrorMessage="ايميل خاطئ"
                     InputPlaceholder="البريد الالكتروني" />
-
+                <!--  Phone  -->
                 <template:AnimatedInput
                     x:Name="telephone"
+                    InputText="{Binding UserRegister.PhoneNumber}"
                     EntryKeyboard="Telephone"
                     ErrorMessage="رقم هاتف غير صحيح"
                     InputPlaceholder="التليفون" />
-
+                <!--  Password  -->
                 <template:AnimatedInput
                     x:Name="password"
+                    InputText="{Binding UserRegister.Password}"
                     IsPassword="True"
                     HasEyeIcon="True"
                     InputPlaceholder="الرقم السري" />
                 <!--  Confirm Password  -->
                 <template:AnimatedInput
                     x:Name="confirmPassword"
+                    InputText="{Binding UserRegister.ConfirmNewPassword}"
                     HasEyeIcon="False"
                     InputPlaceholder="تأكيد الرقم السري">
                     <template:AnimatedInput.Triggers>
@@ -81,13 +87,13 @@
                 </template:AnimatedInput>
             </VerticalStackLayout>
 
+            <!--  BottonS  -->
             <VerticalStackLayout Padding="20,0">
-                <!--  submit Create Aount  -->
+                <!--  Submit  -->
                 <Button
                     Margin="0,30,0,0"
                     Text="إنشاء حساب"
-                    Command="{Binding GetNameCommand}" />
-
+                    Clicked="SubmitClicked" />
                 <!--  Have Acount? sign in  -->
                 <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
                     <!--  label  -->
@@ -106,11 +112,13 @@
                         </Button.Behaviors>
                     </Button>
                 </HorizontalStackLayout>
+                <!--<Label x:Name="timer" HorizontalOptions="Center"/>-->
             </VerticalStackLayout>
 
             <VerticalStackLayout.GestureRecognizers>
                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
             </VerticalStackLayout.GestureRecognizers>
         </VerticalStackLayout>
+
     </ScrollView>
 </ContentPage>

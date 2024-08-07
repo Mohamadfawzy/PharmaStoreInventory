@@ -1,6 +1,6 @@
-﻿namespace DataAccess.DomainModel;
+﻿namespace DataAccess.DomainModel.QueryParams;
 
-public class ProductQueryParameters
+public class ProductQParam
 {
     public bool IsGroup { get; set; } = true;
     public bool QuantityBiggerThanZero { get; set; } = true;

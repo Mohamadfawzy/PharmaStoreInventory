@@ -1,23 +1,104 @@
 ﻿using DataAccess.DomainModel;
+using DataAccess.DomainModel.QueryParams;
 using DataAccess.Dtos.UserDtos;
 using DataAccess.Entities;
 using DataAccess.Helper;
+using DataAccess.Repository;
 
 namespace DataAccess.Services;
 
 public class AuthService
 {
-    private readonly Repository.UserRepository repo;
-    private readonly PasswordHasher hasher;
-    private readonly MailingService mailService;
+    //private readonly Repository.UserRepository repo = new();
+    private readonly PasswordHasher hasher = new();
+    private readonly MailingService mailService = new();
+    private readonly UserRepository repo;
+
+    public AuthService(UserRepository _repo)
+    {
+        repo = _repo;
+        //repo = new Repository.UserRepository();
+        //hasher = new PasswordHasher();
+        //mailService = new MailingService();
+
+    }
+    
     public AuthService()
     {
-        repo = new Repository.UserRepository();
-        hasher = new PasswordHasher();
-        mailService = new MailingService();
+        //repo = new Repository.UserRepository();
     }
 
-    public async Task<Result> RegisterUserAcync(UserAccountDto userDto)
+
+    #region Admin Section
+    public async Task<Result> AdminLoginByEmailAsync(string email, string password)
+    {
+        bool isPasswordCorrect;
+        // Check if email and password are provided
+        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+        {
+            return Result.Failure("Email or password is missing.");
+        }
+
+        try
+        {
+            // Find user account by email
+            var userAccount = await repo.FindUserByEmailAsync(email.ToLower()).ConfigureAwait(false);
+            if (userAccount == null)
+            {
+                return Result.Failure("admin Invalid email or password.");
+            }
+
+            // If admin is the first time he will log in
+            if (userAccount.PasswordHash == password)
+            {
+                var result = await repo.UpdatePasswordByEmailAsync(email, password).ConfigureAwait(false);
+                isPasswordCorrect = result.IsSuccess;
+
+            }
+            else
+            {
+                // Verify the provided password with the stored password hash
+                isPasswordCorrect = await hasher.VerifyPasswordAsync(password, userAccount.PasswordHash).ConfigureAwait(false);
+            }
+
+            if (isPasswordCorrect)
+            {
+                // Return successful result with user login response and welcome message
+                return Result.Success($"Welcome {userAccount.FullName}");
+            }
+            else
+            {
+                // Increment AccessFailedCount if the password is incorrect
+                await repo.IncrementAccessFailedCountAsync(userAccount).ConfigureAwait(false);
+                return Result.Failure("Invalid password.");
+            }
+        }
+        catch (Exception ex)
+        {
+            return Result.Exception(ex.Message);
+        }
+    }
+
+    public async Task<Result> ChangeUserStatus(int userId, bool status)
+    {
+        return await repo.UpdateActivationUserAccountAsync(userId, status);
+    }
+
+    public async Task<List<UserInfoDto>> GetAllUsersAsync(FilterUsersQParam qParam)
+    {
+        return await repo.ReadAllUsers(qParam);
+    }
+    public async Task<Result> AdminConfirmsUserEmail(int userId)
+    {
+        if (userId == 0)
+            return Result.Failure(ErrorCode.InvalidIdentifier, "Can not found user equal 0");
+
+        return await repo.AdminConfirmsUserEmail(userId);
+    }
+    #endregion
+
+
+    public async Task<Result> RegisterUserAcync(UserRegisterDto userDto)
     {
         // Ensure that the email does not already exist
         if (!string.IsNullOrEmpty(userDto.Email) && await repo.IsEmailExistAsync(userDto.Email))
@@ -51,19 +132,18 @@ public class AuthService
         {
             // Find user account by email
             var userAccount = await repo.FindUserByEmailAsync(email).ConfigureAwait(false);
-            if (userAccount != null)
+            if (userAccount is null)
             {
-                return await Login(userAccount, password, dviceId, isNewDevice).ConfigureAwait(false);
+                // Return failure result if email or password is incorrect 
+                return Result<UserLoginResponseDto>.Failure("Invalid email or password.");
             }
 
+            return await Login(userAccount, password, dviceId, isNewDevice).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
             return Result<UserLoginResponseDto>.Failure($"An error occurred: {ex.Message}");
         }
-
-        // Return failure result if email or password is incorrect
-        return Result<UserLoginResponseDto>.Failure("Invalid email or password.");
     }
 
     /// <summary>
@@ -82,18 +162,17 @@ public class AuthService
         {
             // Find user account by phone
             var userAccount = await repo.FindUserByPhoneNumberAsync(phone).ConfigureAwait(false);
-            if (userAccount != null)
+            if (userAccount is null)
             {
-                return await Login(userAccount, password, deviceId, isNewDevice).ConfigureAwait(false);
+                // Return failure result if phone or password is incorrect
+                return Result<UserLoginResponseDto>.Failure("Invalid phone or password.");
             }
+            return await Login(userAccount, password, deviceId, isNewDevice).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
             return Result<UserLoginResponseDto>.Failure($"An error occurred: {ex.Message}");
         }
-
-        // Return failure result if phone or password is incorrect
-        return Result<UserLoginResponseDto>.Failure("Invalid phone or password.");
     }
 
     /// <summary>
@@ -106,7 +185,6 @@ public class AuthService
         // Update the lockout status of the user account
         return await repo.UpdateLogoutUserAsync(id).ConfigureAwait(false);
     }
-
 
     /// <summary>
     /// Changes the password for a user account.
@@ -163,8 +241,8 @@ public class AuthService
             {
                 var code = Common.GenerateVerificationCode();
                 var vCodeExpirationTime = DateTimeOffset.UtcNow.AddMinutes(Helper.Constants.VerificationCodeMinutesExpires);
-                await mailService.SendVerificationCodeAsync(email,code, userAccount.FullName).ConfigureAwait(false);
-                return await repo.UpdateVerificationCode(userAccount.Id,code, vCodeExpirationTime).ConfigureAwait(false);
+                await mailService.SendVerificationCodeAsync(email, code, userAccount.FullName).ConfigureAwait(false);
+                return await repo.UpdateVerificationCode(userAccount.Id, code, vCodeExpirationTime).ConfigureAwait(false);
             }
 
         }
@@ -180,7 +258,7 @@ public class AuthService
     public async Task<Result> ResetForgottenPasswordAsync(string email, string verificationCode, string newPassword)
     {
         // Check if email and password are provided
-        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(verificationCode) ||string.IsNullOrEmpty(newPassword))
+        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(verificationCode) || string.IsNullOrEmpty(newPassword))
         {
             return Result.Failure("Email or verificationCode or newPassword is missing.");
         }
@@ -205,8 +283,14 @@ public class AuthService
         // Update the password and return the result
     }
 
-    // ### PrivateMethods ###########################################################################################################################################################################
+    public async Task<Result> EditUserInfoAsync(UserEditNameDto dto)
+    {
+        return await repo.UpdateUserInfoAsync(dto).ConfigureAwait(false);
+    }
 
+
+
+    // ### PrivateMethods ###########################################################################################################################################################################
     /// <summary>
     /// Verifies the provided password and logs in the user if the credentials are correct.
     /// </summary>
@@ -219,11 +303,11 @@ public class AuthService
         // Check if account is active
         if (!userAccount.IsActive)
         {
-            return Result<UserLoginResponseDto>.Failure("Your account is not active.");
+            return Result<UserLoginResponseDto>.Failure(ErrorCode.UserNotActive, "Your account is not active.");
         }
 
         // Check if user is logged in another device
-        if (userAccount.IsLoggedIn && (userAccount.DeviceID != null && userAccount.DeviceID != deviceId) && !isNewDevice)
+        if (userAccount.IsLoggedIn && (!string.IsNullOrEmpty( userAccount.DeviceID) && userAccount.DeviceID != deviceId) && !isNewDevice)
         {
             return Result<UserLoginResponseDto>.Failure("You are logged in on another device, please log out from it.");
         }
@@ -243,7 +327,7 @@ public class AuthService
                 Email = userAccount.Email,
                 EmailConfirmed = userAccount.EmailConfirmed,
                 FullName = userAccount.FullName,
-                PharmcyName = userAccount.PharmcyName,
+                PharmcyName = userAccount.PharmacyName,
                 PhoneNumber = userAccount.PhoneNumber,
                 LockoutEnd = userAccount.LockoutEnd = DateTimeOffset.UtcNow.AddDays(7),
                 IsActive = userAccount.IsActive,
@@ -262,74 +346,5 @@ public class AuthService
             return Result<UserLoginResponseDto>.Failure("Invalid password.");
         }
     }
-
-
-    /*
-    public async Task<Result<UserLoginResponseDto>> UserLoginByPhoneAsync(string phone, string password, string dviceId)
-    {
-        // Check if phone and password are provided
-        if (string.IsNullOrEmpty(phone) || string.IsNullOrEmpty(password))
-        {
-            return Result<UserLoginResponseDto>.Failure("phone or password is missing.");
-        }
-
-        // Find user account by phone
-        var userAccount = await repo.FindUserByPhoneNumberAsync(phone);
-        if (userAccount != null)
-        {
-            return await Login(userAccount, password, dviceId);
-        }
-
-        // Return failure result if phone or password is incorrect
-        return Result<UserLoginResponseDto>.Failure("Invalid phone or password.");
-    }
-
-    private async Task<Result<UserLoginResponseDto>> Login(UserAccount userAccount, string password, string dviceId)
-    {
-        // Check if acount is active
-        if (userAccount.IsActive)
-        {
-            // if user login in any device you shoud logout after relogin
-            if (!userAccount.IsLoggedIn || (userAccount.DeviceID != null && userAccount.DeviceID == dviceId))
-            {
-                // Verify the provided password with the stored password hash
-                var isPasswordCorrect = await hasher.VerifyPasswordAsync(password, userAccount.PasswordHash);
-                if (isPasswordCorrect)
-                {
-                    // Map user account to UserLoginResponseDto
-                    var loginRes = new UserLoginResponseDto
-                    {
-                        Id = userAccount.Id,
-                        Email = userAccount.Email,
-                        EmailConfirmed = userAccount.EmailConfirmed,
-                        FullName = userAccount.FullName,
-                        PharmcyName = userAccount.PharmcyName,
-                        PhoneNumber = userAccount.PhoneNumber
-                    };
-
-                    // update access in userAcount 
-                    await repo.SetUserAccountIsAccessAsync(userAccount, dviceId);
-
-                    // Return successful result with user login response and welcome message
-                    return Result<UserLoginResponseDto>.Success(loginRes, $"Welcome {userAccount.FullName}");
-                }
-                else
-                {
-                    // Increment AccessFailedCount if the password is incorrect
-                    await repo.IncrementAccessFailedCountAsync(userAccount);
-                    return Result<UserLoginResponseDto>.Failure("Invalid password.");
-                }
-            }
-            else
-            {
-                return Result<UserLoginResponseDto>.Failure("You are login in other device please logout from it");
-            }
-        }
-        else
-        {
-            return Result<UserLoginResponseDto>.Failure("your acount is not active");
-        }
-    }
-    */
 
 }

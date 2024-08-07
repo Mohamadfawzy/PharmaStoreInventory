@@ -25,7 +25,10 @@
                 <StackLayout>
 
                     <!--  Welcom text  -->
-                    <Label Text="مرحبًا بك في تطبيق  e-stock  لجرد الصيدلية" Style="{StaticResource Headline}" />
+                    <Label
+                        Margin="15,15,15,0"
+                        Text="مرحبًا بك في تطبيق  Pharma Store Inventory  لجرد الصيدلية"
+                        Style="{StaticResource Headline}" />
 
                     <!--  Indicator  -->
                     <IndicatorView

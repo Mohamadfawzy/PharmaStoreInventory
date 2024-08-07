@@ -18,12 +18,12 @@ public class MailingService
     /// <param name="userFullName">The full name of the user. If null, an empty string will be used.</param>
     /// <param name="lang">The language for the email content (optional).</param>
     /// <returns>The verification code sent.</returns>
-    public async Task<string?> SendVerificationCodeAsync(string mailTo, string? verificationCode, string userFullName = "", string? lang = null)
+    public async Task<string> SendVerificationCodeAsync(string mailTo, string? verificationCode, string userFullName = "", string? lang = null)
     {
-        if (string.IsNullOrEmpty(mailTo))
-        {
-            return null;
-        }
+        //if (string.IsNullOrEmpty(mailTo))
+        //{
+        //    return null;
+        //}
 
         // Generate a new verification code if none was provided
         verificationCode ??= Common.GenerateVerificationCode();
@@ -79,31 +79,72 @@ public class MailingService
     /// <returns>A task representing the asynchronous operation.</returns>
     public async Task SendEmailAsync(string mailTo, string subject, string body)
     {
-        var email = new MimeMessage
+        try
         {
-            Sender = MailboxAddress.Parse(sender),
-            Subject = subject
-        };
+            var email = new MimeMessage
+            {
+                Sender = MailboxAddress.Parse(sender),
+                Subject = subject
+            };
 
-        email.To.Add(MailboxAddress.Parse(mailTo));
+            email.To.Add(MailboxAddress.Parse(mailTo));
+            email.From.Add(new MailboxAddress("ModernSoft", sender));
 
-        var builder = new BodyBuilder
+            var builder = new BodyBuilder
+            {
+                HtmlBody = body
+            };
+
+            email.Body = builder.ToMessageBody();
+
+            using var smtp = new SmtpClient();
+
+            // Connect to the SMTP server with TLS
+            await smtp.ConnectAsync("smtp-mail.outlook.com", 587, SecureSocketOptions.StartTls);
+
+            // Authenticate
+            await smtp.AuthenticateAsync(sender, senderPassword);
+
+            // Send email
+            await smtp.SendAsync(email);
+            Console.WriteLine("Email sent successfully.");
+
+            // Disconnect and quit
+            await smtp.DisconnectAsync(true);
+        }
+        catch (Exception ex)
         {
-            HtmlBody = body
-        };
-
-        email.Body = builder.ToMessageBody();
-        email.From.Add(new MailboxAddress("ModernSoft", sender));
-
-        using var smtp = new SmtpClient();
-        smtp.Connect("smtp-mail.outlook.com", 587, SecureSocketOptions.StartTls);
-        smtp.Authenticate(sender, senderPassword);
-
-        await smtp.SendAsync(email);
-        Console.WriteLine("Email sent successfully.");
-
-        smtp.Disconnect(true);
+            Console.WriteLine($"An error occurred: {ex.Message}");
+        }
     }
+
+    //public async Task SendEmailAsync(string mailTo, string subject, string body)
+    //{
+    //    var email = new MimeMessage
+    //    {
+    //        Sender = MailboxAddress.Parse(sender),
+    //        Subject = subject
+    //    };
+
+    //    email.To.Add(MailboxAddress.Parse(mailTo));
+
+    //    var builder = new BodyBuilder
+    //    {
+    //        HtmlBody = body
+    //    };
+
+    //    email.Body = builder.ToMessageBody();
+    //    email.From.Add(new MailboxAddress("ModernSoft", sender));
+
+    //    using var smtp = new SmtpClient();
+    //    smtp.Connect("smtp-mail.outlook.com", 587, SecureSocketOptions.StartTlsWhenAvailable);
+    //    smtp.Authenticate(sender, senderPassword);
+
+    //    await smtp.SendAsync(email);
+    //    Console.WriteLine("Email sent successfully.");
+
+    //    smtp.Disconnect(true);
+    //}
 
 
     string body = $@"Dear #userFullName#,

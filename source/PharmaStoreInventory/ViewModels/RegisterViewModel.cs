@@ -1,56 +1,64 @@
-﻿using System.Windows.Input;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using DataAccess.Dtos.UserDtos;
+using DataAccess.Repository;
+using DataAccess.Services;
 namespace PharmaStoreInventory.ViewModels;
 
-public class RegisterViewModel : ObservableObject
+public class RegisterViewModel : BaseViewModel
 {
-    private string name = string.Empty;
-    private string invalidMessage = string.Empty;
-    private bool showError;
+    private readonly MailingService mailingService;
+    private readonly AuthService authService;
 
+
+    public UserRegisterDto UserRegister { get; set; }
+    //public bool ShowError
+    //{
+    //    get => showError;
+    //    set => SetProperty(ref showError, value);
+    //}
+
+    // ########################################################################
     public RegisterViewModel()
     {
-        //name = "الاسم من الفيو موديل";
-        Task.Delay(5000);
-        Awaiting();
-        
+        var repo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<UserRepository>();
+        authService = new(repo);
+        mailingService = new();
+        UserRegister = new()
+        {
+            ConfirmNewPassword = "1",
+            Password = "1",
+            Email = "mohamedfawzy733@yahoo.com",
+            FullName = "mohamed from mopile",
+            PharmcyName = "fawzy pharm",
+            PhoneNumber = "01093052428"
+        }
+        ;
+        Helpers.AppPreferences.SetDeviceID();
+        UserRegister.DeviceID =  Helpers.AppPreferences.GetDeviceID();
     }
 
-    public string Name
+    public async Task<bool> SubmitExecute()
     {
-        get => name;
-        set => SetProperty(ref name, value);
+        try
+        {
+
+            var result = await mailingService.SendVerificationCodeAsync(UserRegister.Email!, null, "mohamed fawzy");
+            Helpers.AppConstants.VerificationCode = result;
+            var res = await authService.RegisterUserAcync(UserRegister);
+            _ = Helpers.Alerts.DisplaySnackbar(res.Message);
+            if (res.IsSuccess)
+            {
+                return true;
+            }
+            return false;
+            //App.Current?.MainPage?.Navigation.PushAsync(new LoginView());
+        }
+        catch (Exception ex)
+        {
+            var exceptionMessage = $"Message: {ex.Message}\nInnerException: {ex.InnerException?.Message}";
+            await Helpers.Alerts.DisplaySnackbar(exceptionMessage);
+            return false;
+        }
     }
 
-    async void  Awaiting()
-    {
-        await Task.Delay(5000);
-        Awaiting2();
-    } 
-    async void Awaiting2()
-    {
-        await Task.Delay(5000);
-    }
-    public string InvalidMessage
-    {
-        get => invalidMessage;
-        set => SetProperty(ref invalidMessage, value);
-    }
 
-    public bool ShowError
-    {
-        get => showError;
-        set => SetProperty(ref showError, value);
-    }
-
-    public ICommand GetNameCommand => new Command(GetNameEx);
-
-
-    private void GetNameEx()
-    {
-        //Helpers.CatchingException.PharmaDisplayAlert(Name);
-        //InvalidMessage = "رسالة من الفييو موديل";
-        //ShowError = !ShowError;
-        Name = "سسسسسسسسسسسسسسسسسسسسسسشسيبشسيبشسيبشس";
-    }
 }

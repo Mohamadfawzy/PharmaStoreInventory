@@ -3,6 +3,7 @@ using DataAccess.Contexts;
 using DataAccess.Helper;
 using DataAccess.Repository;
 using PharmaStoreInventory.Extensions;
+using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Models;
 using PharmaStoreInventory.Views.Templates;
 namespace PharmaStoreInventory.Views;
@@ -28,10 +29,12 @@ public partial class CreateBranchView : ContentPage
         InitializeComponent();
         FileHanler = new();
     }
+
     private void ClearFocusFromAllInputsTapped(object sender, TappedEventArgs e)
     {
         inputsContainer.ClearFocusFromAllInputs();
     }
+
     private async void SubmitButton(object sender, EventArgs e)
     {
         DisplayPopup();
@@ -40,48 +43,54 @@ public partial class CreateBranchView : ContentPage
         if (!DataValidaityCheck())
             return;
 
-        var status = await Task.Run(TestConnection);
+        var status = await Task.Run(Connection);
         if (status == ErrorType.Success)
         {
-            await Dispatcher.DispatchAsync(() =>
-            {
-                Helpers.CatchingException.DisplaySnackbar("The branch has been contacted successfully");
-                SaveDataLocaly();
-            });
+            await Helpers.Alerts.DisplaySnackbar("The branch has been contacted successfully");
+            await FileHanler.Add(branch, Helpers.AppConstants.BranchsFileName);
+            Helpers.AppPreferences.HasBranchRegistered = true;
+            
+
+            //await Dispatcher.DispatchAsync(() =>
+            //{
+            //});
             await Navigation.PushAsync(new BranchesView());
         }
         else if (status == ErrorType.ConnectionString)
         {
-            await Dispatcher.DispatchAsync(() =>
-            {
-                Helpers.CatchingException.DisplaySnackbar("IP or Port is Incorrect");
-            });
+            await Helpers.Alerts.DisplaySnackbar("IP or Port is Incorrect");
+            //await Dispatcher.DispatchAsync(async () =>
+            //{
+            //});
         }
         else
         {
-            await Dispatcher.DispatchAsync(() =>
-            {
-                Helpers.CatchingException.DisplaySnackbar("Username or Password is Incorrect");
-            });
+            await Helpers.Alerts.DisplaySnackbar("Username or Password is Incorrect");
+            //await Dispatcher.DispatchAsync(() =>
+            //{
+            //});
         }
 
         ClosePopup();
         submitButton.IsEnabled = true;
     }
 
-    private async Task<ErrorType> TestConnection()
+    private async Task<ErrorType> Connection()
     {
         try
         {
-            DataAccess.Helper.Constants.IP = branch.IpAdrress;
-            DataAccess.Helper.Constants.Port = branch.Port;
+            DataAccess.Helper.Constants.IP = AppPreferences.IP= branch.IpAdrress;
+            DataAccess.Helper.Constants.Port = AppPreferences.Port=  branch.Port;
 
-            context = new AppDb();
-            repo = new(context);
+            repo = new();
+
 
             var result = await repo.Login(branch.Username, branch.Password);
             if (result != null)
+            {
+                AppPreferences.LocalDbUserId = result.Id;
                 return ErrorType.Success;
+            }
 
             else
                 return ErrorType.UsernameOrPass;
@@ -110,18 +119,20 @@ public partial class CreateBranchView : ContentPage
 
     public async void DisplayPopup()
     {
-        popup = new PopupWin();
-        await this.ShowPopupAsync(popup);
+        //popup = new PopupWin();
+        //await this.ShowPopupAsync(popup);
+        Helpers.Alerts.DisplayActivityIndicator(this);
     }
 
     public async void ClosePopup()
     {
-        await popup.CloseAsync();
+        //await popup.CloseAsync();
+        Helpers.Alerts.CloseActivityIndicator();
     }
 
     async void SaveDataLocaly()
     {
-        await FileHanler.Add(branch, Helpers.AppConstants.BranchsFileName);
+
     }
 
 
@@ -133,41 +144,16 @@ public partial class CreateBranchView : ContentPage
 
 
 
-    private async void TestConnectionOld()
-    {
-        DataAccess.Helper.Constants.IP = branch.IpAdrress;
-        DataAccess.Helper.Constants.Port = branch.Port;
 
-        context = new AppDb();
-        repo = new(context);
 
-        var result = await repo.Login(branch.Username, branch.Password);
-        if (result != null)
-        {
 
-            await Dispatcher.DispatchAsync(() =>
-            {
-                Helpers.CatchingException.DisplaySnackbar("");
-                ClosePopup();
-            });
-        }
-    }
 
-    void SetPreferencesKeys()
-    {
-        try
-        {
-            bool hasKey = Preferences.Default.ContainsKey("Port");
-            if (hasKey)
-            {
-                DataAccess.Helper.Constants.Port = Preferences.Default.Get("Port", "1344");
-                DataAccess.Helper.Constants.IP = Preferences.Default.Get("IP", "192.168.1.103");
-            }
-        }
-        catch (Exception)
-        {
-        }
-    }
+
+
+
+
+
+
 
 
 

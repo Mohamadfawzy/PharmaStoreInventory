@@ -8,9 +8,9 @@ public class EmployeeRepo
 {
 
     private readonly AppDb context;
-    public EmployeeRepo(AppDb _context)
+    public EmployeeRepo( )
     {
-        context = _context;
+        context = new();
     }
 
     public Task<EmployeeDto?> Login(string username, string password)

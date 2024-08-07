@@ -48,6 +48,8 @@ public partial class OnbordingView : ContentPage
     {
         Navigation.PushAsync(new LoginView());
         //App.Current.MainPage = new NavigationPage(new PharmaTabbedPage());
+        //Navigation.NavigationStack.LastOrDefault()
+          
     }
 
     private void GoToRegister(object sender, EventArgs e)

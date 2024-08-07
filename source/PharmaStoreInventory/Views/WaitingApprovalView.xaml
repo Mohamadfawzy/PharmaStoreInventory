@@ -31,7 +31,7 @@
 
             <Image Source="mslogo" />
 
-            <Border
+            <!--<Border
                 Margin="15"
                 Padding="10,3"
                 BackgroundColor="{StaticResource Primary050}"
@@ -46,7 +46,7 @@
                     <Label Text="تسجيل خروج" HorizontalOptions="StartAndExpand" />
                     <Label Style="{StaticResource Iconline}" Text="{x:Static icon:IconFont.Logout}" />
                 </StackLayout>
-            </Border>
+            </Border>-->
 
             <VerticalStackLayout VerticalOptions="EndAndExpand">
                 <Label

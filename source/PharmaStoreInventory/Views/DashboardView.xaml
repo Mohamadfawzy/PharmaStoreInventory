@@ -23,7 +23,6 @@
                 <Setter Property="StrokeThickness" Value="0" />
                 <Setter Property="StrokeShape" Value="RoundRectangle 20" />
                 <Setter Property="Background" Value="{AppThemeBinding Light={StaticResource Primary050}, Dark={StaticResource Primary950}}" />
-
             </Style>
 
             <!--  Frame Style  -->
@@ -86,6 +85,7 @@
                 </Frame.GestureRecognizers>
             </Frame>
         </StackLayout>
+
         <!--  Container  -->
         <VerticalStackLayout
             Grid.Row="1"
@@ -106,10 +106,10 @@
                     </FormattedString>
                 </Label.FormattedText>
             </Label>
-            <!--    -->
+            <!--  the date of Latest Inventory  -->
             <Label
                 Margin="0,-20,0,0"
-                Text="02/04/2024"
+                Text="{Binding LatestInventoryDate}"
                 HorizontalOptions="Center" />
 
             <!--  The Stores Border  -->
@@ -123,7 +123,7 @@
                         BackgroundColor="{StaticResource Primary100}"
                         VerticalTextAlignment="Center" />
                     <Label
-                        Text="الصيدلية"
+                        Text="{Binding StoreName}"
                         TextColor="{StaticResource Primary}"
                         VerticalTextAlignment="Center" />
                     <Label
@@ -149,35 +149,57 @@
                         DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
                         PressedBackgroundColor="{StaticResource Primary500}"
                         PressedOpacity="0.9"
-                        PressedScale="0.98" />
+                        PressedScale="0.8" />
                 </Border.Behaviors>
             </Border>
+
             <!--  4 Statistic Box  -->
             <Grid
                 RowDefinitions="*,*"
                 ColumnDefinitions="*,*"
                 RowSpacing="20"
                 ColumnSpacing="20">
-                <template:DashboardNumberTemplate />
-                <template:DashboardNumberTemplate Grid.Column="1" />
-                <template:DashboardNumberTemplate Grid.Row="1" />
-                <template:DashboardNumberTemplate Grid.Row="1" Grid.Column="1" />
+                <template:DashboardNumberTemplate Title="كل الأصناف" Number="{Binding CountAllProducts}" />
+
+                <template:DashboardNumberTemplate
+                    Title="الأصناف منتهية الصلاحية"
+                    Grid.Column="1"
+                    Number="{Binding CountAllExpiredProducts}" />
+
+                <template:DashboardNumberTemplate
+                    Title="أصناف تنتهي صلاحيتها بعد ثلاثة أشهر"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Number="{Binding CountAllProductsWillExpireAfter3Months}" />
+
+                <template:DashboardNumberTemplate
+                    Title=" أصناف تم جردها"
+                    Grid.Row="1"
+                    Number="{Binding CountAllIsInventoryed}" />
+
             </Grid>
+
             <!--  Resume inventory  -->
-            <Frame Style="{StaticResource FrameTextIconCenter}">
+            <!--<Frame Style="{StaticResource FrameTextIconCenter}">
                 <HorizontalStackLayout Style="{StaticResource HSLinFrame}">
                     <Label Style="{StaticResource IconLabelMediumStyle}" Text="{x:Static icon:IconFont.Autorenew}" />
                     <Label Text="إستئناف الجرد" />
                 </HorizontalStackLayout>
-            </Frame>
+            </Frame>-->
+
+
             <!--  New inventory  -->
             <Frame Style="{StaticResource FrameTextIconCenter}">
                 <HorizontalStackLayout Style="{StaticResource HSLinFrame}">
                     <Label Style="{StaticResource IconLabelMediumStyle}" Text="{x:Static icon:IconFont.ShapeSquarePlus}" />
                     <Label Text="جرد جديد" />
                 </HorizontalStackLayout>
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding StartNewInventoryCommand}" />
+                </Frame.GestureRecognizers>
             </Frame>
-            <!--  search about item  -->
+
+            <!--  Search About Item  -->
             <Frame
                 Padding="20,10"
                 Style="{StaticResource FrameTextIconCenter}"
@@ -201,9 +223,11 @@
                     <TapGestureRecognizer Tapped="GoToScanPage" />
                 </Frame.GestureRecognizers>
             </Frame>
-
         </VerticalStackLayout>
-        <!--  Popup  -->
+
+        <!--  ### Popup ###  -->
+        <!--  ### Popup ###  -->
+        <!--  background Transparence  -->
         <BoxView
             x:Name="backgroundTransparence"
             Grid.RowSpan="2"
@@ -213,7 +237,7 @@
                 <TapGestureRecognizer Tapped="ClosePopupTapped" />
             </BoxView.GestureRecognizers>
         </BoxView>
-
+        <!--  popup window of select strore  -->
         <Border
             x:Name="popup"
             Grid.RowSpan="3"
@@ -278,6 +302,7 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
+                <!--  Submit button  -->
                 <Button
                     Grid.Row="2"
                     Margin="30,10"

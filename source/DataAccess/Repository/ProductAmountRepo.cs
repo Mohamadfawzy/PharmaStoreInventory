@@ -1,12 +1,10 @@
 ﻿using DataAccess.Contexts;
-using DataAccess.DomainModel;
+using DataAccess.DomainModel.QueryParams;
 using DataAccess.Dtos;
 using DataAccess.Entities;
 using DataAccess.Helper;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.Metrics;
 using System.Text.RegularExpressions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DataAccess.Repository;
 public class ProductAmountRepo
@@ -20,13 +18,13 @@ public class ProductAmountRepo
         context = new();
     }
 
-    public List<ProductDto> GetAllProducts(ProductQueryParameters qParam)
+    public List<ProductDto> GetAllProducts(ProductQParam qParam)
     {
         string selectClause = BringSelectAllProductsIncludeJoinQuery(qParam.IsGroup);
         string whereQuantity = qParam.QuantityBiggerThanZero ? " AND pa.amount > 0 " : "";
         string whereStoreId = string.IsNullOrEmpty(qParam.StoreId) ? "" : $" AND pa.store_id = {qParam.StoreId} ";
         string whereSiteId = string.IsNullOrEmpty(qParam.SiteId) ? "" : $" AND products.site_id = {qParam.SiteId} ";
-        string whereOrderBy = $" ORDER BY {BringOrderByQuery((OrderBy)qParam.OrderBy)}";
+        string whereOrderBy = $" ORDER BY {BringOrderByQuery((ProductsOrderBy)qParam.OrderBy)}";
         string whereSearchText = BringSearchQuery(qParam.Text);
         string offset = BringPaginationQuery(qParam.Page);
         string sql = @$"{selectClause} 
@@ -120,7 +118,7 @@ public class ProductAmountRepo
 
     public bool InsertProductAmout(Product_Amount item)
     {
-        //var item = context.Product_Amount.AsNoTracking().OrderBy(x => x.counter_id).LastOrDefault(x => x.product_id == 22);
+        //var item = context.Product_Amount.AsNoTracking().ProductsOrderBy(x => x.counter_id).LastOrDefault(x => x.product_id == 22);
         Product_Amount? insertedRow;
         if (item != null)
         {
@@ -247,42 +245,42 @@ public class ProductAmountRepo
 
 
     #region Statistics
-    public int GetCountAllProducts(int storeId)
+    public async Task<int> GetCountAllProducts(int storeId)
     {
-        var totalProduct = context.Product_Amount
+        var totalProduct = await context.Product_Amount
             .Where(p => p.amount > 0 && p.store_id == storeId)
-            .Count();
+            .CountAsync();
         return totalProduct;
     }
 
-    public int GetCountAllExpiredProducts(int storeId)
+    public async Task<int> GetCountAllExpiredProducts(int storeId)
     {
-        var totalProduct = context.Product_Amount
+        var totalProduct = await context.Product_Amount
             .Where(p => p.amount > 0 && p.exp_date < DateTime.Now && p.store_id == storeId)
             .Select(p => p.product_id)
-            .Count();
+            .CountAsync();
         return totalProduct;
     }
 
-    public int GetCountAllProductsWillExpireAfter3Months(int storeId)
+    public async Task<int> GetCountAllProductsWillExpireAfter3Months(int storeId)
     {
         var currentDate = DateTime.Now;
         var threeMonthsLater = currentDate.AddMonths(3);
 
-        var totalProduct = context.Product_Amount
+        var totalProduct = await context.Product_Amount
             .Where(p => p.amount > 0
                         && p.exp_date > currentDate
                         && p.exp_date < threeMonthsLater
                         && p.store_id == storeId)
-            .Count();
+            .CountAsync();
         return totalProduct;
     }
 
-    public int GetCountAllIsInventoryed(int storeId)
+    public async Task<int> GetCountAllIsInventoryed(int storeId)
     {
-        var totalProduct = context.Product_Amount
+        var totalProduct = await context.Product_Amount
             .Where(p => p.amount > 0 && p.Product_update == "1" && p.store_id == storeId)
-            .Count();
+            .CountAsync();
         return totalProduct;
     }
     #endregion
@@ -307,21 +305,21 @@ public class ProductAmountRepo
 
     }
 
-    string BringOrderByQuery(OrderBy orderBy)
+    string BringOrderByQuery(ProductsOrderBy orderBy)
     {
         string clause;
         switch (orderBy)
         {
-            case OrderBy.Non:
+            case ProductsOrderBy.Non:
                 clause = "(SELECT 1)";
                 break;
-            case OrderBy.ProductId:
+            case ProductsOrderBy.ProductId:
                 clause = "p.product_code";
                 break;
-            case OrderBy.BiggestPrice:
+            case ProductsOrderBy.BiggestPrice:
                 clause = "p.sell_price desc";
                 break;
-            case OrderBy.LowestPrice:
+            case ProductsOrderBy.LowestPrice:
                 clause = "p.sell_price";
                 break;
             default:

@@ -4,7 +4,7 @@ namespace DataAccess.Dtos;
 
 public class EmployeeDto
 {
-    public int? Id { get; set; }
+    public int Id { get; set; }
     public string? Code { get; set; }
     public string? NameAr { get; set; }
     public string? NameEn { get; set; }
@@ -24,7 +24,7 @@ public class EmployeeDto
 
         return new EmployeeDto
         {
-            Id = (int?)arg.emp_id,
+            Id = (int)arg.emp_id,
             Password = arg.pass,
             Username = arg.username,
             Deleted = arg.deleted,

@@ -1,5 +1,8 @@
 ﻿using BarcodeScanning;
 using CommunityToolkit.Maui;
+using DataAccess.Contexts;
+using DataAccess.Repository;
+using DataAccess.Services;
 using Microsoft.Extensions.Logging;
 using ZXing.Net.Maui.Controls;
 
@@ -24,6 +27,15 @@ namespace PharmaStoreInventory
                 })
                 .UseBarcodeReader()
                 .UseBarcodeScanning();
+            builder.Services.AddSingleton<AppHost>();
+            builder.Services.AddSingleton<UserRepository>();
+            builder.Services.AddSingleton<AuthService>();
+
+            builder.Services.AddSingleton<AppDb>();
+            builder.Services.AddSingleton<EmployeeRepo>();
+            builder.Services.AddSingleton<CommonsRepo>();
+            builder.Services.AddSingleton<ProductAmountRepo>();
+
 
 #if DEBUG
             builder.Logging.AddDebug();

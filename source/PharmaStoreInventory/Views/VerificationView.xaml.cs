@@ -105,7 +105,7 @@ public partial class VerificationView : ContentPage
 
     private void Button_Clicked(object sender, EventArgs e)
     {
-        Helpers.CatchingException.PharmaDisplayAlert($"{entry1.Text}{entry2.Text}{entry3.Text}{entry4.Text}");
+        Helpers.Alerts.DisplayAlert($"{entry1.Text}{entry2.Text}{entry3.Text}{entry4.Text}");
     }
 
     private void Button_Clicked_1(object sender, EventArgs e)

@@ -10,14 +10,14 @@ public class CommonsRepo
 {
     private readonly AppDb context;
 
-    public CommonsRepo(AppDb _context)
+    public CommonsRepo()
     {
-        context = _context;
+        context = new();
     }
 
-    public Task<List<Stores>> GetAll()
+    public async Task<List<Stores>> GetAllStores()
     {
-        return context.Stores.ToListAsync();
+        return await context.Stores.ToListAsync();
     }
 
     public async Task<InventoryHistory?> GetLatestInventoryHistoryAsync(int sotreId)
@@ -38,7 +38,7 @@ public class CommonsRepo
         return latestInventory;
     }
 
-    public async Task<Result<InventoryHistory>>  StartNewInventory(int latestHistoryId, int empId, int storeId)
+    public async Task<Result<InventoryHistory>>  StartNewInventoryAsync(int latestHistoryId, int empId, int storeId)
     {
         // end current enventory
         await EndInventoryHistoryAsync(latestHistoryId, empId).ConfigureAwait(false);

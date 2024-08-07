@@ -1,5 +1,5 @@
 ﻿namespace DataAccess.Helper;
-public enum OrderBy
+public enum ProductsOrderBy
 {
     Non = 0,
     ProductId = 1,
@@ -9,19 +9,33 @@ public enum OrderBy
     MaxQuantity = 5,
     MinQuantity = 6
 }
+
+public enum UsersOrderBy
+{
+    Non = 0,
+    Id = 1,
+    Name = 2,
+    NameDescending = 3,
+    CreateOn = 4,
+    CreateOnDescending = 5,
+    EmailNotConfirmed = 6,
+}
+
+
 public enum ErrorCode
 {
-    EmailNotExist = 10,
-    PasswordIsIncorrect = 11,
-    VerificationCodeIsIncorrect = 12,
-    InvalidIdentifier=13,
-    UserLogOut = 14,
+    EmailNotExist = 1, //
+    PasswordIsIncorrect = 2,
+    UserNotActive = 3,
+    VerificationCodeIsIncorrect = 4, //
+    UserLogOut = 5,
+    InvalidIdentifier = 6,//
+    OperationFailed = 7,
+    ManyFailedAttempts = 8,
+
 
     // General Errors
     UnknownError = 1000,
-    InvalidRequest = 1001,
-    NotFound = 1002,
-    OperationFailed = 1003,
 
     // Authentication Errors
     InvalidCredentials = 2000,
@@ -32,25 +46,17 @@ public enum ErrorCode
     // Validation Errors
     InvalidEmailFormat = 3000,
     PasswordTooWeak = 3001,
-    FieldRequired = 3002,
+
     ValueOutOfRange = 3003,
 
     // Database Errors
     DatabaseConnectionFailed = 4000,
-    EntityNotFound = 4001,
-    DuplicateEntity = 4002,
-    ForeignKeyViolation = 4003,
+}
 
-    // Network Errors
-    NetworkUnavailable = 5000,
-    Timeout = 5001,
-
-    // File Errors
-    FileNotFound = 6000,
-    FileUploadFailed = 6001,
-    FileDownloadFailed = 6002,
-
-    // Custom Errors
-    CustomError1 = 9000,
-    CustomError2 = 9001
+public enum InputType
+{
+    Text = 0,
+    Phone = 1,
+    Email = 2,
+    Empty = 3,
 }

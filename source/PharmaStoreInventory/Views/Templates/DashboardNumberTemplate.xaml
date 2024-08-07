@@ -15,13 +15,16 @@
         StrokeShape="RoundRectangle 50 6 6 6"
         Background="{AppThemeBinding Light={StaticResource White},
                                      Dark={StaticResource Primary950}}">
-        <StackLayout Orientation="Horizontal">
+        <StackLayout Orientation="Horizontal" BindingContext="{x:Reference ThisView}">
             <BoxView
                 WidthRequest="8"
                 HorizontalOptions="Start"
                 VerticalOptions="Fill" />
             <VerticalStackLayout Padding="10,5" HorizontalOptions="FillAndExpand">
-                <Label Text="{Binding Title}" />
+                <Label
+                    Margin="0,0,10,0"
+                    FontSize="12"
+                    Text="{Binding Title}" />
                 <Label
                     Text="{Binding Number}"
                     TextColor="{StaticResource Primary800}"

@@ -13,7 +13,7 @@ public class AppHost: DbContext
 
     public AppHost()
     {
-        connectionString = $"Data Source=localhost\\MSSQLSERVER01; Initial Catalog=mosoftphram;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
+        connectionString = $"Data Source=192.168.1.103,1433\\MSSQLSERVER01; Initial Catalog=mosoftphram;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
     }
 
     public DbSet<UserAccount> Users { get; set; }
@@ -23,6 +23,7 @@ public class AppHost: DbContext
         modelBuilder.Entity<UserAccount>(entity =>
         {
             entity.HasKey(x => x.Id);
+            entity.Property(e => e.Email).HasMaxLength(255);
             entity.Property(e => e.CreateOn).HasDefaultValueSql("(getutcdate())");
         });
     }

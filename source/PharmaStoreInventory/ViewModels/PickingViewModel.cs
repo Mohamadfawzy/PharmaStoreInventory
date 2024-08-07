@@ -56,7 +56,7 @@ public class PickingViewModel : ObservableObject
     void CopySelectedItem(StockModel stock)
     {
         ListOfStoc.Add(stock);
-        //Helpers.CatchingException.PharmaDisplayAlert(MajorUnitQuantity);
+        //Helpers.CatchingException.DisplayAlert(MajorUnitQuantity);
     }
     public void GetStockDetails(string code)
     {
@@ -76,7 +76,7 @@ public class PickingViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Helpers.CatchingException.PharmaDisplayAlert(ex.Message);
+            Helpers.Alerts.DisplayAlert(ex.Message);
         }
     }
 

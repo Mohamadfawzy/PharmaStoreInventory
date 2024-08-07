@@ -275,7 +275,7 @@ public partial class AnimatedInput : ContentView
         catch (Exception ex)
         {
             error.IsVisible = false;
-            Helpers.CatchingException.PharmaDisplayAlert(ex.Message);
+            Helpers.Alerts.DisplayAlert(ex.Message);
         }
     }
 

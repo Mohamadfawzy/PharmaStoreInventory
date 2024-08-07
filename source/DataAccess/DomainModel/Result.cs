@@ -6,7 +6,7 @@ public class Result<T>
 {
     public bool IsSuccess { get; set; }
     public string Message { get; set; } = string.Empty;
-    public int ErrorCode { get; set; }
+    public ErrorCode ErrorCode { get; set; }
     public T? Data { get; set; }
     public IEnumerable<string>? Errors { get; set; }
 
@@ -39,12 +39,13 @@ public class Result<T>
         };
     }
     
-    public static Result<T> Failure(string message= "Failure")
+    public static Result<T> Failure(ErrorCode errorCode = ErrorCode.InvalidIdentifier,string message= "Failure")
     {
         return new Result<T>
         {
             IsSuccess = false,
-            Message = message
+            Message = message,
+            ErrorCode = errorCode
         };
     }
 }
@@ -56,7 +57,7 @@ public class Result
     public int ErrorCode { get; set; }
     public IEnumerable<string>? Errors { get; set; }
 
-    public static Result Success(string message = "")
+    public static Result Success(string message = "IsSuccess")
     {
         return new Result { IsSuccess = true, Message = message };
     }
@@ -91,6 +92,15 @@ public class Result
         {
             IsSuccess = false,
             Message = message
+        };
+    }
+    
+    public static Result Exception(string message)
+    {
+        return new Result
+        {
+            IsSuccess = false,
+            Message = $"An error occurred: {message}"
         };
     }
     

@@ -29,7 +29,7 @@
             <Button Text="UserView View" CommandParameter="{x:Type views:UserView}" />
             <Button Text="VerificationView" CommandParameter="{x:Type views:VerificationView}" />
             <Button Text="Branches View" CommandParameter="{x:Type views:BranchesView}" />
-
+            <Label x:Name="refrece" />
             <HorizontalStackLayout Spacing="5">
                 <Button Text="AnimateBoxes" CommandParameter="{x:Type trash:AnimateBoxes}" />
                 <Button Text="Database" CommandParameter="{x:Type trash:GetDataFromDatabase}" />
