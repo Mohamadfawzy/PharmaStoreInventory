@@ -1,5 +1,8 @@
 ﻿
 using CommunityToolkit.Mvvm.ComponentModel;
+using DataAccess.Dtos;
+using DataAccess.Repository;
+using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Models;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -13,71 +16,81 @@ public class PickingViewModel : ObservableObject
     private string barcode = "6221068000977";
     private string microUnitQuantity = "0";
     private string majorUnitQuantity = "0";
+    private readonly ProductAmountRepo repo;
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    public PickingViewModel()
+    {
+        repo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<ProductAmountRepo>()!;
+        ListOfStoc = new ObservableCollection<ProductDetailsDto>();
+        Task.Run(GetStockDetails);
+    }
+    #region Properties
+    public ObservableCollection<ProductDetailsDto> ListOfStoc { get; set; }
 
     public string NameEn
     {
         get => nameEn;
         set => SetProperty(ref nameEn, value);
     }
-
     public string NameAr
     {
         get => nameAr;
         set => SetProperty(ref nameAr, value);
     }
-
     public string Barcode
     {
         get => barcode;
         set => SetProperty(ref barcode, value);
     }
-    
     public string MicroUnitQuantity
     {
         get => microUnitQuantity;
         set => SetProperty(ref microUnitQuantity, value);
     }
-    
     public string MajorUnitQuantity
     {
         get => majorUnitQuantity;
         set => SetProperty(ref majorUnitQuantity, value);
     }
-    public ObservableCollection<StockModel> ListOfStoc { get; set; }
-    public ICommand CopySelectedItemCommand => new Command<StockModel>(CopySelectedItem);
+    #endregion
 
-    //Constructor
-    public PickingViewModel()
-    {
-        ListOfStoc = new ObservableCollection<StockModel>();
-        GetStockDetails(Barcode);
-    }
+    public ICommand CopySelectedItemCommand => new Command<ProductDetailsDto>(CopySelectedItem);
 
-    void CopySelectedItem(StockModel stock)
-    {
-        ListOfStoc.Add(stock);
-        //Helpers.CatchingException.DisplayAlert(MajorUnitQuantity);
-    }
-    public void GetStockDetails(string code)
+    #region Get Data
+    public async void GetStockDetails()
     {
         try
         {
             ListOfStoc.Clear();
-            var list = Services.MockData.GetStockByBarcode(code);
-            foreach (var item in list)
+            var list = await repo.GetProductDetailsByProcedure(-1,"22",1);
+           if (list != null)
             {
-                ListOfStoc.Add(item);
-            }
+                foreach (var item in list)
+                {
+                    ListOfStoc.Add(item);
+                }
+                NameAr = list[0].ProductNameAr!;
+                NameEn = list[0].ProductNameEn!;
 
-            NameAr = list.FirstOrDefault()?.ItemNameArabic!;
-            NameEn = list.FirstOrDefault()?.ItemNameEnglish!;
-            Barcode = code;
-            //OnPropertyChanged(nameof(ListOfStoc));
+            }
+            OnPropertyChanged(nameof(ListOfStoc));
         }
         catch (Exception ex)
         {
-            Helpers.Alerts.DisplayAlert(ex.Message);
+            await Helpers.Alerts.DisplaySnackbar(ex.Message,20);
         }
     }
+    #endregion
+
+
+    // exectued method
+    void CopySelectedItem(ProductDetailsDto stock)
+    {
+        ListOfStoc.Add(stock);
+        //Helpers.CatchingException.DisplayAlert(MajorUnitQuantity);
+    }
+   
 
 }

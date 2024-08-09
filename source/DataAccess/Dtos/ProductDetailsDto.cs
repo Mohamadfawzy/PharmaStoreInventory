@@ -4,15 +4,15 @@ namespace DataAccess.Dtos;
 
 public class ProductDetailsDto
 {
-    public int Id { get; set; }
+    public decimal Id { get; set; }
     public decimal? ProductId { get; set; }
     public decimal? StoreId { get; set; }
-    public decimal? ExpiryBatchID { get; set; } //counter_id
-    public decimal? VendorId { get; set; }
-    public DateTime? ExpDate { get; set; }
-    public decimal? Amount { get; set; }
-    public decimal? SellPrice { get; set; }
+    public decimal? ExpiryGroupID { get; set; } //counter_id
     public string? IsInventoried { get; set; }
+    //public decimal? VendorId { get; set; }
+    public DateTime? ExpDate { get; set; }
+    public decimal? Quantity { get; set; } // Amount
+    public decimal? SellPrice { get; set; }
     public string? ProductNameAr { get; set; }
     public string? ProductNameEn { get; set; }
     public decimal? ProductUnit1 { get; set; }
@@ -32,13 +32,13 @@ public class ProductDetailsDto
             return null;
         return new ProductDetailsDto
         {
-            Id = (int)item.pa_id,
+            Id = item.pa_id,
             ProductId = item.product_id,
             StoreId = item.store_id,
-            ExpiryBatchID = item.counter_id,
-            VendorId = item.vendor_id,
+            ExpiryGroupID = item.counter_id,
+            //VendorId = item.vendor_id,
             ExpDate = item.exp_date,
-            Amount = item.amount,
+            Quantity = item.amount,
             SellPrice = item.sell_price,
             IsInventoried = item.Product_update,
             // Map other properties as needed
@@ -51,10 +51,10 @@ public class ProductDetailsDto
     //    {
     //        product_id = item.ProductId ?? 0,
     //        store_id = item.StoreId ?? 0,
-    //        counter_id = item.ExpiryBatchID ?? 0,
+    //        counter_id = item.ExpiryGroupID ?? 0,
     //        vendor_id = item.VendorId,
     //        exp_date = item.ExpDate,
-    //        amount = item.Amount,
+    //        amount = item.Quantity,
     //        sell_price = item.SellPrice,
     //        pa_id =item.Id,
     //        Product_update=item.IsInventoried,

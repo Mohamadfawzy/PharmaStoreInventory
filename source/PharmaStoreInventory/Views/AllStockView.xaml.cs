@@ -55,4 +55,13 @@ public partial class AllStockView : ContentPage
         {
         }
     }
+
+    private async void CheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        var checkBox = sender as CheckBox;
+        if (checkBox?.ClassId == "CheckBox_1")
+        {
+            await Helpers.Alerts.DisplaySnackbar("1_CheckBox");
+        }
+    }
 }

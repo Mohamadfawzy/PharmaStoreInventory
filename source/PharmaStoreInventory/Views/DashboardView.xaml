@@ -237,6 +237,7 @@
                 <TapGestureRecognizer Tapped="ClosePopupTapped" />
             </BoxView.GestureRecognizers>
         </BoxView>
+        
         <!--  popup window of select strore  -->
         <Border
             x:Name="popup"

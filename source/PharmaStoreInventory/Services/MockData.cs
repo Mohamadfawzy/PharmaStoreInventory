@@ -216,39 +216,39 @@ public static class MockData
             },
         };
 
-    public static List<StoresModel> StoresModelList = new List<StoresModel>
+    public static List<SortModel> StoresModelList = new List<SortModel>
     {
-        new StoresModel { Id = 2, IsSelected = false , Name="المخزن الخارجي", },
-        new StoresModel { Id = 3, IsSelected = false , Name="مخزن شبين"},
-        new StoresModel { Id = 1, IsSelected = true , Name="الصيدلية"},
-        new StoresModel { Id = 4, IsSelected = false , Name="مخزن طنطا"},
+        new SortModel { Id = 2, IsSelected = false , Name="المخزن الخارجي", },
+        new SortModel { Id = 3, IsSelected = false , Name="مخزن شبين"},
+        new SortModel { Id = 1, IsSelected = true , Name="الصيدلية"},
+        new SortModel { Id = 4, IsSelected = false , Name="مخزن طنطا"},
         
-        //new StoresModel { Id = 2, IsSelected = false , Name="المخزن الخارجي"},
-        //new StoresModel { Id = 3, IsSelected = false , Name="مخزن شبين"},
-        //new StoresModel { Id = 1, IsSelected = true , Name="الصيدلية"},
-        //new StoresModel { Id = 4, IsSelected = false , Name="مخزن طنطا"},
-        
-        
-        //new StoresModel { Id = 2, IsSelected = false , Name="المخزن الخارجي"},
-        //new StoresModel { Id = 3, IsSelected = false , Name="مخزن شبين"},
-        //new StoresModel { Id = 1, IsSelected = true , Name="الصيدلية"},
-        //new StoresModel { Id = 4, IsSelected = false , Name="مخزن طنطا"},
-        
-        //new StoresModel { Id = 2, IsSelected = false , Name="المخزن الخارجي"},
-        //new StoresModel { Id = 3, IsSelected = false , Name="مخزن شبين"},
-        //new StoresModel { Id = 1, IsSelected = true , Name="الصيدلية"},
-        //new StoresModel { Id = 4, IsSelected = false , Name="مخزن طنطا"},
-        
-        //new StoresModel { Id = 2, IsSelected = false , Name="المخزن الخارجي"},
-        //new StoresModel { Id = 3, IsSelected = false , Name="مخزن شبين"},
-        //new StoresModel { Id = 1, IsSelected = true , Name="الصيدلية"},
-        //new StoresModel { Id = 4, IsSelected = false , Name="مخزن طنطا"},
+        //new SortModel { Id = 2, IsSelected = false , Name="المخزن الخارجي"},
+        //new SortModel { Id = 3, IsSelected = false , Name="مخزن شبين"},
+        //new SortModel { Id = 1, IsSelected = true , Name="الصيدلية"},
+        //new SortModel { Id = 4, IsSelected = false , Name="مخزن طنطا"},
         
         
-        //new StoresModel { Id = 2, IsSelected = false , Name="المخزن الخارجي"},
-        //new StoresModel { Id = 3, IsSelected = false , Name="مخزن شبين"},
-        //new StoresModel { Id = 1, IsSelected = true , Name="الصيدلية"},
-        //new StoresModel { Id = 4, IsSelected = false , Name="مخزن طنطا"}
+        //new SortModel { Id = 2, IsSelected = false , Name="المخزن الخارجي"},
+        //new SortModel { Id = 3, IsSelected = false , Name="مخزن شبين"},
+        //new SortModel { Id = 1, IsSelected = true , Name="الصيدلية"},
+        //new SortModel { Id = 4, IsSelected = false , Name="مخزن طنطا"},
+        
+        //new SortModel { Id = 2, IsSelected = false , Name="المخزن الخارجي"},
+        //new SortModel { Id = 3, IsSelected = false , Name="مخزن شبين"},
+        //new SortModel { Id = 1, IsSelected = true , Name="الصيدلية"},
+        //new SortModel { Id = 4, IsSelected = false , Name="مخزن طنطا"},
+        
+        //new SortModel { Id = 2, IsSelected = false , Name="المخزن الخارجي"},
+        //new SortModel { Id = 3, IsSelected = false , Name="مخزن شبين"},
+        //new SortModel { Id = 1, IsSelected = true , Name="الصيدلية"},
+        //new SortModel { Id = 4, IsSelected = false , Name="مخزن طنطا"},
+        
+        
+        //new SortModel { Id = 2, IsSelected = false , Name="المخزن الخارجي"},
+        //new SortModel { Id = 3, IsSelected = false , Name="مخزن شبين"},
+        //new SortModel { Id = 1, IsSelected = true , Name="الصيدلية"},
+        //new SortModel { Id = 4, IsSelected = false , Name="مخزن طنطا"}
     };
     public static List<StockModel> GetStocks()
     {
@@ -271,7 +271,7 @@ public static class MockData
     }
 
 
-    public static List<StoresModel> GetStores(string code)
+    public static List<SortModel> GetStores(string code)
     {
         return StoresModelList.ToList();
     }

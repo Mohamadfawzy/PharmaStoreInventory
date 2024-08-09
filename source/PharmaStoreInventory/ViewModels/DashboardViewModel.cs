@@ -17,14 +17,13 @@ public class DashboardViewModel : ObservableObject
     private int allProductsCount = 1;
     private int LatestInventoryId = 0;
 
-    /// <summary>
-    /// Constructor
-    /// </summary>
+    // #######*Constructor*#########
+    //     ################
     public DashboardViewModel()
     {
         commonRepo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<CommonsRepo>()!;
         productRepo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<ProductAmountRepo>()!;
-        StoresModelList = new List<StoresModel>();
+        StoresModelList = new List<SortModel>();
         storeId = AppPreferences.StoreId;
         Task.Run(OnStart);
     }
@@ -41,7 +40,7 @@ public class DashboardViewModel : ObservableObject
         //await Task.WhenAll(t1, t2,t3);
     }
 
-
+    // ########*Public Properties*########
     #region Properties
     public DateOnly LatestInventoryDate
     {
@@ -53,7 +52,7 @@ public class DashboardViewModel : ObservableObject
         get => storeName;
         set => SetProperty(ref storeName, value);
     }
-    public List<StoresModel> StoresModelList { get; set; }
+    public List<SortModel> StoresModelList { get; set; }
     public string Title
     {
         get => title;
@@ -66,7 +65,7 @@ public class DashboardViewModel : ObservableObject
     #endregion
 
 
-    public ICommand StoreSelectionChangedCommand => new Command<StoresModel>(StoreSelectionChanged);
+    public ICommand StoreSelectionChangedCommand => new Command<SortModel>(StoreSelectionChanged);
     public ICommand StartNewInventoryCommand => new Command(StartNewInventory);
 
 
@@ -81,7 +80,7 @@ public class DashboardViewModel : ObservableObject
             {
                 if (model != null)
                 {
-                    var item = new StoresModel()
+                    var item = new SortModel()
                     {
                         Id = (int)model.Store_id,
                         Name = string.IsNullOrEmpty(model.Store_name_ar) ? model.Store_name_en : model.Store_name_ar
@@ -167,7 +166,7 @@ public class DashboardViewModel : ObservableObject
     #endregion
 
     // exectued method
-    void StoreSelectionChanged(StoresModel item)
+    void StoreSelectionChanged(SortModel item)
     {
         var oldItem = StoresModelList.First(c => c.IsSelected);
         oldItem.IsSelected = false;

@@ -14,6 +14,7 @@
     FlowDirection="LeftToRight"
     BackgroundColor="White">
 
+    <!--  Resources  -->
     <ContentPage.Resources>
         <ResourceDictionary>
 
@@ -44,9 +45,10 @@
         <vm:PickingViewModel />
     </ContentPage.BindingContext>
 
+    <!--  Main Contianer  -->
+    <Grid x:Name="mainContianer" RowDefinitions="60,1.3*,*,*">
 
-    <Grid x:Name="cameraViewContianer" RowDefinitions="60,1.3*,*,*">
-
+        <!--  Hedear falsh and barcod icon  -->
         <StackLayout
             Padding="20,0"
             Orientation="Horizontal"
@@ -83,11 +85,9 @@
                 </Label.GestureRecognizers>
             </Label>
 
-
-
         </StackLayout>
-        <!--  Row 1  -->
-        <!--  Barcode scanner view in the center  -->
+
+        <!--  The Camera  -->
         <scanner:CameraView
             x:Name="nativeBarcode"
             Grid.Row="1"
@@ -97,8 +97,7 @@
             TorchOn="False"
             CameraEnabled="True" />
 
-        <!--<BoxView />-->
-        <!--  Lines  -->
+        <!--  Guides Lines over Camera  -->
         <Grid
             Grid.Row="1"
             Padding="0,30,40,30"
@@ -262,6 +261,7 @@
                                     </SwipeItemView>
                                 </SwipeItems>
                             </SwipeView.RightItems>
+
                             <!--  Content  -->
                             <Grid
                                 Grid.Row="2"
@@ -279,8 +279,8 @@
                                     <Label.Triggers>
                                         <DataTrigger
                                             TargetType="Label"
-                                            Binding="{Binding IsCounted}"
-                                            Value="True">
+                                            Binding="{Binding IsInventoried}"
+                                            Value="1">
                                             <Setter Property="Text" Value="{x:Static icon:IconFont.CheckboxMarkedCircle}" />
                                             <Setter Property="TextColor" Value="{StaticResource Primary700}" />
                                             <!--  Multiple Setter elements are allowed  -->
@@ -293,7 +293,7 @@
                                     <!--  Date  -->
                                     <!--  dd, mm, yyyy  -->
                                     <Label
-                                        Text="{Binding ExpiryDate}"
+                                        Text="{Binding ExpDate}"
                                         FlowDirection="LeftToRight"
                                         FontSize="23"
                                         TextColor="{StaticResource Primary800}" />
@@ -327,7 +327,7 @@
                                         <!--  Distributor  -->
                                         <Label
                                             Margin="0,8,0,3"
-                                            Text="{Binding Distributor}"
+                                            Text="{Binding VendorNameAr}"
                                             FontSize="9"
                                             VerticalOptions="End" />
                                         <!--  Price  -->
@@ -341,7 +341,7 @@
                                                 <Label
                                                     Margin="0"
                                                     Padding="0"
-                                                    Text="{Binding Price}"
+                                                    Text="{Binding SellPrice}"
                                                     FontSize="18"
                                                     VerticalTextAlignment="End" />
                                                 <Label
@@ -377,59 +377,61 @@
         </Grid>
 
         <!--  Popup  -->
-        <BoxView
+        <Grid
             x:Name="backgroundTransparence"
             Grid.RowSpan="4"
             IsVisible="False"
             BackgroundColor="{StaticResource BackgroundTransparence}">
-            <BoxView.GestureRecognizers>
-                <TapGestureRecognizer Tapped="ClosePopupTapped" />
-            </BoxView.GestureRecognizers>
-        </BoxView>
 
-        <Border
-            x:Name="popup"
-            Grid.RowSpan="4"
-            Margin="10,0"
-            IsVisible="False"
-            VerticalOptions="Center"
-            MinimumHeightRequest="350"
-            Stroke="#00C49B33"
-            StrokeThickness="1"
-            FlowDirection="RightToLeft"
-            StrokeShape="RoundRectangle 6"
-            InputTransparent="False"
-            BackgroundColor="{AppThemeBinding Light={StaticResource Primary050},
-                                              Dark={StaticResource Primary950}}">
-            <VerticalStackLayout Padding="20,20" Spacing="20">
-                <Label Text="الكمية " HorizontalOptions="CenterAndExpand" />
-                <!--  StepperS  -->
-                <StackLayout
-                    Padding="0,0"
-                    Orientation="Horizontal"
-                    HorizontalOptions="FillAndExpand">
-                    <template:StepperField Text="{Binding MajorUnitQuantity}" HorizontalOptions="StartAndExpand" />
-                    <template:StepperField Text="{Binding MicroUnitQuantity}" />
-                </StackLayout>
-                <!--  date Label  -->
-                <Label Text="تاريخ إنتهاء الصلاحية" />
-                <!--  Date Entry  -->
-                <Border
-                    Padding="10,0"
-                    Stroke="#C49B33"
-                    StrokeThickness="1"
-                    StrokeShape="RoundRectangle 6">
-                    <Entry
-                        x:Name="entry"
-                        Text="1545"
-                        Keyboard="Numeric" />
-                </Border>
-                <Button Text="حفظ" Clicked="Save_Clicked" />
-            </VerticalStackLayout>
-            <Border.GestureRecognizers>
-                <TapGestureRecognizer />
-            </Border.GestureRecognizers>
-        </Border>
+            <Border
+                x:Name="popup"
+                Grid.RowSpan="4"
+                Margin="10,0"
+                IsVisible="False"
+                VerticalOptions="Center"
+                MinimumHeightRequest="350"
+                Stroke="#00C49B33"
+                StrokeThickness="1"
+                FlowDirection="RightToLeft"
+                StrokeShape="RoundRectangle 6"
+                InputTransparent="False"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Primary050},
+                                                  Dark={StaticResource Primary950}}">
+                <VerticalStackLayout Padding="20,20" Spacing="20">
+                    <Label Text="الكمية " HorizontalOptions="CenterAndExpand" />
+                    <!--  StepperS  -->
+                    <StackLayout
+                        Padding="0,0"
+                        Orientation="Horizontal"
+                        HorizontalOptions="FillAndExpand">
+                        <template:StepperField Text="{Binding MajorUnitQuantity}" HorizontalOptions="StartAndExpand" />
+                        <template:StepperField Text="{Binding MicroUnitQuantity}" />
+                    </StackLayout>
+                    <!--  date Label  -->
+                    <Label Text="تاريخ إنتهاء الصلاحية" />
+                    <!--  Date Entry  -->
+                    <Border
+                        Padding="10,0"
+                        Stroke="#C49B33"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 6">
+                        <Entry
+                            x:Name="entry"
+                            Text="1545"
+                            Keyboard="Numeric" />
+                    </Border>
+                    <Button Text="حفظ" Clicked="Save_Clicked" />
+                </VerticalStackLayout>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer />
+                </Border.GestureRecognizers>
+            </Border>
+
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="ClosePopupTapped" />
+            </Grid.GestureRecognizers>
+        </Grid>
+        <!--  End Popup  -->
 
     </Grid>
 

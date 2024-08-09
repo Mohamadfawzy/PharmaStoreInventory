@@ -27,10 +27,10 @@ public partial class PickingView : ContentPage
 
         Dispatcher.DispatchAsync(() =>
         {
-            viewModel.GetStockDetails(first.DisplayValue);
+            viewModel.GetStockDetails();
 
         });
-        cameraViewContianer.SetRow(gridData,1);
+        mainContianer.SetRow(gridData,1);
         nativeBarcode.PauseScanning = true;
         nativeBarcode.CameraEnabled=false;
     }
@@ -38,7 +38,7 @@ public partial class PickingView : ContentPage
     {
         nativeBarcode.PauseScanning = false;
         nativeBarcode.CameraEnabled = true;
-        cameraViewContianer.SetRow(gridData, 2);
+        mainContianer.SetRow(gridData, 2);
     }
 
     private void ToggleFlashLight(object sender, TappedEventArgs e)

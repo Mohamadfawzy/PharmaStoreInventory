@@ -32,6 +32,7 @@ public enum ErrorCode
     InvalidIdentifier = 6,//
     OperationFailed = 7,
     ManyFailedAttempts = 8,
+    NotFoundById = 9,
 
 
     // General Errors

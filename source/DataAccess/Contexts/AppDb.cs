@@ -1,6 +1,7 @@
 ﻿using DataAccess.Entities;
 using DataAccess.Helper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 namespace DataAccess.Contexts;
 
 public class AppDb : DbContext
@@ -9,12 +10,19 @@ public class AppDb : DbContext
     string connectionString;//= $"Data Source=192.168.1.5,1433\\MSSQLSERVER01; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(connectionString);
+        optionsBuilder.UseSqlServer(connectionString, options =>
+        {
+            options.CommandTimeout(180);
+        });
     }
     public AppDb()
     {
-        //connectionString = $"Data Source=192.168.1.103,1433\\MSSQLSERVER01; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
-        connectionString = $"Data Source={Constants.IP},{Constants.Port}\\MSSQLSERVER01; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
+        if (!string.IsNullOrEmpty(Constants.IP))
+        {
+            connectionString = $"Data Source={Constants.IP},{Constants.Port}\\MSSQLSERVER01; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
+        }
+        else
+            connectionString = $"Data Source=192.168.1.103,1433\\MSSQLSERVER01; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
     }
     public DbSet<Product_Amount> Product_Amount { get; set; }
     public DbSet<Product> Products { get; set; }
