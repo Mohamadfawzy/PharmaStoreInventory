@@ -1,6 +1,4 @@
-﻿using DataAccess.Helper;
-
-namespace DataAccess.DomainModel;
+﻿namespace DataAccess.DomainModel;
 
 public class Result<T>
 {
@@ -15,31 +13,41 @@ public class Result<T>
         return new Result<T> { IsSuccess = true, Data = data, Message = message };
     }
 
-    public static Result<T> Failure(IEnumerable<string> errors, string message = "")
+
+    //public static Result<T> Failure(IEnumerable<string> errors, string message = "")
+    //{
+    //    return new Result<T> { IsSuccess = false, Errors = errors, Message = message };
+    //}
+
+    public static Result<T> Failure(string message = "Failure")
     {
-        return new Result<T> { IsSuccess = false, Errors = errors, Message = message };
-    }
-
-    public static Result<T> Failure(string message, params string[] errors )
-    {
-        if (errors == null)
-            return default;
-
-        var list = new List<string>();
-        foreach (var error in errors)
-        {
-            list.Add(error);
-        }
-
         return new Result<T>
         {
             IsSuccess = false,
-            Errors = errors,
             Message = message
         };
     }
+
+    //public static Result<T>? Failure(string message, params string[] errors )
+    //{
+    //    if (errors == null)
+    //        return default;
+
+    //    var list = new List<string>();
+    //    foreach (var error in errors)
+    //    {
+    //        list.Add(error);
+    //    }
+
+    //    return new Result<T>
+    //    {
+    //        IsSuccess = false,
+    //        Errors = errors,
+    //        Message = message
+    //    };
+    //}
     
-    public static Result<T> Failure(ErrorCode errorCode = ErrorCode.InvalidIdentifier,string message= "Failure")
+    public static Result<T> Failure(ErrorCode errorCode,string message= "Failure")
     {
         return new Result<T>
         {
@@ -50,12 +58,16 @@ public class Result<T>
     }
 }
 
+
+
+
+
 public class Result
 {
     public bool IsSuccess { get; set; }
     public string Message { get; set; } = string.Empty;
     public int ErrorCode { get; set; }
-    public IEnumerable<string>? Errors { get; set; }
+    public IEnumerable<string>? Errors { get; set; } 
 
     public static Result Success(string message = "IsSuccess")
     {
@@ -69,9 +81,6 @@ public class Result
 
     public static Result Failure(string message, params string[] errors)
     {
-        if (errors == null)
-            return default;
-
         var list = new List<string>();
         foreach (var error in errors)
         {

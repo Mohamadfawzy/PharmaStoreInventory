@@ -1,6 +1,4 @@
-﻿using DataAccess.Helper;
-
-namespace DataAccess.DomainModel.QueryParams;
+﻿namespace DataAccess.DomainModel.QueryParams;
 
 public class FilterUsersQParam
 {

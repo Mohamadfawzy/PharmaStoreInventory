@@ -150,7 +150,7 @@
 	  <MauiXaml Update="Views\Trash\StockDetails.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\StockDetailsView.xaml">
+	  <MauiXaml Update="Views\Trash\StockDetailsView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Templates\AnimatedInput.xaml">

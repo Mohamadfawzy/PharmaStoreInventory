@@ -44,7 +44,7 @@ public class CommonsRepo
         await EndInventoryHistoryAsync(latestHistoryId, empId).ConfigureAwait(false);
 
         // Set AllProduct Non Inventoried
-        await SetAllProductNonInventoriedAsync(storeId).ConfigureAwait(false);
+        await SetAllProductNonInventoriedAsync(storeId, empId).ConfigureAwait(false);
 
         // start new enventory
         return await AddInventoryHistoryAsync(empId,storeId ).ConfigureAwait(false);
@@ -79,16 +79,16 @@ public class CommonsRepo
         return (query > 0);
     }
 
-    internal async Task<bool> SetAllProductNonInventoriedAsync(int storeId)
+    internal async Task<bool> SetAllProductNonInventoriedAsync(int storeId, int empId)
     {
         var currentDate = DateTime.Now;
         var query = await context.Product_Amount
-            .Where(b => b.store_id == storeId)
+            .Where(b => b.Store_id == storeId)
             .ExecuteUpdateAsync(setters => setters
             .SetProperty(b => b.Product_update, "0")
             .SetProperty(b => b.Product_update_date, currentDate)
-            .SetProperty(b => b.update_date, currentDate)
-            .SetProperty(b => b.update_uid, Helper.Constants.UserId));
+            .SetProperty(b => b.Update_date, currentDate)
+            .SetProperty(b => b.Update_uid, empId.ToString()));
         return (query > 0);
     }
 }

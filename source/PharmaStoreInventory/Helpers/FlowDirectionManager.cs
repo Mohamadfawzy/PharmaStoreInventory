@@ -20,7 +20,7 @@ public static class FlowDirectionManager
     {
         get
         {
-            if (AppConstants.Language == "ar")
+            if (AppValues.Language == "ar")
                 return FlowDirection.RightToLeft;
             else
                 return FlowDirection.LeftToRight;
@@ -32,7 +32,7 @@ public static class FlowDirectionManager
     {
         get
         {
-            if (AppConstants.Language == "ar")
+            if (AppValues.Language == "ar")
                 return IconFont.ArrowRight;
             else
                 return IconFont.ArrowLeft;

@@ -23,14 +23,14 @@ public partial class StepperField : ContentView
 
     private void Plus_Clicked(object sender, EventArgs e)
     {
-        var number = int.Parse(Text);
+        var number = decimal.Parse(Text);
         number++;
         Text = number.ToString();
     }
     
     private void Minus_Clicked(object sender, EventArgs e)
     {
-        var number = int.Parse(Text);
+        var number = decimal.Parse(Text);
         number--;
         Text = number.ToString();
 

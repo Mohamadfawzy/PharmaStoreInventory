@@ -4,7 +4,6 @@ using DataAccess.DomainModel.QueryParams;
 using DataAccess.Dtos.UserDtos;
 using DataAccess.Entities;
 using DataAccess.ExtensionMethods;
-using DataAccess.Helper;
 using DataAccess.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,7 +43,7 @@ public class UserRepository
             en.PasswordHash = passwordHasher.HashPassword(userDto.Password);
 
             // Set the expiration time for the verification code
-            en.VCodeExpirationTime = DateTimeOffset.UtcNow.AddMinutes(Helper.Constants.VerificationCodeMinutesExpires);
+            en.VCodeExpirationTime = DateTimeOffset.UtcNow.AddMinutes(Helper.Strings.VerificationCodeMinutesExpires);
 
             // Confirm the userDto's email by default
             en.EmailConfirmed = true;
@@ -143,7 +142,7 @@ public class UserRepository
     }
 
 
-    public async Task SetUserAccountIsAccessAsync(UserAccount user, string deviceId)
+    public async Task SetUserAccountIsAccessAsync(UserAccount user)
     {
         user.IsLoggedIn = true;
         user.AccessFailedCount = 0;
@@ -367,92 +366,4 @@ public class UserRepository
         context.Database.OpenConnection();
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public async Task<UserAccount?> ReadUserIdByEmailAsync(string email)
-    {
-        try
-        {
-            return await context.Users
-                .Where(x => x.Email == email.ToLower())
-                .Select((user) =>
-                    new UserAccount
-                    {
-                        Id = user.Id,
-                        Email = user.Email,
-                        VerificationCode = user.VerificationCode,
-                        VCodeExpirationTime = user.VCodeExpirationTime,
-                        FullName = user.FullName
-                    })
-                .FirstOrDefaultAsync();
-        }
-        catch (Exception)
-        {
-            return null;
-        }
-    }
-
-    public async Task<UserAccount?> ReadUserIdByPhoneAsync(string phone)
-    {
-        try
-        {
-            return await context.Users
-                .Where(x => x.PhoneNumber == phone.ToLower())
-                .Select((user) => new UserAccount { Id = user.Id, PhoneNumber = user.PhoneNumber, VerificationCode = user.VerificationCode, VCodeExpirationTime = user.VCodeExpirationTime, FullName = user.FullName })
-                .FirstOrDefaultAsync();
-        }
-        catch (Exception)
-        {
-            return null;
-        }
-    }
-
-    //public async Task<UserVerificationEmailModel?> ReadVerificationCode(string userId)
-    //{
-    //    Expression<Func<UserAccount, bool>> filter = u => u.Id == userId;
-
-    //    return await GenericReadSingle(filter, (u) => new UserVerificationEmailModel
-    //    {
-    //        Email = u.Id,
-    //        GenerateVerificationCode = u.GenerateVerificationCode,
-    //        VCodeExpirationTime = u.VCodeExpirationTime,
-
-    //    });
-    //}
-
-    public async Task<bool> CheckPassword(string password, string hashedPassword)
-    {
-        return await Task.FromResult(passwordHasher.VerifyPassword(password, hashedPassword));
-    }
 }

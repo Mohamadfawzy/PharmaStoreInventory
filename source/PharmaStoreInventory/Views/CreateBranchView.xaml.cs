@@ -1,7 +1,6 @@
-﻿using CommunityToolkit.Maui.Views;
-using DataAccess.Contexts;
-using DataAccess.Helper;
+﻿using DataAccess.Helper;
 using DataAccess.Repository;
+using DataAccess.Services;
 using PharmaStoreInventory.Extensions;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Models;
@@ -10,24 +9,13 @@ namespace PharmaStoreInventory.Views;
 
 public partial class CreateBranchView : ContentPage
 {
-    private enum ErrorType
-    {
-        Success,
-        Username,
-        Password,
-        UsernameOrPass,
-        ConnectionString
-    }
-
-    private EmployeeRepo repo;
-    private AppDb context;
-    private Branch branch;
-    private Popup popup;
-    private FileHanler FileHanler;
+    //private Branch? branch = null;
+    private readonly FileHanler fileHanler;
     public CreateBranchView()
     {
         InitializeComponent();
-        FileHanler = new();
+        fileHanler = new(Helpers.AppValues.BranchsFileName);
+
     }
 
     private void ClearFocusFromAllInputsTapped(object sender, TappedEventArgs e)
@@ -37,19 +25,30 @@ public partial class CreateBranchView : ContentPage
 
     private async void SubmitButton(object sender, EventArgs e)
     {
-        DisplayPopup();
+        Helpers.Alerts.DisplayActivityIndicator(this);
+
         submitButton.IsEnabled = false;
 
         if (!DataValidaityCheck())
             return;
 
-        var status = await Task.Run(Connection);
+        var branch = new Branch()
+        {
+            Id = Guid.NewGuid(),
+            BrachName = brachName.InputText,
+            Password = password.InputText,
+            Telephone = telephone.InputText,
+            Username = username.InputText,
+            IpAdrress = ipAdrress.InputText,
+            Port = port.InputText
+        };
+        var status = await Connection(branch);
         if (status == ErrorType.Success)
         {
             await Helpers.Alerts.DisplaySnackbar("The branch has been contacted successfully");
-            await FileHanler.Add(branch, Helpers.AppConstants.BranchsFileName);
+            await fileHanler.Add(branch);
             Helpers.AppPreferences.HasBranchRegistered = true;
-            
+
 
             //await Dispatcher.DispatchAsync(() =>
             //{
@@ -75,16 +74,14 @@ public partial class CreateBranchView : ContentPage
         submitButton.IsEnabled = true;
     }
 
-    private async Task<ErrorType> Connection()
+    private async Task<ErrorType> Connection(Branch branch)
     {
         try
         {
-            DataAccess.Helper.Constants.IP = AppPreferences.IP= branch.IpAdrress;
-            DataAccess.Helper.Constants.Port = AppPreferences.Port=  branch.Port;
+            Strings.IP = AppPreferences.IP = branch.IpAdrress;
+            Strings.Port = AppPreferences.Port = branch.Port;
 
-            repo = new();
-
-
+            var repo = new EmployeeRepo();
             var result = await repo.Login(branch.Username, branch.Password);
             if (result != null)
             {
@@ -104,38 +101,31 @@ public partial class CreateBranchView : ContentPage
     private bool DataValidaityCheck()
     {
         // if validation contentnio ...
-        branch = new Branch()
-        {
-            Id = Guid.NewGuid(),
-            BrachName = brachName.InputText,
-            Password = password.InputText,
-            Telephone = telephone.InputText,
-            Username = username.InputText,
-            IpAdrress = ipAdrress.InputText,
-            Port = port.InputText
-        };
+
         return true;
     }
 
-    public async void DisplayPopup()
+    public void DisplayPopup()
     {
         //popup = new PopupWin();
         //await this.ShowPopupAsync(popup);
         Helpers.Alerts.DisplayActivityIndicator(this);
     }
 
-    public async void ClosePopup()
+    public void ClosePopup()
     {
         //await popup.CloseAsync();
         Helpers.Alerts.CloseActivityIndicator();
     }
 
-    async void SaveDataLocaly()
+    private enum ErrorType
     {
-
+        Success,
+        Username,
+        Password,
+        UsernameOrPass,
+        ConnectionString
     }
-
-
 
 
 
@@ -184,7 +174,7 @@ public partial class CreateBranchView : ContentPage
         //refresh.IsRefreshing = false;
 
     }
-
+    /*
 
     private Task AddElement1()
     {
@@ -228,5 +218,8 @@ public partial class CreateBranchView : ContentPage
         inputsContainer.Add(a1);
         //return Task.CompletedTask;
     }
-
+    */
 }
+
+
+

@@ -1,7 +1,8 @@
 ﻿namespace DataAccess.Entities;
 public class Product
 {
-    public decimal? product_id { get; set; }
+    public decimal? Product_id { get; set; }
+    /*
     public string? product_code { get; set; }
     public string? product_fast_code { get; set; }
     public string? product_int_code { get; set; }
@@ -77,4 +78,5 @@ public class Product
     public string? GPC { get; set; }
     public string? EGS { get; set; }
     public int? taxPer { get; set; }
+    */
 }

@@ -1,35 +1,35 @@
 ﻿namespace DataAccess.Entities;
 public class Employee
 {
-    public decimal? emp_id { get; set; }
-    public string? emp_code { get; set; }
-    public string? emp_name_ar { get; set; }
-    public string? emp_name_en { get; set; }
-    public string? emp_gender { get; set; }
-    public decimal? job_id { get; set; }
+    public decimal Emp_id { get; set; }
+    public string? Emp_code { get; set; }
+    public string? Emp_name_ar { get; set; }
+    public string? Emp_name_en { get; set; }
+    public string? Emp_gender { get; set; }
+    public decimal? Job_id { get; set; }
     //public DateTime? birth_date { get; set; }
     //public DateTime? hire_date { get; set; }
     //public DateTime? work_date { get; set; }
-    public string? mobile { get; set; }
+    public string? Mobile { get; set; }
     //public string? home_tel { get; set; }
     //public string? address { get; set; }
     //public string? card_id { get; set; }
     //public DateTime? card_date { get; set; }
     //public string? card_place { get; set; }
-    public string? active { get; set; }
+    public string? Active { get; set; }
     //public decimal? max_disc_per { get; set; }
     //public decimal? max_disc_money { get; set; }
     //public string? show_buy { get; set; }
     //public string? show_cash_disk_history { get; set; }
     //public string? show_total_sales_report { get; set; }
     //public string? use_compu { get; set; }
-    public string? username { get; set; }
-    public string? pass { get; set; }
-    //public DateTime? insert_date { get; set; }
-    //public string? insert_uid { get; set; }
-    //public string? update_uid { get; set; }
-    //public DateTime? update_date { get; set; }
-    public string? deleted { get; set; }
+    public string? Username { get; set; }
+    public string? Pass { get; set; }
+    //public DateTime? Insert_date { get; set; }
+    //public string? Insert_uid { get; set; }
+    //public string? Update_uid { get; set; }
+    //public DateTime? Update_date { get; set; }
+    public string? Deleted { get; set; }
     //public string? salary_typ { get; set; }
     //public decimal? basic_salary { get; set; }
     //public decimal? more_salary { get; set; }
@@ -56,7 +56,7 @@ public class Employee
     //public DateTime? insurance_date { get; set; }
     //public decimal? salary_tax { get; set; }
     //public string? emp_bank_id { get; set; }
-    public string? emp_mail { get; set; }
+    public string? Emp_mail { get; set; }
     //public decimal? allowance1 { get; set; }
     //public decimal? allowance2 { get; set; }
     //public decimal? allowance3 { get; set; }

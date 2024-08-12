@@ -1,6 +1,5 @@
 using DataAccess.DomainModel;
 using DataAccess.Dtos.UserDtos;
-using DataAccess.Helper;
 using DataAccess.Repository;
 using DataAccess.Services;
 using PharmaStoreInventory.Extensions;
@@ -10,7 +9,7 @@ namespace PharmaStoreInventory.Views;
 
 public partial class LoginView : ContentPage
 {
-    private AuthService authService;
+    //private AuthService authService;
     public LoginView()
     {
         InitializeComponent();
@@ -23,12 +22,16 @@ public partial class LoginView : ContentPage
 
     private void ThisPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {
-        var repo = Handler?.MauiContext?.Services.GetService<UserRepository>();
-        authService = new(repo);
+
     }
 
     private async void SubmitClicked(object sender, EventArgs e)
     {
+        var repo = Handler?.MauiContext?.Services.GetService<UserRepository>();
+        
+        repo ??= new UserRepository(new DataAccess.Contexts.AppHost());
+        
+        AuthService authService = new(repo);
         try
         {
             Result<UserLoginResponseDto> res;
@@ -94,12 +97,6 @@ public partial class LoginView : ContentPage
 
     }
 
-    //private async Task<bool> SubmitExecute()
-    //{
-
-    //    return res.IsSuccess;
-    //}
-
     InputType CheckInputs()
     {
         InputType isError = InputType.Empty;
@@ -110,11 +107,11 @@ public partial class LoginView : ContentPage
         }
         else
         {
-            if (Validator.IsValidTelephone(email.InputText))
+            if (DataAccess.DomainModel.Validator.IsValidTelephone(email.InputText))
             {
                 isError = InputType.Phone;
             }
-            else if (Validator.IsValidEmail(email.InputText))
+            else if (DataAccess.DomainModel.Validator.IsValidEmail(email.InputText))
             {
                 isError = InputType.Email;
             }

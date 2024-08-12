@@ -16,9 +16,9 @@ public class EmployeeRepo
     public Task<EmployeeDto?> Login(string username, string password)
     {
         var result = context.Employee
-            .Where(d => d.deleted == ("0"))
-            .Where(u => u.username == username)
-            .Where(p => p.pass == password)
+            .Where(d => d.Deleted == ("0"))
+            .Where(u => u.Username == username)
+            .Where(p => p.Pass == password)
             .Select(x => (EmployeeDto)x)
             .FirstOrDefaultAsync();
         return result;

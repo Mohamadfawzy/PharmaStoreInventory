@@ -7,16 +7,10 @@ namespace PharmaStoreInventory.Helpers;
 
 public static class Alerts
 {
-    public static async Task DisplayAlert(string message)
-    {
-        await Application.Current?.MainPage?.DisplayAlert("Exception", message, "cancel");
-    }
-
-
     public static async Task DisplaySnackbar(string text, int durationS = 3)
     {
 
-        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        CancellationTokenSource cancellationTokenSource = new();
 
         var snackbarOptions = new SnackbarOptions
         {
@@ -39,7 +33,7 @@ public static class Alerts
         await snackbar.Show(cancellationTokenSource.Token);
     }
 
-    private static Popup popup;
+    private static Popup? popup;
     public static async void DisplayActivityIndicator(Page page)
     {
         popup = new PopupWin();

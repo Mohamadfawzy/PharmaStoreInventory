@@ -1,8 +1,6 @@
 ﻿using DataAccess.Helper;
-using MailKit.Net.Smtp;
-using MailKit.Security;
-using MimeKit;
-
+using System.Net.Mail;
+using System.Net;
 namespace DataAccess.Services;
 
 public class MailingService
@@ -50,7 +48,7 @@ public class MailingService
                                  
                                       <p><strong>Verification Code: <span class='verification-code'>{verificationCode}</span></strong></p>
                                  
-                                      <p>To verify your email address, please follow these steps:</p>
+                                      <p>To verify your email address, please follow these steps{lang}:</p>
                                       <ol>
                                           <li>Open our website/app and log in to your account.</li>
                                           <li>Go to the verification page or click on the verification link provided.</li>
@@ -79,90 +77,43 @@ public class MailingService
     /// <returns>A task representing the asynchronous operation.</returns>
     public async Task SendEmailAsync(string mailTo, string subject, string body)
     {
+
+        /* SmtpClient smt = new SmtpClient();
+        smt.Host = "smtp.gmail.com";
+        System.Net.NetworkCredential ntcd = new NetworkCredential();
+        ntcd.UserName = "modern.soft.2020@gmail.com";
+        ntcd.Password = "mbzi wkby cqil vgrv ";
+        smt.Credentials = ntcd;
+        smt.EnableSsl = true;
+        smt.Port = 587;
+        smt.Send(msg); */
+
         try
         {
-            var email = new MimeMessage
+            await Task.Run(() =>
             {
-                Sender = MailboxAddress.Parse(sender),
-                Subject = subject
-            };
+                var message = new MailMessage
+                {
+                    From = new MailAddress(sender),
+                    Subject = subject,
+                    Body = body,
+                    IsBodyHtml = true
+                };
+                message.To.Add(new MailAddress(mailTo));
 
-            email.To.Add(MailboxAddress.Parse(mailTo));
-            email.From.Add(new MailboxAddress("ModernSoft", sender));
+                var smptClient = new SmtpClient("smtp-mail.outlook.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential(sender, senderPassword),
+                    EnableSsl = true,
 
-            var builder = new BodyBuilder
-            {
-                HtmlBody = body
-            };
-
-            email.Body = builder.ToMessageBody();
-
-            using var smtp = new SmtpClient();
-
-            // Connect to the SMTP server with TLS
-            await smtp.ConnectAsync("smtp-mail.outlook.com", 587, SecureSocketOptions.StartTls);
-
-            // Authenticate
-            await smtp.AuthenticateAsync(sender, senderPassword);
-
-            // Send email
-            await smtp.SendAsync(email);
-            Console.WriteLine("Email sent successfully.");
-
-            // Disconnect and quit
-            await smtp.DisconnectAsync(true);
+                };
+                smptClient.Send(message);
+            });
         }
         catch (Exception ex)
         {
             Console.WriteLine($"An error occurred: {ex.Message}");
         }
     }
-
-    //public async Task SendEmailAsync(string mailTo, string subject, string body)
-    //{
-    //    var email = new MimeMessage
-    //    {
-    //        Sender = MailboxAddress.Parse(sender),
-    //        Subject = subject
-    //    };
-
-    //    email.To.Add(MailboxAddress.Parse(mailTo));
-
-    //    var builder = new BodyBuilder
-    //    {
-    //        HtmlBody = body
-    //    };
-
-    //    email.Body = builder.ToMessageBody();
-    //    email.From.Add(new MailboxAddress("ModernSoft", sender));
-
-    //    using var smtp = new SmtpClient();
-    //    smtp.Connect("smtp-mail.outlook.com", 587, SecureSocketOptions.StartTlsWhenAvailable);
-    //    smtp.Authenticate(sender, senderPassword);
-
-    //    await smtp.SendAsync(email);
-    //    Console.WriteLine("Email sent successfully.");
-
-    //    smtp.Disconnect(true);
-    //}
-
-
-    string body = $@"Dear #userFullName#,
-
-                        Thank you for registering with our service! To complete your account registration and ensure the security of your account, we require you to verify your email address.
-
-                        *Verification Code*: #verificationCode#
-
-                        To verify your email address, please follow these steps:
-                        1. Open our website/app and log in to your account.
-                        2. Go to the verification page or click on the verification link provided.
-                        3. Enter the above verification code when prompted.
-
-                        If you did not initiate this registration, please disregard this email.
-
-                        Thank you for being a part of our community!
-
-                        Best regards,
-                        Modern soft Team";
-
 }

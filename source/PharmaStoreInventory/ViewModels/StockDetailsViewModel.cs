@@ -6,60 +6,60 @@ namespace PharmaStoreInventory.ViewModels;
 
 public class StockDetailsViewModel : ObservableObject
 {
-    private string nameEn = string.Empty;
-    private string nameAr = string.Empty;
-    private string barcode = string.Empty;
+    //private string nameEn = string.Empty;
+    //private string nameAr = string.Empty;
+    //private string barcode = string.Empty;
 
-    public string NameEn
-    {
-        get => nameEn;
-        set => SetProperty(ref nameEn, value);
-    }
+    //public string NameEn
+    //{
+    //    get => nameEn;
+    //    set => SetProperty(ref nameEn, value);
+    //}
     
-    public string NameAr
-    {
-        get => nameAr;
-        set => SetProperty(ref nameAr, value);
-    }
+    //public string NameAr
+    //{
+    //    get => nameAr;
+    //    set => SetProperty(ref nameAr, value);
+    //}
     
-    public string Barcode
-    {
-        get => barcode;
-        set => SetProperty(ref barcode, value);
-    }
-    public ObservableCollection<StockModel> ListOfStoc {  get; set; }
-    public ICommand CopySelectedItemCommand => new Command<StockModel>(CopySelectedItem);
+    //public string Barcode
+    //{
+    //    get => barcode;
+    //    set => SetProperty(ref barcode, value);
+    //}
+    //public ObservableCollection<StockModel> ListOfStoc {  get; set; }
+    //public ICommand CopySelectedItemCommand => new Command<StockModel>(CopySelectedItem);
     
-    //Constructor
-    public StockDetailsViewModel(string code)
-    {
-        ListOfStoc = new ObservableCollection<StockModel>();
-        GetStockDetails(code);
-    }
+    ////Constructor
+    //public StockDetailsViewModel(string code)
+    //{
+    //    ListOfStoc = new ObservableCollection<StockModel>();
+    //    GetStockDetails(code);
+    //}
 
-    void CopySelectedItem(StockModel stock)
-    {
-        ListOfStoc.Add(stock);
-    }
-    void GetStockDetails(string code)
-    {
-        try
-        {
-            var list = Services.MockData.GetStockByBarcode(code);
-            foreach (var item in list)
-            {
-                ListOfStoc.Add(item);
-            }
+    //void CopySelectedItem(StockModel stock)
+    //{
+    //    ListOfStoc.Add(stock);
+    //}
+    //async void GetStockDetails(string code)
+    //{
+    //    try
+    //    {
+    //        //var list = Services.MockData.GetStockByBarcode(code);
+    //        //foreach (var item in list)
+    //        //{
+    //        //    ListOfStoc.Add(item);
+    //        //}
 
-            NameAr = list.FirstOrDefault()?.ItemNameArabic!;
-            NameEn = list.FirstOrDefault()?.ItemNameEnglish!;
-            Barcode = code;
-        }
-        catch (Exception ex)
-        {
-            Helpers.Alerts.DisplayAlert(ex.Message);
-        }
-    }
+    //        //NameAr = list.FirstOrDefault()?.ItemNameArabic!;
+    //        //NameEn = list.FirstOrDefault()?.ItemNameEnglish!;
+    //        //Barcode = code;
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        await Helpers.Alerts.DisplaySnackbar(ex.Message);
+    //    }
+    //}
 
 
 

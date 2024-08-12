@@ -1,4 +1,5 @@
-﻿using DataAccess.Dtos.UserDtos;
+﻿using DataAccess.Contexts;
+using DataAccess.Dtos.UserDtos;
 using DataAccess.Repository;
 using DataAccess.Services;
 namespace PharmaStoreInventory.ViewModels;
@@ -20,6 +21,9 @@ public class RegisterViewModel : BaseViewModel
     public RegisterViewModel()
     {
         var repo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<UserRepository>();
+
+        repo ??= new UserRepository(new AppHost());
+
         authService = new(repo);
         mailingService = new();
         UserRegister = new()
@@ -33,7 +37,7 @@ public class RegisterViewModel : BaseViewModel
         }
         ;
         Helpers.AppPreferences.SetDeviceID();
-        UserRegister.DeviceID =  Helpers.AppPreferences.GetDeviceID();
+        UserRegister.DeviceID = Helpers.AppPreferences.GetDeviceID();
     }
 
     public async Task<bool> SubmitExecute()
@@ -42,7 +46,7 @@ public class RegisterViewModel : BaseViewModel
         {
 
             var result = await mailingService.SendVerificationCodeAsync(UserRegister.Email!, null, "mohamed fawzy");
-            Helpers.AppConstants.VerificationCode = result;
+            Helpers.AppValues.VerificationCode = result;
             var res = await authService.RegisterUserAcync(UserRegister);
             _ = Helpers.Alerts.DisplaySnackbar(res.Message);
             if (res.IsSuccess)

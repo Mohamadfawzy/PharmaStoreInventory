@@ -24,7 +24,7 @@ public partial class GetDataFromDatabase : ContentPage
 
     private async void LoadData()
     {
-        string query = "SELECT top(10) product_id, buy_price FROM Product_Amount";
+        string query = "SELECT top(10) Product_id, Buy_price FROM Product_Amount";
         var dataTable = await _databaseService.GetDataAsync(query);
         var row = dataTable.Rows;
     }

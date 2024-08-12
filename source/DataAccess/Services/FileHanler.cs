@@ -1,26 +1,28 @@
 ﻿using System.Text.Json;
 
-namespace DataAccess.Helper;
+namespace DataAccess.Services;
 
-public class FileHanler
+public class FileHanler(string fileName)
 {
-    public async Task Add<T>(T item, string fileName)
+    public string FileName { get; set; } = fileName;
+
+    public async Task Add<T>(T item)
     {
-        var list = await ReadFromFile<T>(fileName);
+        var list = await ReadFromFile<T>();
         if (list == null)
             list = [item];
 
         else
             list.Add(item);
-        await WriteToFile<T>(list, fileName);
+        await WriteToFile(list);
     }
 
-    public async Task<bool> WriteToFile<T>(List<T> list, string fileName)
+    public async Task<bool> WriteToFile<T>(List<T> list)
     {
         try
         {
             var writeData = JsonSerializer.Serialize(list);
-            await File.WriteAllTextAsync(fileName, writeData);
+            await File.WriteAllTextAsync(FileName, writeData);
             return true;
         }
         catch (Exception ex)
@@ -30,10 +32,10 @@ public class FileHanler
         }
     }
 
-    public async Task<List<T>?> ReadFromFile<T>(string filename)
+    public async Task<List<T>?> ReadFromFile<T>()
     {
 
-        if (File.Exists(filename) == false)
+        if (File.Exists(FileName) == false)
         {
             // no file
             return default;
@@ -41,7 +43,7 @@ public class FileHanler
 
         try
         {
-            var rawData = await File.ReadAllTextAsync(filename);
+            var rawData = await File.ReadAllTextAsync(FileName);
             return JsonSerializer.Deserialize<List<T>>(rawData);
         }
         catch (Exception ex)
@@ -51,11 +53,11 @@ public class FileHanler
         }
     }
 
-    public Task<bool> Clear(string fileName)
+    public Task<bool> Clear()
     {
         try
         {
-            File.Delete(fileName);
+            File.Delete(FileName);
             return Task.FromResult(true);
         }
         catch (Exception ex)

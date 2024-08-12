@@ -174,15 +174,17 @@
         </Grid>
 
         <!--  ===================================================================================================================  -->
-
+        <!--  data  -->
         <Grid
             x:Name="gridData"
             Grid.Row="2"
             Grid.RowSpan="4"
             BackgroundColor="White"
             RowDefinitions="Auto,*">
+            
             <!--  Product Name and Barcod  -->
             <VerticalStackLayout Grid.Row="0">
+                
                 <!--  Name EN  -->
                 <Label
                     Padding="20,0"
@@ -225,7 +227,8 @@
                 Margin="0,5,0,0"
                 ItemsSource="{Binding ListOfStoc}"
                 SelectionMode="Single"
-                SelectionChanged="Collection_SelectionChanged"
+                SelectionChangedCommand="{Binding SelectionChangedCommand}"
+                SelectionChangedCommandParameter="{Binding Path=SelectedItem, Source={x:Reference collection}}"
                 VerticalScrollBarVisibility="Always">
 
                 <CollectionView.ItemTemplate>
@@ -404,8 +407,8 @@
                         Padding="0,0"
                         Orientation="Horizontal"
                         HorizontalOptions="FillAndExpand">
-                        <template:StepperField Text="{Binding MajorUnitQuantity}" HorizontalOptions="StartAndExpand" />
-                        <template:StepperField Text="{Binding MicroUnitQuantity}" />
+                        <template:StepperField Text="{Binding ModifiedQuantity}" HorizontalOptions="CenterAndExpand" />
+                        <!--<template:StepperField Text="{Binding MicroUnitQuantity}" />-->
                     </StackLayout>
                     <!--  date Label  -->
                     <Label Text="تاريخ إنتهاء الصلاحية" />

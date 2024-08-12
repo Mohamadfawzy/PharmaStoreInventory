@@ -7,7 +7,7 @@ public class ProductDetailsDto
     public decimal Id { get; set; }
     public decimal? ProductId { get; set; }
     public decimal? StoreId { get; set; }
-    public decimal? ExpiryGroupID { get; set; } //counter_id
+    public decimal? ExpiryGroupID { get; set; } //Counter_id
     public string? IsInventoried { get; set; }
     //public decimal? VendorId { get; set; }
     public DateTime? ExpDate { get; set; }
@@ -32,14 +32,14 @@ public class ProductDetailsDto
             return null;
         return new ProductDetailsDto
         {
-            Id = item.pa_id,
-            ProductId = item.product_id,
-            StoreId = item.store_id,
-            ExpiryGroupID = item.counter_id,
-            //VendorId = item.vendor_id,
-            ExpDate = item.exp_date,
-            Quantity = item.amount,
-            SellPrice = item.sell_price,
+            Id = item.Pa_id,
+            ProductId = item.Product_id,
+            StoreId = item.Store_id,
+            ExpiryGroupID = item.Counter_id,
+            //VendorId = item.Vendor_id,
+            ExpDate = item.Exp_date,
+            Quantity = item.Amount,
+            SellPrice = item.Sell_price,
             IsInventoried = item.Product_update,
             // Map other properties as needed
         };
@@ -49,14 +49,14 @@ public class ProductDetailsDto
     //{
     //    return new Product_Amount
     //    {
-    //        product_id = item.ProductId ?? 0,
-    //        store_id = item.StoreId ?? 0,
-    //        counter_id = item.ExpiryGroupID ?? 0,
-    //        vendor_id = item.VendorId,
-    //        exp_date = item.ExpDate,
-    //        amount = item.Quantity,
-    //        sell_price = item.SellPrice,
-    //        pa_id =item.Id,
+    //        Product_id = item.ProductId ?? 0,
+    //        Store_id = item.StoreId ?? 0,
+    //        Counter_id = item.ExpiryGroupID ?? 0,
+    //        Vendor_id = item.VendorId,
+    //        Exp_date = item.ExpDate,
+    //        Amount = item.Quantity,
+    //        Sell_price = item.SellPrice,
+    //        Pa_id =item.Id,
     //        Product_update=item.IsInventoried,
     //        // Map other properties as needed
     //    };

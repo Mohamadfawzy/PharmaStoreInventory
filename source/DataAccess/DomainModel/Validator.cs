@@ -1,16 +1,22 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace PharmaStoreInventory.Validations;
+namespace DataAccess.DomainModel;
 
-internal static class Validator
+public class Validator
 {
-    internal static bool IsValidEmail(string email)
+    public static  bool IsNumeric(string searchText)
+    {
+        string pattern = @"\p{Sc}+\s*\d+";
+        return Regex.IsMatch(searchText, pattern);
+    }
+
+    public static bool IsValidEmail(string email)
     {
         if (string.IsNullOrWhiteSpace(email))
             return false;
-        // Define a regular expression pattern for a valid email address
+
         string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
-        // Create a Regex object and use it to match the email address
+
         Regex regex = new(pattern);
         return regex.IsMatch(email);
     }
@@ -22,15 +28,5 @@ internal static class Validator
 
         // Check if the text matches the pattern
         return Regex.IsMatch(phoneNumber, phoneNumberPattern);
-
-        //if (string.IsNullOrWhiteSpace(phoneNumber))
-        //    return false;
-        //// Define a regex pattern for a valid US phone number
-        //string pattern = @"^[0-9]+$";
-
-        //// Create a Regex object and use it to match the phone number
-        //Regex regex = new(pattern);
-        //return regex.IsMatch(phoneNumber);
     }
-
 }

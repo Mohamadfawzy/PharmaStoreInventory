@@ -9,12 +9,10 @@ public class DashboardViewModel : ObservableObject
 {
     private readonly CommonsRepo commonRepo;
     private readonly ProductAmountRepo productRepo;
+    private readonly int storeId = 0;
     private DateOnly latestInventoryDate;
     private string title = "العنوان";
     private string storeName = "غير محدد";
-    private string number = "124568";
-    private int storeId = 1;
-    private int allProductsCount = 1;
     private int LatestInventoryId = 0;
 
     // #######*Constructor*#########
@@ -23,7 +21,7 @@ public class DashboardViewModel : ObservableObject
     {
         commonRepo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<CommonsRepo>()!;
         productRepo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<ProductAmountRepo>()!;
-        StoresModelList = new List<SortModel>();
+        StoresModelList = [];
         storeId = AppPreferences.StoreId;
         Task.Run(OnStart);
     }
@@ -83,12 +81,12 @@ public class DashboardViewModel : ObservableObject
                     var item = new SortModel()
                     {
                         Id = (int)model.Store_id,
-                        Name = string.IsNullOrEmpty(model.Store_name_ar) ? model.Store_name_en : model.Store_name_ar
+                        Name = model.Store_name_ar ?? (model.Store_name_en ?? "not found name")
                     };
                     StoresModelList.Add(item);
                 }
             }
-            Helpers.AppPreferences.StoreId = StoresModelList[0].Id;
+            AppPreferences.StoreId = StoresModelList[0].Id;
             StoresModelList[0].IsSelected = true;
             StoreName = StoresModelList[0].Name;
         }

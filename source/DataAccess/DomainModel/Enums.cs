@@ -1,4 +1,4 @@
-﻿namespace DataAccess.Helper;
+﻿namespace DataAccess.DomainModel;
 public enum ProductsOrderBy
 {
     Non = 0,

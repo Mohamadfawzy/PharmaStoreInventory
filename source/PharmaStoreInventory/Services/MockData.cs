@@ -1,9 +1,9 @@
-﻿using PharmaStoreInventory.Models;
-using System.Linq;
-namespace PharmaStoreInventory.Services;
+﻿namespace PharmaStoreInventory.Services;
 
 public static class MockData
 {
+
+    /*
     public static List<StockModel> StockModelList = new List<StockModel>
         {
             new StockModel
@@ -262,7 +262,7 @@ public static class MockData
 
     public static List<StockModel>? GetStocksByText(string text)
     {
-        return StockModelList.Where(x => x.ItemNameEnglish.ToLower().Contains(text)).ToList();
+        return StockModelList.Where(x => x.ItemNameEnglish != null && x.ItemNameEnglish.Contains(text)).ToList();
     }
 
     public static List<StockModel> GetStockByBarcode(string code)
@@ -275,4 +275,5 @@ public static class MockData
     {
         return StoresModelList.ToList();
     }
+    */
 }

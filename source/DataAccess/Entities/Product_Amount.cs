@@ -1,22 +1,22 @@
 ﻿namespace DataAccess.Entities;
 public class Product_Amount
 {
-    // Composite Primary Keys (product_id,store_id,counter_id)
-    public decimal product_id { get; set; }
-    public decimal store_id { get; set; }
-    public decimal counter_id { get; set; }
-    public decimal pa_id { get; set; } // IDENTITY
-    public decimal? vendor_id { get; set; }
-    public decimal? amount { get; set; }
-    public decimal? buy_price { get; set; }
-    public decimal? sell_price { get; set; }
-    public decimal? tax_price { get; set; }
-    public DateTime? exp_date { get; set; }
-    public string? insert_uid { get; set; }
-    public DateTime? insert_date { get; set; }
-    public string? update_uid { get; set; }
-    public DateTime? update_date { get; set; }
+    // Composite Primary Keys (Product_id,Store_id,Counter_id)
+    public decimal Product_id { get; set; }
+    public decimal Store_id { get; set; }
+    public decimal Counter_id { get; set; }
+    public decimal Pa_id { get; set; } // IDENTITY
+    public decimal? Vendor_id { get; set; }
+    public decimal? Amount { get; set; }
+    public decimal? Buy_price { get; set; }
+    public decimal? Sell_price { get; set; }
+    public decimal? Tax_price { get; set; }
+    public DateTime? Exp_date { get; set; }
+    public string? Insert_uid { get; set; }
+    public DateTime? Insert_date { get; set; }
+    public string? Update_uid { get; set; }
+    public DateTime? Update_date { get; set; }
     public string? Product_update { get; set; }
     public DateTime? Product_update_date { get; set; }
-    public string? batch_num { get; set; }
+    public string? Batch_num { get; set; }
 }

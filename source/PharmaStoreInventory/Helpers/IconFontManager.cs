@@ -12,7 +12,7 @@ internal class IconFontManager
     {
         get
         {
-            if (AppConstants.Language == "ar")
+            if (AppValues.Language == "ar")
                 return ArrowRight;
             else
                 return ArrowLeft;
@@ -23,7 +23,7 @@ internal class IconFontManager
     {
         get
         {
-            if (AppConstants.Language == "ar")
+            if (AppValues.Language == "ar")
                 return ChevronDoubleLeft;
             else
                 return ChevronDoubleRight;

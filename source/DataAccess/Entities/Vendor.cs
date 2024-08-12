@@ -13,13 +13,13 @@ public class Vendor
     //public string? company_code { get; set; }
     //public decimal? vendor_max_money { get; set; }
     //public decimal? vendor_current_money { get; set; }
-    //public string? deleted { get; set; }
+    //public string? Deleted { get; set; }
     //public string? active { get; set; }
     //public decimal? vendor_start_money { get; set; }
-    //public DateTime? insert_date { get; set; }
-    //public decimal? insert_uid { get; set; }
-    //public decimal? update_uid { get; set; }
-    //public DateTime? update_date { get; set; }
+    //public DateTime? Insert_date { get; set; }
+    //public decimal? Insert_uid { get; set; }
+    //public decimal? Update_uid { get; set; }
+    //public DateTime? Update_date { get; set; }
     //public string? emp_tel { get; set; }
     //public string? emp_tel_details { get; set; }
     //public string? emp_area_manegar { get; set; }

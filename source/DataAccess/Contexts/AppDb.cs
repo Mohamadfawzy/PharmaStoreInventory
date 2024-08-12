@@ -7,7 +7,7 @@ namespace DataAccess.Contexts;
 public class AppDb : DbContext
 {
 
-    string connectionString;//= $"Data Source=192.168.1.5,1433\\MSSQLSERVER01; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
+    readonly string connectionString;//= $"Data Source=192.168.1.5,1433\\MSSQLSERVER01; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(connectionString, options =>
@@ -17,9 +17,9 @@ public class AppDb : DbContext
     }
     public AppDb()
     {
-        if (!string.IsNullOrEmpty(Constants.IP))
+        if (!string.IsNullOrEmpty(Strings.IP))
         {
-            connectionString = $"Data Source={Constants.IP},{Constants.Port}\\MSSQLSERVER01; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
+            connectionString = $"Data Source={Strings.IP},{Strings.Port}\\MSSQLSERVER01; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
         }
         else
             connectionString = $"Data Source=192.168.1.103,1433\\MSSQLSERVER01; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
@@ -49,14 +49,14 @@ public class AppDb : DbContext
 
         modelBuilder
             .Entity<Employee>()
-            .HasKey(x => x.emp_id);
+            .HasKey(x => x.Emp_id);
 
         modelBuilder
             .Entity<Product_Amount>(entity =>
             {
-                entity.HasKey(p => new { p.product_id, p.counter_id, p.store_id });
-                entity.Property(x => x.pa_id).ValueGeneratedOnAdd();
-                entity.Property(a => a.update_date).HasDefaultValueSql("(getutcdate())");
+                entity.HasKey(p => new { p.Product_id, p.Counter_id, p.Store_id });
+                entity.Property(x => x.Pa_id).ValueGeneratedOnAdd();
+                entity.Property(a => a.Update_date).HasDefaultValueSql("(getutcdate())");
             });
 
         modelBuilder

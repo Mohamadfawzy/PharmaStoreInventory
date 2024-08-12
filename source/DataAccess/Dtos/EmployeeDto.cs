@@ -24,17 +24,17 @@ public class EmployeeDto
 
         return new EmployeeDto
         {
-            Id = (int)arg.emp_id,
-            Password = arg.pass,
-            Username = arg.username,
-            Deleted = arg.deleted,
-            Active = arg.active,
-            Code = arg.emp_code,
-            Email = arg.emp_mail,
-            NameAr = arg.emp_name_ar,
-            NameEn = arg.emp_name_en,
-            Gender = arg.emp_gender,
-            JobId = (int?)arg.job_id
+            Id = (int)arg.Emp_id,
+            Password = arg.Pass,
+            Username = arg.Username,
+            Deleted = arg.Deleted,
+            Active = arg.Active,
+            Code = arg.Emp_code,
+            Email = arg.Emp_mail,
+            NameAr = arg.Emp_name_ar,
+            NameEn = arg.Emp_name_en,
+            Gender = arg.Emp_gender,
+            JobId = (int?)arg.Job_id
         };
     }
 }

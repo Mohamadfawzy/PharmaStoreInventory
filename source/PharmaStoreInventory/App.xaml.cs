@@ -17,24 +17,27 @@ public partial class App : Application
         HandlePreferencesKeys();
     }
 
+#pragma warning disable CA1822
     void GetCulture()
     {
         var lang = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
         if (lang == "ar" || lang == "en" || lang == "fr")
-            AppConstants.Language = lang;
+            AppValues.Language = lang;
         else
-            AppConstants.Language = "en";
+            AppValues.Language = "en";
     }
 
     void HandlePreferencesKeys()
     {
         try
         {
-            DataAccess.Helper.Constants.Port = AppPreferences.Port;
-            DataAccess.Helper.Constants.IP = AppPreferences.IP;
+            DataAccess.Helper.Strings.Port = AppPreferences.Port;
+            DataAccess.Helper.Strings.IP = AppPreferences.IP;
         }
         catch
         {
         }
     }
+#pragma warning restore CA1822
+
 }

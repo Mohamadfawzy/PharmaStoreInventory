@@ -2,33 +2,32 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using DataAccess.Dtos;
 using DataAccess.Repository;
-using PharmaStoreInventory.Helpers;
-using PharmaStoreInventory.Models;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-
+using Product = DataAccess.Dtos.ProductDetailsDto;
 namespace PharmaStoreInventory.ViewModels;
 
 public class PickingViewModel : ObservableObject
 {
+    private readonly ProductAmountRepo repo;
     private string nameEn = string.Empty;
     private string nameAr = string.Empty;
     private string barcode = "6221068000977";
     private string microUnitQuantity = "0";
-    private string majorUnitQuantity = "0";
-    private readonly ProductAmountRepo repo;
+    private decimal? majorUnitQuantity = 0;
+
     /// <summary>
     /// Constructor
     /// </summary>
     public PickingViewModel()
     {
         repo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<ProductAmountRepo>()!;
-        ListOfStoc = new ObservableCollection<ProductDetailsDto>();
-        Task.Run(GetStockDetails);
+        ListOfStoc = [];
+        Task.Run(FetchStockDetails);
     }
+
     #region Properties
     public ObservableCollection<ProductDetailsDto> ListOfStoc { get; set; }
-
     public string NameEn
     {
         get => nameEn;
@@ -49,23 +48,25 @@ public class PickingViewModel : ObservableObject
         get => microUnitQuantity;
         set => SetProperty(ref microUnitQuantity, value);
     }
-    public string MajorUnitQuantity
+
+    public decimal? ModifiedQuantity
     {
         get => majorUnitQuantity;
         set => SetProperty(ref majorUnitQuantity, value);
     }
     #endregion
 
-    public ICommand CopySelectedItemCommand => new Command<ProductDetailsDto>(CopySelectedItem);
+    public ICommand CopyProductCommand => new Command<Product>(ExecuteCopyProduct);
+    public ICommand SelectionChangedCommand => new Command<Product>(ExecuteSelectionChanged);
 
     #region Get Data
-    public async void GetStockDetails()
+    public async void FetchStockDetails()
     {
         try
         {
             ListOfStoc.Clear();
-            var list = await repo.GetProductDetailsByProcedure(-1,"22",1);
-           if (list != null)
+            var list = await repo.GetProductDetailsByProcedure(-1, "22", 1);
+            if (list != null)
             {
                 foreach (var item in list)
                 {
@@ -73,24 +74,43 @@ public class PickingViewModel : ObservableObject
                 }
                 NameAr = list[0].ProductNameAr!;
                 NameEn = list[0].ProductNameEn!;
-
             }
             OnPropertyChanged(nameof(ListOfStoc));
         }
         catch (Exception ex)
         {
-            await Helpers.Alerts.DisplaySnackbar(ex.Message,20);
+            await Helpers.Alerts.DisplaySnackbar(ex.Message, 20);
         }
     }
     #endregion
 
 
     // exectued method
-    void CopySelectedItem(ProductDetailsDto stock)
+   private void ExecuteCopyProduct(Product stock)
     {
+        
         ListOfStoc.Add(stock);
-        //Helpers.CatchingException.DisplayAlert(MajorUnitQuantity);
+        //Helpers.CatchingException.DisplayAlert(ModifiedQuantity);
     }
-   
 
+    private void ExecuteSelectionChanged(Product dto)
+    {
+        if (dto != null && dto.Quantity != null)
+        {
+            ModifiedQuantity = dto.Quantity;
+        }
+    }
+
+
+    //public void DecimalSplitDto (decimal value)
+    //{
+    //    var integerPart = (int)value;
+    //    var fractionalPart = value - integerPart;
+    //    IntegerPart = integerPart;
+    //    FractionalPart = fractionalPart;
+
+    //}
+
+    //public int IntegerPart { get; set; }
+    //public decimal FractionalPart { get; set; }
 }

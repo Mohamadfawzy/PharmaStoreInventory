@@ -7,26 +7,12 @@ using DataAccess.Repository;
 
 namespace DataAccess.Services;
 
-public class AuthService
+public class AuthService(UserRepository _repo)
 {
     //private readonly Repository.UserRepository repo = new();
     private readonly PasswordHasher hasher = new();
     private readonly MailingService mailService = new();
-    private readonly UserRepository repo;
-
-    public AuthService(UserRepository _repo)
-    {
-        repo = _repo;
-        //repo = new Repository.UserRepository();
-        //hasher = new PasswordHasher();
-        //mailService = new MailingService();
-
-    }
-    
-    public AuthService()
-    {
-        //repo = new Repository.UserRepository();
-    }
+    private readonly UserRepository repo = _repo;
 
 
     #region Admin Section
@@ -240,7 +226,7 @@ public class AuthService
             if (userAccount != null)
             {
                 var code = Common.GenerateVerificationCode();
-                var vCodeExpirationTime = DateTimeOffset.UtcNow.AddMinutes(Helper.Constants.VerificationCodeMinutesExpires);
+                var vCodeExpirationTime = DateTimeOffset.UtcNow.AddMinutes(Helper.Strings.VerificationCodeMinutesExpires);
                 await mailService.SendVerificationCodeAsync(email, code, userAccount.FullName).ConfigureAwait(false);
                 return await repo.UpdateVerificationCode(userAccount.Id, code, vCodeExpirationTime).ConfigureAwait(false);
             }
@@ -334,7 +320,7 @@ public class AuthService
             };
 
             // Update access in userAccount
-            await repo.SetUserAccountIsAccessAsync(userAccount, deviceId).ConfigureAwait(false);
+            await repo.SetUserAccountIsAccessAsync(userAccount).ConfigureAwait(false);
 
             // Return successful result with user login response and welcome message
             return Result<UserLoginResponseDto>.Success(loginRes, $"Welcome {userAccount.FullName}");

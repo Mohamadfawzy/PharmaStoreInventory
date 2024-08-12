@@ -6,7 +6,7 @@ using PharmaStoreInventory.Validations;
 
 public partial class AnimatedInput : ContentView
 {
-    public double BorderHeight => 50.0;
+    public static double BorderHeight => 50.0;
 
     public enum KeyboardEnum
     {
@@ -18,8 +18,8 @@ public partial class AnimatedInput : ContentView
         Telephone,
         Numeric,
     }
-    private double height = 25.0;
-    private Easing easing = Easing.SinInOut;
+    private readonly double height = 25.0;
+    private readonly Easing easing = Easing.SinInOut;
 
     #region BindableProperty
 
@@ -95,12 +95,14 @@ public partial class AnimatedInput : ContentView
         typeof(AnimatedInput),
         false, BindingMode.TwoWay);
 
+#pragma warning disable CA2211
     public static BindableProperty KeyboardProperty =
         BindableProperty.Create(
-            nameof(EntryKeyboard),
-            typeof(KeyboardEnum),
-            typeof(AnimatedInput),
-            KeyboardEnum.Default, BindingMode.TwoWay);
+        nameof(EntryKeyboard),
+        typeof(KeyboardEnum),
+        typeof(AnimatedInput),
+        KeyboardEnum.Default, BindingMode.TwoWay);
+#pragma warning restore CA2211
 
     public Color UnFocusColor
     {
@@ -201,7 +203,11 @@ public partial class AnimatedInput : ContentView
     {
         InitializeComponent();
     }
-
+    protected override void OnParentSet()
+    {
+        base.OnParentSet();
+        PositioningOfPlaceHolder();
+    }
 
     public bool HideKeyBoard()
     {
@@ -219,11 +225,7 @@ public partial class AnimatedInput : ContentView
 
     public bool EntryIsFocused() => entry.IsFocused;
 
-    protected override void OnParentSet()
-    {
-        base.OnParentSet();
-        PositioningOfPlaceHolder();
-    }
+
 
     private async void Entry_Focused(object sender, FocusEventArgs e)
     {
@@ -275,7 +277,7 @@ public partial class AnimatedInput : ContentView
         catch (Exception ex)
         {
             error.IsVisible = false;
-            Helpers.Alerts.DisplayAlert(ex.Message);
+            await Helpers.Alerts.DisplaySnackbar(ex.Message);
         }
     }
 
@@ -328,7 +330,7 @@ public partial class AnimatedInput : ContentView
     {
         //return container.FlowDirection == FlowDirection.RightToLeft ? 10 : -10;
 
-        if (AppConstants.Language == "ar")
+        if (AppValues.Language == "ar")
         {
             return 10;
         }
@@ -363,33 +365,16 @@ public partial class AnimatedInput : ContentView
 
     private void SetKeyboard()
     {
-        switch (EntryKeyboard)
+        entry.Keyboard = EntryKeyboard switch
         {
-
-            case KeyboardEnum.Default:
-                entry.Keyboard = Keyboard.Default;
-                break;
-            case KeyboardEnum.Text:
-                entry.Keyboard = Keyboard.Text;
-                break;
-            case KeyboardEnum.Chat:
-                entry.Keyboard = Keyboard.Chat;
-                break;
-            case KeyboardEnum.Url:
-                entry.Keyboard = Keyboard.Url;
-                break;
-            case KeyboardEnum.Email:
-                entry.Keyboard = Keyboard.Email;
-                break;
-            case KeyboardEnum.Telephone:
-                entry.Keyboard = Keyboard.Telephone;
-                break;
-            case KeyboardEnum.Numeric:
-                entry.Keyboard = Keyboard.Numeric;
-                break;
-            default:
-                entry.Keyboard = Keyboard.Default;
-                break;
-        }
+            KeyboardEnum.Default => Keyboard.Default,
+            KeyboardEnum.Text => Keyboard.Text,
+            KeyboardEnum.Chat => Keyboard.Chat,
+            KeyboardEnum.Url => Keyboard.Url,
+            KeyboardEnum.Email => Keyboard.Email,
+            KeyboardEnum.Telephone => Keyboard.Telephone,
+            KeyboardEnum.Numeric => Keyboard.Numeric,
+            _ => Keyboard.Default,
+        };
     }
 }

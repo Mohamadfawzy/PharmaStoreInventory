@@ -103,9 +103,9 @@ public partial class VerificationView : ContentPage
         //    entry.Text = string.Empty;
     }
 
-    private void Button_Clicked(object sender, EventArgs e)
+    private async  void Button_Clicked(object sender, EventArgs e)
     {
-        Helpers.Alerts.DisplayAlert($"{entry1.Text}{entry2.Text}{entry3.Text}{entry4.Text}");
+        await Helpers.Alerts.DisplaySnackbar($"{entry1.Text}{entry2.Text}{entry3.Text}{entry4.Text}");
     }
 
     private void Button_Clicked_1(object sender, EventArgs e)

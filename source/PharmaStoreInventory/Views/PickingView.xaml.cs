@@ -14,10 +14,6 @@ public partial class PickingView : ContentPage
         viewModel = (PickingViewModel)BindingContext;
         Methods.AskForRequiredPermissionAsync();
     }
-    protected override void OnAppearing()
-    {
-
-    }
 
     private void CameraOnDetectionFinished(object sender, OnDetectionFinishedEventArg e)
     {
@@ -27,7 +23,7 @@ public partial class PickingView : ContentPage
 
         Dispatcher.DispatchAsync(() =>
         {
-            viewModel.GetStockDetails();
+            viewModel.FetchStockDetails();
 
         });
         mainContianer.SetRow(gridData,1);
@@ -53,6 +49,7 @@ public partial class PickingView : ContentPage
 
     private void OnDoneSwipeItemInvoked(object sender, EventArgs e)
     {
+        //viewModel.
         //DisplayAlert("title", "massage", "cancel");
     }
 

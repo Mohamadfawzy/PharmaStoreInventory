@@ -5,53 +5,13 @@ namespace PharmaStoreInventory.Helpers;
 
 public static class AppPreferences
 {
-    public static string GetDeviceID()
-    {
-        try
-        {
-            bool hasKey = Preferences.Default.ContainsKey("DeviceId");
-            if (hasKey)
-            {
-                return Preferences.Default.Get<string>("DeviceId", string.Empty);
-            }
-            else return string.Empty;
-        }
-        catch (Exception)
-        {
-            return string.Empty;
-        }
-    }
-
-
-
-    public static void SetDeviceID()
-    {
-        try
-        {
-            string? deviceID = null;
-#if ANDROID
-            deviceID = Android.Provider.Settings.Secure.GetString(Android.App.Application.Context.ContentResolver, Android.Provider.Settings.Secure.AndroidId);
-#endif
-            if (deviceID != null)
-            {
-                Preferences.Default.Set("DeviceId", deviceID);
-            }
-            else
-            {
-                Preferences.Default.Set("DeviceId", Guid.NewGuid().ToString());
-            }
-        }
-        catch
-        {
-        }
-    }
-
 
     public static int HostUserId
     {
         get => GetValue(nameof(HostUserId), 0);
         set => Preferences.Default.Set(nameof(HostUserId),value);
     }
+
     public static int LocalDbUserId
     {
         get => GetValue(nameof(LocalDbUserId), 0);
@@ -86,6 +46,45 @@ public static class AppPreferences
     {
         get => GetValue(nameof(IP), ".");
         set => Preferences.Default.Set(nameof(IP), value);
+    }
+
+    public static string GetDeviceID()
+    {
+        try
+        {
+            bool hasKey = Preferences.Default.ContainsKey("DeviceId");
+            if (hasKey)
+            {
+                return Preferences.Default.Get<string>("DeviceId", string.Empty);
+            }
+            else return string.Empty;
+        }
+        catch (Exception)
+        {
+            return string.Empty;
+        }
+    }
+
+    public static void SetDeviceID()
+    {
+        try
+        {
+            string? deviceID = null;
+#if ANDROID
+            deviceID = Android.Provider.Settings.Secure.GetString(Android.App.Application.Context.ContentResolver, Android.Provider.Settings.Secure.AndroidId);
+#endif
+            if (deviceID != null)
+            {
+                Preferences.Default.Set("DeviceId", deviceID);
+            }
+            else
+            {
+                Preferences.Default.Set("DeviceId", Guid.NewGuid().ToString());
+            }
+        }
+        catch
+        {
+        }
     }
 
     public static R GetValue<R>(string key, R defaultValue)
