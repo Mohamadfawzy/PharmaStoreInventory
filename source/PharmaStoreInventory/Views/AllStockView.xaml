@@ -8,9 +8,11 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
     xmlns:help="clr-namespace:PharmaStoreInventory.Helpers"
+    xmlns:trigger="clr-namespace:PharmaStoreInventory.Triggers"
     x:Name="ThisPage"
     Title="AllStockView"
     NavigationPage.HasNavigationBar="False">
+
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style TargetType="CheckBox">
@@ -19,6 +21,7 @@
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
+
     <ContentPage.BindingContext>
         <vm:AllStockViewModel />
     </ContentPage.BindingContext>
@@ -63,115 +66,97 @@
                     TextColor="{StaticResource White}" />
 
                 <Frame.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OpenFiltrFrame" />
+                    <TapGestureRecognizer Command="{Binding OpenBottomSheetCommand}" />
                 </Frame.GestureRecognizers>
             </Frame>
         </StackLayout>
 
-        <!--  collection  -->
-        <CollectionView
-            x:Name="allStockList"
+        <ScrollView
             Grid.Row="2"
-            Margin="5,10,5,0"
-            FlowDirection="LeftToRight"
-            BackgroundColor="{StaticResource White}"
-            ItemsSource="{Binding StockModelList}"
-            SelectionChanged="AllStockList_SelectionChanged"
-            SelectionMode="Single">
+            Margin="10"
+            VerticalScrollBarVisibility="Never">
+            <FlexLayout
+                x:Name="flexLayoutItems"
+                Padding="0"
+                FlowDirection="LeftToRight"
+                BindableLayout.ItemsSource="{Binding Products}"
+                IsClippedToBounds="True"
+                Direction="Column"
+                HorizontalOptions="Center"
+                Wrap="NoWrap"
+                JustifyContent="Start">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Margin="0,2"
+                            StrokeShape="RoundRectangle 6"
+                            Stroke="{StaticResource Primary100}">
+                            <StackLayout Orientation="Horizontal">
+                                <BoxView
+                                    Margin="0,0"
+                                    WidthRequest="8"
+                                    HorizontalOptions="Start"
+                                    Color="{StaticResource Primary}" />
 
-            <CollectionView.ItemsLayout>
-                <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
-            </CollectionView.ItemsLayout>
+                                <Grid
+                                    Padding="10,0"
+                                    HorizontalOptions="FillAndExpand"
+                                    BackgroundColor="{StaticResource White}"
+                                    RowDefinitions="Auto,Auto,*">
 
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Border
-                        Margin="10,0"
-                        StrokeShape="RoundRectangle 6"
-                        Stroke="{StaticResource Primary100}">
-                        <StackLayout Orientation="Horizontal">
-                            <BoxView
-                                Margin="0,0"
-                                WidthRequest="8"
-                                HorizontalOptions="Start"
-                                Color="{StaticResource Primary}" />
-
-                            <Grid
-                                Padding="10,0"
-                                HorizontalOptions="FillAndExpand"
-                                BackgroundColor="{StaticResource White}"
-                                RowDefinitions="Auto,Auto,*">
-
-                                <Label
-                                    Text="{Binding Name}"
-                                    Style="{StaticResource Titleline}"
-                                    HorizontalTextAlignment="Start"
-                                    MaxLines="2"
-                                    FontSize="15" />
-
-                                <!--  icon  -->
-                                <!--<Label
-                                    IsVisible="False"
-                                    Text="{x:Static icon:IconFont.CheckboxBlankCircle}"
-                                    Style="{StaticResource Iconline}"
-                                    TextColor="{StaticResource Primary200}"
-                                    HorizontalOptions="End"
-                                    VerticalOptions="Center">
-                                    <Label.Triggers>
-                                        <DataTrigger
-                                            TargetType="Label"
-                                            Binding="{Binding IsCounted}"
-                                            Value="True">
-                                            <Setter Property="Text" Value="{x:Static icon:IconFont.CheckboxMarkedCircle}" />
-                                            <Setter Property="TextColor" Value="{StaticResource Primary700}" />
-                                        </DataTrigger>
-                                    </Label.Triggers>
-                                </Label>-->
-
-
-
-                                <!--  Quantity  -->
-                                <HorizontalStackLayout
-                                    Grid.Row="2"
-                                    Spacing="3"
-                                    HorizontalOptions="End">
                                     <Label
-                                        Margin="0"
-                                        Padding="0"
-                                        FontSize="20"
-                                        Text="{Binding Quantity}"
-                                        TextColor="{StaticResource ErrorDarkColor}"
-                                        VerticalTextAlignment="End" />
-                                    <Label
-                                        Text="Stock"
-                                        VerticalTextAlignment="End"
-                                        FontSize="10" />
-                                </HorizontalStackLayout>
+                                        Text="{Binding Name}"
+                                        Style="{StaticResource Titleline}"
+                                        HorizontalTextAlignment="Start"
+                                        MaxLines="2"
+                                        FontSize="15" />
 
-                                <!--  Price Group  -->
-                                <HorizontalStackLayout Grid.Row="2" Spacing="3">
-                                    <Label
-                                        Margin="0"
-                                        Padding="0"
-                                        Text="{Binding SalePrice}"
-                                        TextColor="{StaticResource Primary300}"
-                                        VerticalTextAlignment="End" />
-                                    <Label
-                                        Text="L.E"
-                                        VerticalTextAlignment="End"
-                                        TextColor="{StaticResource Gray300}"
-                                        FontSize="10" />
-                                </HorizontalStackLayout>
+                                    <!--  Quantity  -->
+                                    <HorizontalStackLayout Grid.Row="2" Spacing="3">
+                                        <Label
+                                            Margin="0"
+                                            Padding="0"
+                                            FontSize="20"
+                                            Text="{Binding Quantity}"
+                                            TextColor="{StaticResource Primary700}"
+                                            VerticalTextAlignment="End" />
+                                        <Label
+                                            Text="Stock"
+                                            VerticalTextAlignment="End"
+                                            FontSize="10" />
+                                    </HorizontalStackLayout>
 
-                            </Grid>
-                        </StackLayout>
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                                    <!--  Price Group  -->
+                                    <HorizontalStackLayout
+                                        Grid.Row="2"
+                                        Spacing="3"
+                                        HorizontalOptions="End">
+                                        <Label
+                                            Margin="0"
+                                            Padding="0"
+                                            Text="{Binding SalePrice}"
+                                            TextColor="{StaticResource Primary300}"
+                                            VerticalTextAlignment="End" />
+                                        <Label
+                                            Text="L.E"
+                                            VerticalTextAlignment="End"
+                                            TextColor="{StaticResource Gray300}"
+                                            FontSize="10" />
+                                    </HorizontalStackLayout>
+
+                                </Grid>
+                            </StackLayout>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </FlexLayout>
+        </ScrollView>
+
 
         <!--  Popup  -->
-
         <Grid
             x:Name="borderFilter"
             Grid.Row="0"
@@ -191,7 +176,7 @@
             <Button
                 Padding="0"
                 BackgroundColor="{StaticResource Primary050}"
-                Clicked="CloseFiltrFrame"
+                Command="{Binding CloseBottomSheetCommand}"
                 HeightRequest="50"
                 WidthRequest="50"
                 CornerRadius="25"
@@ -228,7 +213,7 @@
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid>
+                            <Grid BackgroundColor="{StaticResource White}">
                                 <!--  Name of the Select  -->
                                 <Label Padding="2,10" Text="{Binding Name}" />
                                 <!--  Icon  -->
@@ -256,15 +241,17 @@
                                     BackgroundColor="{StaticResource Primary200}"
                                     HorizontalOptions="Fill"
                                     VerticalOptions="End" />
-                                <Grid.Triggers>
+                                <!--<Grid.Triggers>
                                     <DataTrigger
                                         TargetType="Grid"
                                         Binding="{Binding IsSelected}"
                                         Value="True">
-                                        <Setter Property="BackgroundColor" Value="{StaticResource Primary300}" />
-                                        <!--  Multiple Setter elements are allowed  -->
+                                        <Setter Property="BackgroundColor" Value="{StaticResource Primary050}" />
+                                -->
+                                <!--  Multiple Setter elements are allowed  -->
+                                <!--
                                     </DataTrigger>
-                                </Grid.Triggers>
+                                </Grid.Triggers>-->
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
@@ -277,18 +264,11 @@
                     RowDefinitions="Auto,*"
                     ColumnDefinitions="*,*"
                     RowSpacing="20">
-                    <CheckBox ClassId="CheckBox_1" CheckedChanged="CheckBox_CheckedChanged" />
-                    <Label Style="{StaticResource Body}" Text="دمج حسب تاريخ الصلاحية" />
+                    <CheckBox IsChecked="{Binding FilterIsGroup}" />
+                    <Label Text="دمج حسب تاريخ الصلاحية" />
 
-                    <CheckBox
-                        Grid.Row="1"
-                        AutomationId="2"
-                        ClassId="CheckBox_2"
-                        CheckedChanged="CheckBox_CheckedChanged" />
-                    <Label
-                        Grid.Row="1"
-                        Style="{StaticResource Body}"
-                        Text="كميات أقل من صفر" />
+                    <CheckBox Grid.Row="1" IsChecked="{Binding FilterQuantityBiggerThanZero}" />
+                    <Label Grid.Row="1" Text="كميات أقل من صفر" />
 
                 </Grid>
                 <!--  Submit button  -->
@@ -296,13 +276,38 @@
                     Grid.Row="3"
                     Margin="30,10"
                     Text="اختيار"
-                    VerticalOptions="Center" />
+                    VerticalOptions="Center"
+                    Command="{Binding FiltersCommand}" />
             </Grid>
 
+            <Grid.Triggers>
+                <DataTrigger
+                    TargetType="Grid"
+                    Binding="{Binding OpenBottomSheet}"
+                    Value="true">
+                    <DataTrigger.EnterActions>
+                        <trigger:OpenBottomSheetTrigger StartsFrom="0" />
+                    </DataTrigger.EnterActions>
+                </DataTrigger>
 
-            <Label Text="" />
+                <DataTrigger
+                    TargetType="Grid"
+                    Binding="{Binding OpenBottomSheet}"
+                    Value="false">
+                    <DataTrigger.EnterActions>
+                        <trigger:CloseBottomSheetTrigger StartsFrom="0" />
+                    </DataTrigger.EnterActions>
+                </DataTrigger>
 
+            </Grid.Triggers>
         </Grid>
+        <!--  End Popup  -->
 
+        <ActivityIndicator
+            Grid.Row="0"
+            Grid.RowSpan="4"
+            VerticalOptions="Center"
+            ZIndex="4"
+            IsRunning="{Binding ActivityIndicatorRunning}" />
     </Grid>
 </ContentPage>

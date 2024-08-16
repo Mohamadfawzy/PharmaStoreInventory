@@ -32,5 +32,28 @@
         get => (Color)GetValue(ABCDEF_Property);
         set => SetValue(ABCDEF_Property, value);
     }
-    
-    
+
+//#########*PrivateFields*############
+
+//#########*Constructor*############
+//##################################
+
+//########*PublicProperties*########
+//##################################
+#region Public Properties
+#endregion
+
+//############*CommandS*############
+//##################################
+#region CommandS
+#endregion
+
+//############*Fethch*##############
+//##################################
+#region Fethch Data
+#endregion
+
+//#########*ExectueMethods*#########
+//##################################
+#region Exectue Methods
+#endregion

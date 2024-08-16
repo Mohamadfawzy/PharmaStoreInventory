@@ -1,43 +1,41 @@
-﻿
-using CommunityToolkit.Mvvm.ComponentModel;
-using DataAccess.Dtos;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using DataAccess.Repository;
+using PharmaStoreInventory.Helpers;
+using PharmaStoreInventory.Models;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Product = DataAccess.Dtos.ProductDetailsDto;
+using Product = PharmaStoreInventory.Models.ProductDetailsModel; //DataAccess.Dtos.ProductDetailsDto;
 namespace PharmaStoreInventory.ViewModels;
 
-public class PickingViewModel : ObservableObject
+public class PickingViewModel : BaseViewModel
 {
+    //#########*PrivateFields*############
     private readonly ProductAmountRepo repo;
     private string nameEn = string.Empty;
     private string nameAr = string.Empty;
-    private string barcode = "6221068000977";
+    private string barcode = "0000";
     private string microUnitQuantity = "0";
-    private decimal? majorUnitQuantity = 0;
+    private decimal modifiedQuantity = 0;
+    private bool isVisibleEditQuantityAndExpiryPopup = false;
+    private string modifiedExpiaryDate = string.Empty;
+    private DateTime? expiaryDateLabel;
+    private Product SelectedProduct = new();
 
-    /// <summary>
-    /// Constructor
-    /// </summary>
+    //#########*Constructor*############
+    //##################################
     public PickingViewModel()
     {
         repo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<ProductAmountRepo>()!;
         ListOfStoc = [];
-        Task.Run(FetchStockDetails);
+        Task.Run(async () => { await FetchStockDetails(AppValues.NavigationProductCode); });
     }
 
-    #region Properties
-    public ObservableCollection<ProductDetailsDto> ListOfStoc { get; set; }
-    public string NameEn
-    {
-        get => nameEn;
-        set => SetProperty(ref nameEn, value);
-    }
-    public string NameAr
-    {
-        get => nameAr;
-        set => SetProperty(ref nameAr, value);
-    }
+    //########*PublicProperties*########
+    //##################################
+    #region Public Properties
+    public ObservableCollection<Product> ListOfStoc { get; set; }
+    public string NameEn { get => nameEn; set => SetProperty(ref nameEn, value); }
+    public string NameAr { get => nameAr; set => SetProperty(ref nameAr, value); }
     public string Barcode
     {
         get => barcode;
@@ -48,59 +46,178 @@ public class PickingViewModel : ObservableObject
         get => microUnitQuantity;
         set => SetProperty(ref microUnitQuantity, value);
     }
-
-    public decimal? ModifiedQuantity
+    public decimal ModifiedQuantity
     {
-        get => majorUnitQuantity;
-        set => SetProperty(ref majorUnitQuantity, value);
+        get => modifiedQuantity;
+        set => SetProperty(ref modifiedQuantity, value);
+    }
+    public string ExpiaryDateAsNumber
+    {
+        get => modifiedExpiaryDate;
+        set => SetProperty(ref modifiedExpiaryDate, value);
+
+    }
+    public DateTime? ExpiaryDateLabel
+    {
+        get => expiaryDateLabel;
+        set => SetProperty(ref expiaryDateLabel, value);
+    }
+
+    public bool IsVisibleEditQuantityAndExpiryPopup
+    {
+        get => isVisibleEditQuantityAndExpiryPopup;
+        set => SetProperty(ref isVisibleEditQuantityAndExpiryPopup, value);
     }
     #endregion
 
+    //############*CommandS*############
+    //##################################
+    #region CommandS
     public ICommand CopyProductCommand => new Command<Product>(ExecuteCopyProduct);
+    public ICommand MakeInventoryCommand => new Command<Product>(ExecuteMakeInventory);
     public ICommand SelectionChangedCommand => new Command<Product>(ExecuteSelectionChanged);
+    public ICommand ExpiaryChangedCommand => new Command<string>(ExecuteExpiaryChanged);
+    public ICommand SaveChangesCommand => new Command(ExecuteSaveChanges);
+    #endregion
 
-    #region Get Data
-    public async void FetchStockDetails()
+    //############*Fethch*##############
+    //##################################
+    #region Fethch Data
+    public async Task FetchStockDetails(string productCode = "22")
     {
+        ActivityIndicatorRunning = true;
         try
         {
             ListOfStoc.Clear();
-            var list = await repo.GetProductDetailsByProcedure(-1, "22", 1);
-            if (list != null)
+            var list = await repo.GetProductDetailsByProcedure(0, productCode, AppPreferences.StoreId);
+            if (list != null && list.Count > 0)
             {
                 foreach (var item in list)
                 {
                     ListOfStoc.Add(item);
                 }
-                NameAr = list[0].ProductNameAr!;
-                NameEn = list[0].ProductNameEn!;
+                NameAr = list[0].ProductNameAr ?? "اسم المنتج غير موجود";
+                NameEn = list[0].ProductNameEn ?? "Product name not found";
+                Barcode = productCode;
+                OnPropertyChanged(nameof(ListOfStoc));
             }
-            OnPropertyChanged(nameof(ListOfStoc));
+            else
+            {
+                ResetValues();
+            }
         }
         catch (Exception ex)
         {
             await Helpers.Alerts.DisplaySnackbar(ex.Message, 20);
         }
+        ActivityIndicatorRunning = false;
     }
     #endregion
 
-
-    // exectued method
-   private void ExecuteCopyProduct(Product stock)
+    //#########*ExectueMethods*#########
+    //##################################
+    #region Exectue Methods
+    private async void ExecuteMakeInventory(Product item)
     {
-        
+        var res = await repo.UpdateInventoryStatus(false, "1", (int)item.ProductId, (int)item.ExpiryGroupID);
+        if (res)
+        {
+            item.IsInventoried = "1";
+        }
+    }
+    private void ExecuteCopyProduct(Product stock)
+    {
         ListOfStoc.Add(stock);
-        //Helpers.CatchingException.DisplayAlert(ModifiedQuantity);
+        //OnPropertyChanged(nameof(ListOfStoc));
     }
 
     private void ExecuteSelectionChanged(Product dto)
     {
         if (dto != null && dto.Quantity != null)
         {
-            ModifiedQuantity = dto.Quantity;
+            IsVisibleEditQuantityAndExpiryPopup = true;
+            ModifiedQuantity = dto.Quantity.Value;
+            ConvertDateToNumber(dto.ExpDate);
+            ExpiaryDateLabel = dto.ExpDate;
+            SelectedProduct = dto;
         }
     }
 
+    private void ExecuteExpiaryChanged(string text)
+    {
+        ConvertNumberToDate(text);
+    }
+    #endregion
+
+    void ResetValues()
+    {
+        NameAr = string.Empty;
+        NameEn = string.Empty;
+        Barcode = string.Empty;
+    }
+
+    async void ExecuteSaveChanges()
+    {
+        var res = await repo.CanAddExpirationDate((int)SelectedProduct.Id, (int)SelectedProduct.ProductId, ExpiaryDateLabel.Value);
+        if (res.IsSuccess)
+        {
+            res = await repo.UpdateQuantity((int)SelectedProduct.Id, SelectedProduct.Quantity.Value, ModifiedQuantity, ExpiaryDateLabel, AppPreferences.LocalDbUserId.ToString());
+            SelectedProduct.Quantity = ModifiedQuantity;
+            SelectedProduct.ExpDate = ExpiaryDateLabel;
+            //var item = ListOfStoc.FirstOrDefault(x => x.Id == SelectedProduct.Id);
+            
+            //if (item != null)
+            //{
+            //    item.Quantity = ModifiedQuantity;
+
+            //}
+        }
+        if (!res.IsSuccess)
+        {
+            await Helpers.Alerts.DisplaySnackbar(res.Message, 20);
+        }
+    }
+    void ConvertDateToNumber(DateTime? dateTime)
+    {
+        if (dateTime != null)
+        {
+            ExpiaryDateAsNumber = dateTime.Value.ToString("MMyy");
+        }
+    }
+
+    void ConvertNumberToDate(string value)
+    {
+        if (value.Length == 4)
+        {
+            var month = value[..2];
+            var year = $"20{value[2..]}";
+            //Do check if month > 12
+            ExpiaryDateLabel = new DateTime(int.Parse(year), int.Parse(month), 01);
+        }
+    }
+
+    #region deleted
+
+
+    //private void ExecuteOnCameraDetectionFinished(BarcodeResult[] result)
+    //{
+    //    if (result.Length > 0)
+    //    {
+    //        Barcode = result[0].DisplayValue;
+    //        Task.Run(async () => { await FetchStockDetails(Barcode); });
+    //        CameraEnabled = false;
+    //        GriRow = 2;
+    //    }
+    //    else
+    //    {
+    //        ResetValues();
+    //    }
+    //}
+    //private void ExecuteNewScan()
+    //{
+    //    CameraEnabled = true;
+    //    GriRow = 2;
+    //}
 
     //public void DecimalSplitDto (decimal value)
     //{
@@ -113,4 +230,5 @@ public class PickingViewModel : ObservableObject
 
     //public int IntegerPart { get; set; }
     //public decimal FractionalPart { get; set; }
+    #endregion
 }

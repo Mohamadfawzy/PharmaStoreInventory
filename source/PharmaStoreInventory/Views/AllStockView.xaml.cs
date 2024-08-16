@@ -1,11 +1,14 @@
+using DataAccess.Dtos;
+using PharmaStoreInventory.Helpers;
+
 namespace PharmaStoreInventory.Views;
 
 public partial class AllStockView : ContentPage
 {
-	public AllStockView()
-	{
-		InitializeComponent();
-	}
+    public AllStockView()
+    {
+        InitializeComponent();
+    }
 
     protected override bool OnBackButtonPressed()
     {
@@ -17,11 +20,15 @@ public partial class AllStockView : ContentPage
         return base.OnBackButtonPressed();
     }
 
-    private void AllStockList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        Navigation.PushAsync(new PickingView());
-        //e.CurrentSelection
-    }
+    //private void AllStockList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    //{
+    //    if (allStockList.SelectedItem != null)
+    //    {
+    //        var item = (ProductDto)allStockList.SelectedItem;
+    //        AppValues.NavigationProductCode = item.ProductCode;
+    //    }
+    //    Navigation.PushAsync(new PickingView());
+    //}
     bool filterIsOpen = false;
     private async void OpenFiltrFrame(object sender, TappedEventArgs e)
     {
@@ -42,7 +49,7 @@ public partial class AllStockView : ContentPage
     {
         await CloseFilterFrameAninmation();
     }
-
+    
     private async Task CloseFilterFrameAninmation()
     {
         try
@@ -63,5 +70,15 @@ public partial class AllStockView : ContentPage
         {
             await Helpers.Alerts.DisplaySnackbar("1_CheckBox");
         }
+    }
+
+    private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        if (e.Parameter != null)
+        {
+            var item = (ProductDto)e.Parameter;
+            AppValues.NavigationProductCode = item.ProductCode;
+        }
+        await Navigation.PushAsync(new PickingView(), true);
     }
 }

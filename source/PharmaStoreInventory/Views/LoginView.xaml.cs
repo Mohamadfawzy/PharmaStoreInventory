@@ -27,9 +27,11 @@ public partial class LoginView : ContentPage
 
     private async void SubmitClicked(object sender, EventArgs e)
     {
-        var repo = Handler?.MauiContext?.Services.GetService<UserRepository>();
-        
-        repo ??= new UserRepository(new DataAccess.Contexts.AppHost());
+        //var repo = Handler?.MauiContext?.Services.GetService<UserRepository>();
+        //repo ??= new UserRepository(new DataAccess.Contexts.AppHost());
+
+
+        var repo = new UserRepository(new DataAccess.Contexts.AppHost());
         
         AuthService authService = new(repo);
         try
@@ -97,7 +99,7 @@ public partial class LoginView : ContentPage
 
     }
 
-    InputType CheckInputs()
+    private InputType CheckInputs()
     {
         InputType isError = InputType.Empty;
 

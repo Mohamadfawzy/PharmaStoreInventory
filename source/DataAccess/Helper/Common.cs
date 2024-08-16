@@ -4,6 +4,6 @@ public class Common
 {
     public static string GenerateVerificationCode()
     {
-        return new Random().Next(100000, 999999).ToString();
+        return new Random().Next(1000, 9999).ToString();
     }
 }

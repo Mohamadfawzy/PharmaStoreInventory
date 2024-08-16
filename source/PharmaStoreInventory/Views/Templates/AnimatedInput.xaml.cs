@@ -175,6 +175,16 @@ public partial class AnimatedInput : ContentView
     }
     #endregion
 
+    // CONSTRUCTOR
+    public AnimatedInput()
+    {
+        InitializeComponent();
+    }
+    protected override void OnParentSet()
+    {
+        base.OnParentSet();
+        PositioningOfPlaceHolder();
+    }
     private static void OnIsErrorChanged(BindableObject bindable, object oldValue, object newValue)
     {
         var control = (AnimatedInput)bindable;
@@ -198,16 +208,7 @@ public partial class AnimatedInput : ContentView
         }
     }
 
-    // CONSTRUCTOR
-    public AnimatedInput()
-    {
-        InitializeComponent();
-    }
-    protected override void OnParentSet()
-    {
-        base.OnParentSet();
-        PositioningOfPlaceHolder();
-    }
+
 
     public bool HideKeyBoard()
     {
@@ -302,7 +303,7 @@ public partial class AnimatedInput : ContentView
         await Task.WhenAll(scaleTask, translateTask);
     }
 
-    private async void PositioningOfPlaceHolder()
+    public async void PositioningOfPlaceHolder()
     {
         if (!string.IsNullOrEmpty(InputText)) // InputText is have value
         {

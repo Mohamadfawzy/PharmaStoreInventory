@@ -33,13 +33,13 @@ public class ProductAmountRepo
 
     public async Task<List<ProductDto>> GetAllProducts(ProductQParam qParam)
     {
-        string selectClause = BringSelectAllProductsIncludeJoinQuery(qParam.IsGroup);
+        string selectClause = await BringSelectAllProductsIncludeJoinQuery(qParam.IsGroup);
         string whereQuantity = qParam.QuantityBiggerThanZero ? " AND pa.Amount > 0 " : "";
-        string whereStoreId = string.IsNullOrEmpty(qParam.StoreId) ? "" : $" AND pa.Store_id = {qParam.StoreId} ";
+        string whereStoreId = qParam.StoreId.HasValue ? "" : $" AND pa.Store_id = {qParam.StoreId} ";
         string whereSiteId = string.IsNullOrEmpty(qParam.SiteId) ? "" : $" AND products.site_id = {qParam.SiteId} ";
-        string whereOrderBy = $" ORDER BY {BringOrderByQuery((ProductsOrderBy)qParam.OrderBy)}";
-        string whereSearchText = BringSearchQuery(qParam.Text);
-        string offset = BringPaginationQuery(qParam.Page);
+        string whereOrderBy = $" ORDER BY {BringOrderByQuery(qParam.OrderBy)}";
+        string whereSearchText = await  BringSearchQuery(qParam.Text);
+        string offset = await BringPaginationQuery(qParam.Page);
         string sql = @$"{selectClause} 
                         {whereDeletedActiveStatement}
                         {whereQuantity}
@@ -52,9 +52,9 @@ public class ProductAmountRepo
             .SqlQueryRaw<ProductDto>(sql)
             .ToListAsync();
     }
-    public async Task<List<ProductDetailsDto>?> GetProductDetailsByProcedure(short hasOnlyQuantity, string barcodeParam, int storeId)
+    public async Task<List<ProductDetailsDto>?> GetProductDetailsByProcedure(short hasOnlyQuantity, string productCode, int storeId)
     {
-        string? barcode = ExtractBarcode(barcodeParam);
+        string? barcode = ExtractBarcode(productCode);
         if (string.IsNullOrEmpty(barcode))
             return default;
 
@@ -69,19 +69,58 @@ public class ProductAmountRepo
             .SqlQueryRaw<ProductDetailsDto>("EXEC GetProductDetails @StoreId, @Barcode, @HasOnlyQuantity", parameters)
             .ToListAsync();
         return results;
-
-
     }
 
+    public async Task<List<ProductDetailsDto>?> GetSingleProductByBarcode(short hasOnlyQuantity, string productCode, int storeId)
+    {
+        var barcode = ExtractBarcode(productCode);
+        if (string.IsNullOrEmpty(barcode))
+            return default;
 
+        var sql = $@"declare @barcode varchar(50) ='22'
+                    SELECT
+	                    pa.Pa_id AS [Id],
+                        pa.Product_id AS [ProductId],
+                        pa.Store_id AS [StoreId],
+                        pa.Counter_id AS [ExpiryGroupID],
+	                    pa.Product_update AS [IsInventoried],
+                        pa.Exp_date AS [ExpDate],
+                        pa.Amount AS [Quantity],
+                        pa.Sell_price AS [SellPrice],
+                        p.product_name_ar AS [ProductNameAr],
+                        p.product_name_en AS [ProductNameEn],
+                        p.product_unit1 AS [ProductUnit1],
+                        p.product_unit1_3 AS [ProductUnit13],
+                        vendor.vendor_name_ar AS [VendorNameAr],
+                        companys.co_name_ar AS [CompanyNameAr]
+
+                    FROM Product_Amount as pa
+                    INNER JOIN products  as p ON p.Product_id = pa.Product_id 
+                    INNER JOIN companys ON p.company_id = companys.company_id
+                    INNER JOIN JOIN vendor ON pa.Vendor_id = vendor.Vendor_id
+
+                    WHERE 
+                     pa.Store_id=1
+                     AND p.Deleted=1
+                     AND p.active=1
+                     AND pa.Amount > {hasOnlyQuantity}
+                     AND (p.product_code = @barcode OR p.product_int_code = @barcode)
+                     order by pa.Exp_date desc ";
+
+        var list = await context.Database
+            .SqlQueryRaw<ProductDetailsDto>(sql)
+            .ToListAsync();
+
+        return list;
+    }
 
 
 
     /*
     #region Trash
-    public async Task<List<ProductDetailsDto>?> GetProductDetailsLinq(bool hasOnlyQuantity, string barcodeParam, decimal? storeId)
+    public async Task<List<ProductDetailsDto>?> GetProductDetailsLinq(bool hasOnlyQuantity, string productCode, decimal? storeId)
     {
-        var barcode = ExtractBarcode(barcodeParam);
+        var barcode = ExtractBarcode(productCode);
         if (string.IsNullOrEmpty(barcode))
             return default;
         var query = from p in context.Products
@@ -136,7 +175,7 @@ public class ProductAmountRepo
     
     public async Task<List<ProductDetailsDto>?> GetSingleProductByBarcode(bool hasOnlyQuantity, string barcode, decimal? storeId)
     {
-        //var barcode = ExtractBarcode(barcodeParam);
+        //var barcode = ExtractBarcode(productCode);
         //if (string.IsNullOrEmpty(barcode))
         //    return default;
        var sql = $@"declare @barcode varchar(50) ='22'
@@ -204,7 +243,7 @@ WHERE
         return list;
     }
     
-    public async Task<List<ProductDetailsDto>?> GetSingleProAmountByProId(bool hasOnlyQuantity, string barcodeParam, decimal? storeId)
+    public async Task<List<ProductDetailsDto>?> GetSingleProAmountByProId(bool hasOnlyQuantity, string productCode, decimal? storeId)
     {
         var query = from pAmount in context.Product_Amount
                     join vendor in context.Vendor on pAmount.Vendor_id equals vendor.vendor_id into vendorGroup
@@ -230,9 +269,9 @@ WHERE
         return result;
     }
 
-    public async Task<List<ProductDetailsDto>?> GetProductDetails(bool hasOnlyQuantity, string barcodeParam, int storeId)
+    public async Task<List<ProductDetailsDto>?> GetProductDetails(bool hasOnlyQuantity, string productCode, int storeId)
     {
-        var barcode = ExtractBarcode(barcodeParam);
+        var barcode = ExtractBarcode(productCode);
         if (string.IsNullOrEmpty(barcode))
             return default;
 
@@ -295,9 +334,9 @@ WHERE
         return list;
     }
     
-    public async Task<List<ProductDetailsDto>?> GetProductDetailsFormADO(bool hasOnlyQuantity, string barcodeParam, int storeId)
+    public async Task<List<ProductDetailsDto>?> GetProductDetailsFormADO(bool hasOnlyQuantity, string productCode, int storeId)
     {
-        var barcode = ExtractBarcode(barcodeParam);
+        var barcode = ExtractBarcode(productCode);
         if (string.IsNullOrEmpty(barcode))
             return default;
 
@@ -379,7 +418,7 @@ WHERE
         return (ProductDetailsDto?)pro;
     }
 
-    public async Task<bool> UpdateInventoryStatus(bool allOneTime, string status, int? productId, int? expiryBatchID)
+    public async Task<bool> UpdateInventoryStatus(bool allOneTime, string status, int productId, int expiryBatchID)
     {
         var query = context.Product_Amount
             .Where(x => x.Product_id == productId);
@@ -457,28 +496,84 @@ WHERE
 
     public async Task<Result> UpdateQuantity(int id, decimal oldQuantity, decimal newQuantity, DateTime? expDate, string empId)
     {
-        var product = await context.Product_Amount
+        try
+        {
+            var product = await context.Product_Amount
             .FirstOrDefaultAsync(x => x.Pa_id == id);
 
-        if (product == null)
-            return Result.Failure(ErrorCode.NotFoundById);
+            if (product == null)
+                return Result.Failure(ErrorCode.NotFoundById);
 
-        product.Amount = (newQuantity - oldQuantity) + product.Amount;
-        product.Exp_date = expDate ?? expDate;
-        product.Insert_uid = empId;
-        product.Update_uid = empId;
-        product.Product_update = "1";
-        product.Update_date = DateTime.Now;
-        product.Product_update_date = DateTime.Now;
+            //if (expDate.HasValue)
+            //{
+            //    expDate = new DateTime(expDate.Value.Year, expDate.Value.Month, expDate.Value.Day,00,00,00,DateTimeKind.Unspecified);
+            //}
+            //else
+            //    expDate = new DateTime();
 
-        var effectedRow = await context.SaveChangesAsync();
-        if (effectedRow > 0)
+            product.Amount = (newQuantity - oldQuantity) + product.Amount;
+            product.Exp_date = expDate ?? expDate;
+            product.Insert_uid = empId;
+            product.Update_uid = empId;
+            product.Product_update = "1";
+            product.Update_date = DateTime.Now;
+            product.Product_update_date = DateTime.Now;
+
+            var effectedRow = await context.SaveChangesAsync();
+            if (effectedRow > 0)
+            {
+                return Result.Success();
+            };
+
+            return Result.Failure("not updated");
+        }
+        catch (Exception ex)
         {
-            return Result.Success();
-        };
-
-        return Result.Failure("not updated");
+            return Result.Failure("An error occurred while checking the expiration date." + ex.Message + ex.InnerException?.Message);
+        }
     }
+    
+    public async Task<Result> ExecuteUpdateQuantity(int id, decimal oldQuantity, decimal newQuantity, DateTime? expDate, string empId)
+    {
+        try
+        {
+            // Execute the update
+            //var rowsAffected = await context.Product_Amount
+            //    .Where(x => x.Pa_id == id)
+            //    .ExecuteUpdateAsync(setters => setters
+            //        .SetProperty(b => b.Amount, (newQuantity - oldQuantity) + b.Amount)
+            //        .SetProperty(b => b.Exp_date, dto.PharmcyName)
+            //        .SetProperty(b => b.Insert_uid, dto.PharmcyName)
+            //        .SetProperty(b => b.Update_uid, dto.PharmcyName)
+            //        .SetProperty(b => b.Product_update, dto.PharmcyName)
+            //        .SetProperty(b => b.Update_date, dto.PharmcyName)
+            //        .SetProperty(b => b.Product_update_date, dto.PharmcyName)
+            //        );
+
+            //product.Amount = (newQuantity - oldQuantity) + product.Amount;
+            //product.Exp_date = expDate ?? expDate;
+            //product.Insert_uid = empId;
+            //product.Update_uid = empId;
+            //product.Product_update = "1";
+            //product.Update_date = DateTime.Now;
+            //product.Product_update_date = DateTime.Now;
+
+
+            //// Check if the update was successful
+            //if (rowsAffected > 0)
+            //{
+            //    return Result.Success("userDto info updated successfully.");
+            //}
+
+            return Result.Failure(ErrorCode.OperationFailed, "Failed to update the userDto info.");
+        }
+        catch (Exception ex)
+        {
+            // Log the exception if necessary
+            return Result.Failure(ErrorCode.OperationFailed, $"An error occurred while updating the userDto info: {ex.Message}");
+        }
+    }
+
 
     /// <summary>
     /// Checks whether an expiration date can be added for a specified product.
@@ -577,21 +672,23 @@ WHERE
     // The code that's violating the rule is on this line.
     #region Methods for creating queries
 #pragma warning disable CA1822
-    private string BringSelectAllProductsIncludeJoinQuery(bool isGroup)
+    private Task<string> BringSelectAllProductsIncludeJoinQuery(bool isGroup)
     {
         if (isGroup)
         {
-            return @$" SELECT {columnsStatement}
+            var sql = @$" SELECT {columnsStatement}
                     FROM (SELECT Store_id, Product_id, SUM(Amount) AS Amount, Sell_price 
                         FROM Product_Amount GROUP BY Product_id,Sell_price,Store_id) 
                         AS pa 
                         INNER JOIN Products p ON pa.Product_id = p.Product_id ";
+            return Task.FromResult(sql);
         }
         else
         {
-            return @$" SELECT {columnsStatement}
+            var sql = @$" SELECT {columnsStatement}
                         FROM Products p
                         INNER JOIN Product_Amount pa ON p.Product_id = pa.Product_id ";
+            return Task.FromResult(sql);
         }
 
     }
@@ -612,32 +709,36 @@ WHERE
         return $" {clause} ";
     }
 
-    private string BringPaginationQuery(int page, int size = 30)
+    private Task<string> BringPaginationQuery(int page, int size = 30)
     {
         var num = (page < 2) ? 0 : (page - 1) * size;
-        return $"OFFSET {num} ROWS FETCH NEXT {size} ROWS ONLY ";
+        return Task.FromResult( $"OFFSET {num} ROWS FETCH NEXT {size} ROWS ONLY ");
     }
 
-    private string BringSearchQuery(string searchText)
+    private Task<string> BringSearchQuery(string searchText)
     {
         if (!string.IsNullOrEmpty(searchText))
         {
             if (Validator.IsNumeric(searchText))
             {
-                return $" AND (p.product_code ='{searchText}' or p.product_int_code = '{searchText}') ";
+                return Task.FromResult( $" AND (p.product_code ='{searchText}' or p.product_int_code = '{searchText}') ");
             }
             else
             {
-                return $" AND (p.product_fast_code = '{searchText}'or p.product_name_en  LIKE '%{searchText}%' or p.product_name_ar  LIKE '%{searchText}%') ";
+                return Task.FromResult($" AND (p.product_fast_code = '{searchText}'or p.product_name_en  LIKE '%{searchText}%' or p.product_name_ar  LIKE '%{searchText}%') ");
             }
         }
-        return string.Empty;
+        return Task.FromResult("");
     }
 
-    private string? ExtractBarcode(string input)
+    private string ExtractBarcode(string input)
     {
-        string[] words = input.Split('-', '$');
-        return words[0];
+        if (!string.IsNullOrEmpty(input))
+        {
+            string[] words = input.Split('-', '$');
+            return words[0];
+        }
+        return string.Empty;
     }
 
     //string GetBarcodeQuery()

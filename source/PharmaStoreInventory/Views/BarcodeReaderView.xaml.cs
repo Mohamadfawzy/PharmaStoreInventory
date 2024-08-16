@@ -30,7 +30,7 @@ public partial class BarcodeReaderView : ContentPage
 
     //    Dispatcher.DispatchAsync(async () =>
     //    {
-    //        await DisplayAlert("Barcode Detected", first.Value, "OK");
+    //        await DisplayAlert("NavigationProductCode Detected", first.Value, "OK");
 
     //    });
     //}
@@ -44,7 +44,7 @@ public partial class BarcodeReaderView : ContentPage
 
         Dispatcher.DispatchAsync(async () =>
         {
-            //await DisplayAlert("Barcode Detected", first.DisplayValue, "OK");
+            //await DisplayAlert("NavigationProductCode Detected", first.DisplayValue, "OK");
             //await Navigation.PushAsync(new StockDetailsView(first.DisplayValue) ,false);
             await Navigation.PushAsync(new StockDetailsView() ,false);
 

@@ -12,31 +12,45 @@ public partial class PickingView : ContentPage
         this.FlowDirection = FlowDirection.RightToLeft;
         InitializeComponent();
         viewModel = (PickingViewModel)BindingContext;
-        Methods.AskForRequiredPermissionAsync();
+
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        nativeBarcode.CameraEnabled = false;
     }
 
     private void CameraOnDetectionFinished(object sender, OnDetectionFinishedEventArg e)
     {
-        var first = e.BarcodeResults.FirstOrDefault();
-        if (first is null)
+        if (e.BarcodeResults.Length <= 0)
             return;
 
-        Dispatcher.DispatchAsync(() =>
-        {
-            viewModel.FetchStockDetails();
-
-        });
-        mainContianer.SetRow(gridData,1);
+        mainContianer.SetRow(gridData, 1);
         nativeBarcode.PauseScanning = true;
-        nativeBarcode.CameraEnabled=false;
+        nativeBarcode.CameraEnabled = false;
+        _ = viewModel.FetchStockDetails(e.BarcodeResults[0].DisplayValue);
+
+        // Dispatcher.DispatchAsync(() => { });
+
     }
+
     private void NewScanTapped(object sender, TappedEventArgs e)
     {
         nativeBarcode.PauseScanning = false;
         nativeBarcode.CameraEnabled = true;
         mainContianer.SetRow(gridData, 2);
     }
-
+    private void ScrollView_Scrolled_1(object sender, ScrolledEventArgs e)
+    {
+        //if (e.ScrollY <= 0)
+        //{
+        //    nativeBarcode.PauseScanning = false;
+        //    nativeBarcode.CameraEnabled = true;
+        //    mainContianer.SetRow(gridData, 2);
+        //}
+        //Console.WriteLine(e.ScrollY);
+    }
     private void ToggleFlashLight(object sender, TappedEventArgs e)
     {
         nativeBarcode.TorchOn = !nativeBarcode.TorchOn;
@@ -49,13 +63,13 @@ public partial class PickingView : ContentPage
 
     private void OnDoneSwipeItemInvoked(object sender, EventArgs e)
     {
+
         //viewModel.
         //DisplayAlert("title", "massage", "cancel");
     }
 
     private async void SwipeView_SwipeStarted(object sender, SwipeStartedEventArgs e)
     {
-
         if (e.SwipeDirection == SwipeDirection.Right)
         {
             var swip = sender as SwipeView;
@@ -77,16 +91,16 @@ public partial class PickingView : ContentPage
         ClosePopup();
     }
 
-    private void Collection_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        if (collection.SelectedItem == null) return;
-        if (collection.SelectedItem != null)
-        {
-            //popup.IsVisible = true;
-            //backgroundTransparence.IsVisible = true;
-        }
-        collection.SelectedItem = null;
-    }
+    //private void Collection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    //{
+    //    if (collection.SelectedItem == null) return;
+    //    if (collection.SelectedItem != null)
+    //    {
+    //        //popup.IsVisible = true;
+    //        //backgroundTransparence.IsVisible = true;
+    //    }
+    //    collection.SelectedItem = null;
+    //}
 
     private void Save_Clicked(object sender, EventArgs e)
     {
@@ -101,9 +115,7 @@ public partial class PickingView : ContentPage
 
     void ClosePopup()
     {
-        popup.IsVisible = false;
-        backgroundTransparence.IsVisible = false;
-        nativeBarcode.PauseScanning = false;
+        viewModel.IsVisibleEditQuantityAndExpiryPopup = false;
         entry.HideSoftInputAsync(CancellationToken.None);
     }
 
@@ -114,8 +126,12 @@ public partial class PickingView : ContentPage
         nativeBarcode.PauseScanning = true;
     }
 
-    private void ScrollView_Scrolled(object sender, ScrolledEventArgs e)
+    private void ThisPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {
-
+        Methods.AskForRequiredPermissionAsync();
+        nativeBarcode.IsVisible = true;
+        gridData.IsVisible = true;
+        nativeBarcode.IsVisible = true;
+        nativeBarcode.IsVisible = true;
     }
 }

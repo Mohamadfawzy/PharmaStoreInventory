@@ -89,7 +89,11 @@ public class UserRepository
         return result;
     }
 
-
+    /// <summary>
+    /// Asynchronously checks if a email exists in the users table.
+    /// </summary>
+    /// <param name="email">The email to check for existence.</param>
+    /// <returns>return true if  the email exists.</returns>
     public async Task<bool> IsEmailExistAsync(string email)
     {
         return await context.Users.AsNoTracking().AnyAsync(e => e.Email != null && e.Email == email);

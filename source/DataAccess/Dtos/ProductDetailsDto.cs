@@ -1,17 +1,21 @@
 ﻿using DataAccess.Entities;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace DataAccess.Dtos;
 
-public class ProductDetailsDto
+public class ProductDetailsDto 
 {
+
     public decimal Id { get; set; }
-    public decimal? ProductId { get; set; }
+    public decimal ProductId { get; set; }
     public decimal? StoreId { get; set; }
     public decimal? ExpiryGroupID { get; set; } //Counter_id
     public string? IsInventoried { get; set; }
     //public decimal? VendorId { get; set; }
     public DateTime? ExpDate { get; set; }
-    public decimal? Quantity { get; set; } // Amount
+    public decimal? Quantity{ get; set; } // Amount
     public decimal? SellPrice { get; set; }
     public string? ProductNameAr { get; set; }
     public string? ProductNameEn { get; set; }
@@ -20,11 +24,29 @@ public class ProductDetailsDto
     public string? VendorNameAr { get; set; }
     public string? CompanyNameAr { get; set; }
 
-    //public decimal BuyPrice { get; set; }
-    //public decimal TaxPrice { get; set; }
-    //public DateTime InsertDate { get; set; }
-    //public string? UnitNameAr { get; set; }
-    //public string? SiteFullName { get; set; }
+    //public event NotifyCollectionChangedEventHandler? CollectionChanged;
+
+    //public event PropertyChangedEventHandler PropertyChanged;
+    //protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+    //{
+    //    var changed = PropertyChanged;
+    //    if (changed == null)
+    //        return;
+
+    //    changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    //}
+    //protected bool SetProperty<T>(ref T backingStore, T value,
+    //                                [CallerMemberName] string propertyName = "",
+    //                                Action onChanged = null)
+    //{
+    //    if (EqualityComparer<T>.Default.Equals(backingStore, value))
+    //        return false;
+
+    //    backingStore = value;
+    //    onChanged?.Invoke();
+    //    OnPropertyChanged(propertyName);
+    //    return true;
+    //}
 
     public static implicit operator ProductDetailsDto?(Product_Amount? item)
     {
@@ -44,23 +66,6 @@ public class ProductDetailsDto
             // Map other properties as needed
         };
     }
-
-    //public static implicit operator Product_Amount(ProductDetailsDto item)
-    //{
-    //    return new Product_Amount
-    //    {
-    //        Product_id = item.ProductId ?? 0,
-    //        Store_id = item.StoreId ?? 0,
-    //        Counter_id = item.ExpiryGroupID ?? 0,
-    //        Vendor_id = item.VendorId,
-    //        Exp_date = item.ExpDate,
-    //        Amount = item.Quantity,
-    //        Sell_price = item.SellPrice,
-    //        Pa_id =item.Id,
-    //        Product_update=item.IsInventoried,
-    //        // Map other properties as needed
-    //    };
-    //}
 }
 
 

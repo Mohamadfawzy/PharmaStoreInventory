@@ -14,4 +14,13 @@ public static class InputsExtensions
             }
         }
     }
+    
+    public static void PositioningOfPlaceHolder(this VerticalStackLayout inputsContainer)
+    {
+        foreach (var item in inputsContainer.Children)
+        {
+            var input = item as AnimatedInput;
+            input?.PositioningOfPlaceHolder();
+        }
+    }
 }

@@ -1,5 +1,5 @@
-﻿namespace DataAccess.DomainModel;
-
+﻿// this file has 2 classes Result<T> and Result
+namespace DataAccess.DomainModel;
 public class Result<T>
 {
     public bool IsSuccess { get; set; }
@@ -66,7 +66,7 @@ public class Result
 {
     public bool IsSuccess { get; set; }
     public string Message { get; set; } = string.Empty;
-    public int ErrorCode { get; set; }
+    public ErrorCode ErrorCode { get; set; }
     public IEnumerable<string>? Errors { get; set; } 
 
     public static Result Success(string message = "IsSuccess")
@@ -119,7 +119,7 @@ public class Result
         {
             IsSuccess = false,
             Message = message,
-            ErrorCode =(int)errorCode
+            ErrorCode = errorCode
         };
     }
 }

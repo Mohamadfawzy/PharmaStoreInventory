@@ -4,7 +4,7 @@ namespace PharmaStoreInventory.Models;
 
 public class SortModel : ObservableObject
 {
-    public int Id { get; set; }
+    public short Id { get; set; }
     public string Name { get; set; } = string.Empty;
 
     private bool isSelected;

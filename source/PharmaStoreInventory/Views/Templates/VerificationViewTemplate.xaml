@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="PharmaStoreInventory.Views.Templates.VerificationViewTemplate"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates"
+    xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
+    xmlns:res="clr-namespace:PharmaStoreInventory.Languages"
+    xmlns:help="clr-namespace:PharmaStoreInventory.Helpers"
+    x:Name="ThisPage"
+    InputTransparent="False"
+    IsVisible="{Binding VerificationViewTemplateVisible}"
+    FlowDirection="{x:Static help:FlowDirectionManager.CurentFlowDirection}">
+    
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Entry">
+                <Setter Property="HorizontalTextAlignment"
+                        Value="Center" />
+                <Setter Property="WidthRequest"
+                        Value="50" />
+                <Setter Property="HeightRequest"
+                        Value="50" />
+                <Setter Property="Keyboard"
+                        Value="Numeric" />
+                <Setter Property="MaxLength"
+                        Value="1" />
+                <Setter Property="IsReadOnly"
+                        Value="True" />
+            </Style>
+
+            <Style TargetType="Frame">
+                <Setter Property="CornerRadius"
+                        Value="8" />
+            </Style>
+
+            <Style x:Key="ParagrapherLabel"
+                   TargetType="Label">
+                <Setter Property="Margin"
+                        Value="30,0" />
+                <Setter Property="TextColor"
+                        Value="{StaticResource Secondary100}" />
+                <Setter Property="HorizontalOptions"
+                        Value="Center" />
+                <Setter Property="HorizontalTextAlignment"
+                        Value="Center" />
+                <Setter Property="VerticalTextAlignment"
+                        Value="Center" />
+                <Setter Property="FontSize"
+                        Value="14" />
+            </Style>
+
+        </ResourceDictionary>
+    </ContentView.Resources>
+    
+    
+    <VerticalStackLayout x:Name="container" BackgroundColor="{StaticResource White}">
+        <!--  Login Title  -->
+        <Border Style="{StaticResource TitleBorderStyle}">
+            <VerticalStackLayout Padding="0,30" HorizontalOptions="Center">
+                <!--  Verification Code  -->
+                <Label
+                    Style="{StaticResource TitleCenter}"
+                    VerticalOptions="Start"
+                    Text="رمز التحقق" />
+                <!--  Plese enter  -->
+                <Label
+                    HorizontalTextAlignment="Center"
+                    Style="{StaticResource ParagrapherLabel}"
+                    Text="من فضلك أدخل رمز التحقق الذي تم إرساله"
+                    TextColor="{StaticResource AccentDarkColor}" />
+                <!--  الايميل  -->
+                <Label Style="{StaticResource ParagrapherLabel}" HorizontalTextAlignment="Center">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span TextColor="{StaticResource AccentDarkColor}" Text="إلى" />
+                            <Span Text="  " />
+                            <Span
+                                FontAttributes="Bold"
+                                TextColor="{StaticResource Secondary050}"
+                                Text="yourEmail@gmail.com" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <!--  Entries  -->
+                <HorizontalStackLayout
+                    x:Name="entriesContainer"
+                    Padding="0,50,0,0"
+                    FlowDirection="LeftToRight"
+                    HorizontalOptions="Center">
+
+                    <!--  Entry 1  -->
+                    <Frame Margin="10" Padding="0">
+                        <Entry
+                            x:Name="entry1"
+                            Text="{Binding Code.Value1}"
+                            HorizontalTextAlignment="Center"
+                            IsReadOnly="False"
+                            TextChanged="Entry_TextChanged"
+                            ReturnCommandParameter="1" />
+                    </Frame>
+                    <!--  Entry 2  -->
+                    <Frame Margin="10" Padding="0">
+                        <Entry
+                            x:Name="entry2"
+                            Text="{Binding Code.Value2}"
+                            HorizontalTextAlignment="Center"
+                            TextChanged="Entry_TextChanged"
+                            ReturnCommandParameter="2" />
+                    </Frame>
+                    <!--  Entry 3  -->
+                    <Frame Margin="10" Padding="0">
+                        <Entry
+                            x:Name="entry3"
+                            Text="{Binding Code.Value3}"
+                            HorizontalTextAlignment="Center"
+                            TextChanged="Entry_TextChanged"
+                            ReturnCommandParameter="3" />
+                    </Frame>
+                    <!--  Entry 4  -->
+                    <Frame Margin="10" Padding="0">
+                        <Entry
+                            x:Name="entry4"
+                            Text="{Binding Code.Value4}"
+                            HorizontalTextAlignment="Center"
+                            TextChanged="Entry_TextChanged"
+                            ReturnCommandParameter="4" />
+                    </Frame>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Label
+                        Margin="10,0"
+                        Text="لم تستلم الرمز؟"
+                        Style="{StaticResource ParagrapherLabel}"
+                        TextColor="{StaticResource AccentDarkColor}"
+                        VerticalOptions="Center" />
+                    <Button
+                        x:Name="ResendCodeButton"
+                        Text="إعادة إرسال"
+                        VerticalOptions="Center"
+                        FontSize="14"
+                        TextColor="{StaticResource Primary050}"
+                        Style="{StaticResource Anchor}"
+                        FontFamily="{StaticResource KufiRegular}"
+                        IsEnabled="False"
+                        Clicked="OnResendCodeClicked" />
+                </HorizontalStackLayout>
+
+                <Label
+                    x:Name="TimerLabel"
+                    TextColor="{StaticResource ErrorColor}"
+                    Text="You can resend the code in 60 seconds"
+                    IsVisible="False"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" />
+
+            </VerticalStackLayout>
+        </Border>
+        <!--  Verify Button  -->
+        <Button
+            Margin="30,20"
+            Text="تأكيد"
+            Command="{Binding SubmitCommand}" />
+        <!--  Back to  -->
+        <HorizontalStackLayout HorizontalOptions="Center">
+            <Label
+                Margin="0"
+                Style="{StaticResource ParagrapherLabel}"
+                TextColor="{StaticResource Primary}"
+                FontFamily="{StaticResource IconFont}"
+                Text="{x:Static help:IconFontManager.ArrowIcon}" />
+
+            <Label
+                Margin="10,0"
+                Style="{StaticResource ParagrapherLabel}"
+                TextColor="{StaticResource Primary}"
+                Text="العودة للخلف" />
+            <HorizontalStackLayout.GestureRecognizers>
+                <TapGestureRecognizer Tapped="PopTapped" />
+            </HorizontalStackLayout.GestureRecognizers>
+        </HorizontalStackLayout>
+        <VerticalStackLayout.GestureRecognizers>
+            <TapGestureRecognizer />
+        </VerticalStackLayout.GestureRecognizers>
+    </VerticalStackLayout>
+</ContentView>

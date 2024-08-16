@@ -102,6 +102,24 @@ public class AuthService(UserRepository _repo)
         return await repo.CreateAsync(userDto);
     }
 
+
+    public async Task<Result> IsEmailOrPhoneExistAsync(string email, string phone)
+    {
+        // Ensure that the email does not already exist
+        if (string.IsNullOrEmpty(email) || await repo.IsEmailExistAsync(email))
+        {
+            return Result.Failure(ErrorCode.EmailAlreadyExists, "Email already exists");
+        }
+        // Check if phone and password are provided
+        if (string.IsNullOrEmpty(phone) || await repo.IsPhoneExistAsync(phone))
+        {
+            return Result.Failure(ErrorCode.PhoneNumberAlreadyExists, "Phone number already exists");
+        }
+
+        return Result.Success();
+    }
+
+
     /// <summary>
     /// Authenticates a user based on their email and password.
     /// </summary>
@@ -293,7 +311,7 @@ public class AuthService(UserRepository _repo)
         }
 
         // Check if user is logged in another device
-        if (userAccount.IsLoggedIn && (!string.IsNullOrEmpty( userAccount.DeviceID) && userAccount.DeviceID != deviceId) && !isNewDevice)
+        if (userAccount.IsLoggedIn && (!string.IsNullOrEmpty(userAccount.DeviceID) && userAccount.DeviceID != deviceId) && !isNewDevice)
         {
             return Result<UserLoginResponseDto>.Failure("You are logged in on another device, please log out from it.");
         }

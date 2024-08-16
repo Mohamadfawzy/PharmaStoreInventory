@@ -80,7 +80,7 @@ public class DashboardViewModel : ObservableObject
                 {
                     var item = new SortModel()
                     {
-                        Id = (int)model.Store_id,
+                        Id = (short)model.Store_id,
                         Name = model.Store_name_ar ?? (model.Store_name_en ?? "not found name")
                     };
                     StoresModelList.Add(item);

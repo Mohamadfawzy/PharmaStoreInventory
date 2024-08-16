@@ -43,7 +43,7 @@
                             x:Name="userStoppedTypingBehavior"
                             Command="{Binding Command, Source={x:Reference ThisPage}}"
                             CommandParameter="{Binding Source={x:Reference entry}, Path=Text}"
-                            StoppedTypingTimeThreshold="300" />
+                            StoppedTypingTimeThreshold="500" />
                     </Entry.Behaviors>
                 </Entry>
             </StackLayout>

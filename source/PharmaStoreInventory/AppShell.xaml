@@ -8,9 +8,17 @@
     Title="PharmaStoreInventory"
     Shell.FlyoutBehavior="Disabled">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <!--  Home  -->
+    <Tab Title="h1">
+
+        <ShellContent ContentTemplate="{DataTemplate local:MainPage}" Route="main" />
+    </Tab>
+
+    <!--  Specialties  -->
+    <!--  Home  -->
+    <Tab Title="h1">
+
+        <ShellContent ContentTemplate="{DataTemplate views:AllStockView}" Route="main" />
+    </Tab>
 
 </Shell>

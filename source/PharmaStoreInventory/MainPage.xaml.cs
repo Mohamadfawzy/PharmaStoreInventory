@@ -21,7 +21,7 @@ public partial class MainPage : ContentPage
                 if (pageType != null)
                 {
                     Page? page = Activator.CreateInstance(pageType) as Page;
-                    await Navigation.PushAsync(page);
+                    await Navigation.PushAsync(page,true);
                 }
             });
 
@@ -68,5 +68,10 @@ public partial class MainPage : ContentPage
         {
             Console.WriteLine($"An error occurred: {ex.Message}");
         }
+    }
+
+    private void Button_Clicked_1(object sender, EventArgs e)
+    {
+
     }
 }

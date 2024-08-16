@@ -1,9 +1,8 @@
 ﻿using CommunityToolkit.Maui.Views;
+using DataAccess.DomainModel;
 using PharmaStoreInventory.Extensions;
 using PharmaStoreInventory.ViewModels;
 using PharmaStoreInventory.Views.Templates;
-using System;
-using System.Diagnostics;
 
 namespace PharmaStoreInventory.Views;
 
@@ -17,20 +16,7 @@ public partial class RegisterView : ContentPage
         popup = new PopupWin();
         vm = (RegisterViewModel)BindingContext;
     }
-    //short count=0;
-    //protected override bool OnBackButtonPressed()
-    //{
-    //    if (count == 0)
-    //    {
-    //        count = 1;
-    //        inputsContainer.ClearFocusFromAllInputs();
-    //        return true;
-    //    }
-    //    else
-    //    {
-    //        return false;
-    //    }
-    //}
+
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
         //email.HideKeyBoard();
@@ -55,15 +41,23 @@ public partial class RegisterView : ContentPage
         var isError = CheckInputs();
         if (!isError)
         {
-            var res = await vm.SubmitExecute();
-            if (res)
+            var res = await vm.CheckEmailValidityAndSendEmail();
+
+            if (res == ErrorCode.EmailAlreadyExists)
             {
-                await Navigation.PushAsync(new LoginView());
-                Navigation.RemovePage(this);
+                email.IsError = true;
+                email.ErrorMessage = "الايميل مسجل من قبل";
             }
+            else if (res == ErrorCode.PhoneNumberAlreadyExists)
+            {
+                telephone.IsError = true;
+                telephone.ErrorMessage = "رقم الهاتف مسجل من قبل ";
+            }
+            else
+                await Helpers.Alerts.DisplaySnackbar("ExceptionError");
+
         }
         Helpers.Alerts.CloseActivityIndicator();
-
 
         //stopWatch.Stop();
         //timer.Text = stopWatch.Elapsed.Microseconds.ToString();
@@ -98,8 +92,18 @@ public partial class RegisterView : ContentPage
         {
             password.IsError = true;
             confirmPassword.IsError = true;
-            isError =true;
+            isError = true;
         }
         return isError;
     }// end CheckInputs
+
+
+    private void ThisPage_NavigatedTo(object sender, NavigatedToEventArgs e)
+    {
+        // when releas remove this
+        inputsContainer.PositioningOfPlaceHolder();
+        var verfViewTemplate = new VerificationViewTemplate() { ZIndex = 2 };
+        manStack.SetRowSpan(verfViewTemplate, 3);
+        manStack.Add(verfViewTemplate);
+    }
 }

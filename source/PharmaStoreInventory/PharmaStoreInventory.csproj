@@ -117,6 +117,9 @@
 	  <MauiXaml Update="Views\Templates\PopupWin.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Templates\VerificationViewTemplate.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Trash\AnimateBoxes.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

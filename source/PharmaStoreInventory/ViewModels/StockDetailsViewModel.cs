@@ -22,7 +22,7 @@ public class StockDetailsViewModel : ObservableObject
     //    set => SetProperty(ref nameAr, value);
     //}
     
-    //public string Barcode
+    //public string NavigationProductCode
     //{
     //    get => barcode;
     //    set => SetProperty(ref barcode, value);
@@ -53,7 +53,7 @@ public class StockDetailsViewModel : ObservableObject
 
     //        //NameAr = list.FirstOrDefault()?.ItemNameArabic!;
     //        //NameEn = list.FirstOrDefault()?.ItemNameEnglish!;
-    //        //Barcode = code;
+    //        //NavigationProductCode = code;
     //    }
     //    catch (Exception ex)
     //    {

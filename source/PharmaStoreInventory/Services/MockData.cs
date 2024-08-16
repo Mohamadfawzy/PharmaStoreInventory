@@ -4,7 +4,7 @@ public static class MockData
 {
 
     /*
-    public static List<StockModel> StockModelList = new List<StockModel>
+    public static List<StockModel> Products = new List<StockModel>
         {
             new StockModel
             {
@@ -16,7 +16,7 @@ public static class MockData
                 ExpiryDate = new DateOnly(2026, 11, 1),
                 IsCounted = false,
                 Distributor = "شركة القاهرة للأدوية والصناعات الكيماوية",
-                Barcode = "6221068000977"
+                NavigationProductCode = "6221068000977"
 
             },
         
@@ -30,7 +30,7 @@ public static class MockData
                 ExpiryDate = new DateOnly(2026, 11, 1),
                 IsCounted = false,
                 Distributor = "شركة القاهرة للأدوية والصناعات الكيماوية",
-                Barcode = "6221068000917"
+                NavigationProductCode = "6221068000917"
 
             },
             new StockModel
@@ -43,7 +43,7 @@ public static class MockData
                 ExpiryDate = new DateOnly(2026, 11, 1),
                 IsCounted = true,
                 Distributor = "شركة القاهرة للأدوية والصناعات الكيماوية",
-                Barcode = "6221068000977"
+                NavigationProductCode = "6221068000977"
 
             },
             new StockModel
@@ -56,7 +56,7 @@ public static class MockData
                 ExpiryDate = new DateOnly(2026, 11, 1),
                 IsCounted = false,
                 Distributor = "شركة القاهرة للأدوية والصناعات الكيماوية",
-                Barcode = "6221068000977"
+                NavigationProductCode = "6221068000977"
 
             },
             new StockModel
@@ -69,7 +69,7 @@ public static class MockData
                 ExpiryDate = new DateOnly(2026, 11, 1),
                 IsCounted = true,
                 Distributor = "شركة القاهرة للأدوية والصناعات الكيماوية",
-                Barcode = "6221068000977"
+                NavigationProductCode = "6221068000977"
 
             },
             new StockModel
@@ -82,7 +82,7 @@ public static class MockData
                 ExpiryDate = new DateOnly(2026, 11, 1),
                 IsCounted = true,
                 Distributor = "شركة القاهرة للأدوية والصناعات الكيماوية",
-                Barcode = "6221068000977"
+                NavigationProductCode = "6221068000977"
 
             },
              new StockModel
@@ -95,7 +95,7 @@ public static class MockData
                 ExpiryDate = new DateOnly(2026, 11, 1),
                 IsCounted = false,
                 Distributor = "شركة القاهرة للأدوية والصناعات الكيماوية",
-                Barcode = "6221068000977"
+                NavigationProductCode = "6221068000977"
 
             },
 
@@ -109,7 +109,7 @@ public static class MockData
                 ExpiryDate = new DateOnly(2026, 11, 1),
                 IsCounted = true,
                 Distributor = "شركة القاهرة للأدوية والصناعات الكيماوية",
-                Barcode = "6221068000977"
+                NavigationProductCode = "6221068000977"
 
             },
             new StockModel
@@ -122,7 +122,7 @@ public static class MockData
                 ExpiryDate = new DateOnly(2025, 10, 1),
                 IsCounted = false,
                 Distributor = "Hochster",
-                Barcode = "6224007751008"
+                NavigationProductCode = "6224007751008"
             },
             new StockModel
             {
@@ -134,7 +134,7 @@ public static class MockData
                 ExpiryDate = new DateOnly(2025, 12, 31),
                 IsCounted = true,
                 Distributor = "شركة الأدوية الحديثة",
-                Barcode = "6221050030074"
+                NavigationProductCode = "6221050030074"
             },
             new StockModel
             {
@@ -188,7 +188,7 @@ public static class MockData
                 ExpiryDate = new DateOnly(2026, 8, 1),
                 IsCounted = true,
                 Distributor = "شركة القاهرة للأدوية والصناعات الكيماوية",
-                Barcode = "6221068000977"
+                NavigationProductCode = "6221068000977"
             },
             new StockModel
             {
@@ -200,7 +200,7 @@ public static class MockData
                 ExpiryDate = new DateOnly(2025, 3, 1),
                 IsCounted = false,
                 Distributor = "Hochster",
-                Barcode = "6224007751008"
+                NavigationProductCode = "6224007751008"
             },
             new StockModel
             {
@@ -212,7 +212,7 @@ public static class MockData
                 ExpiryDate = new DateOnly(2025, 7, 31),
                 IsCounted = true,
                 Distributor = "شركة الأدوية الحديثة",
-                Barcode = "6221050030074"
+                NavigationProductCode = "6221050030074"
             },
         };
 
@@ -252,22 +252,22 @@ public static class MockData
     };
     public static List<StockModel> GetStocks()
     {
-        return StockModelList.ToList();
+        return Products.ToList();
     }
 
     public static List<StockModel> GetStocksNonRepet()
     {
-        return StockModelList.DistinctBy(i => i.Barcode).ToList();
+        return Products.DistinctBy(i => i.NavigationProductCode).ToList();
     }
 
     public static List<StockModel>? GetStocksByText(string text)
     {
-        return StockModelList.Where(x => x.ItemNameEnglish != null && x.ItemNameEnglish.Contains(text)).ToList();
+        return Products.Where(x => x.ItemNameEnglish != null && x.ItemNameEnglish.Contains(text)).ToList();
     }
 
     public static List<StockModel> GetStockByBarcode(string code)
     {
-        return StockModelList.Where(x => x.Barcode == code).ToList();
+        return Products.Where(x => x.NavigationProductCode == code).ToList();
     }
 
 

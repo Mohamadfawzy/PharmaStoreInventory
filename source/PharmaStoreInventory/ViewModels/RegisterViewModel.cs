@@ -1,7 +1,13 @@
 ﻿using DataAccess.Contexts;
+using DataAccess.DomainModel;
 using DataAccess.Dtos.UserDtos;
 using DataAccess.Repository;
 using DataAccess.Services;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using PharmaStoreInventory.Helpers;
+using PharmaStoreInventory.Models;
+using PharmaStoreInventory.Views;
+using System.Windows.Input;
 namespace PharmaStoreInventory.ViewModels;
 
 public class RegisterViewModel : BaseViewModel
@@ -11,12 +17,14 @@ public class RegisterViewModel : BaseViewModel
 
 
     public UserRegisterDto UserRegister { get; set; }
-    //public bool ShowError
-    //{
-    //    get => showError;
-    //    set => SetProperty(ref showError, value);
-    //}
 
+    public bool verificationViewTemplateVisible = false;
+    public bool VerificationViewTemplateVisible
+    {
+        get => verificationViewTemplateVisible;
+        set => SetProperty(ref verificationViewTemplateVisible, value);
+    }
+    private string verificationCodeSended = string.Empty;
     // ########################################################################
     public RegisterViewModel()
     {
@@ -38,29 +46,76 @@ public class RegisterViewModel : BaseViewModel
         ;
         Helpers.AppPreferences.SetDeviceID();
         UserRegister.DeviceID = Helpers.AppPreferences.GetDeviceID();
+        Code = new();
     }
 
-    public async Task<bool> SubmitExecute()
+    public VerificationCodeValues Code { get; set; }
+
+    public ICommand SubmitCommand => new Command(ExecuteSubmit);
+    public ICommand SendEmailCommand => new Command(ExecuteSendEmail);
+
+
+    async void ExecuteSubmit()
+    {
+        var code = Code.Value1 + Code.Value2 + Code.Value3 + Code.Value4;
+        if (code == verificationCodeSended)
+        {
+            CreateAcount();
+            //VerificationViewTemplateVisible = false;
+
+        }
+    }
+
+    async void ExecuteSendEmail()
+    {
+        verificationCodeSended = await mailingService.SendVerificationCodeAsync(UserRegister.Email!, null, "mohamed fawzy");
+    }
+    private async Task CreateAcount()
     {
         try
         {
-
-            var result = await mailingService.SendVerificationCodeAsync(UserRegister.Email!, null, "mohamed fawzy");
-            Helpers.AppValues.VerificationCode = result;
             var res = await authService.RegisterUserAcync(UserRegister);
             _ = Helpers.Alerts.DisplaySnackbar(res.Message);
             if (res.IsSuccess)
             {
-                return true;
+                if (Application.Current != null && Application.Current.MainPage != null)
+                {
+                    var navigation = Application.Current.MainPage.Navigation;
+                    var last = navigation.NavigationStack[navigation.NavigationStack.Count - 1];
+                    await navigation.PushAsync(new LoginView());
+                    if (last != null)
+                    {
+                        navigation.RemovePage(last);
+                    }
+                }
             }
-            return false;
-            //App.Current?.MainPage?.Navigation.PushAsync(new LoginView());
         }
         catch (Exception ex)
         {
             var exceptionMessage = $"Message: {ex.Message}\nInnerException: {ex.InnerException?.Message}";
             await Helpers.Alerts.DisplaySnackbar(exceptionMessage);
-            return false;
+        }
+    }
+    
+    public async Task<ErrorCode> CheckEmailValidityAndSendEmail()
+    {
+        try
+        {
+            //cheack if email is not exist
+            var res = await authService.IsEmailOrPhoneExistAsync(UserRegister.Email!, UserRegister.PhoneNumber!);
+            _ = Helpers.Alerts.DisplaySnackbar(res.Message);
+            if (res.IsSuccess)
+            {
+                VerificationViewTemplateVisible = true;
+                verificationCodeSended = "1111";// await mailingService.SendVerificationCodeAsync(UserRegister.Email!, null, "mohamed fawzy");
+            }
+            return res.ErrorCode;
+        }
+        catch (Exception ex)
+        {
+            var exceptionMessage = $"Message: {ex.Message}\nInnerException: {ex.InnerException?.Message}";
+            await Helpers.Alerts.DisplaySnackbar(exceptionMessage);
+            return ErrorCode.ExceptionError;
         }
     }
 

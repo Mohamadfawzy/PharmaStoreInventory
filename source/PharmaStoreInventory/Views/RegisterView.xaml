@@ -9,18 +9,20 @@
     x:Name="ThisPage"
     Title="RegisterView"
     FlowDirection="RightToLeft"
+    NavigatedTo="ThisPage_NavigatedTo"
     NavigationPage.HasNavigationBar="False">
 
+
+    
     <ContentPage.BindingContext>
         <vm:RegisterViewModel />
     </ContentPage.BindingContext>
 
     <ScrollView x:Name="scroll">
-        <VerticalStackLayout
+        <Grid
             x:Name="manStack"
-            Margin="0,0,0,0"
             Padding="0,0,0,50"
-            Spacing="0">
+            RowDefinitions="Auto,Auto,*">
             <!--  Register Title  -->
             <Border
                 Margin="0,0,0,30"
@@ -36,14 +38,16 @@
                     HorizontalOptions="Center" />
             </Border>
             <!--  Inputs  -->
-            <VerticalStackLayout x:Name="inputsContainer" Padding="20,0">
+            <VerticalStackLayout
+                x:Name="inputsContainer"
+                Grid.Row="1"
+                Padding="20,0">
                 <!--  FullName  -->
                 <template:AnimatedInput
                     x:Name="fullName"
                     InputPlaceholder="الاسم كاملاً"
                     InputText="{Binding UserRegister.FullName}"
-                    ErrorMessage="أدخل اسمك مطلوب"
-                    IsError="{Binding UserRegisterError.ErrorFullName, Mode=TwoWay}" />
+                    ErrorMessage="أدخل اسمك مطلوب" />
                 <!--  Pharmacy  -->
                 <template:AnimatedInput
                     x:Name="pharmacyName"
@@ -88,7 +92,7 @@
             </VerticalStackLayout>
 
             <!--  BottonS  -->
-            <VerticalStackLayout Padding="20,0">
+            <VerticalStackLayout Grid.Row="2" Padding="20,0">
                 <!--  Submit  -->
                 <Button
                     Margin="0,30,0,0"
@@ -115,10 +119,10 @@
                 <!--<Label x:Name="timer" HorizontalOptions="Center"/>-->
             </VerticalStackLayout>
 
-            <VerticalStackLayout.GestureRecognizers>
+            <Grid.GestureRecognizers>
                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
-            </VerticalStackLayout.GestureRecognizers>
-        </VerticalStackLayout>
+            </Grid.GestureRecognizers>
 
+        </Grid>
     </ScrollView>
 </ContentPage>

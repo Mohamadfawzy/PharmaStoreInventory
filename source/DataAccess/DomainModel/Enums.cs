@@ -2,12 +2,12 @@
 public enum ProductsOrderBy
 {
     Non = 0,
-    ProductId = 1,
     Name = 2,
-    BiggestPrice = 3,
+    ProductId = 1,
     LowestPrice = 4,
+    BiggestPrice = 3,
+    MinQuantity = 6,
     MaxQuantity = 5,
-    MinQuantity = 6
 }
 
 public enum UsersOrderBy
@@ -24,6 +24,7 @@ public enum UsersOrderBy
 
 public enum ErrorCode
 {
+    NoError = 0,
     EmailNotExist = 1, //
     PasswordIsIncorrect = 2,
     UserNotActive = 3,
@@ -33,7 +34,9 @@ public enum ErrorCode
     OperationFailed = 7,
     ManyFailedAttempts = 8,
     NotFoundById = 9,
-
+    EmailAlreadyExists =10,
+    PhoneNumberAlreadyExists = 11,
+    ExceptionError =12,
 
     // General Errors
     UnknownError = 1000,
