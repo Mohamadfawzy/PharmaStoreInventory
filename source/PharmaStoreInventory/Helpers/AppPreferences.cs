@@ -36,6 +36,12 @@ public static class AppPreferences
         set => Preferences.Default.Set(nameof(HasBranchRegistered), value);
     }
 
+    public static string LocalBaseURI
+    {
+        get => GetValue(nameof(Port), "http://192.168.1.100:5144/api");
+        set => Preferences.Default.Set(nameof(Port), value);
+    }
+    
     public static string Port
     {
         get => GetValue(nameof(Port), "1433");

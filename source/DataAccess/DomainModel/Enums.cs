@@ -37,6 +37,8 @@ public enum ErrorCode
     EmailAlreadyExists =10,
     PhoneNumberAlreadyExists = 11,
     ExceptionError =12,
+    ItemIsExist = 13,
+    NullValue = 14,
 
     // General Errors
     UnknownError = 1000,

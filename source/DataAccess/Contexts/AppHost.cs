@@ -13,7 +13,7 @@ public class AppHost: DbContext
 
     public AppHost()
     {
-        connectionString = $"Data Source=192.168.1.103,1433\\MSSQLSERVER01; Initial Catalog=mosoftphram;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
+        connectionString = $"Data Source=192.168.1.103,1433; Initial Catalog=mosoftphram;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
     }
 
     public DbSet<UserAccount> Users { get; set; }

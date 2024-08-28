@@ -8,7 +8,7 @@ public class Result<T>
     public T? Data { get; set; }
     public IEnumerable<string>? Errors { get; set; }
 
-    public static Result<T> Success(T data, string message = "Success")
+    public static Result<T> Success(T? data, string message = "Success")
     {
         return new Result<T> { IsSuccess = true, Data = data, Message = message };
     }

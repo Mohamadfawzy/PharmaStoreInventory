@@ -159,23 +159,23 @@
                 ColumnDefinitions="*,*"
                 RowSpacing="20"
                 ColumnSpacing="20">
-                <template:DashboardNumberTemplate Title="كل الأصناف" Number="{Binding CountAllProducts}" />
+                <template:DashboardNumberTemplate Title="كل الأصناف" Number="{Binding StatisticsModel.TotalProducts}" />
 
                 <template:DashboardNumberTemplate
                     Title="الأصناف منتهية الصلاحية"
                     Grid.Column="1"
-                    Number="{Binding CountAllExpiredProducts}" />
+                    Number="{Binding StatisticsModel.ExpiredProducts}" />
 
                 <template:DashboardNumberTemplate
                     Title="أصناف تنتهي صلاحيتها بعد ثلاثة أشهر"
                     Grid.Row="1"
                     Grid.Column="1"
-                    Number="{Binding CountAllProductsWillExpireAfter3Months}" />
+                    Number="{Binding StatisticsModel.WillExpireIn3Months}" />
 
                 <template:DashboardNumberTemplate
                     Title=" أصناف تم جردها"
                     Grid.Row="1"
-                    Number="{Binding CountAllIsInventoryed}" />
+                    Number="{Binding StatisticsModel.InventoryedProducts}" />
 
             </Grid>
 
@@ -237,7 +237,7 @@
                 <TapGestureRecognizer Tapped="ClosePopupTapped" />
             </BoxView.GestureRecognizers>
         </BoxView>
-        
+
         <!--  popup window of select strore  -->
         <Border
             x:Name="popup"

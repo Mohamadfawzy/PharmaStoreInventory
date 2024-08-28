@@ -10,12 +10,11 @@
     xmlns:res="clr-namespace:PharmaStoreInventory.Languages"
     xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
     x:Name="ThisPage"
-    Title="Branches"
+    Title="الفروع"
     FlowDirection="LeftToRight">
     <Grid Padding="20,0">
 
-
-        <!--  collection  -->
+        <!--  Collection  -->
         <CollectionView
             x:Name="clBranches"
             Grid.Row="2"
@@ -30,43 +29,85 @@
 
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Border
-                        Padding="10,0"
-                        StrokeShape="RoundRectangle 10"
-                        BackgroundColor="{StaticResource Primary800}">
-                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,80" RowSpacing="0">
-                            <Label
-                                Text="{Binding BrachName}"
-                                FontSize="22"
-                                HorizontalOptions="Center"
-                                TextColor="{StaticResource Primary050}" />
-                            <Label
-                                Grid.Row="1"
-                                Text="{Binding IpAdrress}"
-                                TextColor="{StaticResource Primary050}" />
-                            <Label
-                                Grid.Row="2"
-                                Margin="0,5,0,0"
-                                FontSize="13"
-                                Text="Username"
-                                TextColor="{StaticResource Primary050}" />
-                            <Label
-                                Grid.Row="3"
-                                Margin="0,-13,0,0"
-                                Padding="0"
-                                Text="{Binding Username}"
-                                TextColor="{StaticResource Primary050}" />
-                            <Button
-                                Grid.Row="4"
-                                Margin="20,0"
-                                Padding="0"
-                                Text="Contact"
-                                FontSize="20"
-                                Clicked="BtnContact"
-                                BackgroundColor="{StaticResource SuccessColor}"
-                                VerticalOptions="Center" />
-                        </Grid>
-                    </Border>
+                    <SwipeView>
+
+                        <!--  Right to delete  -->
+                        <!--  CommandParameter="{Binding Source={RelativeSource Self}, Path=BindingContext}"  -->
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItemView BackgroundColor="{StaticResource Primary950}" Invoked="OnDoneSwipeItemInvoked">
+                                    <Button
+                                        Margin="20,0"
+                                        Clicked="Button_Clicked_3"
+                                        CommandParameter="{Binding .}"
+                                        Text="Delete"
+                                        VerticalOptions="Center" />
+                                </SwipeItemView>
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+
+                        <Border
+                            Padding="10,0"
+                            StrokeShape="RoundRectangle 10"
+                            BackgroundColor="{StaticResource Primary800}">
+                            <Grid
+                                RowDefinitions="Auto,Auto,Auto,Auto,80"
+                                ColumnDefinitions="*,Auto"
+                                RowSpacing="0">
+                                <Label
+                                    Grid.ColumnSpan="2"
+                                    Text="{Binding BrachName}"
+                                    FontSize="22"
+                                    HorizontalOptions="Center"
+                                    TextColor="{StaticResource Primary050}" />
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.ColumnSpan="2"
+                                    Text="{Binding HidIpAddress}"
+                                    TextColor="{StaticResource Primary050}" />
+                                <!--  Username  -->
+                                <Label
+                                    Grid.Row="2"
+                                    Margin="0,5,0,0"
+                                    FontSize="13"
+                                    Text="Username"
+                                    TextColor="{StaticResource Primary050}" />
+                                <Label
+                                    Grid.Row="3"
+                                    Margin="0,-13,0,0"
+                                    Padding="0"
+                                    Text="{Binding Username}"
+                                    TextColor="{StaticResource Primary050}" />
+                                <!--  Port  -->
+                                <Label
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Margin="0,5,0,0"
+                                    FontSize="13"
+                                    Text="Port"
+                                    TextColor="{StaticResource Primary050}" />
+                                <Label
+                                    Grid.Row="3"
+                                    Grid.Column="1"
+                                    Margin="0,-13,10,0"
+                                    Padding="0"
+                                    Text="{Binding Port}"
+                                    TextColor="{StaticResource Primary050}" />
+
+                                <!--  Contact Button  -->
+                                <Button
+                                    Grid.Row="4"
+                                    Grid.ColumnSpan="2"
+                                    Margin="20,0"
+                                    Padding="0"
+                                    Text="Contact"
+                                    FontSize="20"
+                                    Clicked="BtnContact"
+                                    BackgroundColor="{StaticResource SuccessColor}"
+                                    VerticalOptions="Center" />
+                            </Grid>
+                        </Border>
+                    </SwipeView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

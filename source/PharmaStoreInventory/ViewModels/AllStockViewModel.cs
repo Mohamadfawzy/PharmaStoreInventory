@@ -3,6 +3,7 @@ using DataAccess.Dtos;
 using DataAccess.Repository;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Models;
+using PharmaStoreInventory.Services;
 using System.Windows.Input;
 
 namespace PharmaStoreInventory.ViewModels;
@@ -11,7 +12,7 @@ public class AllStockViewModel : BaseViewModel
 {
     private readonly ProductAmountRepo repo;
     private List<ProductDto> productsListTemp = [];
-    private List<ProductDto> products = [];
+    private List<ProductDto> products;
     public List<SortModel> sortListItems =
     [
         new () { Id = 2, IsSelected = false , Name="الاسم"},
@@ -27,8 +28,8 @@ public class AllStockViewModel : BaseViewModel
     public AllStockViewModel()
     {
         repo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<ProductAmountRepo>()!;
-        ProductQueryParam = new() { StoreId = AppPreferences.StoreId };
-        Task.Run(GetAllProducts);
+        ProductQueryParam = new() { StoreId = AppPreferences.StoreId.ToString() };
+        GetAllProducts();
     }
 
     // ########*Public*########
@@ -81,6 +82,31 @@ public class AllStockViewModel : BaseViewModel
         ActivityIndicatorRunning = false;
     }
 
+
+    private async Task GetAllProducts()
+    {
+        try
+        {
+            //await Task.Delay(300);
+            await Task.Run(async () =>
+            {
+                var list = await ApiServices.GetAllProducts(ProductQueryParam);
+                if (list != null)
+                {
+                    Products = list;
+                    //await Task.Delay(1000);
+                    productsListTemp = list;
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            await Helpers.Alerts.DisplaySnackbar($"{ex.Message}");
+        }
+
+        ActivityIndicatorRunning = false;
+    }
+
     private async Task GetFromSearch(string text)
     {
         ActivityIndicatorRunning = true;
@@ -92,9 +118,11 @@ public class AllStockViewModel : BaseViewModel
                 OnPropertyChanged(nameof(Products));
                 return;
             }
+
             ProductQueryParam.Text = text;
-            Products = await repo.GetAllProducts(ProductQueryParam);
-            OnPropertyChanged(nameof(Products));
+            var list = await ApiServices.GetAllProducts(ProductQueryParam);
+            if (list != null)
+                Products = list;
         }
         catch (Exception ex)
         {
@@ -102,23 +130,6 @@ public class AllStockViewModel : BaseViewModel
         }
     }
 
-    private async void GetAllProducts()
-    {
-        try
-        {
-            var list = await repo.GetAllProducts(ProductQueryParam);
-            if (products != null)
-            {
-                Products = productsListTemp = list;
-            }
-        }
-        catch (Exception ex)
-        {
-            await Helpers.Alerts.DisplaySnackbar($"{ex.Message}");
-        }
-
-        ActivityIndicatorRunning = false;
-    }
 
     private async void ExecuteFilters()
     {

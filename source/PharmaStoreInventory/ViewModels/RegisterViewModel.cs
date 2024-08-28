@@ -6,6 +6,7 @@ using DataAccess.Services;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Models;
+using PharmaStoreInventory.Services;
 using PharmaStoreInventory.Views;
 using System.Windows.Input;
 namespace PharmaStoreInventory.ViewModels;
@@ -13,7 +14,7 @@ namespace PharmaStoreInventory.ViewModels;
 public class RegisterViewModel : BaseViewModel
 {
     private readonly MailingService mailingService;
-    private readonly AuthService authService;
+   // private readonly AuthService authService;
 
 
     public UserRegisterDto UserRegister { get; set; }
@@ -28,11 +29,11 @@ public class RegisterViewModel : BaseViewModel
     // ########################################################################
     public RegisterViewModel()
     {
-        var repo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<UserRepository>();
+        //var repo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<UserRepository>();
 
-        repo ??= new UserRepository(new AppHost());
+        //repo ??= new UserRepository(new AppHost());
 
-        authService = new(repo);
+        //authService = new(repo);
         mailingService = new();
         UserRegister = new()
         {
@@ -74,7 +75,12 @@ public class RegisterViewModel : BaseViewModel
     {
         try
         {
-            var res = await authService.RegisterUserAcync(UserRegister);
+            var res = await ApiServices.RegisterUserAcync(UserRegister);
+            if (res == null)
+            {
+                await Helpers.Alerts.DisplaySnackbar("RegisterUserAcync return null");
+                return;
+            }
             _ = Helpers.Alerts.DisplaySnackbar(res.Message);
             if (res.IsSuccess)
             {
@@ -102,12 +108,16 @@ public class RegisterViewModel : BaseViewModel
         try
         {
             //cheack if email is not exist
-            var res = await authService.IsEmailOrPhoneExistAsync(UserRegister.Email!, UserRegister.PhoneNumber!);
-            _ = Helpers.Alerts.DisplaySnackbar(res.Message);
+            var res = await ApiServices.IsEmailOrPhoneExistAsync(UserRegister.Email!, UserRegister.PhoneNumber!);
+            //_ = Helpers.Alerts.DisplaySnackbar(res.Message);
+            if (res == null)
+                return ErrorCode.NullValue;
+
             if (res.IsSuccess)
             {
                 VerificationViewTemplateVisible = true;
                 verificationCodeSended = "1111";// await mailingService.SendVerificationCodeAsync(UserRegister.Email!, null, "mohamed fawzy");
+                return ErrorCode.NoError;
             }
             return res.ErrorCode;
         }

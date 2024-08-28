@@ -15,7 +15,12 @@ public class CommonsRepo
         context = new();
     }
 
-    public async Task<List<Stores>> GetAllStores()
+    public CommonsRepo(string db)
+    {
+        context = new(db);
+    }
+
+    public async Task<List<Stores>?> GetAllStores()
     {
         return await context.Stores.ToListAsync();
     }
@@ -38,16 +43,16 @@ public class CommonsRepo
         return latestInventory;
     }
 
-    public async Task<Result<InventoryHistory>>  StartNewInventoryAsync(int latestHistoryId, int empId, int storeId)
+    public async Task<Result<InventoryHistory>>  StartNewInventoryAsync(StartNewInventoryHistoryDto model)
     {
         // end current enventory
-        await EndInventoryHistoryAsync(latestHistoryId, empId).ConfigureAwait(false);
+        await EndInventoryHistoryAsync(model.LatestHistoryId, model.EmpId).ConfigureAwait(false);
 
         // Set AllProduct Non Inventoried
-        await SetAllProductNonInventoriedAsync(storeId, empId).ConfigureAwait(false);
+        await SetAllProductNonInventoriedAsync(model.StoreId, model.EmpId).ConfigureAwait(false);
 
         // start new enventory
-        return await AddInventoryHistoryAsync(empId,storeId ).ConfigureAwait(false);
+        return await AddInventoryHistoryAsync(model.EmpId, model.StoreId).ConfigureAwait(false);
     }
 
     internal async Task<Result<InventoryHistory>> AddInventoryHistoryAsync(int empId, int storeId)

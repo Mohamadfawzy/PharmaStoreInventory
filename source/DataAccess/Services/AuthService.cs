@@ -4,6 +4,7 @@ using DataAccess.Dtos.UserDtos;
 using DataAccess.Entities;
 using DataAccess.Helper;
 using DataAccess.Repository;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DataAccess.Services;
 
@@ -27,7 +28,7 @@ public class AuthService(UserRepository _repo)
 
         try
         {
-            // Find user account by email
+            // All user account by email
             var userAccount = await repo.FindUserByEmailAsync(email.ToLower()).ConfigureAwait(false);
             if (userAccount == null)
             {
@@ -125,24 +126,24 @@ public class AuthService(UserRepository _repo)
     /// </summary>
     /// <param name="deviceId">The device ID from which the user is logging in.</param>
     /// <returns>A <see cref="Result{UserLoginResponseDto}"/> containing the user's login information if authentication is successful, or an error message if authentication fails.</returns>
-    public async Task<Result<UserLoginResponseDto>> UserLoginByEmailAsync(string email, string password, string dviceId, bool isNewDevice)
+    public async Task<Result<UserLoginResponseDto>> UserLoginByEmailAsync(UserLoginRequestDto dto)
     {
         // Check if email and password are provided
-        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+        if (string.IsNullOrEmpty(dto.EmailOrPhone) || string.IsNullOrEmpty(dto.Password))
         {
             return Result<UserLoginResponseDto>.Failure("Email or password is missing.");
         }
         try
         {
-            // Find user account by email
-            var userAccount = await repo.FindUserByEmailAsync(email).ConfigureAwait(false);
+            // All user account by email
+            var userAccount = await repo.FindUserByEmailAsync(dto.EmailOrPhone).ConfigureAwait(false);
             if (userAccount is null)
             {
                 // Return failure result if email or password is incorrect 
                 return Result<UserLoginResponseDto>.Failure("Invalid email or password.");
             }
 
-            return await Login(userAccount, password, dviceId, isNewDevice).ConfigureAwait(false);
+            return await Login(userAccount, dto.Password, dto.DviceId, dto.IsNewDevice).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -155,23 +156,23 @@ public class AuthService(UserRepository _repo)
     /// </summary>
     /// <param name="deviceId">The device ID from which the user is logging in.</param>
     /// <returns>A <see cref="Result{UserLoginResponseDto}"/> containing the user's login information if authentication is successful, or an error message if authentication fails.</returns>
-    public async Task<Result<UserLoginResponseDto>> UserLoginByPhoneAsync(string phone, string password, string deviceId, bool isNewDevice)
+    public async Task<Result<UserLoginResponseDto>> UserLoginByPhoneAsync(UserLoginRequestDto dto)
     {
         // Check if phone and password are provided
-        if (string.IsNullOrEmpty(phone) || string.IsNullOrEmpty(password))
+        if (string.IsNullOrEmpty(dto.EmailOrPhone) || string.IsNullOrEmpty(dto.Password))
         {
             return Result<UserLoginResponseDto>.Failure("Phone or password is missing.");
         }
         try
         {
-            // Find user account by phone
-            var userAccount = await repo.FindUserByPhoneNumberAsync(phone).ConfigureAwait(false);
+            // All user account by phone
+            var userAccount = await repo.FindUserByPhoneNumberAsync(dto.EmailOrPhone).ConfigureAwait(false);
             if (userAccount is null)
             {
                 // Return failure result if phone or password is incorrect
                 return Result<UserLoginResponseDto>.Failure("Invalid phone or password.");
             }
-            return await Login(userAccount, password, deviceId, isNewDevice).ConfigureAwait(false);
+            return await Login(userAccount, dto.Password, dto.DviceId, dto.IsNewDevice).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -203,7 +204,7 @@ public class AuthService(UserRepository _repo)
             return Result.Failure("NewPassword does not match ConfirmNewPassword");
         }
 
-        // Find the user by ID
+        // All the user by ID
         var user = await repo.FindUserById(dto.UserId).ConfigureAwait(false);
 
         // Check if the user exists
@@ -239,7 +240,7 @@ public class AuthService(UserRepository _repo)
         }
         try
         {
-            // Find user account by email
+            // All user account by email
             var userAccount = await repo.FindUserByEmailAsync(email).ConfigureAwait(false);
             if (userAccount != null)
             {
@@ -268,7 +269,7 @@ public class AuthService(UserRepository _repo)
         }
         try
         {
-            // Find user account by email
+            // All user account by email
             var userAccount = await repo.FindUserByEmailAsync(email).ConfigureAwait(false);
             if (userAccount != null && userAccount.VerificationCode == verificationCode)
             {

@@ -106,7 +106,7 @@ namespace PharmaStoreInventory.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Login.
+        ///   Looks up a localized string similar to EmpLogin.
         /// </summary>
         internal static string Login_Login {
             get {
@@ -133,7 +133,7 @@ namespace PharmaStoreInventory.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Login.
+        ///   Looks up a localized string similar to EmpLogin.
         /// </summary>
         internal static string Login_submit {
             get {

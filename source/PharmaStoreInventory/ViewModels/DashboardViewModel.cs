@@ -1,7 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using DataAccess.DomainModel;
+using DataAccess.Dtos;
 using DataAccess.Repository;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Models;
+using PharmaStoreInventory.Services;
 using System.Windows.Input;
 namespace PharmaStoreInventory.ViewModels;
 
@@ -9,7 +12,7 @@ public class DashboardViewModel : ObservableObject
 {
     private readonly CommonsRepo commonRepo;
     private readonly ProductAmountRepo productRepo;
-    private readonly int storeId = 0;
+    private readonly int storeId = 1;
     private DateOnly latestInventoryDate;
     private string title = "العنوان";
     private string storeName = "غير محدد";
@@ -31,11 +34,13 @@ public class DashboardViewModel : ObservableObject
         //var t1 = Task.Delay(4000);
         await GetLatestInventoryHistory();
         await GetAllStores();
-        await GetCountAllProducts();
-        await GetCountAllExpiredProducts();
-        await GetCountAllProductsWillExpireAfter3Months();
-        await GetCountAllIsInventoryed();
+        //await GetCountAllProducts();
+        //await GetCountAllExpiredProducts();
+        //await GetCountAllProductsWillExpireAfter3Months();
+        //await GetCountAllIsInventoryed();
         //await Task.WhenAll(t1, t2,t3);
+
+        await GetProductCountsAsync();
     }
 
     // ########*Public Properties*########
@@ -60,6 +65,7 @@ public class DashboardViewModel : ObservableObject
     public int CountAllExpiredProducts { get; set; }
     public int CountAllProductsWillExpireAfter3Months { get; set; }
     public int CountAllIsInventoryed { get; set; }
+    public StatisticsModel? StatisticsModel { get; set; }
     #endregion
 
 
@@ -68,9 +74,9 @@ public class DashboardViewModel : ObservableObject
 
 
     #region Get Data
-    async Task GetAllStores()
+    private async Task GetAllStores()
     {
-        var list = await commonRepo.GetAllStores();
+        var list = await ApiServices.GetAllStores();
 
         if (list != null)
         {
@@ -96,13 +102,54 @@ public class DashboardViewModel : ObservableObject
     {
         try
         {
-            var result = await commonRepo.GetLatestInventoryHistoryAsync(storeId);
+            var result = await ApiServices.GetLatestInventoryHistoryAsync(storeId);
             if (result != null && result.Start_time != null)
             {
                 LatestInventoryDate = DateOnly.FromDateTime(result.Start_time.Value);
                 LatestInventoryId = (int)result.Store_id!;
             }
+        }
+        catch (Exception ex)
+        {
+            await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
+        }
+    }
 
+    private async Task GetProductCountsAsync()
+    {
+        try
+        {
+            StatisticsModel = await ApiServices.GetProductCountsAsync(storeId);
+            OnPropertyChanged(nameof(StatisticsModel));
+        }
+        catch (Exception ex)
+        {
+            await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
+        }
+    }
+    
+    private async void StartNewInventory()
+    {
+        try
+        {
+            await Task.Run(async () =>
+            {
+                var model = new StartNewInventoryHistoryDto()
+                {
+                    EmpId = AppPreferences.LocalDbUserId,
+                    LatestHistoryId = LatestInventoryId,
+                    StoreId = storeId,
+                };
+
+                var result = await ApiServices.StartNewInventoryAsync(model);
+                if (result != null && result.IsSuccess)
+                {
+                    await Helpers.Alerts.DisplaySnackbar("Start New Inventory Success", 7);
+                    await GetLatestInventoryHistory();
+                    CountAllIsInventoryed = 0;
+                    OnPropertyChanged(nameof(CountAllIsInventoryed));
+                }
+            });
         }
         catch (Exception ex)
         {
@@ -114,7 +161,7 @@ public class DashboardViewModel : ObservableObject
     {
         try
         {
-            CountAllProducts = await productRepo.GetCountAllProducts(storeId);
+            CountAllProducts = await productRepo.GetCountAllProductsAsync(storeId);
             OnPropertyChanged(nameof(CountAllProducts));
         }
         catch (Exception ex)
@@ -174,24 +221,8 @@ public class DashboardViewModel : ObservableObject
         StoreName = item.Name;
     }
 
-    private async void StartNewInventory()
-    {
-        try
-        {
-            await Task.Run(async () =>
-            {
-                var result = await commonRepo.StartNewInventoryAsync(LatestInventoryId, AppPreferences.LocalDbUserId, storeId);
-                if (result != null && result.IsSuccess)
-                {
-                    await Helpers.Alerts.DisplaySnackbar("Start New Inventory Success", 7);
-                    await GetLatestInventoryHistory();
-                    await GetCountAllIsInventoryed();
-                }
-            });
-        }
-        catch (Exception ex)
-        {
-            await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
-        }
-    }
+   
+
+
+    
 }

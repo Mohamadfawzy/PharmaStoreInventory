@@ -53,8 +53,14 @@ public partial class RegisterView : ContentPage
                 telephone.IsError = true;
                 telephone.ErrorMessage = "رقم الهاتف مسجل من قبل ";
             }
-            else
-                await Helpers.Alerts.DisplaySnackbar("ExceptionError");
+            else if (res == ErrorCode.NoError)
+            {
+                await Helpers.Alerts.DisplaySnackbar(" check your email");
+            }
+            else 
+            {
+                await Helpers.Alerts.DisplaySnackbar(" ErrorCode.NullValu");
+            }
 
         }
         Helpers.Alerts.CloseActivityIndicator();
@@ -102,8 +108,8 @@ public partial class RegisterView : ContentPage
     {
         // when releas remove this
         inputsContainer.PositioningOfPlaceHolder();
-        var verfViewTemplate = new VerificationViewTemplate() { ZIndex = 2 };
-        manStack.SetRowSpan(verfViewTemplate, 3);
-        manStack.Add(verfViewTemplate);
+        //var verfViewTemplate = new VerificationViewTemplate() { ZIndex = 2 };
+        //manStack.SetRowSpan(verfViewTemplate, 3);
+        //manStack.Add(verfViewTemplate);
     }
 }

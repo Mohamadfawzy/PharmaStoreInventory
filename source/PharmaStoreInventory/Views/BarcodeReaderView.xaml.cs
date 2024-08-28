@@ -67,7 +67,7 @@ public partial class BarcodeReaderView : ContentPage
 
     private async void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
     {
-        //cameraViewContianer.Remove(nativeBarcode);
+        //cameraViewContianer.RemoveById(nativeBarcode);
         await Navigation.PopAsync();
 
     }

@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using DataAccess.Dtos;
 using DataAccess.Repository;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Models;
+using PharmaStoreInventory.Services;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Product = PharmaStoreInventory.Models.ProductDetailsModel; //DataAccess.Dtos.ProductDetailsDto;
@@ -10,7 +12,7 @@ namespace PharmaStoreInventory.ViewModels;
 public class PickingViewModel : BaseViewModel
 {
     //#########*PrivateFields*############
-    private readonly ProductAmountRepo repo;
+    //private readonly ProductAmountRepo repo;
     private string nameEn = string.Empty;
     private string nameAr = string.Empty;
     private string barcode = "0000";
@@ -25,7 +27,7 @@ public class PickingViewModel : BaseViewModel
     //##################################
     public PickingViewModel()
     {
-        repo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<ProductAmountRepo>()!;
+        //repo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<ProductAmountRepo>()!;
         ListOfStoc = [];
         Task.Run(async () => { await FetchStockDetails(AppValues.NavigationProductCode); });
     }
@@ -89,7 +91,7 @@ public class PickingViewModel : BaseViewModel
         try
         {
             ListOfStoc.Clear();
-            var list = await repo.GetProductDetailsByProcedure(0, productCode, AppPreferences.StoreId);
+            var list = await ApiServices.GetProductDetails(false, productCode, AppPreferences.StoreId);
             if (list != null && list.Count > 0)
             {
                 foreach (var item in list)
@@ -119,8 +121,8 @@ public class PickingViewModel : BaseViewModel
     #region Exectue Methods
     private async void ExecuteMakeInventory(Product item)
     {
-        var res = await repo.UpdateInventoryStatus(false, "1", (int)item.ProductId, (int)item.ExpiryGroupID);
-        if (res)
+        var res = await ApiServices.UpdateInventoryStatus(false, "1", (int)item.ProductId, (int)item.ExpiryGroupID);
+        if (res != null && res.IsSuccess)
         {
             item.IsInventoried = "1";
         }
@@ -158,23 +160,32 @@ public class PickingViewModel : BaseViewModel
 
     async void ExecuteSaveChanges()
     {
-        var res = await repo.CanAddExpirationDate((int)SelectedProduct.Id, (int)SelectedProduct.ProductId, ExpiaryDateLabel.Value);
-        if (res.IsSuccess)
+        //var res = await repo.CanAddExpirationDate((int)SelectedProduct.Id, (int)SelectedProduct.ProductId, ExpiaryDateLabel.Value);
+        //res = await repo.UpdateQuantity((int)SelectedProduct.Id, SelectedProduct.Quantity.Value, ModifiedQuantity, ExpiaryDateLabel, AppPreferences.LocalDbUserId.ToString());
+        try
         {
-            res = await repo.UpdateQuantity((int)SelectedProduct.Id, SelectedProduct.Quantity.Value, ModifiedQuantity, ExpiaryDateLabel, AppPreferences.LocalDbUserId.ToString());
-            SelectedProduct.Quantity = ModifiedQuantity;
-            SelectedProduct.ExpDate = ExpiaryDateLabel;
-            //var item = ListOfStoc.FirstOrDefault(x => x.Id == SelectedProduct.Id);
-            
-            //if (item != null)
-            //{
-            //    item.Quantity = ModifiedQuantity;
+            UpdateProductQuantityDto model = new()
+            {
+                Id = SelectedProduct.Id,
+                OldQuantity = SelectedProduct.Quantity.Value,
+                NewQuantity = ModifiedQuantity,
+                ExpDate = ExpiaryDateLabel.Value,
+                EmpId = AppPreferences.LocalDbUserId.ToString()
+            };
 
-            //}
+            var res = await ApiServices.UpdateQuantity(model);
+            if (res != null && res.IsSuccess)
+            {
+                SelectedProduct.Quantity = ModifiedQuantity;
+                SelectedProduct.ExpDate = ExpiaryDateLabel;
+            }
+            else
+                await Helpers.Alerts.DisplaySnackbar(res.Message, 20);
+            IsVisibleEditQuantityAndExpiryPopup = false;
         }
-        if (!res.IsSuccess)
+        catch (Exception ex)
         {
-            await Helpers.Alerts.DisplaySnackbar(res.Message, 20);
+            await Helpers.Alerts.DisplaySnackbar($"{nameof(ExecuteSaveChanges)}:{ex.Message}");
         }
     }
     void ConvertDateToNumber(DateTime? dateTime)

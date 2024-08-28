@@ -2,7 +2,7 @@
 
 namespace DataAccess.Services;
 
-public class FileHanler(string fileName)
+public class JsonFileHanler(string fileName)
 {
     public string FileName { get; set; } = fileName;
 

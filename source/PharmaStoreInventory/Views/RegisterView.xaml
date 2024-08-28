@@ -12,8 +12,6 @@
     NavigatedTo="ThisPage_NavigatedTo"
     NavigationPage.HasNavigationBar="False">
 
-
-    
     <ContentPage.BindingContext>
         <vm:RegisterViewModel />
     </ContentPage.BindingContext>
@@ -119,10 +117,13 @@
                 <!--<Label x:Name="timer" HorizontalOptions="Center"/>-->
             </VerticalStackLayout>
 
+            <template:VerificationViewTemplate
+                Grid.RowSpan="3"
+                IsVisible="{Binding VerificationViewTemplateVisible}"
+                ZIndex="2" />
             <Grid.GestureRecognizers>
                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
             </Grid.GestureRecognizers>
-
         </Grid>
     </ScrollView>
 </ContentPage>

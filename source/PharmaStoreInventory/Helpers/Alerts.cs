@@ -7,7 +7,7 @@ namespace PharmaStoreInventory.Helpers;
 
 public static class Alerts
 {
-    public static async Task DisplaySnackbar(string text, int durationS = 3)
+    public static async Task DisplaySnackbar(string text, int durationS = 10)
     {
 
         CancellationTokenSource cancellationTokenSource = new();
@@ -16,6 +16,7 @@ public static class Alerts
         {
             BackgroundColor = Colors.DarkBlue,
             TextColor = Colors.White,
+            
             //ActionButtonTextColor = Colors.Yellow,
             // ActionButtonFont = Microsoft.Maui.Font.SystemFontOfSize(14),
             CornerRadius = new CornerRadius(10),
@@ -28,7 +29,7 @@ public static class Alerts
         //Action action = async () => await DisplayAlert("Snackbar ActionButton Tapped", "The user has tapped the Snackbar ActionButton", "OK");
         TimeSpan duration = TimeSpan.FromSeconds(durationS);
 
-        var snackbar = Snackbar.Make(text, visualOptions: snackbarOptions, duration: duration, actionButtonText: "");
+        var snackbar = Snackbar.Make(text, duration: duration, visualOptions: snackbarOptions);
 
         await snackbar.Show(cancellationTokenSource.Token);
     }

@@ -1,20 +1,20 @@
-﻿using DataAccess.Helper;
+﻿using DataAccess.DomainModel;
+using DataAccess.Dtos;
+using DataAccess.Helper;
 using DataAccess.Repository;
 using DataAccess.Services;
 using PharmaStoreInventory.Extensions;
 using PharmaStoreInventory.Helpers;
-using PharmaStoreInventory.Models;
-using PharmaStoreInventory.Views.Templates;
+using PharmaStoreInventory.Services;
 namespace PharmaStoreInventory.Views;
 
 public partial class CreateBranchView : ContentPage
 {
-    //private Branch? branch = null;
-    private readonly FileHanler fileHanler;
+    private readonly XmlFileHandler xFileHanler;
     public CreateBranchView()
     {
         InitializeComponent();
-        fileHanler = new(Helpers.AppValues.BranchsFileName);
+        xFileHanler = new(Helpers.AppValues.XBranchsFileName);
 
     }
 
@@ -32,60 +32,56 @@ public partial class CreateBranchView : ContentPage
         if (!DataValidaityCheck())
             return;
 
-        var branch = new Branch()
+        var branch = new BranchModel()
         {
             Id = Guid.NewGuid(),
             BrachName = brachName.InputText,
             Password = password.InputText,
             Telephone = telephone.InputText,
             Username = username.InputText,
-            IpAdrress = ipAdrress.InputText,
+            IpAddress = ipAdrress.InputText,
             Port = port.InputText
         };
         var status = await Connection(branch);
         if (status == ErrorType.Success)
         {
             await Helpers.Alerts.DisplaySnackbar("The branch has been contacted successfully");
-            await fileHanler.Add(branch);
+
+            // save new brash in file
+            await xFileHanler.Add(branch);
             Helpers.AppPreferences.HasBranchRegistered = true;
 
-
-            //await Dispatcher.DispatchAsync(() =>
-            //{
-            //});
             await Navigation.PushAsync(new BranchesView());
         }
         else if (status == ErrorType.ConnectionString)
         {
             await Helpers.Alerts.DisplaySnackbar("IP or Port is Incorrect");
-            //await Dispatcher.DispatchAsync(async () =>
-            //{
-            //});
         }
         else
         {
-            await Helpers.Alerts.DisplaySnackbar("Username or Password is Incorrect");
-            //await Dispatcher.DispatchAsync(() =>
-            //{
-            //});
+            await Helpers.Alerts.DisplaySnackbar("EmailOrPhone or Password is Incorrect");
         }
 
         ClosePopup();
         submitButton.IsEnabled = true;
     }
 
-    private async Task<ErrorType> Connection(Branch branch)
+    private async Task<ErrorType> Connection(BranchModel branch)
     {
         try
         {
-            Strings.IP = AppPreferences.IP = branch.IpAdrress;
-            Strings.Port = AppPreferences.Port = branch.Port;
+            //Strings.IP = AppPreferences.IP = branch.IpAddress;
+            //Strings.Port = AppPreferences.Port = branch.Port;
+            // http://192.168.1.103:5144/api
+            //var repo = new EmployeeRepo();
 
-            var repo = new EmployeeRepo();
-            var result = await repo.Login(branch.Username, branch.Password);
-            if (result != null)
+            AppPreferences.LocalBaseURI = AppValues.LocalBaseURI = $"http://{branch.IpAddress}:{branch.Port}/api";
+
+            var emp = new EmpLogin(branch.Username, branch.Password);
+            var result = await ApiServices.EmpLogin(emp);
+            if (result != null && result.IsSuccess)
             {
-                AppPreferences.LocalDbUserId = result.Id;
+                AppPreferences.LocalDbUserId = result.Data.Id;
                 return ErrorType.Success;
             }
 

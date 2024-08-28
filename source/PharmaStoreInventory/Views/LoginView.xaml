@@ -9,7 +9,6 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     x:Name="ThisPage"
     Title="LoginView"
-    NavigatedTo="ThisPage_NavigatedTo"
     NavigationPage.HasNavigationBar="False">
     <!--  20.6.2024 9:08PM  -->
 

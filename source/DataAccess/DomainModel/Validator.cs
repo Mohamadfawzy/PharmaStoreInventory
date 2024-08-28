@@ -6,8 +6,10 @@ public class Validator
 {
     public static  bool IsNumeric(string searchText)
     {
-        string pattern = @"\p{Sc}+\s*\d+";
-        return Regex.IsMatch(searchText, pattern);
+        return int.TryParse(searchText, out int result);
+
+        //string pattern = @"\p{Sc}+\s*\d+";
+        //return Regex.IsMatch(searchText, pattern);
     }
 
     public static bool IsValidEmail(string email)

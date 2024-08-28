@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    x:Class="PharmaStoreInventory.Views.CreateBranchView"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates"
-    xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
-    x:Name="ThisPage"
-    Title="CreateBranchView"
-    BackgroundColor="White"
-    FlowDirection="RightToLeft"
-    NavigationPage.HasNavigationBar="False"
-    NavigatedTo="ThisPage_NavigatedTo">
-
-    <ContentPage.BindingContext>
-        <vm:RegisterViewModel />
-    </ContentPage.BindingContext>
-
+<ContentPage x:Class="PharmaStoreInventory.Views.CreateBranchView"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates"
+             xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
+             x:Name="ThisPage"
+             Title="CreateBranchView"
+             BackgroundColor="White"
+             FlowDirection="RightToLeft"
+             NavigationPage.HasNavigationBar="False"
+             NavigatedTo="ThisPage_NavigatedTo">
+    
     <ScrollView>
         <VerticalStackLayout
             Margin="0"
@@ -44,9 +39,7 @@
                 <template:AnimatedInput
                     x:Name="brachName"
                     InputPlaceholder="اسم الفرع"
-                    InputText="شبين الكوم"
-                    ErrorMessage="{Binding InvalidMessage, Mode=TwoWay}"
-                    IsError="{Binding ShowError, Mode=TwoWay}" />
+                    InputText="شبين الكوم" />
 
                 <template:AnimatedInput
                     x:Name="telephone"

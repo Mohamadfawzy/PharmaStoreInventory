@@ -1,15 +1,12 @@
 using DataAccess.DomainModel;
 using DataAccess.Dtos.UserDtos;
-using DataAccess.Repository;
-using DataAccess.Services;
 using PharmaStoreInventory.Extensions;
-using PharmaStoreInventory.Validations;
+using PharmaStoreInventory.Services;
 
 namespace PharmaStoreInventory.Views;
 
 public partial class LoginView : ContentPage
 {
-    //private AuthService authService;
     public LoginView()
     {
         InitializeComponent();
@@ -20,23 +17,11 @@ public partial class LoginView : ContentPage
         inputsContainer.ClearFocusFromAllInputs();
     }
 
-    private void ThisPage_NavigatedTo(object sender, NavigatedToEventArgs e)
-    {
-
-    }
-
     private async void SubmitClicked(object sender, EventArgs e)
     {
-        //var repo = Handler?.MauiContext?.Services.GetService<UserRepository>();
-        //repo ??= new UserRepository(new DataAccess.Contexts.AppHost());
-
-
-        var repo = new UserRepository(new DataAccess.Contexts.AppHost());
-        
-        AuthService authService = new(repo);
         try
         {
-            Result<UserLoginResponseDto> res;
+            Result<UserLoginResponseDto>? res;
             Helpers.Alerts.DisplayActivityIndicator(this);
             InputType check = CheckInputs();
 
@@ -46,13 +31,21 @@ public partial class LoginView : ContentPage
                 return;
             }
 
+            var loginModel = new UserLoginRequestDto()
+            {
+                EmailOrPhone = email.InputText,
+                Password = password.InputText,
+                IsNewDevice = false,
+                DviceId = Helpers.AppPreferences.GetDeviceID()
+            };
+
             if (check == InputType.Phone)
             {
-                res = await authService.UserLoginByPhoneAsync(email.InputText, password.InputText, Helpers.AppPreferences.GetDeviceID(), false);
+                res = await ApiServices.UserLoginByPhoneAsync(loginModel);
             }
             else // if( input == Email?
             {
-                res = await authService.UserLoginByEmailAsync(email.InputText, password.InputText, Helpers.AppPreferences.GetDeviceID(), false);
+                res = await ApiServices.UserLoginByEmailAsync(loginModel);
             }
 
             if (res == null)

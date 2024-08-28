@@ -8,6 +8,9 @@ public class AppDb : DbContext
 {
 
     readonly string connectionString;//= $"Data Source=192.168.1.5,1433\\MSSQLSERVER01; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
+                                     //connectionString = "Server=192.168.1.103,1433;Database=stock;User Id=sa;Password=Ph@store;Persist Security Info=True;Encrypt=True;TrustServerCertificate=True";
+                                     //connectionString = $"Data Source=108.166.183.115,1433;Initial Catalog=modernsoft;Persist Security Info=False;User ID=maua;Password=ma321982; MultipleActiveResultSets=False;Encrypt=True;Trusted_Connection=false; TrustServerCertificate=true; ";
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(connectionString, options =>
@@ -15,15 +18,24 @@ public class AppDb : DbContext
             options.CommandTimeout(180);
         });
     }
+
     public AppDb()
     {
         if (!string.IsNullOrEmpty(Strings.IP))
         {
-            connectionString = $"Data Source={Strings.IP},{Strings.Port}\\MSSQLSERVER01; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
+            connectionString = $"Data Source={Strings.IP},{Strings.Port}; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
         }
         else
-            connectionString = $"Data Source=192.168.1.103,1433\\MSSQLSERVER01; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
+            connectionString = $"Server=192.168.1.125,1433;Database=stock;User Id=sa;Password=Ph@store;Persist Security Info=True;Encrypt=True;TrustServerCertificate=True;";
+
+        //connectionString = $"Data Source=192.168.1.103,1433; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
     }
+
+    public AppDb(string db)
+    {
+        connectionString = db;
+    }
+
     public DbSet<Product_Amount> Product_Amount { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Vendor> Vendor { get; set; }
