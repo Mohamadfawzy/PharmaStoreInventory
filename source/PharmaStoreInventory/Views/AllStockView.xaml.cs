@@ -49,7 +49,7 @@ public partial class AllStockView : ContentPage
     {
         await CloseFilterFrameAninmation();
     }
-    
+
     private async Task CloseFilterFrameAninmation()
     {
         try
@@ -77,8 +77,8 @@ public partial class AllStockView : ContentPage
         if (e.Parameter != null)
         {
             var item = (ProductDto)e.Parameter;
-            AppValues.NavigationProductCode = item.ProductCode;
+            //AppValues.NavigationProductCode = item.ProductCode;
+            await Navigation.PushAsync(new PickingView(item.ProductCode), true);
         }
-        await Navigation.PushAsync(new PickingView(), true);
     }
 }

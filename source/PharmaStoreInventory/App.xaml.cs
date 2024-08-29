@@ -34,6 +34,7 @@ public partial class App : Application
             DataAccess.Helper.Strings.Port = AppPreferences.Port;
             DataAccess.Helper.Strings.IP = AppPreferences.IP;
             AppValues.LocalBaseURI =  AppPreferences.LocalBaseURI;
+            AppValues.LeftScanIcon = true;
         }
         catch
         {

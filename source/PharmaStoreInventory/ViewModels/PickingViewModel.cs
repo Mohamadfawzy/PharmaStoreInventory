@@ -23,19 +23,27 @@ public class PickingViewModel : BaseViewModel
     private DateTime? expiaryDateLabel;
     private Product SelectedProduct = new();
 
-    //#########*Constructor*############
-    //##################################
+    //#########*Constructor_1*############
+    //###########ScanMode###############
     public PickingViewModel()
     {
+        ActivityIndicatorRunning = false;
         //repo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<ProductAmountRepo>()!;
-        ListOfStoc = [];
-        Task.Run(async () => { await FetchStockDetails(AppValues.NavigationProductCode); });
+        //ListOfStoc = [];
+        //Task.Run(async () => { await FetchStockDetails(NavigationProductCode); });
+    }
+    //#########*Constructor_2*############
+    //###########DataMode###############
+    public PickingViewModel(string _barcode)
+    {
+        //ListOfStoc = [];
+        Task.Run(async () => { await FetchStockDetails(_barcode); });
     }
 
     //########*PublicProperties*########
     //##################################
     #region Public Properties
-    public ObservableCollection<Product> ListOfStoc { get; set; }
+    public ObservableCollection<Product> ListOfStoc { get; set; } = [];
     public string NameEn { get => nameEn; set => SetProperty(ref nameEn, value); }
     public string NameAr { get => nameAr; set => SetProperty(ref nameAr, value); }
     public string Barcode
@@ -64,12 +72,12 @@ public class PickingViewModel : BaseViewModel
         get => expiaryDateLabel;
         set => SetProperty(ref expiaryDateLabel, value);
     }
-
     public bool IsVisibleEditQuantityAndExpiryPopup
     {
         get => isVisibleEditQuantityAndExpiryPopup;
         set => SetProperty(ref isVisibleEditQuantityAndExpiryPopup, value);
     }
+
     #endregion
 
     //############*CommandS*############
@@ -85,23 +93,28 @@ public class PickingViewModel : BaseViewModel
     //############*Fethch*##############
     //##################################
     #region Fethch Data
-    public async Task FetchStockDetails(string productCode = "22")
+    public async Task FetchStockDetails(string? productCode)
     {
         ActivityIndicatorRunning = true;
+        ResetValues();
+        if (productCode == null)
+        {
+            return;
+        }
         try
         {
             ListOfStoc.Clear();
             var list = await ApiServices.GetProductDetails(false, productCode, AppPreferences.StoreId);
             if (list != null && list.Count > 0)
             {
+                NameAr = list[0].ProductNameAr ?? "اسم المنتج غير موجود";
+                NameEn = list[0].ProductNameEn ?? "Product name not found";
+                Barcode = productCode;
                 foreach (var item in list)
                 {
                     ListOfStoc.Add(item);
                 }
-                NameAr = list[0].ProductNameAr ?? "اسم المنتج غير موجود";
-                NameEn = list[0].ProductNameEn ?? "Product name not found";
-                Barcode = productCode;
-                OnPropertyChanged(nameof(ListOfStoc));
+                //OnPropertyChanged(nameof(ListOfStoc));
             }
             else
             {

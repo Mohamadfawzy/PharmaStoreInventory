@@ -32,8 +32,7 @@
             Padding="10,5"
             IsVisible="True"
             Orientation="Horizontal"
-            BackgroundColor="{StaticResource Primary800}"
-            ZIndex="1">
+            BackgroundColor="{StaticResource Primary800}">
             <Label
                 Margin="10"
                 FontSize="22"
@@ -71,6 +70,21 @@
             </Frame>
         </StackLayout>
 
+        <VerticalStackLayout
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            HorizontalOptions="Center"
+            VerticalOptions="Center">
+            <Label
+                Text="قم بالبحث عن صنف معين"
+                HorizontalTextAlignment="Center"
+                FontSize="25" />
+            <Label
+                Text="أو قم بعرض الاصناف من الفلتر"
+                HorizontalTextAlignment="Center"
+                FontSize="25" />
+        </VerticalStackLayout>
+
         <ScrollView
             Grid.Row="2"
             Margin="10"
@@ -78,6 +92,7 @@
             <FlexLayout
                 x:Name="flexLayoutItems"
                 Padding="0"
+                BackgroundColor="{StaticResource White}"
                 FlowDirection="LeftToRight"
                 BindableLayout.ItemsSource="{Binding Products}"
                 IsClippedToBounds="True"
@@ -283,7 +298,7 @@
             <Grid.Triggers>
                 <DataTrigger
                     TargetType="Grid"
-                    Binding="{Binding OpenBottomSheet}"
+                    Binding="{Binding BottomSheet}"
                     Value="true">
                     <DataTrigger.EnterActions>
                         <trigger:OpenBottomSheetTrigger StartsFrom="0" />
@@ -292,7 +307,7 @@
 
                 <DataTrigger
                     TargetType="Grid"
-                    Binding="{Binding OpenBottomSheet}"
+                    Binding="{Binding BottomSheet}"
                     Value="false">
                     <DataTrigger.EnterActions>
                         <trigger:CloseBottomSheetTrigger StartsFrom="0" />
@@ -305,9 +320,10 @@
 
         <ActivityIndicator
             Grid.Row="0"
-            Grid.RowSpan="4"
+            Grid.RowSpan="3"
             VerticalOptions="Center"
-            ZIndex="4"
-            IsRunning="{Binding ActivityIndicatorRunning}" />
+            ZIndex="2"
+            IsRunning="{Binding ActivityIndicatorRunning}"
+            Color="{StaticResource Primary600}" />
     </Grid>
 </ContentPage>

@@ -16,7 +16,7 @@
                 <Setter Property="CornerRadius" Value="0" />
                 <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
                 <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Primary950}, Dark={StaticResource Primary050}}" />
-                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary050}, Dark={StaticResource Primary900}}" />
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary100}, Dark={StaticResource Primary900}}" />
                 <Setter Property="FontSize" Value="18" />
             </Style>
         </ResourceDictionary>
@@ -30,23 +30,29 @@
         Background="{AppThemeBinding Light={StaticResource Primary050},
                                      Dark={StaticResource Primary950}}">
         <StackLayout Orientation="Horizontal">
+            <!--  Plus  -->
             <Button
                 Style="{StaticResource StepperButton}"
                 Text="{x:Static icon:IconFont.Plus}"
                 Clicked="Plus_Clicked" />
-
+            <!--  Entry  -->
             <Entry
                 x:Name="entry"
+                WidthRequest="60"
                 BindingContext="{x:Reference ThisView}"
                 Text="{Binding Text}"
                 HorizontalTextAlignment="Center"
                 HorizontalOptions="FillAndExpand"
                 Keyboard="Numeric" />
+            <!--  Minus  -->
             <Button
                 Style="{StaticResource StepperButton}"
                 Text="{x:Static icon:IconFont.Minus}"
-                Clicked="Minus_Clicked" />
-
+                Clicked="Minus_Clicked">
+                <Button.Behaviors>
+                    <toolkit:TouchBehavior LongPressDuration="750" LongPressCommand="{Binding Source={x:Reference ThisView}, Path=LongPressCommand}" />
+                </Button.Behaviors>
+            </Button>
         </StackLayout>
     </Border>
 </ContentView>

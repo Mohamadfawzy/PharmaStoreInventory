@@ -2,6 +2,7 @@
 using DataAccess.DomainModel;
 using DataAccess.DomainModel.QueryParams;
 using DataAccess.Dtos;
+using DataAccess.Entities;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -501,7 +502,7 @@ WHERE
             var effectedRow = await context.SaveChangesAsync();
             if (effectedRow > 0)
             {
-                return Result.Success();
+                return Result.Success($"product: {dto.ProductId} is updated successfuly");
             };
 
             return Result.Failure("not updated");

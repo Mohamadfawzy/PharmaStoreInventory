@@ -26,7 +26,7 @@
 
             <Style x:Key="TouchLabelStyle" TargetType="Label">
                 <Setter Property="Margin" Value="0" />
-                <Setter Property="Padding" Value="20,0" />
+                <Setter Property="Padding" Value="30,0" />
                 <Setter Property="FontSize" Value="28" />
                 <Setter Property="TextColor" Value="White" />
                 <Setter Property="HorizontalOptions" Value="EndAndExpand" />
@@ -42,23 +42,25 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <ContentPage.BindingContext>
+    <!--<ContentPage.BindingContext>
         <vm:PickingViewModel />
-    </ContentPage.BindingContext>
+    </ContentPage.BindingContext>-->
 
     <!--  Main Contianer  -->
     <Grid x:Name="mainContianer" RowDefinitions="60,1.3*,*,*">
 
         <!--  Hedear falsh and barcod icon  -->
         <StackLayout
-            Padding="20,0"
+            x:Name="header"
+            Padding="0,0"
             Orientation="Horizontal"
             BackgroundColor="{StaticResource Primary800}">
 
             <!--  Flash Icon  -->
             <Label
+                HorizontalOptions="Start"
                 Text="{x:Static icon:IconFont.Flashlight}"
-                HorizontalOptions="FillAndExpand"
+                BackgroundColor="Transparent"
                 Style="{StaticResource TouchLabelStyle}">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Tapped="ToggleFlashLight" />
@@ -74,15 +76,18 @@
 
             <!--  barcod Icon  -->
             <Label
-                Margin="10,0"
+                Padding="30,5"
+                Background="Transparent"
+                HorizontalOptions="EndAndExpand"
                 Text="{x:Static icon:IconFont.BarcodeScan}"
                 FontFamily="{StaticResource IconFont}"
                 TextColor="{StaticResource Primary050}"
                 VerticalTextAlignment="Center"
-                VerticalOptions="Center"
+                VerticalOptions="Fill"
                 FontSize="30">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Tapped="NewScanTapped" />
+                    <TapGestureRecognizer Tapped="CloseCameraTapped" NumberOfTapsRequired="2" />
                 </Label.GestureRecognizers>
             </Label>
 
@@ -92,6 +97,7 @@
         <scanner:CameraView
             x:Name="nativeBarcode"
             Grid.Row="1"
+            TapToFocusEnabled="True"
             IsVisible="False"
             VerticalOptions="FillAndExpand"
             HorizontalOptions="FillAndExpand"
@@ -103,9 +109,11 @@
         <!--  OnDetectionFinishedCommand="{Binding OnCameraDetectionFinishedCommand}"  -->
         <!--  Guides Lines over Camera  -->
         <Grid
+            x:Name="guidesLines"
             Grid.Row="1"
             Padding="0,30,40,30"
-            IsVisible="True"
+            IsVisible="False"
+            InputTransparent="True"
             BackgroundColor="Transparent"
             FlowDirection="LeftToRight"
             VerticalOptions="FillAndExpand">
@@ -173,9 +181,9 @@
                     Y2="0"
                     HorizontalOptions="End" />
             </StackLayout>
-            <Grid.GestureRecognizers>
+            <!--<Grid.GestureRecognizers>
                 <TapGestureRecognizer Tapped="TapToScan" />
-            </Grid.GestureRecognizers>
+            </Grid.GestureRecognizers>-->
         </Grid>
 
         <!--  ===================================================================================================================  -->
@@ -228,7 +236,7 @@
             </VerticalStackLayout>
 
             <!--  DataTemplateStockDetails  -->
-            <ScrollView Grid.Row="1" Scrolled="ScrollView_Scrolled_1">
+            <ScrollView Grid.Row="1">
                 <FlexLayout
                     x:Name="flexLayoutItems"
                     Padding="0"
@@ -241,6 +249,7 @@
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
                             <SwipeView SwipeStarted="SwipeView_SwipeStarted">
+
                                 <!--  Left Make Inventory  -->
                                 <SwipeView.LeftItems>
                                     <SwipeItems Mode="Execute">
@@ -447,9 +456,9 @@
                                 x:Name="entry"
                                 HorizontalOptions="FillAndExpand"
                                 HorizontalTextAlignment="Center"
+                                Keyboard="Numeric"
                                 MaxLength="4"
-                                Text="{Binding ExpiaryDateAsNumber}"
-                                Keyboard="Text">
+                                Text="{Binding ExpiaryDateAsNumber}">
                                 <Entry.Behaviors>
                                     <toolkit:UserStoppedTypingBehavior
                                         x:Name="userStoppedTypingBehavior"
@@ -472,7 +481,7 @@
                         Command="{Binding SaveChangesCommand}" />
                 </VerticalStackLayout>
                 <Border.GestureRecognizers>
-                    <TapGestureRecognizer />
+                    <TapGestureRecognizer Tapped="Popup_HideSoftInput_Tapped" />
                 </Border.GestureRecognizers>
             </Border>
 
@@ -487,7 +496,8 @@
             Grid.RowSpan="4"
             VerticalOptions="Center"
             ZIndex="4"
-            IsRunning="{Binding ActivityIndicatorRunning}" />
+            IsRunning="{Binding ActivityIndicatorRunning}"
+            Color="{StaticResource Primary600}" />
     </Grid>
 
 </ContentPage>

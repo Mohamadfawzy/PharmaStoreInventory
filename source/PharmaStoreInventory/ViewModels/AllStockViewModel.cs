@@ -10,9 +10,9 @@ namespace PharmaStoreInventory.ViewModels;
 
 public class AllStockViewModel : BaseViewModel
 {
-    private readonly ProductAmountRepo repo;
+    //private readonly ProductAmountRepo repo;
     private List<ProductDto> productsListTemp = [];
-    private List<ProductDto> products;
+    private List<ProductDto>? products;
     public List<SortModel> sortListItems =
     [
         new () { Id = 2, IsSelected = false , Name="الاسم"},
@@ -22,28 +22,28 @@ public class AllStockViewModel : BaseViewModel
         new () { Id = 6, IsSelected = false , Name = "أقل كمية" },
         new () { Id = 5, IsSelected = false  , Name = "أكبر كمية" },
     ];
-    private bool openBottomSheet = false;
+    private bool bottomSheet = false;
     // #######*Constructor*#########
     //     ################
     public AllStockViewModel()
     {
-        repo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<ProductAmountRepo>()!;
+        //repo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<ProductAmountRepo>()!;
         ProductQueryParam = new() { StoreId = AppPreferences.StoreId.ToString() };
-        GetAllProducts();
+        //GetAllProducts();
     }
 
     // ########*Public*########
     public ProductQParam ProductQueryParam { get; set; }
-    public List<ProductDto> Products
+    public List<ProductDto>? Products
     {
         get => products;
         set => SetProperty(ref products, value);
     }
 
-    public bool OpenBottomSheet
+    public bool BottomSheet
     {
-        get => openBottomSheet;
-        set => SetProperty(ref openBottomSheet, value);
+        get => bottomSheet;
+        set => SetProperty(ref bottomSheet, value);
     }
 
     public short SelectedSortBy { get; set; }
@@ -66,13 +66,10 @@ public class AllStockViewModel : BaseViewModel
     // #######################################
     void ExecuteOpenBottomSheet()
     {
-        OpenBottomSheet = true;
+        BottomSheet = true;
     }
 
-    void CloseOpenBottomSheet()
-    {
-        OpenBottomSheet = false;
-    }
+   
     private async void SearchBoxTyping(string text)
     {
         if (text == "" || text == " ")
@@ -101,7 +98,7 @@ public class AllStockViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            await Helpers.Alerts.DisplaySnackbar($"{ex.Message}");
+            await Alerts.DisplaySnackbar($"{ex.Message}");
         }
 
         ActivityIndicatorRunning = false;
@@ -136,14 +133,21 @@ public class AllStockViewModel : BaseViewModel
         ActivityIndicatorRunning = true;
         CloseOpenBottomSheet();
 
-        await Task.Run(async () =>
+        try
         {
-            ProductQueryParam.OrderBy = (DataAccess.DomainModel.ProductsOrderBy)SelectedSortBy;
-            ProductQueryParam.QuantityBiggerThanZero = FilterQuantityBiggerThanZero;
-            ProductQueryParam.IsGroup = FilterIsGroup;
-            await Task.Delay(250);
-            Products = await repo.GetAllProducts(ProductQueryParam).ConfigureAwait(true);
-        });
+            await Task.Run(async () =>
+            {
+                ProductQueryParam.OrderBy = (DataAccess.DomainModel.ProductsOrderBy)SelectedSortBy;
+                ProductQueryParam.QuantityBiggerThanZero = FilterQuantityBiggerThanZero;
+                ProductQueryParam.IsGroup = FilterIsGroup;
+                await Task.Delay(250);
+                Products = await ApiServices.GetAllProducts(ProductQueryParam).ConfigureAwait(true);
+            });
+        }
+        catch
+        {
+            await Alerts.DisplaySnackbar("Exception from ExecuteFilters");
+        }
         ActivityIndicatorRunning = false;
     }
 
@@ -156,4 +160,9 @@ public class AllStockViewModel : BaseViewModel
         SelectedSortBy = item.Id;
     }
 
+
+    void CloseOpenBottomSheet()
+    {
+        BottomSheet = false;
+    }
 }

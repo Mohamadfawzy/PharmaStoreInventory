@@ -5,7 +5,7 @@ namespace PharmaStoreInventory.ViewModels;
 
 public class BaseViewModel : ObservableObject
 {
-    private bool activityIndicatorRunning = true;
+    private bool activityIndicatorRunning = false;
 
     public bool ActivityIndicatorRunning
     {

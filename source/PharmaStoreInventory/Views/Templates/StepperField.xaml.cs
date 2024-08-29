@@ -1,8 +1,9 @@
+using System.Windows.Input;
+
 namespace PharmaStoreInventory.Views.Templates;
 
 public partial class StepperField : ContentView
 {
-
     public static readonly BindableProperty TextProperty =
     BindableProperty.Create(
     nameof(Text),
@@ -15,7 +16,7 @@ public partial class StepperField : ContentView
         get => (string)GetValue(TextProperty);
         set => SetValue(TextProperty, value);
     }
-
+    public ICommand LongPressCommand => new Command(() => { Text = $"{0.00}"; });
     public StepperField()
 	{
 		InitializeComponent();
@@ -31,6 +32,8 @@ public partial class StepperField : ContentView
     private void Minus_Clicked(object sender, EventArgs e)
     {
         var number = decimal.Parse(Text);
+        if (number <= 0) 
+            return;
         number--;
         Text = number.ToString();
 

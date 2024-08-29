@@ -1,5 +1,5 @@
 using BarcodeScanning;
-using CommunityToolkit.Maui.Core.Platform;
+using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.ViewModels;
 
 namespace PharmaStoreInventory.Views;
@@ -7,50 +7,78 @@ namespace PharmaStoreInventory.Views;
 public partial class PickingView : ContentPage
 {
     readonly PickingViewModel viewModel;
+    bool IsScanMode = false;
     public PickingView()
     {
-        this.FlowDirection = FlowDirection.RightToLeft;
         InitializeComponent();
-        viewModel = (PickingViewModel)BindingContext;
-
+        viewModel = new PickingViewModel();
+        this.BindingContext = viewModel;
+        IsScanMode = true;
     }
 
-    protected override void OnDisappearing()
+    public PickingView(string barcode)
     {
-        base.OnDisappearing();
-        nativeBarcode.CameraEnabled = false;
+        InitializeComponent();
+        viewModel = new PickingViewModel(barcode);
+        this.BindingContext = viewModel;
+    }
+
+    private void ThisPage_NavigatedTo(object sender, NavigatedToEventArgs e)
+    {
+        if (IsScanMode)
+        {
+            Methods.AskForRequiredPermissionAsync();
+
+            guidesLines.IsVisible = true;
+            nativeBarcode.IsVisible = true;
+            nativeBarcode.CameraEnabled = true;
+            nativeBarcode.PauseScanning = false;
+            mainContianer.SetRow(gridData, 2);
+        }
+        //  is it shown in data mode? comes from AllStockView
+        else
+        {
+            gridData.IsVisible = true;
+        }
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        if (AppValues.LeftScanIcon)
+        {
+            header.FlowDirection = FlowDirection.RightToLeft;
+        }
     }
 
     private void CameraOnDetectionFinished(object sender, OnDetectionFinishedEventArg e)
     {
         if (e.BarcodeResults.Length <= 0)
             return;
-
+        gridData.IsVisible = true;
         mainContianer.SetRow(gridData, 1);
         nativeBarcode.PauseScanning = true;
         nativeBarcode.CameraEnabled = false;
         _ = viewModel.FetchStockDetails(e.BarcodeResults[0].DisplayValue);
-
         // Dispatcher.DispatchAsync(() => { });
-
     }
 
     private void NewScanTapped(object sender, TappedEventArgs e)
     {
+        nativeBarcode.IsVisible = true;
         nativeBarcode.PauseScanning = false;
         nativeBarcode.CameraEnabled = true;
         mainContianer.SetRow(gridData, 2);
     }
-    private void ScrollView_Scrolled_1(object sender, ScrolledEventArgs e)
+    
+    private void CloseCameraTapped(object sender, TappedEventArgs e)
     {
-        //if (e.ScrollY <= 0)
-        //{
-        //    nativeBarcode.PauseScanning = false;
-        //    nativeBarcode.CameraEnabled = true;
-        //    mainContianer.SetRow(gridData, 2);
-        //}
-        //Console.WriteLine(e.ScrollY);
+        nativeBarcode.IsVisible = false;
+        nativeBarcode.PauseScanning = true;
+        nativeBarcode.CameraEnabled = false;
+        mainContianer.SetRow(gridData, 1);
     }
+
     private void ToggleFlashLight(object sender, TappedEventArgs e)
     {
         nativeBarcode.TorchOn = !nativeBarcode.TorchOn;
@@ -58,14 +86,13 @@ public partial class PickingView : ContentPage
 
     private void TapToScan(object sender, TappedEventArgs e)
     {
-        nativeBarcode.PauseScanning = false;
+        //nativeBarcode.PauseScanning = false;
+        //nativeBarcode.TapToFocusEnabled = true;
     }
 
     private void OnDoneSwipeItemInvoked(object sender, EventArgs e)
     {
 
-        //viewModel.
-        //DisplayAlert("title", "massage", "cancel");
     }
 
     private async void SwipeView_SwipeStarted(object sender, SwipeStartedEventArgs e)
@@ -126,12 +153,10 @@ public partial class PickingView : ContentPage
         nativeBarcode.PauseScanning = true;
     }
 
-    private void ThisPage_NavigatedTo(object sender, NavigatedToEventArgs e)
+
+
+    private void Popup_HideSoftInput_Tapped(object sender, TappedEventArgs e)
     {
-        Methods.AskForRequiredPermissionAsync();
-        nativeBarcode.IsVisible = true;
-        gridData.IsVisible = true;
-        nativeBarcode.IsVisible = true;
-        nativeBarcode.IsVisible = true;
+        entry.HideSoftInputAsync(CancellationToken.None);
     }
 }
