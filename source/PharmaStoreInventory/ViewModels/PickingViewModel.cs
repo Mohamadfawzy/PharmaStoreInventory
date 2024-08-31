@@ -92,7 +92,7 @@ public class PickingViewModel : BaseViewModel
 
     //############*Fethch*##############
     //##################################
-    #region Fethch Data
+    #region Fetch Data
     public async Task FetchStockDetails(string? productCode)
     {
         ActivityIndicatorRunning = true;

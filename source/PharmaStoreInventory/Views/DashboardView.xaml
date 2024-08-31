@@ -39,13 +39,7 @@
                 <Setter Property="Spacing" Value="10" />
             </Style>
 
-            <!--  Icon Label Style  -->
-            <Style x:Key="IconLabelMediumStyle" TargetType="Label">
-                <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
-                <Setter Property="VerticalTextAlignment" Value="Center" />
-                <Setter Property="HorizontalTextAlignment" Value="Center" />
-                <Setter Property="FontSize" Value="20" />
-            </Style>
+
 
         </ResourceDictionary>
     </ContentPage.Resources>

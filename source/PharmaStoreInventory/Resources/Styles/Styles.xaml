@@ -138,6 +138,13 @@
     </Style>
 
     <!--  Label  -->
+    <Style x:Key="IconLabelMediumStyle" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
+        <Setter Property="VerticalTextAlignment" Value="Center" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="20" />
+    </Style>
+    
     <Style TargetType="Label">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Primary}}" />
         <Setter Property="BackgroundColor" Value="Transparent" />

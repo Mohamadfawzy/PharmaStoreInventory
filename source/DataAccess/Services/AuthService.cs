@@ -4,7 +4,6 @@ using DataAccess.Dtos.UserDtos;
 using DataAccess.Entities;
 using DataAccess.Helper;
 using DataAccess.Repository;
-using Microsoft.IdentityModel.Tokens;
 
 namespace DataAccess.Services;
 
@@ -71,9 +70,9 @@ public class AuthService(UserRepository _repo)
         return await repo.UpdateActivationUserAccountAsync(userId, status);
     }
 
-    public async Task<List<UserInfoDto>> GetAllUsersAsync(FilterUsersQParam qParam)
+    public async Task<List<UserInfoDto>> GetAllUsersAsync(FilterUsersQParam query)
     {
-        return await repo.ReadAllUsers(qParam);
+        return await repo.ReadAllUsers(query);
     }
     public async Task<Result> AdminConfirmsUserEmail(int userId)
     {

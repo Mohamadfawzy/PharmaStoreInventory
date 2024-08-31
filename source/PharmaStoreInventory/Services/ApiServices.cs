@@ -34,7 +34,7 @@ public static class ApiServices
     #region Product
     public static async Task<List<ProductDto>?> GetAllProducts(ProductQParam qParam)
     {
-        var queryParams = new Dictionary<string, string>
+        var queryParams = new Dictionary<string, string?>
             {
                 { "query.StoreId",qParam.StoreId},
                 { "query.IsGroup",qParam.IsGroup.ToString()},
@@ -50,7 +50,7 @@ public static class ApiServices
 
     public static async Task<List<ProductDetailsDto>?> GetProductDetails(bool hasOnlyQuantity, string productCode, int storeId)
     {
-        var queryParams = new Dictionary<string, string>
+        var queryParams = new Dictionary<string, string?>
             {
                 { "hasOnlyQuantity",hasOnlyQuantity.ToString()},
                 { "barcode",productCode},
@@ -64,7 +64,7 @@ public static class ApiServices
 
     public static async Task<Result?> UpdateInventoryStatus(bool allOneTime, string status, int productId, int expiryBatchID)
     {
-        var queryParams = new Dictionary<string, string>
+        var queryParams = new Dictionary<string, string?>
             {
                 { "allOneTime",allOneTime.ToString()},
                 { "status",status},
@@ -100,7 +100,7 @@ public static class ApiServices
 
     public static async Task<Result?> IsEmailOrPhoneExistAsync(string email, string phone)
     {
-        var queryParams = new Dictionary<string, string>
+        var queryParams = new Dictionary<string, string?>
             {
                 { "email",email},
                 { "phone",phone}
@@ -118,6 +118,37 @@ public static class ApiServices
     {
         var url = AppValues.HostBaseURI + "/userAuth/login-email";
         return await RequestProvider.PostSingleAsync<Result<UserLoginResponseDto>?, UserLoginRequestDto>(url, model);
+    }
+    #endregion
+
+    #region Admin
+    public static async Task<List<UserInfoDto>?> GetAllUsersAsync(FilterUsersQParam query)
+    {
+        var queryParams = new Dictionary<string, string?>
+            {
+                { "query.IsActive",query.IsActive.ToString()},
+                { "query.EmailConfirmed",query.EmailConfirmed.ToString()},
+                { "query.PageSize",query.PageSize.ToString()},
+                { "query.Page",query.Page.ToString()},
+                { "query.OrderBy",query.OrderBy.ToString()},
+            };
+
+        var url = AppValues.HostBaseURI + "/admin/all-users" + await BuildQueryString(queryParams);
+
+        return await RequestProvider.GetAllAsync<UserInfoDto>(url);
+    }
+
+    public static async Task<Result?> ChangeUserStatus(int userId)
+    {
+        var queryParams = new Dictionary<string, string?>
+            {
+                { "userId",userId.ToString()},
+                { "status","true"}
+            };
+
+        var url = AppValues.HostBaseURI + "/admin/activate-user-account" + await BuildQueryString(queryParams);
+
+        return await RequestProvider.PutByQueryParamsAsync<Result>(url);
     }
     #endregion
 
@@ -145,7 +176,7 @@ public static class ApiServices
 
 
     // BuildQueryString
-    private static async Task<string> BuildQueryString(Dictionary<string, string> queryParams)
+    private static async Task<string> BuildQueryString(Dictionary<string, string?> queryParams)
     {
         try
         {

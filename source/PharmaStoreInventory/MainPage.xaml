@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
     xmlns:views="clr-namespace:PharmaStoreInventory.Views"
+    xmlns:adminV="clr-namespace:PharmaStoreInventory.Views.Admin"
     xmlns:trash="clr-namespace:PharmaStoreInventory.Views.Trash"
     Padding="0,50,0,0"
     NavigationPage.HasNavigationBar="False">
@@ -29,16 +30,13 @@
             <Button Text="UserView View" CommandParameter="{x:Type views:UserView}" />
             <Button Text="VerificationView" CommandParameter="{x:Type views:VerificationView}" />
             <Button Text="Branches View" CommandParameter="{x:Type views:BranchesView}" />
+            <Button Text="Users View" CommandParameter="{x:Type adminV:UsersView}" />
 
             <Label x:Name="refrece" />
             <HorizontalStackLayout Spacing="5">
-                <Button Text="AnimateBoxes" CommandParameter="{x:Type trash:AnimateBoxes}" />
                 <Button Text="Database" CommandParameter="{x:Type trash:GetDataFromDatabase}" />
                 <Button Text="Barcode Reader View" CommandParameter="{x:Type views:BarcodeReaderView}" />
             </HorizontalStackLayout>
-
-
-            <Button Text="send Email" Clicked="Button_Clicked" />
         </VerticalStackLayout>
     </ScrollView>
 

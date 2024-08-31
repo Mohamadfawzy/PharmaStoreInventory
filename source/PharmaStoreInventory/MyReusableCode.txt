@@ -20,6 +20,13 @@
         PressedScale="0.8" />
 </Button.Behaviors>
 ====================================================================================================================
+|||||||||||||||||||||||||||||||||||||||Binding outSide Collection|||||||||||||||||||||||||||||||||||||||||||||||||||
+====================================================================================================================
+<Border.GestureRecognizers>
+    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:???????ViewModel}}, Path=???????Command}" 
+                          CommandParameter="{Binding .}" />
+</Border.GestureRecognizers>
+====================================================================================================================
 ||||||||||||||||||||||||||||||||||||||||||||BindableProperty||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 ====================================================================================================================
     public static readonly BindableProperty Name_Property =
@@ -61,7 +68,7 @@ await Dispatcher.DispatchAsync(() =>
 
 //############*Fethch*##############
 //##################################
-#region Fethch Data
+#region Fetch Data
 #endregion
 
 //#########*ExectueMethods*#########

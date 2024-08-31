@@ -2,9 +2,9 @@
 
 public class FilterUsersQParam
 {
-    public bool? Status { get; set; }
-    public bool? EmailConfirmed { get; set; }
-    public UsersOrderBy OrderBy { get; set; }
-    public int? Page { get; set; }
-    public int? PageSize { get; set; }
+    public bool? IsActive { get; set; } = false;
+    public bool? EmailConfirmed { get; set; } = null;
+    public UsersOrderBy OrderBy { get; set; }= UsersOrderBy.CreateOnDescending;
+    public int? Page { get; set; } = 1;
+    public int? PageSize { get; set; } = 30;
 }

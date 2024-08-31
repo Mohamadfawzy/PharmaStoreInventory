@@ -265,15 +265,19 @@ public class UserRepository
     public async Task<List<UserInfoDto>> ReadAllUsers(FilterUsersQParam qParam)
     {
         IQueryable<UserAccount> query = context.Users;
-        if (qParam.Status is not null)
+
+        query = query.Where(x => x.Id != 1);
+
+        if (qParam.IsActive is not null)
         {
-            query = query.Where(x => x.IsActive == qParam.Status);
+            query = query.Where(x => x.IsActive == qParam.IsActive);
         }
 
         if (qParam.EmailConfirmed is not null)
         {
             query = query.Where(x => x.EmailConfirmed == qParam.EmailConfirmed);
         }
+
         if (qParam.OrderBy != UsersOrderBy.Non)
         {
             switch (qParam.OrderBy)
