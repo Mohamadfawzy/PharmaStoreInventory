@@ -10,8 +10,8 @@ namespace PharmaStoreInventory.ViewModels;
 
 public class DashboardViewModel : ObservableObject
 {
-    private readonly CommonsRepo commonRepo;
-    private readonly ProductAmountRepo productRepo;
+   // private readonly CommonsRepo commonRepo;
+    //private readonly ProductAmountRepo productRepo;
     private readonly int storeId = 1;
     private DateOnly latestInventoryDate;
     private string title = "العنوان";
@@ -22,8 +22,8 @@ public class DashboardViewModel : ObservableObject
     //     ################
     public DashboardViewModel()
     {
-        commonRepo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<CommonsRepo>()!;
-        productRepo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<ProductAmountRepo>()!;
+        //commonRepo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<CommonsRepo>()!;
+        //productRepo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<ProductAmountRepo>()!;
         StoresModelList = [];
         storeId = AppPreferences.StoreId;
         Task.Run(OnStart);
@@ -31,15 +31,8 @@ public class DashboardViewModel : ObservableObject
 
     private async Task OnStart()
     {
-        //var t1 = Task.Delay(4000);
-        await GetLatestInventoryHistory();
         await GetAllStores();
-        //await GetCountAllProducts();
-        //await GetCountAllExpiredProducts();
-        //await GetCountAllProductsWillExpireAfter3Months();
-        //await GetCountAllIsInventoryed();
-        //await Task.WhenAll(t1, t2,t3);
-
+        await GetLatestInventoryHistory();
         await GetProductCountsAsync();
     }
 
@@ -156,58 +149,6 @@ public class DashboardViewModel : ObservableObject
             await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
         }
     }
-
-    private async Task GetCountAllProducts()
-    {
-        try
-        {
-            CountAllProducts = await productRepo.GetCountAllProductsAsync(storeId);
-            OnPropertyChanged(nameof(CountAllProducts));
-        }
-        catch (Exception ex)
-        {
-            await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
-        }
-    }
-
-    private async Task GetCountAllExpiredProducts()
-    {
-        try
-        {
-            CountAllExpiredProducts = await productRepo.GetCountAllExpiredProducts(storeId);
-            OnPropertyChanged(nameof(CountAllExpiredProducts));
-        }
-        catch (Exception ex)
-        {
-            await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
-        }
-    }
-
-    private async Task GetCountAllProductsWillExpireAfter3Months()
-    {
-        try
-        {
-            CountAllProductsWillExpireAfter3Months = await productRepo.GetCountAllProductsWillExpireAfter3Months(storeId);
-            OnPropertyChanged(nameof(CountAllProductsWillExpireAfter3Months));
-        }
-        catch (Exception ex)
-        {
-            await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
-        }
-    }
-
-    private async Task GetCountAllIsInventoryed()
-    {
-        try
-        {
-            CountAllIsInventoryed = await productRepo.GetCountAllIsInventoryed(storeId);
-            OnPropertyChanged(nameof(CountAllIsInventoryed));
-        }
-        catch (Exception ex)
-        {
-            await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
-        }
-    }
     #endregion
 
     // exectued method
@@ -221,8 +162,63 @@ public class DashboardViewModel : ObservableObject
         StoreName = item.Name;
     }
 
-   
 
 
-    
+    #region Deleted
+    /*
+    private async Task GetCountAllProducts()
+    {
+        try
+        {
+            //CountAllProducts = await productRepo.GetCountAllProductsAsync(storeId);
+            OnPropertyChanged(nameof(CountAllProducts));
+        }
+        catch (Exception ex)
+        {
+            await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
+        }
+    }
+
+    private async Task GetCountAllExpiredProducts()
+    {
+        try
+        {
+            //CountAllExpiredProducts = await productRepo.GetCountAllExpiredProducts(storeId);
+            OnPropertyChanged(nameof(CountAllExpiredProducts));
+        }
+        catch (Exception ex)
+        {
+            await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
+        }
+    }
+
+    private async Task GetCountAllProductsWillExpireAfter3Months()
+    {
+        try
+        {
+            //CountAllProductsWillExpireAfter3Months = await productRepo.GetCountAllProductsWillExpireAfter3Months(storeId);
+            OnPropertyChanged(nameof(CountAllProductsWillExpireAfter3Months));
+        }
+        catch (Exception ex)
+        {
+            await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
+        }
+    }
+
+    private async Task GetCountAllIsInventoryed()
+    {
+        try
+        {
+            //CountAllIsInventoryed = await productRepo.GetCountAllIsInventoryed(storeId);
+            OnPropertyChanged(nameof(CountAllIsInventoryed));
+        }
+        catch (Exception ex)
+        {
+            await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
+        }
+    }
+
+    */
+    #endregion
+
 }

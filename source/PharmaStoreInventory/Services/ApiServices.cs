@@ -24,6 +24,7 @@ public static class ApiServices
     {
         return await RequestProvider.GetAllAsync<Stores>(AppValues.LocalBaseURI + $"/Commons/stores");
     }
+
     public static async Task<Result<InventoryHistory>?> StartNewInventoryAsync(StartNewInventoryHistoryDto model)
     {
         return await RequestProvider.PostSingleAsync<Result<InventoryHistory>, StartNewInventoryHistoryDto>(AppValues.LocalBaseURI + $"/Commons/start_new_inventory", model);
@@ -84,11 +85,13 @@ public static class ApiServices
     }
     #endregion product
 
-    public static async Task<Result<EmployeeDto?>?> EmpLogin(EmpLogin model)
+    public static async Task<Result<EmployeeDto?>?> EmpLogin(LoginDto model)
     {
         var url = AppValues.LocalBaseURI + "/Employee/login";
-        return await RequestProvider.PostSingleAsync<Result<EmployeeDto?>, EmpLogin>(url, model);
+        return await RequestProvider.PostSingleAsync<Result<EmployeeDto?>, LoginDto>(url, model);
     }
+
+
 
 
     #region User
@@ -119,9 +122,17 @@ public static class ApiServices
         var url = AppValues.HostBaseURI + "/userAuth/login-email";
         return await RequestProvider.PostSingleAsync<Result<UserLoginResponseDto>?, UserLoginRequestDto>(url, model);
     }
+
+    public static async Task<Result?> UserChangePasswordAsync(ChangePasswordRequest model)
+    {
+        var url = AppValues.HostBaseURI + "/userAuth/change-password";
+        return await RequestProvider.PutAsync<Result, ChangePasswordRequest>(url, model);
+    }
     #endregion
 
-    #region Admin
+
+
+    #region AdminUser
     public static async Task<List<UserInfoDto>?> GetAllUsersAsync(FilterUsersQParam query)
     {
         var queryParams = new Dictionary<string, string?>
@@ -149,6 +160,12 @@ public static class ApiServices
         var url = AppValues.HostBaseURI + "/admin/activate-user-account" + await BuildQueryString(queryParams);
 
         return await RequestProvider.PutByQueryParamsAsync<Result>(url);
+    }
+
+    public static async Task<Result<UserLoginResponseDto>?> AdminLoginByEmailAsync(LoginDto model)
+    {
+        var url = AppValues.HostBaseURI + "/admin/login";
+        return await RequestProvider.PostSingleAsync<Result<UserLoginResponseDto>, LoginDto>(url, model);
     }
     #endregion
 

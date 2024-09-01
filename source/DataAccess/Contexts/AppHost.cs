@@ -13,7 +13,8 @@ public class AppHost: DbContext
 
     public AppHost()
     {
-        connectionString = $"Data Source=localhost; Initial Catalog=mosoftphram;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
+        //connectionString = $"Data Source=localhost; Initial Catalog=mosoftphram;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
+        connectionString = $"workstation id=msoftStock.mssql.somee.com;packet size=4096;user id=mfawzyH_SQLLogin_1;pwd=kd35ziwgqs;data source=msoftStock.mssql.somee.com;persist security info=False;initial catalog=msoftStock;TrustServerCertificate=True";
     }
 
     public DbSet<UserAccount> Users { get; set; }

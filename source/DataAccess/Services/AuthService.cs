@@ -1,5 +1,6 @@
 ﻿using DataAccess.DomainModel;
 using DataAccess.DomainModel.QueryParams;
+using DataAccess.Dtos;
 using DataAccess.Dtos.UserDtos;
 using DataAccess.Entities;
 using DataAccess.Helper;
@@ -16,52 +17,65 @@ public class AuthService(UserRepository _repo)
 
 
     #region Admin Section
-    public async Task<Result> AdminLoginByEmailAsync(string email, string password)
+    public async Task<Result<UserLoginResponseDto>> AdminLoginByEmailAsync(LoginDto model)
     {
         bool isPasswordCorrect;
         // Check if email and password are provided
-        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+        if (string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password))
         {
-            return Result.Failure("Email or password is missing.");
+            return Result<UserLoginResponseDto>.Failure("Email or password is missing.");
         }
 
         try
         {
-            // All user account by email
-            var userAccount = await repo.FindUserByEmailAsync(email.ToLower()).ConfigureAwait(false);
+            // find user account by email
+            var userAccount = await repo.FindUserByEmailAsync(model.Username.ToLower()).ConfigureAwait(false);
             if (userAccount == null)
             {
-                return Result.Failure("admin Invalid email or password.");
+                return Result<UserLoginResponseDto>.Failure("admin Invalid email");
             }
 
-            // If admin is the first time he will log in
-            if (userAccount.PasswordHash == password)
+            // If admin is the first time he will login
+            if (userAccount.PasswordHash == model.Password)
             {
-                var result = await repo.UpdatePasswordByEmailAsync(email, password).ConfigureAwait(false);
+                var result = await repo.UpdatePasswordByEmailAsync(model.Username, model.Password).ConfigureAwait(false);
                 isPasswordCorrect = result.IsSuccess;
 
             }
             else
             {
                 // Verify the provided password with the stored password hash
-                isPasswordCorrect = await hasher.VerifyPasswordAsync(password, userAccount.PasswordHash).ConfigureAwait(false);
+                isPasswordCorrect = await hasher.VerifyPasswordAsync(model.Password, userAccount.PasswordHash).ConfigureAwait(false);
             }
 
             if (isPasswordCorrect)
             {
+                // Map user account to UserLoginResponseDto
+                var loginRes = new UserLoginResponseDto
+                {
+                    Id = userAccount.Id,
+                    Email = userAccount.Email,
+                    EmailConfirmed = userAccount.EmailConfirmed,
+                    FullName = userAccount.FullName,
+                    PharmcyName = userAccount.PharmacyName,
+                    PhoneNumber = userAccount.PhoneNumber,
+                    LockoutEnd = userAccount.LockoutEnd = DateTimeOffset.UtcNow.AddDays(7),
+                    IsActive = userAccount.IsActive,
+                };
+
                 // Return successful result with user login response and welcome message
-                return Result.Success($"Welcome {userAccount.FullName}");
+                return Result<UserLoginResponseDto>.Success(loginRes, $"Welcome {userAccount.FullName}");
             }
             else
             {
                 // Increment AccessFailedCount if the password is incorrect
                 await repo.IncrementAccessFailedCountAsync(userAccount).ConfigureAwait(false);
-                return Result.Failure("Invalid password.");
+                return Result<UserLoginResponseDto>.Failure("Invalid password.");
             }
         }
         catch (Exception ex)
         {
-            return Result.Exception(ex.Message);
+            return Result<UserLoginResponseDto>.Failure(ex.Message);
         }
     }
 

@@ -1,9 +1,10 @@
 ﻿namespace PharmaStoreInventory.Helpers;
 internal static class AppValues
 {
+    public static string UserFileName = FileSystem.AppDataDirectory + "/user.json";
     public static string BranchsFileName = FileSystem.AppDataDirectory + "/branchs.json";
     public static string XBranchsFileName = FileSystem.AppDataDirectory + "/XBarchs.xml";
-    public static string Language { get; set; } = string.Empty;
+    public static string Language { get; set; } = "ar";
     public static string VerificationCode { get; set; } = string.Empty;
     //public static string? NavigationProductCode { get; set; } = null;
     public static string VerificationCodeFromUser { get; set; } = null!;

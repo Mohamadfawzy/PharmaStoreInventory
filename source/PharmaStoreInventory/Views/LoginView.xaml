@@ -36,8 +36,8 @@
             <!--  Inputs  -->
             <VerticalStackLayout x:Name="inputsContainer" Padding="20,0">
                 <template:AnimatedInput
-                    InputText="mohamedfawzy733@yahoo.com"
                     x:Name="email"
+                    InputText="user1@mosoft.com"
                     ErrorMessage="أدخل الايميل أور قم الهاتف بشكل صحيح"
                     InputPlaceholder="أدخل الايميل أو رقم الهاتف" />
 
@@ -45,7 +45,7 @@
                     x:Name="password"
                     IsPassword="True"
                     HasEyeIcon="True"
-                    InputText="1"
+                    InputText="123456"
                     InputPlaceholder="{x:Static res:AppResources.Login_Password}" />
             </VerticalStackLayout>
 
@@ -63,7 +63,10 @@
                     <!--  label  -->
                     <Label Text="{x:Static res:AppResources.Login_DoYouHaveAcount}" VerticalOptions="Center" />
                     <!--  login button  -->
-                    <Button Style="{StaticResource Anchor}" Text="{x:Static res:AppResources.Login_SignUp}">
+                    <Button
+                        Style="{StaticResource Anchor}"
+                        Text="{x:Static res:AppResources.Login_SignUp}"
+                        Clicked="Button_Clicked">
                         <Button.Behaviors>
                             <toolkit:TouchBehavior
                                 DefaultAnimationDuration="250"

@@ -65,4 +65,5 @@ public enum InputType
     Phone = 1,
     Email = 2,
     Empty = 3,
+    Admin = 4
 }

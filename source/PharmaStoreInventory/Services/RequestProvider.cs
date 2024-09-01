@@ -8,14 +8,17 @@ namespace PharmaStoreInventory.Services;
 public static class RequestProvider
 {
     // request.Headers.Add("DbConnectionString", Helpers.AppValues.ConnectionString);
-
+    private static short timeoutInSeconds = 10;
     public static async Task<List<TResult>?> GetAllAsync<TResult>(string uri)
     {
         try
         {
+
             var client = new HttpClient();
+            client.Timeout = TimeSpan.FromSeconds(timeoutInSeconds);
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
             var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
 
             List<TResult>? result = await response.Content.ReadFromJsonAsync<List<TResult>?>();
             return result;
@@ -32,6 +35,7 @@ public static class RequestProvider
         try
         {
             var client = new HttpClient();
+            client.Timeout = TimeSpan.FromSeconds(timeoutInSeconds);
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
             var response = await client.SendAsync(request);
 
@@ -44,43 +48,6 @@ public static class RequestProvider
             return default;
         }
     }
-
-    public static async Task<string?> GetStringAsync(string uri)
-    {
-        try
-        {
-            var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Get, uri);
-            var response = await client.SendAsync(request);
-            string result = await response.Content.ReadAsStringAsync();
-            return result;
-        }
-        catch (Exception ex)
-        {
-            await Helpers.Alerts.DisplaySnackbar($"{nameof(RequestProvider)}:{nameof(GetStringAsync)}, Message:{ex.Message}");
-            return default;
-        }
-    }
-
-    //public static async Task<TResult?> PostSingleAsync<TResult, TTake>(string uri, TTake data)
-    //{
-    //    try
-    //    {
-    //        var client = new HttpClient();
-    //        var request = new HttpRequestMessage(HttpMethod.Post, uri);
-    //        var content = new StringContent(JsonSerializer.Serialize(data), null, "application/json");
-    //        request.Content = content;
-    //        var response = await client.SendAsync(request);
-
-    //        TResult? result = await response.Content.ReadFromJsonAsync<TResult?>();
-    //        return result;
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        await Helpers.Alerts.DisplaySnackbar($"{nameof(RequestProvider)}:{nameof(PostSingleAsync)}, Message:{ex.Message}");
-    //        return default;
-    //    }
-    //}
 
     public static async Task<TResult?> PostSingleAsync<TResult, TTake>(string uri, TTake data)
     {

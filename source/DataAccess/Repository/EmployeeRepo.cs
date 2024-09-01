@@ -14,7 +14,7 @@ public class EmployeeRepo
         context = new();
     }
 
-    public async Task<Result<EmployeeDto?>> EmpLogin(EmpLogin emp)
+    public async Task<Result<EmployeeDto?>> EmpLogin(LoginDto emp)
     {
         try
         {

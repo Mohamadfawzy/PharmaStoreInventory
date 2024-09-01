@@ -106,21 +106,7 @@ public class ProductAmountRepo
                     {whereQuantity} 
                     AND (
                     p.[product_code]       = @Barcode OR
-                    p.[product_int_code]   = @Barcode OR
-                    p.[product_int_code1]  = @Barcode OR
-                    p.[product_int_code2]  = @Barcode OR
-                    p.[product_int_code3]  = @Barcode OR
-                    p.[product_int_code4]  = @Barcode OR
-                    p.[product_int_code5]  = @Barcode OR
-                    p.[product_int_code6]  = @Barcode OR
-                    p.[product_int_code7]  = @Barcode OR
-                    p.[product_int_code8]  = @Barcode OR
-                    p.[product_int_code9]  = @Barcode OR
-                    p.[product_int_code10] = @Barcode OR
-                    p.[product_int_code11] = @Barcode OR
-                    p.[product_int_code12] = @Barcode OR
-                    p.[product_int_code13] = @Barcode OR
-                    p.[product_int_code14] = @Barcode) 
+                    p.[product_int_code]   = @Barcode) 
                     order by pa.Exp_date desc ";
 
         // Define parameters to avoid SQL injection and type issues
@@ -134,6 +120,25 @@ public class ProductAmountRepo
             .SqlQueryRaw<ProductDetailsDto>(sql, parameters)
             .ToListAsync();
         return list;
+
+
+        /*
+          OR
+                    p.[product_int_code1]  = @Barcode OR
+                    p.[product_int_code2]  = @Barcode OR
+                    p.[product_int_code3]  = @Barcode OR
+                    p.[product_int_code4]  = @Barcode OR
+                    p.[product_int_code5]  = @Barcode OR
+                    p.[product_int_code6]  = @Barcode OR
+                    p.[product_int_code7]  = @Barcode OR
+                    p.[product_int_code8]  = @Barcode OR
+                    p.[product_int_code9]  = @Barcode OR
+                    p.[product_int_code10] = @Barcode OR
+                    p.[product_int_code11] = @Barcode OR
+                    p.[product_int_code12] = @Barcode OR
+                    p.[product_int_code13] = @Barcode OR
+                    p.[product_int_code14] = @Barcode
+         */
     }
 
     /*

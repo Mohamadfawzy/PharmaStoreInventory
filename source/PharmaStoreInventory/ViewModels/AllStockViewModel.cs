@@ -73,7 +73,10 @@ public class AllStockViewModel : BaseViewModel
     private async void SearchBoxTyping(string text)
     {
         if (text == "" || text == " ")
+        {
+            ProductQueryParam.Text = string.Empty;
             return;
+        }
 
         await GetFromSearch(text);
         ActivityIndicatorRunning = false;

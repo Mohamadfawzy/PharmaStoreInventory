@@ -27,7 +27,7 @@ public partial class MainPage : ContentPage
 
         BindingContext = this;
 
-        refrece.Text = $"{Helpers.AppPreferences.HostUserId},{Helpers.AppPreferences.HasBranchRegistered.ToString()}";
+        //refrece.Text = $"{Helpers.AppPreferences.HostUserId},{Helpers.AppPreferences.HasBranchRegistered.ToString()}";
 
     }
 

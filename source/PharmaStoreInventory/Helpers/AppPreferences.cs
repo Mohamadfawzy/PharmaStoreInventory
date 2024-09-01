@@ -29,6 +29,18 @@ public static class AppPreferences
         get => GetValue(nameof(IsLoggedIn), false);
         set => Preferences.Default.Set(nameof(IsLoggedIn), value);
     }
+
+    public static bool IsFirstTime
+    {
+        get => GetValue(nameof(IsFirstTime), true);
+        set => Preferences.Default.Set(nameof(IsFirstTime), value);
+    }
+    
+    public static bool IsUserActivated
+    {
+        get => GetValue(nameof(IsUserActivated), false);
+        set => Preferences.Default.Set(nameof(IsUserActivated), value);
+    }
     
     public static bool HasBranchRegistered
     {
@@ -38,10 +50,11 @@ public static class AppPreferences
 
     public static string LocalBaseURI
     {
-        get => GetValue(nameof(Port), "http://192.168.1.100:5144/api");
-        set => Preferences.Default.Set(nameof(Port), value);
+        get => GetValue(nameof(LocalBaseURI), "http://192.168.1.100:5144/api");
+        set => Preferences.Default.Set(nameof(LocalBaseURI), value);
+        
     }
-    
+
     public static string Port
     {
         get => GetValue(nameof(Port), "1433");
@@ -56,7 +69,7 @@ public static class AppPreferences
 
     public static string GetDeviceID()
     {
-        try
+        try 
         {
             bool hasKey = Preferences.Default.ContainsKey("DeviceId");
             if (hasKey)

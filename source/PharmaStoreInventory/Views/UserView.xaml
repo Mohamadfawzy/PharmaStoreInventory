@@ -10,13 +10,7 @@
     xmlns:help="clr-namespace:PharmaStoreInventory.Helpers"
     x:Name="ThisPage"
     Title="UserView"
-    NavigationPage.HasNavigationBar="False"
-    NavigatedFrom="ContentPage_NavigatedFrom"
-    NavigatedTo="ContentPage_NavigatedTo"
-    NavigatingFrom="ContentPage_NavigatingFrom"
-    Disappearing="ContentPage_Disappearing"
-    Loaded="ContentPage_Loaded"
-    Unloaded="ContentPage_Unloaded">
+    NavigationPage.HasNavigationBar="False">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -32,24 +26,41 @@
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
-    <Grid>
-        <ScrollView VerticalOptions="FillAndExpand">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!--  BackButton  -->
+        <Button
+            Margin="15"
+            Padding="0"
+            HeightRequest="30"
+            WidthRequest="30"
+            HorizontalOptions="Start"
+            VerticalOptions="Start"
+            CornerRadius="20"
+            Clicked="BackButtonClicked"
+            FontFamily="{StaticResource IconFont}"
+            Text="{x:Static help:IconFontManager.ArrowIcon}" />
+
+        <Button
+            x:Name="saveButton"
+            Margin="15"
+            Padding="0"
+            Text="حفظ"
+            IsVisible="False"
+            MaximumHeightRequest="30"
+            VerticalOptions="Center"
+            FontSize="10"
+            HorizontalOptions="End"
+            Clicked="saveButton_Clicked" />
+
+        <ScrollView Grid.Row="1" VerticalOptions="FillAndExpand">
             <StackLayout
                 x:Name="container"
                 Padding="20,30"
                 VerticalOptions="FillAndExpand"
                 Background="White">
-                <!--  BackButton  -->
-                <Button
-                    Padding="0"
-                    HeightRequest="30"
-                    WidthRequest="30"
-                    HorizontalOptions="Start"
-                    VerticalOptions="Start"
-                    CornerRadius="20"
-                    Clicked="Button_Clicked_1"
-                    FontFamily="{StaticResource IconFont}"
-                    Text="{x:Static help:IconFontManager.ArrowIcon}" />
+
 
                 <!--  Acount Icon  -->
                 <Label
@@ -70,40 +81,31 @@
                         FontFamily="{StaticResource IconFont}"
                         VerticalTextAlignment="Center">
                         <Label.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                            <TapGestureRecognizer Tapped="AllowNameEditingTapped" />
                         </Label.GestureRecognizers>
                     </Label>
                     <Entry
                         x:Name="nameEntry"
                         Text="محمد سعيد محمود"
                         IsReadOnly="True" />
-                    <Button
-                        x:Name="saveButton"
-                        Padding="0"
-                        Text="حفظ"
-                        IsVisible="False"
-                        MaximumHeightRequest="30"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center"
-                        FontSize="10"
-                        Clicked="saveButton_Clicked" />
                 </HorizontalStackLayout>
 
                 <!--  Email Group  -->
                 <Label Text="البريد الالكتروني" FontSize="{StaticResource Body}" />
-                <Entry Text="email@aia.cm" />
+                <Entry x:Name="email" IsReadOnly="True" />
                 <BoxView Style="{StaticResource SeparatorStyle}" />
 
                 <!--  PharmaName Group  -->
                 <Label Text="اسم الصيدلية" FontSize="{StaticResource Body}" />
-                <Entry Text="صيدلية المتوكل علي الله" />
+                <Entry x:Name="pharmaName" IsReadOnly="True" />
                 <BoxView Style="{StaticResource SeparatorStyle}" />
 
                 <!--  Phone Group  -->
                 <Label Text="رقم الهاتف" FontSize="{StaticResource Body}" />
-                <Entry Text="051505451054" />
+                <Entry x:Name="phone" IsReadOnly="True" />
                 <BoxView Style="{StaticResource SeparatorStyle}" />
 
+                <!--  =============================================================================================  -->
 
                 <!--  Branches  -->
                 <Border Style="{StaticResource MenuItemBorderStyle}">
@@ -115,7 +117,7 @@
                             FontFamily="{StaticResource IconFont}" />
                     </StackLayout>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="MenuItemTapped" CommandParameter="1" />
+                        <TapGestureRecognizer Tapped="MenuItemTapped" CommandParameter="Branches" />
                     </Border.GestureRecognizers>
                 </Border>
 
@@ -129,7 +131,7 @@
                             FontFamily="{StaticResource IconFont}" />
                     </StackLayout>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="ResetPasswordTapped" CommandParameter="2" />
+                        <TapGestureRecognizer Tapped="MenuItemTapped" CommandParameter="resetPassword" />
                     </Border.GestureRecognizers>
                 </Border>
 
@@ -143,7 +145,7 @@
                             FontFamily="{StaticResource IconFont}" />
                     </StackLayout>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="LogoutTapped" />
+                        <TapGestureRecognizer Tapped="MenuItemTapped" CommandParameter="Logout" />
                     </Border.GestureRecognizers>
                 </Border>
 
@@ -151,76 +153,86 @@
         </ScrollView>
 
         <!--  Popup  -->
-        <BoxView
+        <Grid
             x:Name="backgroundTransparence"
-            IsVisible="Hidden"
-            HorizontalOptions="Fill"
+            Grid.RowSpan="2"
+            ZIndex="2"
+            IsVisible="False"
             BackgroundColor="{StaticResource BackgroundTransparence}">
-            <BoxView.GestureRecognizers>
-                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1" />
-            </BoxView.GestureRecognizers>
-        </BoxView>
 
-        <Border
-            x:Name="popup"
-            Margin="15,0"
-            IsVisible="Hidden"
-            VerticalOptions="Center"
-            MinimumHeightRequest="350"
-            Stroke="#00C49B33"
-            StrokeThickness="1"
-            FlowDirection="RightToLeft"
-            StrokeShape="RoundRectangle 6"
-            InputTransparent="False"
-            BackgroundColor="{AppThemeBinding Light={StaticResource White},
-                                              Dark={StaticResource Primary950}}">
-            <StackLayout Padding="20">
-                <Button
-                    Margin="-10"
-                    Padding="0"
-                    BackgroundColor="White"
-                    TextColor="{StaticResource Primary}"
-                    FontSize="20"
-                    Text="{x:Static icon:IconFont.Close}"
-                    HorizontalOptions="End"
-                    Clicked="ClosePopupClicked"
-                    FontFamily="{StaticResource IconFont}" />
-                <Label
-                    Margin="0,20"
-                    Text="العنوان"
-                    HorizontalTextAlignment="Center" />
+            <Border
+                x:Name="popup"
+                Margin="10,0"
+                VerticalOptions="Center"
+                MinimumHeightRequest="350"
+                Stroke="#00C49B33"
+                StrokeThickness="1"
+                FlowDirection="RightToLeft"
+                StrokeShape="RoundRectangle 6"
+                InputTransparent="False"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Primary050},
+                                                  Dark={StaticResource Primary950}}">
+                <StackLayout Padding="20">
+                    <Button
+                        Margin="-10"
+                        Padding="0"
+                        BackgroundColor="White"
+                        TextColor="{StaticResource Primary}"
+                        FontSize="20"
+                        Text="{x:Static icon:IconFont.Close}"
+                        HorizontalOptions="End"
+                        Clicked="ClosePopupClicked"
+                        FontFamily="{StaticResource IconFont}" />
+                    <Label
+                        Margin="0,20"
+                        Text="العنوان"
+                        HorizontalTextAlignment="Center" />
+                    <VerticalStackLayout x:Name="inputsContainer">
+                        <!--  old password  -->
+                        <template:AnimatedInput
+                            x:Name="oldPassword"
+                            IsPassword="True"
+                            HasEyeIcon="True"
+                            InputPlaceholder="الرقم السري القديم" />
+                        <!--  new Password  -->
+                        <template:AnimatedInput
+                            x:Name="newPassword"
+                            IsPassword="True"
+                            HasEyeIcon="True"
+                            InputPlaceholder="الرقم السري الجديد" />
 
-                <!--  old password  -->
-                <template:AnimatedInput
-                    x:Name="oldPassword"
-                    IsPassword="True"
-                    HasEyeIcon="True"
-                    InputPlaceholder="الرقم السري القديم" />
-                <!--  new Password  -->
-                <template:AnimatedInput
-                    x:Name="password"
-                    IsPassword="True"
-                    HasEyeIcon="True"
-                    InputPlaceholder="الرقم السري الجديد" />
+                        <!--  Confirm Password  -->
+                        <template:AnimatedInput
+                            x:Name="confirmPassword"
+                            HasEyeIcon="False"
+                            InputPlaceholder="تأكيد الرقم السري">
+                            <template:AnimatedInput.Triggers>
+                                <DataTrigger
+                                    TargetType="template:AnimatedInput"
+                                    Binding="{Binding Source={x:Reference newPassword}, Path=IsPassword}"
+                                    Value="True">
+                                    <Setter Property="IsPassword" Value="True" />
+                                </DataTrigger>
+                            </template:AnimatedInput.Triggers>
+                        </template:AnimatedInput>
 
-                <!--  Confirm Password  -->
-                <template:AnimatedInput
-                    x:Name="confirmPassword"
-                    HasEyeIcon="False"
-                    InputPlaceholder="تأكيد الرقم السري">
-                    <template:AnimatedInput.Triggers>
-                        <DataTrigger
-                            TargetType="template:AnimatedInput"
-                            Binding="{Binding Source={x:Reference password}, Path=IsPassword}"
-                            Value="True">
-                            <Setter Property="IsPassword" Value="True" />
-                        </DataTrigger>
-                    </template:AnimatedInput.Triggers>
-                </template:AnimatedInput>
-            </StackLayout>
-            <Border.GestureRecognizers>
-                <TapGestureRecognizer />
-            </Border.GestureRecognizers>
-        </Border>
+                        <Button
+                            Margin="0,20,0,0"
+                            Text="حفظ"
+                            Clicked="SaveChangePasswordClicked" />
+                    </VerticalStackLayout>
+
+                </StackLayout>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Popup_HideSoftInput_Tapped" />
+                </Border.GestureRecognizers>
+            </Border>
+
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="ClosePopupTapped" />
+            </Grid.GestureRecognizers>
+        </Grid>
+        <!--  End Popup  -->
+
     </Grid>
 </ContentPage>

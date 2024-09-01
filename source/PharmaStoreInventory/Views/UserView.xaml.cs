@@ -1,93 +1,45 @@
-﻿using CommunityToolkit.Maui.Views;
-using PharmaStoreInventory.Views.Templates;
+﻿using DataAccess.DomainModel;
+using DataAccess.Dtos.UserDtos;
+using DataAccess.Services;
+using PharmaStoreInventory.Extensions;
+using PharmaStoreInventory.Helpers;
+using PharmaStoreInventory.Services;
 
 namespace PharmaStoreInventory.Views;
 
 public partial class UserView : ContentPage
 {
-    private PopupWin popupWin;
+    private JsonFileHanler jsonFileHanler;
     public UserView()
     {
         InitializeComponent();
-        popupWin = new PopupWin();
+        jsonFileHanler = new JsonFileHanler(AppValues.UserFileName);
     }
-    protected override void OnAppearing()
+
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
-        // o 1  النفيجيشن ظهر فعلا
-    }
-
-
-    private void ContentPage_Loaded(object sender, EventArgs e)
-    {
-        // o2  اتحملت فعلا
-        //var inputFaild = new AnimatedInput();
-
-
-    }
-
-
-    private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
-    {
-        // o 3  اخر حاجة
-        //refresh.IsRefreshing = true;
-
-        if (container.Count == 0)
+        var user = await jsonFileHanler.SingleObject<UserLoginResponseDto>();
+        if (user != null)
         {
-            //for (int i = 0; i < 10; i++)
-            //{
-            //var inputFaild1 = new AnimatedInput();
-            //inputFaild1.InputPlaceholder = "حقل جديد";
-            //container.Add(inputFaild1);
-            //}
+
+            nameEntry.Text = user.FullName;
+            pharmaName.Text = user.PharmcyName;
+            phone.Text = user.PhoneNumber;
+            email.Text = user.Email;
         }
-
     }
-
-
-    // ========================== c ======================================
-    protected override void OnDisappearing()
-    {
-        base.OnDisappearing();
-        // c 1
-
-    }
-
-    private void ContentPage_Disappearing(object sender, EventArgs e)
-    {
-        // c 2
-    }
-    private void ContentPage_NavigatingFrom(object sender, NavigatingFromEventArgs e)
-    {
-        // c 3 النافيجيشن بتاع الجديدة ظهر
-    }
-
-    private void ContentPage_NavigatedFrom(object sender, NavigatedFromEventArgs e)
-    {
-        // c 4
-    }
-
-    private void ContentPage_Unloaded(object sender, EventArgs e)
-    {
-        // c 5
-        //container.Clear();
-        popupWin?.Close();
-    }
-
-
-    private void Button_Clicked(object sender, EventArgs e)
-    {
-        Navigation.PushAsync(new Views.VerificationView());
-        popupWin ??= new PopupWin();
-        this.ShowPopup(popupWin);
-    }
-
-    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    private void AllowNameEditingTapped(object sender, TappedEventArgs e)
     {
         saveButton.IsVisible = true;
         editIcon.IsVisible = false;
         nameStack.BackgroundColor = Color.FromArgb("#f0f7ff");
+
         nameEntry.IsReadOnly = false;
+        // email.IsReadOnly = false;
+        pharmaName.IsReadOnly = false;
+        // phone.IsReadOnly = false;
+
         nameEntry.Focus();
 
     }
@@ -99,52 +51,96 @@ public partial class UserView : ContentPage
         nameStack.BackgroundColor = Colors.Transparent;
         nameEntry.Unfocus();
         nameEntry.IsReadOnly = true;
-    }
-
-    private void MenuItemTapped(object sender, TappedEventArgs e)
-    {
-
+        pharmaName.IsReadOnly = true;
+        //email.IsReadOnly = true;
+        //phone.IsReadOnly = true;
     }
 
     private void ClosePopupClicked(object sender, EventArgs e)
     {
         ClosePopup();
+    }
+
+    private void Popup_HideSoftInput_Tapped(object sender, TappedEventArgs e)
+    {
+        //confirmPassword.HideKeyBoard();
+        inputsContainer.ClearFocusFromAllInputs();
 
     }
 
-    private void LogoutTapped(object sender, TappedEventArgs e)
+    private void ClosePopupTapped(object sender, TappedEventArgs e)
     {
-
-    }
-
-    private void ResetPasswordTapped(object sender, TappedEventArgs e)
-    {
-        OpenPopup();
+        ClosePopup();
     }
 
     void ClosePopup()
     {
+        confirmPassword.HideKeyBoard();
         backgroundTransparence.IsVisible = false;
-        
         popup.IsVisible = false;
         oldPassword.ClearText();
-        password.ClearText();
+        newPassword.ClearText();
         confirmPassword.ClearText();
     }
 
+    private async void MenuItemTapped(object sender, TappedEventArgs e)
+    {
+        if (e.Parameter == null)
+            return;
+        string parameter = (string)e.Parameter;
+
+        if (parameter == "Branches")
+        {
+            await Navigation.PushAsync(new BranchesView());
+        }
+        else if (parameter == "resetPassword")
+        {
+            OpenPopup();
+        }
+        else if (parameter == "Logout")
+        {
+           Logout();
+        }
+        else
+        {
+
+        }
+
+    }
+
+    private void Logout()
+    {
+        if (Application.Current != null)
+            Application.Current.MainPage = new NavigationPage(new LoginView());
+        AppPreferences.IsLoggedIn = false;
+        AppPreferences.HostUserId = 0;
+    }
     void OpenPopup()
     {
         backgroundTransparence.IsVisible = true;
         popup.IsVisible = true;
     }
 
-    private void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
-    {
-        oldPassword.HideKeyBoard();
-    }
 
-    private async void Button_Clicked_1(object sender, EventArgs e)
+    private async void BackButtonClicked(object sender, EventArgs e)
     {
         await Navigation.PopAsync();
+    }
+
+    private async void SaveChangePasswordClicked(object sender, EventArgs e)
+    {
+        var model = new ChangePasswordRequest()
+        {
+            UserId = Helpers.AppPreferences.HostUserId,
+            CurrentPassword = oldPassword.InputText,
+            NewPassword = newPassword.InputText,
+            ConfirmNewPassword = confirmPassword.InputText,
+        };
+
+        var res = await ApiServices.UserChangePasswordAsync(model);
+        if (res != null && res.IsSuccess)
+        {
+            await Helpers.Alerts.DisplaySnackbar(res.Message);
+        }
     }
 }

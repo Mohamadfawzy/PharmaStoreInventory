@@ -77,7 +77,7 @@ public partial class CreateBranchView : ContentPage
 
             AppPreferences.LocalBaseURI = AppValues.LocalBaseURI = $"http://{branch.IpAddress}:{branch.Port}/api";
 
-            var emp = new EmpLogin(branch.Username, branch.Password);
+            var emp = new LoginDto(branch.Username, branch.Password);
             var result = await ApiServices.EmpLogin(emp);
             if (result != null && result.IsSuccess)
             {

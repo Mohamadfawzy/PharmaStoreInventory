@@ -15,12 +15,15 @@ public class XmlFileHandler
         Initial();
     }
 
-    public async Task Initial()
+    public async void Initial()
     {
         if (File.Exists(path))
             return;
-        XDocument xDocument = new XDocument(new XElement(rootName));
-        xDocument.Save(path);
+        await Task.Run(() =>
+        {
+            XDocument xDocument = new XDocument(new XElement(rootName));
+            xDocument.Save(path);
+        });
     }
 
     public async Task<Result> Add(BranchModel branch)

@@ -32,7 +32,7 @@ public class UsersViewModel : BaseViewModel
     #endregion
 
     //############*CommandS*############
-    #region CommandS
+    #region Commands
     public ICommand NewUsersTabCommand => new Command<string>(ExecuteNewUsersTab);
     public ICommand ActiveAcountCommand => new Command<UserInfoDto>(ExecuteActiveAcount);
     #endregion

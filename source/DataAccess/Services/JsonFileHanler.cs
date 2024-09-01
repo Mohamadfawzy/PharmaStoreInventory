@@ -4,7 +4,7 @@ namespace DataAccess.Services;
 
 public class JsonFileHanler(string fileName)
 {
-    public string FileName { get; set; } = fileName;
+    public string FullPath { get; set; } = fileName;
 
     public async Task Add<T>(T item)
     {
@@ -22,7 +22,22 @@ public class JsonFileHanler(string fileName)
         try
         {
             var writeData = JsonSerializer.Serialize(list);
-            await File.WriteAllTextAsync(FileName, writeData);
+            await File.WriteAllTextAsync(FullPath, writeData);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred while reading the file: {ex.Message}");
+            return false;
+        }
+    }
+
+    public async Task<bool> WriteToFile<T>(T item)
+    {
+        try
+        {
+            var writeData = JsonSerializer.Serialize(item);
+            await File.WriteAllTextAsync(FullPath, writeData);
             return true;
         }
         catch (Exception ex)
@@ -35,7 +50,7 @@ public class JsonFileHanler(string fileName)
     public async Task<List<T>?> ReadFromFile<T>()
     {
 
-        if (File.Exists(FileName) == false)
+        if (File.Exists(FullPath) == false)
         {
             // no file
             return default;
@@ -43,7 +58,7 @@ public class JsonFileHanler(string fileName)
 
         try
         {
-            var rawData = await File.ReadAllTextAsync(FileName);
+            var rawData = await File.ReadAllTextAsync(FullPath);
             return JsonSerializer.Deserialize<List<T>>(rawData);
         }
         catch (Exception ex)
@@ -52,12 +67,33 @@ public class JsonFileHanler(string fileName)
             return null;
         }
     }
+    
+    public async Task<T?> SingleObject<T>()
+    {
+
+        if (File.Exists(FullPath) == false)
+        {
+            // no file
+            return default;
+        }
+
+        try
+        {
+            var rawData = await File.ReadAllTextAsync(FullPath);
+            return JsonSerializer.Deserialize<T>(rawData);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred while reading the file: {ex.Message}");
+            return default;
+        }
+    }
 
     public Task<bool> Clear()
     {
         try
         {
-            File.Delete(FileName);
+            File.Delete(FullPath);
             return Task.FromResult(true);
         }
         catch (Exception ex)

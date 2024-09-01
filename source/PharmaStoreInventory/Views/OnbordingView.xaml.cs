@@ -1,4 +1,6 @@
-﻿namespace PharmaStoreInventory.Views;
+﻿using PharmaStoreInventory.Helpers;
+
+namespace PharmaStoreInventory.Views;
 
 public partial class OnbordingView : ContentPage
 {
@@ -41,6 +43,7 @@ public partial class OnbordingView : ContentPage
         else
         {
             OnBordimage.Source = "pharma1.jpg";
+            AppPreferences.IsFirstTime = false;
         }
     }
 
