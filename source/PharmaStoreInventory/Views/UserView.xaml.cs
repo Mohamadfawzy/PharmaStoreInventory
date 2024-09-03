@@ -9,16 +9,22 @@ namespace PharmaStoreInventory.Views;
 
 public partial class UserView : ContentPage
 {
-    private JsonFileHanler jsonFileHanler;
+    //private JsonFileHanler jsonFileHanler;
     public UserView()
     {
         InitializeComponent();
-        jsonFileHanler = new JsonFileHanler(AppValues.UserFileName);
+
     }
 
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
+
+    }
+    private async void ThisPage_NavigatedTo(object sender, NavigatedToEventArgs e)
+    {
+        var jsonFileHanler = new JsonFileHanler(AppValues.UserFileName);
+
         var user = await jsonFileHanler.SingleObject<UserLoginResponseDto>();
         if (user != null)
         {
@@ -29,6 +35,7 @@ public partial class UserView : ContentPage
             email.Text = user.Email;
         }
     }
+
     private void AllowNameEditingTapped(object sender, TappedEventArgs e)
     {
         saveButton.IsVisible = true;
@@ -93,13 +100,21 @@ public partial class UserView : ContentPage
         {
             await Navigation.PushAsync(new BranchesView());
         }
-        else if (parameter == "resetPassword")
+        else if (parameter == "AddBranch")
+        {
+            await Navigation.PushAsync(new CreateBranchView());
+        }
+        else if (parameter == "Cog")
+        {
+            await Navigation.PushAsync(new SettingView());
+        }
+        else if (parameter == "ResetPassword")
         {
             OpenPopup();
         }
         else if (parameter == "Logout")
         {
-           Logout();
+            Logout();
         }
         else
         {
@@ -143,4 +158,6 @@ public partial class UserView : ContentPage
             await Helpers.Alerts.DisplaySnackbar(res.Message);
         }
     }
+
+
 }

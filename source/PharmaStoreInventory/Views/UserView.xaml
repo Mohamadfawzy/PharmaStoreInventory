@@ -10,6 +10,7 @@
     xmlns:help="clr-namespace:PharmaStoreInventory.Helpers"
     x:Name="ThisPage"
     Title="UserView"
+    NavigatedTo="ThisPage_NavigatedTo"
     NavigationPage.HasNavigationBar="False">
 
     <ContentPage.Resources>
@@ -121,6 +122,20 @@
                     </Border.GestureRecognizers>
                 </Border>
 
+                <!--  Add Branch  -->
+                <Border Style="{StaticResource MenuItemBorderStyle}">
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="إضافة فرع" Style="{StaticResource MenuItemTestStyle}" />
+                        <Label
+                            VerticalTextAlignment="Center"
+                            Text="{x:Static icon:IconFont.SourceBranch}"
+                            FontFamily="{StaticResource IconFont}" />
+                    </StackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="MenuItemTapped" CommandParameter="AddBranch" />
+                    </Border.GestureRecognizers>
+                </Border>
+
                 <!--  reset password  -->
                 <Border Style="{StaticResource MenuItemBorderStyle}">
                     <StackLayout Orientation="Horizontal">
@@ -131,14 +146,28 @@
                             FontFamily="{StaticResource IconFont}" />
                     </StackLayout>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="MenuItemTapped" CommandParameter="resetPassword" />
+                        <TapGestureRecognizer Tapped="MenuItemTapped" CommandParameter="ResetPassword" />
                     </Border.GestureRecognizers>
                 </Border>
 
                 <!--  Logout  -->
                 <Border Style="{StaticResource MenuItemBorderStyle}">
                     <StackLayout Orientation="Horizontal">
-                        <Label Style="{StaticResource MenuItemTestStyle}" Text="تسجيل_خروج" />
+                        <Label Style="{StaticResource MenuItemTestStyle}" Text="الاعدادات" />
+                        <Label
+                            VerticalTextAlignment="Center"
+                            Text="{x:Static icon:IconFont.Cog}"
+                            FontFamily="{StaticResource IconFont}" />
+                    </StackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="MenuItemTapped" CommandParameter="Cog" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!--  Logout  -->
+                <Border Style="{StaticResource MenuItemBorderStyle}">
+                    <StackLayout Orientation="Horizontal">
+                        <Label Style="{StaticResource MenuItemTestStyle}" Text="تسجيل خروج" />
                         <Label
                             VerticalTextAlignment="Center"
                             Text="{x:Static icon:IconFont.Logout}"

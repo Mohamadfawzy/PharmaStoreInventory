@@ -6,6 +6,7 @@ using DataAccess.Entities;
 using DataAccess.ExtensionMethods;
 using DataAccess.Services;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace DataAccess.Repository;
 
@@ -117,6 +118,18 @@ public class UserRepository
         {
             return await context.Users
                 .FirstOrDefaultAsync(x => x.Email != null && x.Email.Equals(email));
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message + nameof(FindUserByEmailAsync));
+        }
+    }
+    
+    public async Task<bool> IsUserActiveAsync(int userId)
+    {
+        try
+        {
+            return await context.Users.AnyAsync(x => x.Id == userId && x.IsActive);
         }
         catch (Exception ex)
         {

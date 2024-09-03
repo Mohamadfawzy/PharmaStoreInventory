@@ -29,6 +29,27 @@ public static class RequestProvider
             return default;
         }
     }
+    
+    public static async Task<IEnumerable<TResult>?> GetAllIEnumerableAsync<TResult>(string uri)
+    {
+        try
+        {
+
+            var client = new HttpClient();
+            client.Timeout = TimeSpan.FromSeconds(timeoutInSeconds);
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            IEnumerable<TResult>? result = await response.Content.ReadFromJsonAsync<IEnumerable<TResult>?>();
+            return result;
+        }
+        catch (Exception ex)
+        {
+            await Helpers.Alerts.DisplaySnackbar($"{nameof(RequestProvider)}:{nameof(GetAllAsync)}\n Message:{ex.Message}");
+            return default;
+        }
+    }
 
     public static async Task<TResult?> GetSingleAsync<TResult>(string uri)
     {

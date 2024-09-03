@@ -193,6 +193,16 @@
                 </Frame.GestureRecognizers>
             </Frame>
 
+            <Frame Style="{StaticResource FrameTextIconCenter}">
+                <HorizontalStackLayout Style="{StaticResource HSLinFrame}">
+                    <Label Style="{StaticResource IconLabelMediumStyle}" Text="{x:Static icon:IconFont.Magnify}" />
+                    <Label Text="البحث في الأصناف" />
+                </HorizontalStackLayout>
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="GoToAllProductsPage" />
+                </Frame.GestureRecognizers>
+            </Frame>
+
             <!--  Search About Item  -->
             <Frame
                 Padding="20,10"

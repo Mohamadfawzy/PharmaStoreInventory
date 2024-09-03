@@ -54,7 +54,7 @@
                     InputPlaceholder="عنوان IP" />
                 <template:AnimatedInput
                     x:Name="port"
-                    InputText="1433"
+                    InputText="5144"
                     InputPlaceholder="المنفذPort" />
 
                 <template:AnimatedInput

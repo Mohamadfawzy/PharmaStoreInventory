@@ -37,7 +37,7 @@
             <VerticalStackLayout x:Name="inputsContainer" Padding="20,0">
                 <template:AnimatedInput
                     x:Name="email"
-                    InputText="user1@mosoft.com"
+                    InputText="user2@mosoft.com"
                     ErrorMessage="أدخل الايميل أور قم الهاتف بشكل صحيح"
                     InputPlaceholder="أدخل الايميل أو رقم الهاتف" />
 

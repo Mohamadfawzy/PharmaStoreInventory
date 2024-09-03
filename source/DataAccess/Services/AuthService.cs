@@ -5,6 +5,7 @@ using DataAccess.Dtos.UserDtos;
 using DataAccess.Entities;
 using DataAccess.Helper;
 using DataAccess.Repository;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DataAccess.Services;
 
@@ -88,6 +89,7 @@ public class AuthService(UserRepository _repo)
     {
         return await repo.ReadAllUsers(query);
     }
+
     public async Task<Result> AdminConfirmsUserEmail(int userId)
     {
         if (userId == 0)
@@ -116,7 +118,6 @@ public class AuthService(UserRepository _repo)
         return await repo.CreateAsync(userDto);
     }
 
-
     public async Task<Result> IsEmailOrPhoneExistAsync(string email, string phone)
     {
         // Ensure that the email does not already exist
@@ -133,6 +134,21 @@ public class AuthService(UserRepository _repo)
         return Result.Success();
     }
 
+    public async Task<Result> IsUserActiveAsync(int userId)
+    {
+        // Ensure that the email does not already exist
+        if (userId < 1)
+        {
+            return Result.Failure(ErrorCode.NullValue, "Null Value");
+        }
+        // Check if phone and password are provided
+        if (await repo.IsUserActiveAsync(userId))
+        {
+            return Result.Success($"User {userId}: is already active");
+        }
+
+        return Result.Failure(ErrorCode.UserNotActive, "user is not active");
+    }
 
     /// <summary>
     /// Authenticates a user based on their email and password.

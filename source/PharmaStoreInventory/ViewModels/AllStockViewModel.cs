@@ -72,14 +72,22 @@ public class AllStockViewModel : BaseViewModel
    
     private async void SearchBoxTyping(string text)
     {
-        if (text == "" || text == " ")
+        try
         {
-            ProductQueryParam.Text = string.Empty;
-            return;
+            if (text == "" || text == " ")
+            {
+                ProductQueryParam.Text = string.Empty;
+                return;
+            }
+
+            await GetFromSearch(text);
+            ActivityIndicatorRunning = false;
+        }
+        catch (Exception ex)
+        {
+            await Helpers.Alerts.DisplaySnackbar("SearchBoxTyping: " + ex.Message);
         }
 
-        await GetFromSearch(text);
-        ActivityIndicatorRunning = false;
     }
 
 
@@ -126,7 +134,7 @@ public class AllStockViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            await Helpers.Alerts.DisplaySnackbar(ex.Message);
+            await Helpers.Alerts.DisplaySnackbar("GetFromSearch: " + ex.Message);
         }
     }
 

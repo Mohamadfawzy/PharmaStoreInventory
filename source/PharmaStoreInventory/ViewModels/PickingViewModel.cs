@@ -22,6 +22,7 @@ public class PickingViewModel : BaseViewModel
     private string modifiedExpiaryDate = string.Empty;
     private DateTime? expiaryDateLabel;
     private Product SelectedProduct = new();
+    public ObservableCollection<Product> listOfStoc = [];
 
     //#########*Constructor_1*############
     //###########ScanMode###############
@@ -36,14 +37,19 @@ public class PickingViewModel : BaseViewModel
     //###########DataMode###############
     public PickingViewModel(string _barcode)
     {
+        //ActivityIndicatorRunning = true;
         //ListOfStoc = [];
-        Task.Run(async () => { await FetchStockDetails(_barcode); });
+        FetchStockDetails(_barcode);
     }
 
     //########*PublicProperties*########
     //##################################
     #region Public Properties
-    public ObservableCollection<Product> ListOfStoc { get; set; } = [];
+    public List<Product> ListOfStoc { get; set; } = [];
+    //{
+    //    get => listOfStoc;
+    //    set => SetProperty(ref listOfStoc, value);
+    //}
     public string NameEn { get => nameEn; set => SetProperty(ref nameEn, value); }
     public string NameAr { get => nameAr; set => SetProperty(ref nameAr, value); }
     public string Barcode
@@ -93,8 +99,9 @@ public class PickingViewModel : BaseViewModel
     //############*Fethch*##############
     //##################################
     #region Fetch Data
-    public async Task FetchStockDetails(string? productCode)
+    public async void FetchStockDetails(string? productCode)
     {
+
         ActivityIndicatorRunning = true;
         ResetValues();
         if (productCode == null)
@@ -103,27 +110,32 @@ public class PickingViewModel : BaseViewModel
         }
         try
         {
-            ListOfStoc.Clear();
-            var list = await ApiServices.GetProductDetails(false, productCode, AppPreferences.StoreId);
-            if (list != null && list.Count > 0)
+
+            //ListOfStoc.Clear();
+            await Task.Run(async () =>
             {
-                NameAr = list[0].ProductNameAr ?? "اسم المنتج غير موجود";
-                NameEn = list[0].ProductNameEn ?? "Product name not found";
-                Barcode = productCode;
-                foreach (var item in list)
+                var list = await ApiServices.GetProductDetails(false, productCode, AppPreferences.StoreId);
+                if (list != null && list.Count > 0)
                 {
-                    ListOfStoc.Add(item);
+                    NameAr = list.First().ProductNameAr ?? "اسم المنتج غير موجود";
+                    NameEn = list.First().ProductNameEn ?? "Product name not found";
+                    Barcode = productCode;
+                    //foreach (var item in list)
+                    //{
+                    //    ListOfStoc.Add(item);
+                    //}
+                    ListOfStoc = list;
+                    OnPropertyChanged(nameof(ListOfStoc));
                 }
-                //OnPropertyChanged(nameof(ListOfStoc));
-            }
-            else
-            {
-                ResetValues();
-            }
+                else
+                {
+                    ResetValues();
+                }
+            });
         }
         catch (Exception ex)
         {
-            await Helpers.Alerts.DisplaySnackbar(ex.Message, 20);
+            await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
         }
         ActivityIndicatorRunning = false;
     }
@@ -134,19 +146,27 @@ public class PickingViewModel : BaseViewModel
     #region Exectue Methods
     private async void ExecuteMakeInventory(Product item)
     {
-        var res = await ApiServices.UpdateInventoryStatus(false, "1", (int)item.ProductId, (int)item.ExpiryGroupID);
-        if (res != null && res.IsSuccess)
+        try
         {
-            item.IsInventoried = "1";
+            var res = await ApiServices.UpdateInventoryStatus(false, "1", (int)item.ProductId, (int)item.ExpiryGroupID);
+            if (res != null && res.IsSuccess)
+            {
+                item.IsInventoried = "1";
+            }
         }
+        catch (Exception ex)
+        {
+            await Alerts.DisplaySnackbar($"ExecuteMakeInventory: {ex.Message}");
+        }
+
     }
     private void ExecuteCopyProduct(Product stock)
     {
-        ListOfStoc.Add(stock);
+        //ListOfStoc(stock);
         //OnPropertyChanged(nameof(ListOfStoc));
     }
 
-    private void ExecuteSelectionChanged(Product dto)
+    public void ExecuteSelectionChanged(Product dto)
     {
         if (dto != null && dto.Quantity != null)
         {

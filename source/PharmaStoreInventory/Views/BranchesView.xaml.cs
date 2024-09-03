@@ -1,6 +1,9 @@
 using DataAccess.DomainModel;
 using DataAccess.Services;
+using PharmaStoreInventory.Helpers;
+using PharmaStoreInventory.Languages;
 using PharmaStoreInventory.Models;
+using PharmaStoreInventory.Services;
 using System.Text.Json;
 namespace PharmaStoreInventory.Views;
 public partial class BranchesView : ContentPage
@@ -16,9 +19,25 @@ public partial class BranchesView : ContentPage
         GetAllBranchs();
         //ReadFromFile();
     }
-    private void BtnContact(object sender, EventArgs e)
+    private  void BtnContact(object sender, EventArgs e)
     {
+        var btn = sender as Button;
+        if (btn != null)
+        {
+            var branch = btn.CommandParameter as BranchModel;
+            if (branch != null)
+            {
+                AppPreferences.LocalBaseURI = AppValues.LocalBaseURI = $"http://{branch.IpAddress}:{branch.Port}/api";
+                GetAllBranchs();
+            }
+        }
+    }
 
+    protected override bool OnBackButtonPressed()
+    {
+        Navigation.PushAsync(new DashboardView());
+        return true;
+        
     }
     private async void GetAllBranchs()
     {

@@ -248,155 +248,166 @@
                     JustifyContent="Start">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
-                            <SwipeView SwipeStarted="SwipeView_SwipeStarted">
+                            <VerticalStackLayout>
+                                <SwipeView SwipeStarted="SwipeView_SwipeStarted">
 
-                                <!--  Left Make Inventory  -->
-                                <SwipeView.LeftItems>
-                                    <SwipeItems Mode="Execute">
-                                        <SwipeItemView
-                                            BackgroundColor="{StaticResource Primary950}"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PickingViewModel}}, Path=MakeInventoryCommand}"
-                                            CommandParameter="{Binding .}"
-                                            Invoked="OnDoneSwipeItemInvoked">
-                                            <Label
-                                                x:Name="checkIcon"
-                                                Margin="50,0"
-                                                HorizontalOptions="Center"
-                                                FontSize="24"
-                                                TextColor="{StaticResource Primary050}"
-                                                Text="{x:Static icon:IconFont.Check}"
-                                                FontFamily="{StaticResource IconFont}"
-                                                VerticalOptions="Center" />
-                                        </SwipeItemView>
-                                    </SwipeItems>
-                                </SwipeView.LeftItems>
-
-                                <!--  Right to copy  -->
-                                <SwipeView.RightItems>
-                                    <SwipeItems>
-                                        <SwipeItemView BackgroundColor="{StaticResource Primary950}">
-                                            <Button
-                                                Margin="20,0"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PickingViewModel}}, Path=CopyProductCommand}"
+                                    <!--  Left Make Inventory  -->
+                                    <SwipeView.LeftItems>
+                                        <SwipeItems Mode="Execute">
+                                            <SwipeItemView
+                                                BackgroundColor="{StaticResource Primary950}"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PickingViewModel}}, Path=MakeInventoryCommand}"
                                                 CommandParameter="{Binding .}"
-                                                Text="نسخ"
-                                                VerticalOptions="Center" />
-                                        </SwipeItemView>
-                                    </SwipeItems>
-                                </SwipeView.RightItems>
+                                                Invoked="OnDoneSwipeItemInvoked">
+                                                <Label
+                                                    x:Name="checkIcon"
+                                                    Margin="50,0"
+                                                    HorizontalOptions="Center"
+                                                    FontSize="24"
+                                                    TextColor="{StaticResource Primary050}"
+                                                    Text="{x:Static icon:IconFont.Check}"
+                                                    FontFamily="{StaticResource IconFont}"
+                                                    VerticalOptions="Center" />
+                                            </SwipeItemView>
+                                        </SwipeItems>
+                                    </SwipeView.LeftItems>
 
-                                <!--  Content  -->
-                                <Grid
-                                    Grid.Row="2"
-                                    ColumnDefinitions="45,*,45"
-                                    RowDefinitions="*,1"
-                                    BackgroundColor="{StaticResource White}">
+                                    <!--  Right to copy  -->
+                                    <SwipeView.RightItems>
+                                        <SwipeItems>
+                                            <SwipeItemView BackgroundColor="{StaticResource Primary950}">
+                                                <Button
+                                                    Margin="20,0"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PickingViewModel}}, Path=CopyProductCommand}"
+                                                    CommandParameter="{Binding .}"
+                                                    Text="نسخ"
+                                                    VerticalOptions="Center" />
+                                            </SwipeItemView>
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>
 
-                                    <!--  checkbox icon  -->
-                                    <Label
-                                        Margin="10,0"
-                                        Text="{x:Static icon:IconFont.CheckboxBlankCircle}"
-                                        Style="{StaticResource Iconline}"
-                                        TextColor="{StaticResource Primary200}"
-                                        VerticalOptions="Center">
-                                        <Label.Triggers>
-                                            <DataTrigger
-                                                TargetType="Label"
-                                                Binding="{Binding IsInventoried}"
-                                                Value="1">
-                                                <Setter Property="Text" Value="{x:Static icon:IconFont.CheckboxMarkedCircle}" />
-                                                <Setter Property="TextColor" Value="{StaticResource Primary700}" />
-                                                <!--  Multiple Setter elements are allowed  -->
-                                            </DataTrigger>
-                                        </Label.Triggers>
-                                    </Label>
+                                    <!--  Content  -->
+                                    <Grid
+                                        Grid.Row="2"
+                                        ColumnDefinitions="45,*,45"
+                                        RowDefinitions="*,1"
+                                        BackgroundColor="{StaticResource White}">
 
-                                    <VerticalStackLayout
-                                        Grid.Column="1"
-                                        Spacing="0"
-                                        InputTransparent="True">
-
-                                        <!--  Date  -->
-                                        <!--  dd, mm, yyyy  ,StringFormat='{}{0:dd-MM-yyyy}'  -->
+                                        <!--  checkbox icon  -->
                                         <Label
-                                            Text="{Binding ExpDate, StringFormat='{}{0:dd-MM-yyyy}'}"
-                                            FlowDirection="LeftToRight"
-                                            FontSize="23"
-                                            TextColor="{StaticResource Primary800}" />
+                                            Margin="10,0"
+                                            InputTransparent="True"
+                                            Text="{x:Static icon:IconFont.CheckboxBlankCircle}"
+                                            Style="{StaticResource Iconline}"
+                                            TextColor="{StaticResource Primary200}"
+                                            VerticalOptions="Center">
+                                            <Label.Triggers>
+                                                <DataTrigger
+                                                    TargetType="Label"
+                                                    Binding="{Binding IsInventoried}"
+                                                    Value="1">
+                                                    <Setter Property="Text" Value="{x:Static icon:IconFont.CheckboxMarkedCircle}" />
+                                                    <Setter Property="TextColor" Value="{StaticResource Primary700}" />
+                                                    <!--  Multiple Setter elements are allowed  -->
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
 
-                                        <HorizontalStackLayout Spacing="15">
+                                        <VerticalStackLayout
+                                            Grid.Column="1"
+                                            InputTransparent="True"
+                                            Spacing="0">
 
-                                            <!--  Quantity  -->
-                                            <Frame
-                                                Padding="15,0"
-                                                HasShadow="False"
-                                                BackgroundColor="{StaticResource Primary100}"
-                                                CornerRadius="6">
-                                                <HorizontalStackLayout Spacing="3">
-                                                    <Label
-                                                        Margin="0"
-                                                        Padding="0"
-                                                        FontSize="22"
-                                                        Text="{Binding Quantity}"
-                                                        VerticalTextAlignment="End" />
-                                                    <Label
-                                                        Text="Stock"
-                                                        VerticalTextAlignment="End"
-                                                        FontSize="10" />
-                                                </HorizontalStackLayout>
-                                            </Frame>
-
-                                        </HorizontalStackLayout>
-                                        <StackLayout Orientation="Horizontal">
-
-                                            <!--  Distributor  -->
+                                            <!--  Date  -->
+                                            <!--  dd, mm, yyyy  ,StringFormat='{}{0:dd-MM-yyyy}'  -->
                                             <Label
-                                                Margin="0,8,0,3"
-                                                Text="{Binding VendorNameAr}"
-                                                FontSize="9"
-                                                VerticalOptions="End" />
-                                            <!--  Price  -->
-                                            <Frame
-                                                Padding="15,0"
-                                                HorizontalOptions="EndAndExpand"
-                                                HasShadow="False"
-                                                BackgroundColor="Transparent"
-                                                CornerRadius="6">
-                                                <HorizontalStackLayout Spacing="3">
-                                                    <Label
-                                                        Margin="0"
-                                                        Padding="0"
-                                                        Text="{Binding SellPrice}"
-                                                        FontSize="18"
-                                                        VerticalTextAlignment="End" />
-                                                    <Label
-                                                        Text="L.E"
-                                                        VerticalTextAlignment="End"
-                                                        FontSize="10" />
-                                                </HorizontalStackLayout>
-                                            </Frame>
-                                        </StackLayout>
-                                    </VerticalStackLayout>
-                                    <!--  Edit Icon  -->
-                                    <Label
-                                        Grid.Column="2"
-                                        Margin="0"
-                                        Text="{x:Static icon:IconFont.SquareEditOutline}"
-                                        FontFamily="{StaticResource IconFont}"
-                                        VerticalTextAlignment="Center"
-                                        HorizontalOptions="Start" />
-                                    <!--  line separator  -->
-                                    <BoxView
-                                        Grid.Row="1"
-                                        Grid.ColumnSpan="3"
-                                        HeightRequest="0.5"
-                                        Color="{StaticResource Primary300}" />
-                                    <Grid.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PickingViewModel}}, Path=SelectionChangedCommand}" CommandParameter="{Binding .}" />
-                                    </Grid.GestureRecognizers>
-                                </Grid>
-                                <!--  End Content of SwipeView  -->
-                            </SwipeView>
+                                                InputTransparent="True"
+                                                Text="{Binding ExpDate, StringFormat='{}{0:dd-MM-yyyy}'}"
+                                                FlowDirection="LeftToRight"
+                                                FontSize="23"
+                                                TextColor="{StaticResource Primary800}" />
+
+                                            <HorizontalStackLayout Spacing="15" InputTransparent="True">
+
+                                                <!--  Quantity  -->
+                                                <Frame
+                                                    Padding="15,0"
+                                                    InputTransparent="True"
+                                                    HasShadow="False"
+                                                    BackgroundColor="{StaticResource Primary100}"
+                                                    CornerRadius="6">
+                                                    <HorizontalStackLayout Spacing="3">
+                                                        <Label
+                                                            Margin="0"
+                                                            Padding="0"
+                                                            FontSize="22"
+                                                            Text="{Binding Quantity}"
+                                                            VerticalTextAlignment="End" />
+                                                        <Label
+                                                            Text="Stock"
+                                                            VerticalTextAlignment="End"
+                                                            FontSize="10" />
+                                                    </HorizontalStackLayout>
+                                                </Frame>
+
+                                            </HorizontalStackLayout>
+                                            <StackLayout Orientation="Horizontal" InputTransparent="True">
+
+                                                <!--  Distributor  -->
+                                                <Label
+                                                    Margin="0,8,0,3"
+                                                    InputTransparent="True"
+                                                    Text="{Binding VendorNameAr}"
+                                                    FontSize="9"
+                                                    VerticalOptions="End" />
+                                                <!--  Price  -->
+                                                <Frame
+                                                    Padding="15,0"
+                                                    InputTransparent="True"
+                                                    HorizontalOptions="EndAndExpand"
+                                                    HasShadow="False"
+                                                    BackgroundColor="Transparent"
+                                                    CornerRadius="6">
+                                                    <HorizontalStackLayout Spacing="3">
+                                                        <Label
+                                                            Margin="0"
+                                                            Padding="0"
+                                                            Text="{Binding SellPrice}"
+                                                            FontSize="18"
+                                                            VerticalTextAlignment="End" />
+                                                        <Label
+                                                            Text="L.E"
+                                                            VerticalTextAlignment="End"
+                                                            FontSize="10" />
+                                                    </HorizontalStackLayout>
+                                                </Frame>
+                                            </StackLayout>
+                                        </VerticalStackLayout>
+                                        <!--  Edit Icon  -->
+                                        <Label
+                                            Grid.Column="2"
+                                            Margin="0"
+                                            InputTransparent="True"
+                                            Text="{x:Static icon:IconFont.SquareEditOutline}"
+                                            FontFamily="{StaticResource IconFont}"
+                                            VerticalTextAlignment="Center"
+                                            HorizontalOptions="Start" />
+                                        <!--  line separator  -->
+                                        <BoxView
+                                            Grid.Row="1"
+                                            Grid.ColumnSpan="3"
+                                            InputTransparent="True"
+                                            HeightRequest="0.5"
+                                            Color="{StaticResource Primary300}" />
+                                        <!--  Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PickingViewModel}}, Path=SelectionChangedCommand}" CommandParameter="{Binding .}"  -->
+                                        <Grid.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="ExecuteSelectionChanged_Tapped" CommandParameter="{Binding .}" />
+                                        </Grid.GestureRecognizers>
+
+                                    </Grid>
+                                    <!--  End Content of SwipeView  -->
+                                </SwipeView>
+                            </VerticalStackLayout>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </FlexLayout>
@@ -406,6 +417,7 @@
         <!--  Popup  -->
         <Grid
             x:Name="backgroundTransparence"
+            Grid.Row="0"
             Grid.RowSpan="4"
             ZIndex="2"
             IsVisible="{Binding IsVisibleEditQuantityAndExpiryPopup}"
@@ -413,7 +425,6 @@
 
             <Border
                 x:Name="popup"
-                Grid.RowSpan="4"
                 Margin="10,0"
                 VerticalOptions="Center"
                 MinimumHeightRequest="350"

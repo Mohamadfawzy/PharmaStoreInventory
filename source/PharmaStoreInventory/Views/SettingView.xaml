@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PharmaStoreInventory.Views.SettingView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="الإعدادات">
+    <Grid Padding="10" ColumnDefinitions="Auto,*">
+
+        <StackLayout
+            Grid.ColumnSpan="2"
+            Padding="10,0"
+            Orientation="Horizontal"
+            VerticalOptions="Start"
+            BackgroundColor="{StaticResource Primary200}">
+
+            <Label
+                Text="الفلاش في جهة اليمين"
+                VerticalOptions="Center"
+                HorizontalOptions="StartAndExpand">
+                <Label.Triggers>
+                    <DataTrigger
+                        TargetType="Label"
+                        Binding="{Binding Source={x:Reference styleSwitch}, Path=IsToggled}"
+                        Value="true">
+                        <Setter Property="FontAttributes" Value="Italic, Bold" />
+                        <Setter Property="FontSize" Value="18" />
+                    </DataTrigger>
+                </Label.Triggers>
+            </Label>
+
+            <Switch
+                x:Name="styleSwitch"
+                IsToggled="False"
+                Toggled="Switch_Toggled"
+                VerticalOptions="Center">
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="On">
+                            <VisualState.Setters>
+                                <Setter Property="OnColor" Value="{StaticResource Primary400}" />
+                                <Setter Property="ThumbColor" Value="{StaticResource Primary700}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Off">
+                            <VisualState.Setters>
+                                <Setter Property="OnColor" Value="Gray" />
+                                <Setter Property="ThumbColor" Value="Gray" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+            </Switch>
+        </StackLayout>
+    </Grid>
+</ContentPage>

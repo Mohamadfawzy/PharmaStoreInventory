@@ -10,7 +10,7 @@ public class AppHost: DbContext
     {
         optionsBuilder.UseSqlServer(connectionString);
     }
-
+    
     public AppHost()
     {
         //connectionString = $"Data Source=localhost; Initial Catalog=mosoftphram;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";

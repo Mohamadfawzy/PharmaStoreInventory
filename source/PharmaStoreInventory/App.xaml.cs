@@ -36,6 +36,7 @@ public partial class App : Application
 
         UserAppTheme = AppTheme.Light;
     }
+    
 #pragma warning disable CA1822
     void GetCulture()
     {
@@ -56,7 +57,7 @@ public partial class App : Application
             DataAccess.Helper.Strings.Port = AppPreferences.Port;
             DataAccess.Helper.Strings.IP = AppPreferences.IP;
             AppValues.LocalBaseURI = AppPreferences.LocalBaseURI;
-            AppValues.LeftScanIcon = true;
+            AppValues.LeftScanIcon = AppPreferences.LeftScanIcon;
         }
         catch
         {

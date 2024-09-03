@@ -4,6 +4,8 @@ using DataAccess.Dtos;
 using DataAccess.Dtos.UserDtos;
 using DataAccess.Entities;
 using PharmaStoreInventory.Helpers;
+using PharmaStoreInventory.Models;
+using System.Collections.ObjectModel;
 
 namespace PharmaStoreInventory.Services;
 
@@ -49,7 +51,7 @@ public static class ApiServices
         return await RequestProvider.GetAllAsync<ProductDto>(url);
     }
 
-    public static async Task<List<ProductDetailsDto>?> GetProductDetails(bool hasOnlyQuantity, string productCode, int storeId)
+    public static async Task<List<ProductDetailsModel>?> GetProductDetails(bool hasOnlyQuantity, string productCode, int storeId)
     {
         var queryParams = new Dictionary<string, string?>
             {
@@ -60,7 +62,7 @@ public static class ApiServices
 
         var url = AppValues.LocalBaseURI + "/Products/product-details" + await BuildQueryString(queryParams);
 
-        return await RequestProvider.GetAllAsync<ProductDetailsDto>(url);
+        return await RequestProvider.GetAllAsync<ProductDetailsModel>(url);
     }
 
     public static async Task<Result?> UpdateInventoryStatus(bool allOneTime, string status, int productId, int expiryBatchID)
@@ -109,6 +111,13 @@ public static class ApiServices
                 { "phone",phone}
             };
         var url = AppValues.HostBaseURI + "/userAuth/email-phone-exist" + await BuildQueryString(queryParams);
+        return await RequestProvider.GetSingleAsync<Result>(url);
+    }
+
+    public static async Task<Result?> IsUserActiveAsync(int userId)
+    {
+
+        var url = AppValues.HostBaseURI + "/userAuth/user_status?userId=" + userId;
         return await RequestProvider.GetSingleAsync<Result>(url);
     }
 

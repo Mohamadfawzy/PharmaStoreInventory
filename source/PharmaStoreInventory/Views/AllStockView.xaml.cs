@@ -1,5 +1,6 @@
 using DataAccess.Dtos;
 using PharmaStoreInventory.Helpers;
+using PharmaStoreInventory.ViewModels;
 
 namespace PharmaStoreInventory.Views;
 
@@ -74,11 +75,20 @@ public partial class AllStockView : ContentPage
 
     private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
-        if (e.Parameter != null)
+        try
         {
-            var item = (ProductDto)e.Parameter;
-            //AppValues.NavigationProductCode = item.ProductCode;
-            await Navigation.PushAsync(new PickingView(item.ProductCode), true);
+            (BindingContext as AllStockViewModel)!.ActivityIndicatorRunning = true;
+            if (e.Parameter != null)
+            {
+                var item = (ProductDto)e.Parameter;
+                //AppValues.NavigationProductCode = item.ProductCode;
+                await Navigation.PushAsync(new PickingView(item.ProductCode), true);
+            }
+            (BindingContext as AllStockViewModel)!.ActivityIndicatorRunning = false;
+        }
+        catch (Exception ex)
+        {
+            await Alerts.DisplaySnackbar("TapGestureRecognizer_Tapped" + ex.Message);
         }
     }
 }

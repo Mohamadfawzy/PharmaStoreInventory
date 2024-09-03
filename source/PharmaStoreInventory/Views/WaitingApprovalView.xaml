@@ -11,6 +11,7 @@
     Title="WaitingApprovalView"
     BackgroundColor="White"
     FlowDirection="RightToLeft"
+    NavigatedTo="ThisPage_NavigatedTo"
     NavigationPage.HasNavigationBar="False">
     <!--  21.6.2024 4:20PM  -->
 
@@ -24,30 +25,62 @@
             <Border Style="{StaticResource TitleBorderStyle}">
                 <Label Style="{StaticResource TitleCenter}" Text="مرحبا دكتور محمد أحمد" />
             </Border>
-            <Label
-                Margin="20,0"
-                Style="{StaticResource Titleline}"
-                Text="نقدر إنتظاركم ونعمل علي إعتماد استخدامكم للتطبيق  شكرا لاستخدامكم e-stock" />
 
-            <Image Source="mslogo" />
-
-            <!--<Border
-                Margin="15"
+            <!--  Refresh  -->
+            <Border
+                Margin="15,0"
                 Padding="10,3"
                 BackgroundColor="{StaticResource Primary050}"
                 StrokeThickness="1"
-                HorizontalOptions="Start"
+                HorizontalOptions="Center"
                 Stroke="{StaticResource Primary400}"
                 StrokeShape="RoundRectangle 15">
                 <StackLayout
                     Padding="15,0"
                     Orientation="Horizontal"
                     Spacing="20">
-                    <Label Text="تسجيل خروج" HorizontalOptions="StartAndExpand" />
+                    <Label Text="تحديث" TextColor="{StaticResource Primary700}" />
+                    <Label Style="{StaticResource Iconline}" Text="{x:Static icon:IconFont.DatabaseRefresh}" />
+                </StackLayout>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="RefreshTapped" />
+                </Border.GestureRecognizers>
+            </Border>
+
+            <Label
+                Margin="20,0"
+                Style="{StaticResource Titleline}"
+                Text="نقدر إنتظاركم ونعمل علي إعتماد استخدامكم للتطبيق  شكرا لاستخدامكم e-stock" />
+
+            <Image
+                Source="logoicon.svg"
+                Aspect="AspectFill"
+                HeightRequest="250" />
+
+
+
+            <!--  Logout  -->
+            <Border
+                Margin="15"
+                Padding="10,3"
+                BackgroundColor="{StaticResource Primary050}"
+                StrokeThickness="1"
+                HorizontalOptions="Start"
+                Stroke="{StaticResource ErrorDarkColor}"
+                StrokeShape="RoundRectangle 15">
+                <StackLayout
+                    Padding="15,0"
+                    Orientation="Horizontal"
+                    Spacing="20">
+                    <Label Text="تسجيل خروج" TextColor="{StaticResource Primary700}" />
                     <Label Style="{StaticResource Iconline}" Text="{x:Static icon:IconFont.Logout}" />
                 </StackLayout>
-            </Border>-->
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="LogoutTapped" />
+                </Border.GestureRecognizers>
+            </Border>
 
+            <!--  Call Us  -->
             <VerticalStackLayout VerticalOptions="EndAndExpand">
                 <Label
                     Text="اتصل بنا"
@@ -59,6 +92,16 @@
                     FontSize="{StaticResource VerySmall}"
                     TextColor="{StaticResource AccentDarkColor}"
                     HorizontalOptions="Center" />
+                <VerticalStackLayout.Behaviors>
+                    <toolkit:TouchBehavior
+                        DefaultAnimationDuration="250"
+                        DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+                        PressedOpacity="0.8"
+                        PressedScale="0.9" />
+                </VerticalStackLayout.Behaviors>
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="PhoneDialerTapped" />
+                </VerticalStackLayout.GestureRecognizers>
             </VerticalStackLayout>
         </StackLayout>
     </ScrollView>

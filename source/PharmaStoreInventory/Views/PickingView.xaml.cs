@@ -1,5 +1,6 @@
 using BarcodeScanning;
 using PharmaStoreInventory.Helpers;
+using PharmaStoreInventory.Models;
 using PharmaStoreInventory.ViewModels;
 
 namespace PharmaStoreInventory.Views;
@@ -7,9 +8,10 @@ namespace PharmaStoreInventory.Views;
 public partial class PickingView : ContentPage
 {
     readonly PickingViewModel viewModel;
-    bool IsScanMode = false;
+    readonly bool IsScanMode = false;
     public PickingView()
     {
+        Methods.AskForRequiredPermissionAsync();
         InitializeComponent();
         viewModel = new PickingViewModel();
         this.BindingContext = viewModel;
@@ -27,8 +29,6 @@ public partial class PickingView : ContentPage
     {
         if (IsScanMode)
         {
-            Methods.AskForRequiredPermissionAsync();
-
             guidesLines.IsVisible = true;
             nativeBarcode.IsVisible = true;
             nativeBarcode.CameraEnabled = true;
@@ -42,13 +42,21 @@ public partial class PickingView : ContentPage
         }
     }
 
-    protected override void OnAppearing()
+    protected async override void OnAppearing()
     {
         base.OnAppearing();
-        if (AppValues.LeftScanIcon)
+        try
         {
-            header.FlowDirection = FlowDirection.RightToLeft;
+            if (AppValues.LeftScanIcon)
+            {
+                header.FlowDirection = FlowDirection.RightToLeft;
+            }
         }
+        catch (Exception ex)
+        {
+            await Alerts.DisplaySnackbar("OnAppearing" + ex.Message);
+        }
+
     }
 
     private void CameraOnDetectionFinished(object sender, OnDetectionFinishedEventArg e)
@@ -59,7 +67,7 @@ public partial class PickingView : ContentPage
         mainContianer.SetRow(gridData, 1);
         nativeBarcode.PauseScanning = true;
         nativeBarcode.CameraEnabled = false;
-        _ = viewModel.FetchStockDetails(e.BarcodeResults[0].DisplayValue);
+        viewModel.FetchStockDetails(e.BarcodeResults[0].DisplayValue);
         // Dispatcher.DispatchAsync(() => { });
     }
 
@@ -70,7 +78,7 @@ public partial class PickingView : ContentPage
         nativeBarcode.CameraEnabled = true;
         mainContianer.SetRow(gridData, 2);
     }
-    
+
     private void CloseCameraTapped(object sender, TappedEventArgs e)
     {
         nativeBarcode.IsVisible = false;
@@ -158,5 +166,18 @@ public partial class PickingView : ContentPage
     private void Popup_HideSoftInput_Tapped(object sender, TappedEventArgs e)
     {
         entry.HideSoftInputAsync(CancellationToken.None);
+    }
+
+    private void ExecuteSelectionChanged_Tapped(object sender, TappedEventArgs e)
+    {
+
+        if (e.Parameter != null)
+        {
+            var param = e.Parameter as ProductDetailsModel;
+            if (param != null)
+            {
+                viewModel.ExecuteSelectionChanged(param);
+            }
+        }
     }
 }

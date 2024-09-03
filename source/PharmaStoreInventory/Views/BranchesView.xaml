@@ -104,6 +104,7 @@
                                     FontSize="20"
                                     Clicked="BtnContact"
                                     BackgroundColor="{StaticResource SuccessColor}"
+                                    CommandParameter="{Binding .}"
                                     VerticalOptions="Center" />
                             </Grid>
                         </Border>

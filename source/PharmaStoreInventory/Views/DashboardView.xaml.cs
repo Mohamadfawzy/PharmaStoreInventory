@@ -12,10 +12,11 @@ public partial class DashboardView : ContentPage
 		Navigation.PushAsync(new UserView());
     }
 
-    private void GoToScanPage(object sender, TappedEventArgs e)
+    private async void GoToScanPage(object sender, TappedEventArgs e)
     {
         //Navigation.PushAsync(new Views.BarcodeReaderView());
-        Navigation.PushAsync(new Views.AllStockView());
+        //await Navigation.PushAsync(new Views.AllStockView());
+        await Navigation.PushAsync(new Views.PickingView());
     }
 
     private void OpenPopupTapped(object sender, TappedEventArgs e)
@@ -40,5 +41,8 @@ public partial class DashboardView : ContentPage
         popup.IsVisible = true;
     }
 
-
+    private async void GoToAllProductsPage(object sender, TappedEventArgs e)
+    {
+        await Navigation.PushAsync(new AllStockView());
+    }
 }

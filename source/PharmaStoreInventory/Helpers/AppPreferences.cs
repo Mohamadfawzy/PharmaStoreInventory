@@ -47,6 +47,12 @@ public static class AppPreferences
         get => GetValue(nameof(HasBranchRegistered), false);
         set => Preferences.Default.Set(nameof(HasBranchRegistered), value);
     }
+    
+    public static bool LeftScanIcon
+    {
+        get => GetValue(nameof(LeftScanIcon), false);
+        set => Preferences.Default.Set(nameof(LeftScanIcon), value);
+    }
 
     public static string LocalBaseURI
     {

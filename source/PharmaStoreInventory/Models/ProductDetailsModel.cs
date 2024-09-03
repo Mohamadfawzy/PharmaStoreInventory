@@ -34,10 +34,10 @@ public class ProductDetailsModel : ObservableObject
         return new ProductDetailsModel
         {
 
-            Quantity = item.Quantity,
             Id = item.Id,
             ProductId = item.ProductId,
             StoreId = item.StoreId,
+            Quantity = item.Quantity,
             ExpiryGroupID = item.ExpiryGroupID,
             ProductNameAr = item.ProductNameAr,
             ProductNameEn = item.ProductNameEn,
@@ -51,4 +51,15 @@ public class ProductDetailsModel : ObservableObject
 
         };
     }
+
+    public static IEnumerable<ProductDetailsModel> ToList1(IEnumerable<ProductDetailsDto> list)
+    {
+        //var newList = new List<ProductDetailsModel>();
+        foreach (var item in list)
+        {
+            yield return item;
+        }
+        // return newList;
+    }
+
 }

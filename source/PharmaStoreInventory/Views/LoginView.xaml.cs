@@ -34,12 +34,12 @@ public partial class LoginView : ContentPage
         try
         {
             Result<UserLoginResponseDto>? res = null;
-            Helpers.Alerts.DisplayActivityIndicator(this);
+            Alerts.DisplayActivityIndicator(this);
             InputType check = CheckInputs();
 
             if (check == InputType.Empty)
             {
-                Helpers.Alerts.CloseActivityIndicator();
+                Alerts.CloseActivityIndicator();
                 return;
             }
 
@@ -48,7 +48,7 @@ public partial class LoginView : ContentPage
                 EmailOrPhone = email.InputText,
                 Password = password.InputText,
                 IsNewDevice = false,
-                DviceId = Helpers.AppPreferences.GetDeviceID()
+                DviceId = AppPreferences.GetDeviceID()
             };
 
             if (check == InputType.Phone)
@@ -70,21 +70,26 @@ public partial class LoginView : ContentPage
 
             if (res == null)
             {
-                _ = Helpers.Alerts.DisplaySnackbar("Something went wrong");
-                Helpers.Alerts.CloseActivityIndicator();
+                _ = Alerts.DisplaySnackbar("Something went wrong");
+                Alerts.CloseActivityIndicator();
                 return;
             }
 
+            if(res.Data != null)
+            {
+                AppPreferences.HostUserId = res.Data.Id;
+            }
+           // = res.Data != null ? res.Data.Id : 0;
 
-            // navigation
-            _ = Helpers.Alerts.DisplaySnackbar(res.Message);
+            // Navigation
+            _ = Alerts.DisplaySnackbar(res.Message);
             if (res.IsSuccess)
             {
                 if (check == InputType.Admin)
                 {
                     await Navigation.PushAsync(new UsersView());
                 }
-                else if (Helpers.AppPreferences.HasBranchRegistered)
+                else if (AppPreferences.HasBranchRegistered)
                 {
                     await Navigation.PushAsync(new DashboardView());
                 }
@@ -92,15 +97,17 @@ public partial class LoginView : ContentPage
                 {
                     await Navigation.PushAsync(new CreateBranchView());
                 }
-
-                Helpers.AppPreferences.IsLoggedIn = true;
-                Helpers.AppPreferences.HostUserId = res.Data != null ? res.Data.Id : 0;
                 Navigation.RemovePage(this);
+
+                // Save status in AppPreferences
+                AppPreferences.IsLoggedIn = true;
+                AppPreferences.IsUserActivated = true;
+                
+                // Save user data in json file
                 if (res.Data != null)
                 {
                     await jsonFileHanler.WriteToFile(res.Data);
                 }
-                AppPreferences.IsUserActivated = true;
             }
             else
             {
@@ -108,10 +115,12 @@ public partial class LoginView : ContentPage
                 {
                     await Navigation.PushAsync(new WaitingApprovalView());
                 }
+                AppPreferences.IsLoggedIn = true;
+                AppPreferences.IsUserActivated = false;
             }
 
             //end try
-            Helpers.Alerts.CloseActivityIndicator();
+            Alerts.CloseActivityIndicator();
         }
 
         catch
