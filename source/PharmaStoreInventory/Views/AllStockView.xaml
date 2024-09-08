@@ -301,7 +301,7 @@
                     Binding="{Binding BottomSheet}"
                     Value="true">
                     <DataTrigger.EnterActions>
-                        <trigger:OpenBottomSheetTrigger StartsFrom="0" />
+                        <trigger:OpenBottomSheetTrigger />
                     </DataTrigger.EnterActions>
                 </DataTrigger>
 
@@ -310,7 +310,7 @@
                     Binding="{Binding BottomSheet}"
                     Value="false">
                     <DataTrigger.EnterActions>
-                        <trigger:CloseBottomSheetTrigger StartsFrom="0" />
+                        <trigger:CloseBottomSheetTrigger />
                     </DataTrigger.EnterActions>
                 </DataTrigger>
 

@@ -182,6 +182,9 @@
 	  <MauiXaml Update="Views\Templates\CLInPickingTemplate.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Templates\NotificationTemplate.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Templates\PopupWin.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

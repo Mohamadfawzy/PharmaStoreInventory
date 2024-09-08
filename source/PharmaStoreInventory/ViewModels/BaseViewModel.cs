@@ -13,7 +13,15 @@ public class BaseViewModel : ObservableObject
         set => SetProperty(ref activityIndicatorRunning, value);
     }
     
-    private bool isEmptyColleciton = false;
+    private bool isRefreshing = false;
+
+    public bool IsRefreshing
+    {
+        get => isRefreshing;
+        set => SetProperty(ref isRefreshing, value);
+    }
+    
+    private bool isEmptyColleciton = true;
 
     public bool IsEmptyColleciton
     {

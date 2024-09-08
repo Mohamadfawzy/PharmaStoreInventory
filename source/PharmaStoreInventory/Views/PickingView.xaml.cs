@@ -59,16 +59,21 @@ public partial class PickingView : ContentPage
 
     }
 
-    private void CameraOnDetectionFinished(object sender, OnDetectionFinishedEventArg e)
+    private async void CameraOnDetectionFinished(object sender, OnDetectionFinishedEventArg e)
     {
-        if (e.BarcodeResults.Length <= 0)
-            return;
-        gridData.IsVisible = true;
-        mainContianer.SetRow(gridData, 1);
-        nativeBarcode.PauseScanning = true;
-        nativeBarcode.CameraEnabled = false;
-        viewModel.FetchStockDetails(e.BarcodeResults[0].DisplayValue);
-        // Dispatcher.DispatchAsync(() => { });
+        await Dispatcher.DispatchAsync(() =>
+        {
+            if (e.BarcodeResults.Length <= 0)
+                return;
+            gridData.IsVisible = true;
+            mainContianer.SetRow(gridData, 1);
+            nativeBarcode.PauseScanning = true;
+            nativeBarcode.CameraEnabled = false;
+            Task.Run(() => { viewModel.FetchStockDetails(e.BarcodeResults[0].DisplayValue); });
+            //viewModel.FetchStockDetails(e.BarcodeResults[0].DisplayValue);
+            // Dispatcher.DispatchAsync(() => { });
+            
+        });
     }
 
     private void NewScanTapped(object sender, TappedEventArgs e)
@@ -92,11 +97,7 @@ public partial class PickingView : ContentPage
         nativeBarcode.TorchOn = !nativeBarcode.TorchOn;
     }
 
-    private void TapToScan(object sender, TappedEventArgs e)
-    {
-        //nativeBarcode.PauseScanning = false;
-        //nativeBarcode.TapToFocusEnabled = true;
-    }
+
 
     private void OnDoneSwipeItemInvoked(object sender, EventArgs e)
     {
@@ -126,42 +127,11 @@ public partial class PickingView : ContentPage
         ClosePopup();
     }
 
-    //private void Collection_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    //{
-    //    if (collection.SelectedItem == null) return;
-    //    if (collection.SelectedItem != null)
-    //    {
-    //        //popup.IsVisible = true;
-    //        //backgroundTransparence.IsVisible = true;
-    //    }
-    //    collection.SelectedItem = null;
-    //}
-
-    private void Save_Clicked(object sender, EventArgs e)
-    {
-        ClosePopup();
-    }
-
-
-    private void OpenPopupTapped(object sender, TappedEventArgs e)
-    {
-        OpenPopup();
-    }
-
     void ClosePopup()
     {
         viewModel.IsVisibleEditQuantityAndExpiryPopup = false;
         entry.HideSoftInputAsync(CancellationToken.None);
     }
-
-    void OpenPopup()
-    {
-        popup.IsVisible = true;
-        backgroundTransparence.IsVisible = true;
-        nativeBarcode.PauseScanning = true;
-    }
-
-
 
     private void Popup_HideSoftInput_Tapped(object sender, TappedEventArgs e)
     {
@@ -180,4 +150,44 @@ public partial class PickingView : ContentPage
             }
         }
     }
+
+    //Deleted
+
+    //private void TapToScan(object sender, TappedEventArgs e)
+    //{
+    //    //nativeBarcode.PauseScanning = false;
+    //    //nativeBarcode.TapToFocusEnabled = true;
+    //}
+
+
+    //private void Collection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    //{
+    //    if (collection.SelectedItem == null) return;
+    //    if (collection.SelectedItem != null)
+    //    {
+    //        //popup.IsVisible = true;
+    //        //backgroundTransparence.IsVisible = true;
+    //    }
+    //    collection.SelectedItem = null;
+    //}
+
+    //private void Save_Clicked(object sender, EventArgs e)
+    //{
+    //    ClosePopup();
+    //}
+
+
+    //private void OpenPopupTapped(object sender, TappedEventArgs e)
+    //{
+    //    OpenPopup();
+    //}
+
+
+    //void OpenPopup()
+    //{
+    //    popup.IsVisible = true;
+    //    backgroundTransparence.IsVisible = true;
+    //    nativeBarcode.PauseScanning = true;
+    //}
+
 }

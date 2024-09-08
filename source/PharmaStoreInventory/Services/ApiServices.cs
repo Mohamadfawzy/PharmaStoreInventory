@@ -1,9 +1,11 @@
-﻿using DataAccess.DomainModel;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using DataAccess.DomainModel;
 using DataAccess.DomainModel.QueryParams;
 using DataAccess.Dtos;
 using DataAccess.Dtos.UserDtos;
 using DataAccess.Entities;
 using PharmaStoreInventory.Helpers;
+using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.Models;
 using System.Collections.ObjectModel;
 
@@ -24,6 +26,8 @@ public static class ApiServices
 
     public static async Task<List<Stores>?> GetAllStores()
     {
+        await Task.Delay(3000);
+
         return await RequestProvider.GetAllAsync<Stores>(AppValues.LocalBaseURI + $"/Commons/stores");
     }
 

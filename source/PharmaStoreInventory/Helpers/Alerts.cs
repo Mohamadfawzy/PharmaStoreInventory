@@ -1,6 +1,9 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.Messaging;
+using PharmaStoreInventory.Messages;
+using PharmaStoreInventory.Models;
 using PharmaStoreInventory.Views.Templates;
 
 namespace PharmaStoreInventory.Helpers;
@@ -32,6 +35,11 @@ public static class Alerts
         var snackbar = Snackbar.Make(text, duration: duration, visualOptions: snackbarOptions);
 
         await snackbar.Show(cancellationTokenSource.Token);
+    }
+
+    public static void SendNotification(ErrorMessage errorMessage)
+    {
+        WeakReferenceMessenger.Default.Send(new NotificationMessage(errorMessage));
     }
 
     private static Popup? popup;

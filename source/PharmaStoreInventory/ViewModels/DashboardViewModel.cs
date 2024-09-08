@@ -1,39 +1,43 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using DataAccess.DomainModel;
+﻿using DataAccess.DomainModel;
 using DataAccess.Dtos;
-using DataAccess.Repository;
 using PharmaStoreInventory.Helpers;
+using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.Models;
 using PharmaStoreInventory.Services;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 namespace PharmaStoreInventory.ViewModels;
 
-public class DashboardViewModel : ObservableObject
+public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
 {
-   // private readonly CommonsRepo commonRepo;
+    // private readonly CommonsRepo commonRepo;
     //private readonly ProductAmountRepo productRepo;
-    private readonly int storeId = 1;
+    private int storeId = 0;
     private DateOnly latestInventoryDate;
+    private SortModel? currentSelectedStore = null;
     private string title = "العنوان";
     private string storeName = "غير محدد";
     private int LatestInventoryId = 0;
+    private bool isStoresPopupVisible = false;
+    private bool isPlaceholderElementVisible = true;
 
     // #######*Constructor*#########
     //     ################
     public DashboardViewModel()
     {
-        //commonRepo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<CommonsRepo>()!;
-        //productRepo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<ProductAmountRepo>()!;
-        StoresModelList = [];
         storeId = AppPreferences.StoreId;
-        Task.Run(OnStart);
+        OnStart();
     }
 
-    private async Task OnStart()
+    private async void OnStart()
     {
-        await GetAllStores();
-        await GetLatestInventoryHistory();
-        await GetProductCountsAsync();
+        ActivityIndicatorRunning = true;
+        IsEmptyColleciton = true;
+        var t1 = GetAllStores();
+        var t2 = GetLatestInventoryHistory();
+        var t3 = GetProductCountsAsync();
+        await Task.WhenAll(t1, t2, t3);
+        ActivityIndicatorRunning = false;
     }
 
     // ########*Public Properties*########
@@ -43,27 +47,43 @@ public class DashboardViewModel : ObservableObject
         get => latestInventoryDate;
         set => SetProperty(ref latestInventoryDate, value);
     }
+    public ObservableCollection<SortModel> StoresModelList { get; set; } = [];
+    public StatisticsModel? StatisticsModel { get; set; }
+
     public string StoreName
     {
         get => storeName;
         set => SetProperty(ref storeName, value);
     }
-    public List<SortModel> StoresModelList { get; set; }
     public string Title
     {
         get => title;
         set => SetProperty(ref title, value);
     }
+
+    public bool IsStoresPopupVisible
+    {
+        get => isStoresPopupVisible;
+        set => SetProperty(ref isStoresPopupVisible, value);
+    }
+
+    public bool IsPlaceholderElementVisible
+    {
+        get => isPlaceholderElementVisible;
+        set => SetProperty(ref isPlaceholderElementVisible, value);
+    }
     public int CountAllProducts { get; set; }
     public int CountAllExpiredProducts { get; set; }
     public int CountAllProductsWillExpireAfter3Months { get; set; }
     public int CountAllIsInventoryed { get; set; }
-    public StatisticsModel? StatisticsModel { get; set; }
     #endregion
 
 
     public ICommand StoreSelectionChangedCommand => new Command<SortModel>(StoreSelectionChanged);
     public ICommand StartNewInventoryCommand => new Command(StartNewInventory);
+    public ICommand RefreshCommand => new Command(ExecuteCRefresh);
+    public ICommand ToggleStoresPopupVisibilityCommand => new Command<string>(ExecuteToggleStoresPopupVisibility);
+    public ICommand SubmitStoreSelectionChangedCommand => new Command(ExecuteSubmitStoreSelectionChanged);
 
 
     #region Get Data
@@ -71,8 +91,10 @@ public class DashboardViewModel : ObservableObject
     {
         var list = await ApiServices.GetAllStores();
 
-        if (list != null)
+        if (list != null && list.Count > 0)
         {
+            IsEmptyColleciton = false;
+            StoresModelList.Clear();
             foreach (var model in list)
             {
                 if (model != null)
@@ -82,12 +104,25 @@ public class DashboardViewModel : ObservableObject
                         Id = (short)model.Store_id,
                         Name = model.Store_name_ar ?? (model.Store_name_en ?? "not found name")
                     };
+
+                    if (item.Id == storeId)
+                    {
+                        item.IsSelected = true;
+                        StoreName = item.Name;
+                        currentSelectedStore = item;
+                    }
                     StoresModelList.Add(item);
                 }
             }
-            AppPreferences.StoreId = StoresModelList[0].Id;
-            StoresModelList[0].IsSelected = true;
-            StoreName = StoresModelList[0].Name;
+
+            // if the first time registr storeId
+            if (currentSelectedStore == null)
+            {
+                currentSelectedStore = StoresModelList[0];
+                currentSelectedStore.IsSelected = true;
+                StoreName = currentSelectedStore.Name;
+                AppPreferences.StoreId = storeId = currentSelectedStore.Id;
+            }
         }
     }
 
@@ -98,6 +133,7 @@ public class DashboardViewModel : ObservableObject
             var result = await ApiServices.GetLatestInventoryHistoryAsync(storeId);
             if (result != null && result.Start_time != null)
             {
+                IsEmptyColleciton = false;
                 LatestInventoryDate = DateOnly.FromDateTime(result.Start_time.Value);
                 LatestInventoryId = (int)result.Store_id!;
             }
@@ -113,14 +149,18 @@ public class DashboardViewModel : ObservableObject
         try
         {
             StatisticsModel = await ApiServices.GetProductCountsAsync(storeId);
-            OnPropertyChanged(nameof(StatisticsModel));
+            if (StatisticsModel != null)
+            {
+                IsEmptyColleciton = false;
+                OnPropertyChanged(nameof(StatisticsModel));
+            }
         }
         catch (Exception ex)
         {
             await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
         }
     }
-    
+
     private async void StartNewInventory()
     {
         try
@@ -157,11 +197,45 @@ public class DashboardViewModel : ObservableObject
         var oldItem = StoresModelList.First(c => c.IsSelected);
         oldItem.IsSelected = false;
         item.IsSelected = true;
-
-        Helpers.AppPreferences.StoreId = item.Id;
-        StoreName = item.Name;
+        currentSelectedStore = item;
+        //AppPreferences.StoreId = storeId = item.Id;
+        //StoreName = item.Name;
     }
 
+    void ExecuteSubmitStoreSelectionChanged()
+    {
+        if (currentSelectedStore != null)
+        {
+            AppPreferences.StoreId = storeId = currentSelectedStore.Id;
+            StoreName = currentSelectedStore.Name;
+            IsStoresPopupVisible = false;
+            ExecuteCRefresh();
+        }
+    }
+
+    void ExecuteCRefresh()
+    {
+        OnStart();
+        IsRefreshing = false;
+    }
+
+    void ExecuteToggleStoresPopupVisibility(string status)
+    {
+        IsStoresPopupVisible = !IsStoresPopupVisible;
+    }
+    public void Receive(NotificationMessage message)
+    {
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            //string message = m.Message;
+
+            //if (message.Value == "Message")
+            //{
+            //    StatisticsModel.InventoryedProducts = 47734;
+            //    OnPropertyChanged(nameof(StatisticsModel));
+            //}
+        });
+    }
 
 
     #region Deleted

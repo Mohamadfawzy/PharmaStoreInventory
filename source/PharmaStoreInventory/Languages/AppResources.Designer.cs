@@ -61,6 +61,51 @@ namespace PharmaStoreInventory.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An unexpected error occurred.
+        /// </summary>
+        internal static string ApiError_Exception {
+            get {
+                return ResourceManager.GetString("ApiError_Exception", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HTTP error.
+        /// </summary>
+        internal static string ApiError_HttpRequestException {
+            get {
+                return ResourceManager.GetString("ApiError_HttpRequestException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error in JSON deserialization.
+        /// </summary>
+        internal static string ApiError_JsonException {
+            get {
+                return ResourceManager.GetString("ApiError_JsonException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ApiError_NotSupportedException.
+        /// </summary>
+        internal static string ApiError_NotSupportedException {
+            get {
+                return ResourceManager.GetString("ApiError_NotSupportedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request timed out.
+        /// </summary>
+        internal static string ApiError_TaskCanceledException {
+            get {
+                return ResourceManager.GetString("ApiError_TaskCanceledException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Contact Us.
         /// </summary>
         internal static string Common_ContactUS {
@@ -106,7 +151,7 @@ namespace PharmaStoreInventory.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to EmpLogin.
+        ///   Looks up a localized string similar to Login.
         /// </summary>
         internal static string Login_Login {
             get {
@@ -133,7 +178,7 @@ namespace PharmaStoreInventory.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to EmpLogin.
+        ///   Looks up a localized string similar to Login.
         /// </summary>
         internal static string Login_submit {
             get {

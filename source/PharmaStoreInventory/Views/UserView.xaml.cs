@@ -1,8 +1,10 @@
-﻿using DataAccess.DomainModel;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using DataAccess.DomainModel;
 using DataAccess.Dtos.UserDtos;
 using DataAccess.Services;
 using PharmaStoreInventory.Extensions;
 using PharmaStoreInventory.Helpers;
+using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.Services;
 
 namespace PharmaStoreInventory.Views;
@@ -123,13 +125,7 @@ public partial class UserView : ContentPage
 
     }
 
-    private void Logout()
-    {
-        if (Application.Current != null)
-            Application.Current.MainPage = new NavigationPage(new LoginView());
-        AppPreferences.IsLoggedIn = false;
-        AppPreferences.HostUserId = 0;
-    }
+
     void OpenPopup()
     {
         backgroundTransparence.IsVisible = true;
@@ -159,5 +155,15 @@ public partial class UserView : ContentPage
         }
     }
 
+    private void Logout()
+    {
+        if (Application.Current != null)
+            Application.Current.MainPage = new NavigationPage(new LoginView());
+        AppPreferences.IsLoggedIn = false;
+        AppPreferences.HostUserId = 0;
+        
+        // delete all be low
+        AppPreferences.StoreId = 0;
+    }
 
 }

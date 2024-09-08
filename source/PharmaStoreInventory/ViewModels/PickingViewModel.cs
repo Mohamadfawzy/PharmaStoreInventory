@@ -39,7 +39,7 @@ public class PickingViewModel : BaseViewModel
     {
         //ActivityIndicatorRunning = true;
         //ListOfStoc = [];
-        FetchStockDetails(_barcode);
+        Task.Run(() => { FetchStockDetails(_barcode); });
     }
 
     //########*PublicProperties*########
@@ -104,34 +104,34 @@ public class PickingViewModel : BaseViewModel
 
         ActivityIndicatorRunning = true;
         ResetValues();
+        //ListOfStoc.Clear();
         if (productCode == null)
         {
             return;
         }
         try
         {
-
-            //ListOfStoc.Clear();
-            await Task.Run(async () =>
+            Barcode = productCode;
+            var list = await ApiServices.GetProductDetails(false, productCode, AppPreferences.StoreId);
+            if (list != null && list.Count > 0)
             {
-                var list = await ApiServices.GetProductDetails(false, productCode, AppPreferences.StoreId);
-                if (list != null && list.Count > 0)
-                {
-                    NameAr = list.First().ProductNameAr ?? "اسم المنتج غير موجود";
-                    NameEn = list.First().ProductNameEn ?? "Product name not found";
-                    Barcode = productCode;
-                    //foreach (var item in list)
-                    //{
-                    //    ListOfStoc.Add(item);
-                    //}
-                    ListOfStoc = list;
-                    OnPropertyChanged(nameof(ListOfStoc));
-                }
-                else
-                {
-                    ResetValues();
-                }
-            });
+                NameAr = list.First().ProductNameAr ?? "اسم المنتج غير موجود";
+                NameEn = list.First().ProductNameEn ?? "Product name not found";
+                //foreach (var item in list)
+                //{
+                //    ListOfStoc.Add(item);
+                //    OnPropertyChanged(nameof(ListOfStoc));
+                //}
+                ListOfStoc = list;
+                OnPropertyChanged(nameof(ListOfStoc));
+            }
+            else
+            {
+                ResetValues();
+            }
+            //await Task.Run(async () =>
+            //{
+            //});
         }
         catch (Exception ex)
         {
@@ -189,6 +189,7 @@ public class PickingViewModel : BaseViewModel
         NameAr = string.Empty;
         NameEn = string.Empty;
         Barcode = string.Empty;
+       
     }
 
     async void ExecuteSaveChanges()

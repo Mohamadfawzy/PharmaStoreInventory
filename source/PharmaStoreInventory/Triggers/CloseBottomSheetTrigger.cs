@@ -2,7 +2,7 @@
 
 public class CloseBottomSheetTrigger : TriggerAction<VisualElement>
 {
-    public int StartsFrom { get; set; }
+    //public int StartsFrom { get; set; }
 
     protected async override void Invoke(VisualElement sender)
     {

@@ -14,7 +14,7 @@
             BackgroundColor="{StaticResource Primary200}">
 
             <Label
-                Text="الفلاش في جهة اليمين"
+                Text="الفلاش في جهة اليسار"
                 VerticalOptions="Center"
                 HorizontalOptions="StartAndExpand">
                 <Label.Triggers>
@@ -22,8 +22,9 @@
                         TargetType="Label"
                         Binding="{Binding Source={x:Reference styleSwitch}, Path=IsToggled}"
                         Value="true">
-                        <Setter Property="FontAttributes" Value="Italic, Bold" />
+                        <Setter Property="FontAttributes" Value="Bold" />
                         <Setter Property="FontSize" Value="18" />
+                        <Setter Property="Text" Value="الفلاش جهة اليمين" />
                     </DataTrigger>
                 </Label.Triggers>
             </Label>
