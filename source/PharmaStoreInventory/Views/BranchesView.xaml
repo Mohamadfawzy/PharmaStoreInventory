@@ -11,13 +11,41 @@
     xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
     x:Name="ThisPage"
     Title="الفروع"
-    FlowDirection="LeftToRight">
-    <Grid Padding="20,0">
+    NavigationPage.HasNavigationBar="False">
+    <Grid Padding="20,0" RowDefinitions="Auto,*">
+        <template:NotificationTemplate
+            x:Name="notification"
+            ZIndex="2"
+            IsVisible="False" />
+
+        <!--  BackButton  -->
+        <Button
+            Margin="15"
+            Padding="0"
+            HeightRequest="30"
+            WidthRequest="30"
+            HorizontalOptions="Start"
+            VerticalOptions="Start"
+            CornerRadius="20"
+            Clicked="BackButtonClicked"
+            FontFamily="{StaticResource IconFont}"
+            Text="{x:Static help:IconFontManager.ArrowIcon}" />
+
+        <Button
+            Margin="15"
+            Padding="10,0"
+            Text="إضافة فرع"
+            IsVisible="True"
+            MaximumHeightRequest="30"
+            VerticalOptions="Center"
+            FontSize="10"
+            HorizontalOptions="End"
+            Clicked="GotoCreateBranchClicked" />
 
         <!--  Collection  -->
         <CollectionView
             x:Name="clBranches"
-            Grid.Row="2"
+            Grid.Row="1"
             Margin="5,10,5,0"
             FlowDirection="LeftToRight"
             BackgroundColor="{StaticResource White}"
@@ -35,7 +63,7 @@
                         <!--  CommandParameter="{Binding Source={RelativeSource Self}, Path=BindingContext}"  -->
                         <SwipeView.RightItems>
                             <SwipeItems>
-                                <SwipeItemView BackgroundColor="{StaticResource Primary950}" Invoked="OnDoneSwipeItemInvoked">
+                                <SwipeItemView BackgroundColor="{StaticResource Primary950}">
                                     <Button
                                         Margin="20,0"
                                         Clicked="Button_Clicked_3"
@@ -102,7 +130,7 @@
                                     Padding="0"
                                     Text="Contact"
                                     FontSize="20"
-                                    Clicked="BtnContact"
+                                    Clicked="ConnectionClicked"
                                     BackgroundColor="{StaticResource SuccessColor}"
                                     CommandParameter="{Binding .}"
                                     VerticalOptions="Center" />
@@ -112,5 +140,19 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
+        <template:NoDataTemplate
+            x:Name="noDataTemplate"
+            Grid.Row="2"
+            Grid.RowSpan="2"
+            IsVisible="True" />
+        <ActivityIndicator
+            x:Name="activityIndicator"
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            VerticalOptions="Center"
+            ZIndex="2"
+            IsRunning="True"
+            Color="{StaticResource Primary600}" />
     </Grid>
 </ContentPage>

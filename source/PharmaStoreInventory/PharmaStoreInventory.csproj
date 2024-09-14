@@ -134,6 +134,8 @@
 	  <None Remove="Resources\Images\logoicon.svg" />
 	  <None Remove="Resources\Images\logout.svg" />
 	  <None Remove="Resources\Images\msLogo.png" />
+	  <None Remove="Resources\Images\noconnection.png" />
+	  <None Remove="Resources\Images\nodataicon.png" />
 	  <None Remove="Resources\Images\onbord1.jpg" />
 	  <None Remove="Resources\Images\Onbord2.jpg" />
 	  <None Remove="Resources\Images\pharma1.jpg" />
@@ -180,6 +182,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Templates\CLInPickingTemplate.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Templates\NoDataTemplate.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Templates\NotificationTemplate.xaml">

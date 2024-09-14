@@ -40,8 +40,23 @@ public partial class NotificationTemplate : ContentView
 
         await Task.Delay(TimeSpan.FromSeconds(15));
         HideMessage();
-
     }
+    
+    public async void ShowMessage(string title, string body= "")
+    {
+        //CommunityToolkit.Maui.Core.Platform.StatusBar.SetColor(Color.Parse("#b9ddfe"));
+        //CommunityToolkit.Maui.Core.Platform.StatusBar.SetStyle(StatusBarStyle.LightContent);
+        this.IsVisible = true;
+        Message = title;
+        bodyMessage.Text = body;
+        container.Opacity = 1;
+        await container.TranslateTo(0,0);
+        container.TranslationY = 0;
+
+        await Task.Delay(TimeSpan.FromSeconds(15));
+        HideMessage();
+    }
+
 
     public async void HideMessage()
     {

@@ -1,87 +1,108 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage x:Class="PharmaStoreInventory.Views.CreateBranchView"
-             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates"
-             xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
-             x:Name="ThisPage"
-             Title="CreateBranchView"
-             BackgroundColor="White"
-             FlowDirection="RightToLeft"
-             NavigationPage.HasNavigationBar="False"
-             NavigatedTo="ThisPage_NavigatedTo">
-    
+<ContentPage
+    x:Class="PharmaStoreInventory.Views.CreateBranchView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates"
+    xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
+    x:Name="ThisPage"
+    Title="CreateBranchView"
+    BackgroundColor="White"
+    FlowDirection="RightToLeft"
+    NavigationPage.HasNavigationBar="False">
+
     <ScrollView>
-        <VerticalStackLayout
-            Margin="0"
-            Padding="0,0,0,50"
-            Spacing="0">
-            <!--  Register Title  -->
-            <Border
-                Margin="0,0,0,30"
-                StrokeThickness="0"
-                BackgroundColor="{StaticResource PrimaryDark}"
-                StrokeShape="RoundRectangle 0 0 30 30"
-                HeightRequest="150">
-                <Label
-                    FontSize="20"
-                    TextColor="{StaticResource White}"
-                    Text="إضافة فرع"
-                    VerticalOptions="Center"
-                    HorizontalOptions="Center" />
-            </Border>
+        <Grid>
+            <template:NotificationTemplate
+                x:Name="notification"
+                Grid.RowSpan="5"
+                ZIndex="2"
+                IsVisible="True" />
 
-            <!--  Inputs  -->
             <VerticalStackLayout
-                x:Name="inputsContainer"
-                Padding="20,0"
-                IsVisible="True">
-                <template:AnimatedInput
-                    x:Name="brachName"
-                    InputPlaceholder="اسم الفرع"
-                    InputText="شبين الكوم" />
+                Margin="0"
+                Padding="0,0,0,50"
+                Spacing="0">
+                <!--  Register Title  -->
+                <Border
+                    Margin="0,0,0,30"
+                    StrokeThickness="0"
+                    BackgroundColor="{StaticResource PrimaryDark}"
+                    StrokeShape="RoundRectangle 0 0 30 30"
+                    HeightRequest="150">
+                    <Label
+                        FontSize="20"
+                        TextColor="{StaticResource White}"
+                        Text="إضافة فرع"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="SetInputText_Tapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Border>
 
-                <template:AnimatedInput
-                    x:Name="telephone"
-                    EntryKeyboard="Telephone"
-                    InputText="0402555540"
-                    ErrorMessage="رقم هاتف غير صحيح"
-                    InputPlaceholder="تليفون الفرع" />
+                <!--  Inputs  -->
+                <VerticalStackLayout
+                    x:Name="inputsContainer"
+                    Padding="20,0"
+                    IsVisible="True">
+                    <template:AnimatedInput
+                        x:Name="brachName"
+                        InputPlaceholder="اسم الفرع"
+                        ErrorMessage="هذا الحقل مطلوب" />
 
-                <template:AnimatedInput
-                    x:Name="ipAdrress"
-                    InputText="192.168.1.103"
-                    InputPlaceholder="عنوان IP" />
-                <template:AnimatedInput
-                    x:Name="port"
-                    InputText="5144"
-                    InputPlaceholder="المنفذPort" />
+                    <template:AnimatedInput
+                        x:Name="telephone"
+                        EntryKeyboard="Telephone"
+                        ErrorMessage="هذا الحقل مطلوب"
+                        InputPlaceholder="تليفون الفرع" />
 
-                <template:AnimatedInput
-                    x:Name="username"
-                    InputText="admin"
-                    InputPlaceholder="اسم المستخدم علي النظام" />
+                    <template:AnimatedInput
+                        x:Name="ipAdrress"
+                        ErrorMessage="هذا الحقل مطلوب"
+                        InputPlaceholder="عنوان IP" />
+                    
+                    <template:AnimatedInput
+                        x:Name="port"
+                        ErrorMessage="هذا الحقل مطلوب"
+                        InputPlaceholder="المنفذPort" />
 
-                <template:AnimatedInput
-                    x:Name="password"
-                    InputText="admin"
-                    IsPassword="True"
-                    HasEyeIcon="True"
-                    InputPlaceholder="الرقم السري علي النظام" />
+                    <template:AnimatedInput
+                        x:Name="username"
+                        ErrorMessage="هذا الحقل مطلوب"
+                        InputPlaceholder="اسم المستخدم علي النظام" />
+
+                    <template:AnimatedInput
+                        x:Name="password"
+                        IsPassword="True"
+                        HasEyeIcon="True"
+                        ErrorMessage="هذا الحقل مطلوب"
+                        InputPlaceholder="الرقم السري علي النظام" />
+
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Padding="20,0">
+                    <!--  submit Create Branch  -->
+                    <Button
+                        x:Name="btnCreateBranch"
+                        Margin="0,30,0,0"
+                        Text="إضافة فرع"
+                        Clicked="CreateBranchClicked" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="ClearFocusFromAllInputsTapped" />
+                </VerticalStackLayout.GestureRecognizers>
             </VerticalStackLayout>
 
-            <VerticalStackLayout Padding="20,0">
-                <!--  submit Create Branch  -->
-                <Button
-                    x:Name="submitButton"
-                    Margin="0,30,0,0"
-                    Text="إضافة فرع"
-                    Clicked="SubmitButton" />
-            </VerticalStackLayout>
-
-            <VerticalStackLayout.GestureRecognizers>
-                <TapGestureRecognizer Tapped="ClearFocusFromAllInputsTapped" />
-            </VerticalStackLayout.GestureRecognizers>
-        </VerticalStackLayout>
+            <ActivityIndicator
+                x:Name="activityIndicator"
+                Grid.Row="0"
+                VerticalOptions="Center"
+                ZIndex="3"
+                IsRunning="False"
+                Color="{StaticResource Primary600}" />
+        </Grid>
     </ScrollView>
 </ContentPage>

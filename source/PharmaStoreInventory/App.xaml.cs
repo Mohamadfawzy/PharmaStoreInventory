@@ -27,7 +27,8 @@ public partial class App : Application
         }
         else if (!AppPreferences.HasBranchRegistered)
         {
-            MainPage = new NavigationPage(new CreateBranchView());
+            //MainPage = new NavigationPage(new CreateBranchView());
+            MainPage = new NavigationPage(new BranchesView());
         }
         else
         {
@@ -54,8 +55,8 @@ public partial class App : Application
     {
         try
         {
-            DataAccess.Helper.Strings.Port = AppPreferences.Port;
-            DataAccess.Helper.Strings.IP = AppPreferences.IP;
+            //DataAccess.Helper.Strings.Port = AppPreferences.Port;
+            //DataAccess.Helper.Strings.IP = AppPreferences.IP;
             AppValues.LocalBaseURI = AppPreferences.LocalBaseURI;
             AppValues.LeftScanIcon = AppPreferences.LeftScanIcon;
         }

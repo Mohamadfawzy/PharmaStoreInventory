@@ -318,11 +318,13 @@
         </Grid>
         <!--  End Popup  -->
 
+        <template:NoDataTemplate Grid.Row="2" Grid.RowSpan="3" IsVisible="{Binding IsNoDataElementVisible}" />
+
         <ActivityIndicator
             Grid.Row="0"
             Grid.RowSpan="3"
             VerticalOptions="Center"
-            ZIndex="2"
+            ZIndex="3"
             IsRunning="{Binding ActivityIndicatorRunning}"
             Color="{StaticResource Primary600}" />
     </Grid>

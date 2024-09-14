@@ -42,14 +42,14 @@ public class UsersViewModel : BaseViewModel
     private async Task FetchAllUsersAsync()
     {
         ActivityIndicatorRunning = true;
-        IsEmptyColleciton = false;
+        IsPlaceholderVisible = false;
         try
         {
             Users.Clear();
             var list = await ApiServices.GetAllUsersAsync(FilterUsersQParam);
             if (list != null && list.Count > 0)
             {
-                IsEmptyColleciton = false;
+                IsPlaceholderVisible = false;
                 foreach (var user in list)
                 {
                     Users.Add(user);// = list;
@@ -57,7 +57,7 @@ public class UsersViewModel : BaseViewModel
                 //OnPropertyChanged(nameof(Users));
             }
             else
-                IsEmptyColleciton = true;
+                IsPlaceholderVisible = true;
 
 
         }
@@ -111,7 +111,7 @@ public class UsersViewModel : BaseViewModel
 
         if (Users.Count < 1)
         {
-            IsEmptyColleciton = true;
+            IsPlaceholderVisible = true;
         }
         ActivityIndicatorRunning = false;
 

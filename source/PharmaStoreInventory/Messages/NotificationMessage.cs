@@ -2,10 +2,14 @@
 using PharmaStoreInventory.Models;
 namespace PharmaStoreInventory.Messages;
 
-public class NotificationMessage : ValueChangedMessage<ErrorMessage>
+public class NotificationMessage(ErrorMessage value) : ValueChangedMessage<ErrorMessage>(value)
 {
-    public NotificationMessage(ErrorMessage value) : base(value)
-    {
-        
-    }
+}
+
+public class DashboardViewNotification(ErrorMessage value) : ValueChangedMessage<ErrorMessage>(value)
+{
+}
+
+public class CreateBranchViewotification(ErrorMessage value) : ValueChangedMessage<ErrorMessage>(value)
+{
 }

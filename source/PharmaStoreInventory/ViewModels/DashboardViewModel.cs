@@ -1,4 +1,5 @@
-﻿using DataAccess.DomainModel;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using DataAccess.DomainModel;
 using DataAccess.Dtos;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Messages;
@@ -6,12 +7,12 @@ using PharmaStoreInventory.Models;
 using PharmaStoreInventory.Services;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace PharmaStoreInventory.ViewModels;
 
 public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
 {
-    // private readonly CommonsRepo commonRepo;
-    //private readonly ProductAmountRepo productRepo;
+
     private int storeId = 0;
     private DateOnly latestInventoryDate;
     private SortModel? currentSelectedStore = null;
@@ -19,7 +20,6 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
     private string storeName = "غير محدد";
     private int LatestInventoryId = 0;
     private bool isStoresPopupVisible = false;
-    private bool isPlaceholderElementVisible = true;
 
     // #######*Constructor*#########
     //     ################
@@ -32,11 +32,12 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
     private async void OnStart()
     {
         ActivityIndicatorRunning = true;
-        IsEmptyColleciton = true;
+
+        var t0 = TestConnection();
         var t1 = GetAllStores();
         var t2 = GetLatestInventoryHistory();
         var t3 = GetProductCountsAsync();
-        await Task.WhenAll(t1, t2, t3);
+        await Task.WhenAll(t0, t1, t2, t3);
         ActivityIndicatorRunning = false;
     }
 
@@ -47,6 +48,10 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
         get => latestInventoryDate;
         set => SetProperty(ref latestInventoryDate, value);
     }
+
+    public NoDataModel NoDataModel =>
+         new("noconnection", "Something went wrong", "We're having issues loading this page", true);
+
     public ObservableCollection<SortModel> StoresModelList { get; set; } = [];
     public StatisticsModel? StatisticsModel { get; set; }
 
@@ -67,11 +72,7 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
         set => SetProperty(ref isStoresPopupVisible, value);
     }
 
-    public bool IsPlaceholderElementVisible
-    {
-        get => isPlaceholderElementVisible;
-        set => SetProperty(ref isPlaceholderElementVisible, value);
-    }
+
     public int CountAllProducts { get; set; }
     public int CountAllExpiredProducts { get; set; }
     public int CountAllProductsWillExpireAfter3Months { get; set; }
@@ -79,21 +80,56 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
     #endregion
 
 
-    public ICommand StoreSelectionChangedCommand => new Command<SortModel>(StoreSelectionChanged);
-    public ICommand StartNewInventoryCommand => new Command(StartNewInventory);
     public ICommand RefreshCommand => new Command(ExecuteCRefresh);
+    public ICommand StoreSelectionChangedCommand => new Command<SortModel>(StoreSelectionChanged);
     public ICommand ToggleStoresPopupVisibilityCommand => new Command<string>(ExecuteToggleStoresPopupVisibility);
     public ICommand SubmitStoreSelectionChangedCommand => new Command(ExecuteSubmitStoreSelectionChanged);
+    public ICommand StartNewInventoryCommand => new Command(StartNewInventory);
 
 
     #region Get Data
+    //private async Task ApiEmployeeLogin()
+    //{
+    //    var isSuccess = await ApiServices.ApiEmployeeLogin(new LoginDto(AppPreferences.EmpUsername, AppPreferences.EmpPassword));
+
+    //    if (isSuccess == null)
+    //    {
+    //        IsNoDataElementVisible = true;
+    //        IsPlaceholderVisible = false;
+    //        return;
+    //    }
+    //    if(isSuccess.IsSuccess)
+    //    {
+    //        IsPlaceholderVisible = false;
+    //        IsNoDataElementVisible = false;
+    //    }
+    //}
+
+    private async Task<bool> TestConnection()
+    {
+        var isSuccess = await ApiServices.TestConnection();
+
+        if (isSuccess)
+        {
+            IsPlaceholderVisible = false;
+            IsNoDataElementVisible = false;
+            return true;
+        }
+        else
+        {
+            IsNoDataElementVisible = true;
+            IsPlaceholderVisible = false;
+            WeakReferenceMessenger.Default
+                .Send(new DashboardViewNotification(new ErrorMessage("فشل في الاتصال بالسيرفير","")));
+            return false;
+        }
+    }
     private async Task GetAllStores()
     {
         var list = await ApiServices.GetAllStores();
 
         if (list != null && list.Count > 0)
         {
-            IsEmptyColleciton = false;
             StoresModelList.Clear();
             foreach (var model in list)
             {
@@ -133,7 +169,6 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
             var result = await ApiServices.GetLatestInventoryHistoryAsync(storeId);
             if (result != null && result.Start_time != null)
             {
-                IsEmptyColleciton = false;
                 LatestInventoryDate = DateOnly.FromDateTime(result.Start_time.Value);
                 LatestInventoryId = (int)result.Store_id!;
             }
@@ -151,13 +186,50 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
             StatisticsModel = await ApiServices.GetProductCountsAsync(storeId);
             if (StatisticsModel != null)
             {
-                IsEmptyColleciton = false;
                 OnPropertyChanged(nameof(StatisticsModel));
             }
         }
         catch (Exception ex)
         {
             await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
+        }
+    }
+    #endregion
+
+    // exectued method
+    async void ExecuteCRefresh()
+    {
+        IsRefreshing = true;
+        if (await TestConnection())
+        {
+            OnStart();
+        }
+        IsRefreshing = false;
+    }
+
+    void StoreSelectionChanged(SortModel item)
+    {
+        var oldItem = StoresModelList.First(c => c.IsSelected);
+        oldItem.IsSelected = false;
+        item.IsSelected = true;
+        currentSelectedStore = item;
+        //AppPreferences.StoreId = storeId = item.Id;
+        //StoreName = item.Name;
+    }
+
+    void ExecuteToggleStoresPopupVisibility(string status)
+    {
+        IsStoresPopupVisible = !IsStoresPopupVisible;
+    }
+
+    void ExecuteSubmitStoreSelectionChanged()
+    {
+        if (currentSelectedStore != null)
+        {
+            AppPreferences.StoreId = storeId = currentSelectedStore.Id;
+            StoreName = currentSelectedStore.Name;
+            IsStoresPopupVisible = false;
+            ExecuteCRefresh();
         }
     }
 
@@ -189,40 +261,9 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
             await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
         }
     }
-    #endregion
 
-    // exectued method
-    void StoreSelectionChanged(SortModel item)
-    {
-        var oldItem = StoresModelList.First(c => c.IsSelected);
-        oldItem.IsSelected = false;
-        item.IsSelected = true;
-        currentSelectedStore = item;
-        //AppPreferences.StoreId = storeId = item.Id;
-        //StoreName = item.Name;
-    }
 
-    void ExecuteSubmitStoreSelectionChanged()
-    {
-        if (currentSelectedStore != null)
-        {
-            AppPreferences.StoreId = storeId = currentSelectedStore.Id;
-            StoreName = currentSelectedStore.Name;
-            IsStoresPopupVisible = false;
-            ExecuteCRefresh();
-        }
-    }
 
-    void ExecuteCRefresh()
-    {
-        OnStart();
-        IsRefreshing = false;
-    }
-
-    void ExecuteToggleStoresPopupVisibility(string status)
-    {
-        IsStoresPopupVisible = !IsStoresPopupVisible;
-    }
     public void Receive(NotificationMessage message)
     {
         MainThread.BeginInvokeOnMainThread(() =>

@@ -102,10 +102,10 @@
 
         <!--  if colection empty  -->
         <VerticalStackLayout
-            IsVisible="{Binding IsEmptyColleciton}"
             Grid.Row="0"
             Grid.RowSpan="3"
             Grid.ColumnSpan="2"
+            IsVisible="{Binding IsPlaceholderVisible}"
             HorizontalOptions="Center"
             VerticalOptions="Center">
             <Label

@@ -11,9 +11,8 @@ public partial class WaitingApprovalView : ContentPage
     }
     private void ThisPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {
-        RefreshStatus();
+        //RefreshStatus();
     }
-
 
     private void PhoneDialerTapped(object sender, TappedEventArgs e)
     {
@@ -21,12 +20,10 @@ public partial class WaitingApprovalView : ContentPage
             PhoneDialer.Default.Open("01200007275");
     }
 
-
-
-    private void RefreshTapped(object sender, TappedEventArgs e)
-    {
-        RefreshStatus();
-    }
+    //private void RefreshTapped(object sender, TappedEventArgs e)
+    //{
+    //    RefreshStatus();
+    //}
     
     private void LogoutTapped(object sender, TappedEventArgs e)
     {
@@ -36,16 +33,16 @@ public partial class WaitingApprovalView : ContentPage
         AppPreferences.HostUserId = 0;
     }
 
-    private async void RefreshStatus()
-    {
-        if (AppPreferences.HostUserId == 0)
-            return;
+    //private async void RefreshStatus()
+    //{
+    //    if (AppPreferences.HostUserId == 0)
+    //        return;
 
-        var res = await ApiServices.IsUserActiveAsync(AppPreferences.HostUserId);
-        if (res != null && res.IsSuccess)
-        {
-            await Navigation.PushAsync(new CreateBranchView());
-            AppPreferences.IsUserActivated = true;
-        }
-    }
+    //    var res = await ApiServices.IsUserActiveAsync(AppPreferences.HostUserId);
+    //    if (res != null && res.IsSuccess)
+    //    {
+    //        await Navigation.PushAsync(new CreateBranchView());
+    //        AppPreferences.IsUserActivated = true;
+    //    }
+    //}
 }

@@ -1,4 +1,4 @@
-namespace PharmaStoreInventory.Views.Templates;
+﻿namespace PharmaStoreInventory.Views.Templates;
 using CommunityToolkit.Maui.Core.Platform;
 using Microsoft.Maui.Controls;
 using PharmaStoreInventory.Helpers;
@@ -249,12 +249,19 @@ public partial class AnimatedInput : ContentView
         if (EntryKeyboard == KeyboardEnum.Email)
         {
             if (!Validator.IsValidEmail(InputText))
+            {
                 IsError = true;
+                ErrorMessage = "صيغة عنوان بريد غير صحيحة";
+            }
         }
         if (EntryKeyboard == KeyboardEnum.Telephone)
         {
             if (!Validator.IsValidTelephone(InputText))
+            {
                 IsError = true;
+                ErrorMessage = "رقم هاتف غير صحيح";
+            }
+            
         }
     }
 

@@ -20,12 +20,19 @@ public class BaseViewModel : ObservableObject
         get => isRefreshing;
         set => SetProperty(ref isRefreshing, value);
     }
-    
-    private bool isEmptyColleciton = true;
 
-    public bool IsEmptyColleciton
+    private bool isPlaceholderVisible = true;
+
+    public bool IsPlaceholderVisible
     {
-        get => isEmptyColleciton;
-        set => SetProperty(ref isEmptyColleciton, value);
+        get => isPlaceholderVisible;
+        set => SetProperty(ref isPlaceholderVisible, value);
+    }
+
+    private bool isNoDataElementVisible = false;
+    public bool IsNoDataElementVisible
+    {
+        get => isNoDataElementVisible;
+        set => SetProperty(ref isNoDataElementVisible, value);
     }
 }

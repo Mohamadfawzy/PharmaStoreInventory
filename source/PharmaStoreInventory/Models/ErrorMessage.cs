@@ -1,8 +1,33 @@
-﻿namespace PharmaStoreInventory.Models
+﻿namespace PharmaStoreInventory.Models;
+
+public class ErrorMessage() 
 {
-    public class ErrorMessage(string title="Error", string body="")
+    public string Title { get; set; } = string.Empty;
+    public string Body { get; set; } = string.Empty;
+    public ExceptionErrorCode Error { get; set; }
+
+    public ErrorMessage(string title , string body) : this()
     {
-        public string Title { get; set; } = title;
-        public string Body { get; set; } = body;
+        this.Title = title;
+        this.Body = body;
+
     }
+
+    public ErrorMessage(ExceptionErrorCode error, string title = "Error", string body = "") : this()
+    {
+        this.Error = error;
+        this.Title = title;
+        this.Body = body;
+    }
+
+}
+
+
+public enum ExceptionErrorCode
+{
+    TaskCanceledException,
+    HttpRequestException,
+    NotSupportedException,
+    JsonException,
+    Exception
 }

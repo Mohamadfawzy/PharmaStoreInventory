@@ -12,7 +12,7 @@ public static class RequestProvider
 {
     // request.Headers.Add("DbConnectionString", Helpers.AppValues.ConnectionString);
     private const short timeoutInSeconds = 10;
-    public static async Task<List<TResult>?> GetAllAsync<TResult>(string uri)
+    public static async Task<List<TResult>?> GetAllAsync3<TResult>(string uri)
     {
         ErrorMessage message;
 
@@ -61,6 +61,85 @@ public static class RequestProvider
         message.Body = $"{nameof(GetAllAsync)} {message.Body}";
         WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
         return default;
+    }
+
+    public static async Task<(List<TResult>? content, ErrorMessage? error)> GetAllAsync<TResult>(string uri)
+    {
+        ErrorMessage? message = null;
+
+        try
+        {
+            var client = new HttpClient();
+            client.Timeout = TimeSpan.FromSeconds(timeoutInSeconds);
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            if (response.StatusCode == HttpStatusCode.NoContent)
+            {
+                return (default, message);
+            }
+
+            List<TResult>? result = await response.Content.ReadFromJsonAsync<List<TResult>?>();
+            return (result, message);
+        }
+        catch (TaskCanceledException ex) when (ex.InnerException is TimeoutException)
+        {
+            // Handle request timeout
+            message = new ErrorMessage()
+            {
+                Title = AppResources.ApiError_TaskCanceledException,
+                Body = ex.Message,
+                Error = ExceptionErrorCode.TaskCanceledException,
+            };
+        }
+
+        // Occurs when the HTTP response code is not successful (like 404, 500, etc.)
+        catch (HttpRequestException ex)
+        {
+            // Handle specific HTTP request exceptions
+            //message = new ErrorMessage(AppResources.ApiError_HttpRequestException, ex.Message);
+            message = new ErrorMessage()
+            {
+                Title = AppResources.ApiError_HttpRequestException,
+                Body = ex.Message,
+                Error = ExceptionErrorCode.HttpRequestException,
+            };
+        }
+        catch (NotSupportedException ex)
+        {
+            // Handle content not being supported (e.g., JSON content could not be read)
+            //message = new ErrorMessage(AppResources.ApiError_NotSupportedException, ex.Message);
+            message = new ErrorMessage()
+            {
+                Title = AppResources.ApiError_NotSupportedException,
+                Body = ex.Message,
+                Error = ExceptionErrorCode.NotSupportedException,
+            };
+        }
+        catch (JsonException ex)
+        {
+            // Handle JSON deserialization errors
+            //message = new ErrorMessage(AppResources.ApiError_JsonException, ex.Message);
+            message = new ErrorMessage()
+            {
+                Title = AppResources.ApiError_JsonException,
+                Body = ex.Message,
+                Error = ExceptionErrorCode.JsonException,
+            };
+        }
+        catch (Exception ex)
+        {
+            // Handle any other unexpected exceptions
+            //message = new ErrorMessage(AppResources.ApiError_Exception, ex.Message);
+            message = new ErrorMessage()
+            {
+                Title = AppResources.ApiError_Exception,
+                Body = ex.Message,
+                Error = ExceptionErrorCode.Exception,
+            };
+        }
+        message.Body = $"{nameof(GetAllAsync)} {message.Body}";
+        return (default, message);
     }
 
     public static async Task<IEnumerable<TResult>?> GetAllIEnumerableAsync<TResult>(string uri)
@@ -134,7 +213,7 @@ public static class RequestProvider
         catch (TaskCanceledException ex) when (ex.InnerException is TimeoutException)
         {
             // Handle request timeout
-            message = new ErrorMessage(AppResources.ApiError_TaskCanceledException, ex.Message); 
+            message = new ErrorMessage(AppResources.ApiError_TaskCanceledException, ex.Message);
         }
 
         // Occurs when the HTTP response code is not successful (like 404, 500, etc.)
@@ -159,13 +238,38 @@ public static class RequestProvider
             message = new ErrorMessage(AppResources.ApiError_Exception, ex.Message);
         }
         message.Body = $"{nameof(GetSingleAsync)} {message.Body}";
-        WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
+        // WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
         return default;
     }
 
-    public static async Task<TResult?> PostSingleAsync<TResult, TTake>(string uri, TTake data)
+    public static async Task<bool> GetBooleanValueAsync(string uri)
     {
-        ErrorMessage message;
+        try
+        {
+            var client = new HttpClient
+            {
+                Timeout = TimeSpan.FromSeconds(timeoutInSeconds)
+            };
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
+            var response = await client.SendAsync(request);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return true;
+            }
+            return false;
+
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+
+    public static async Task<(TResult? content, ErrorMessage? error)> PostSingleAsync<TResult, TTake>(string uri, TTake data)
+    {
+        ErrorMessage? message = null;
         using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(timeoutInSeconds) };
         using var request = new HttpRequestMessage(HttpMethod.Post, uri)
         {
@@ -183,8 +287,9 @@ public static class RequestProvider
             }
 
             // Deserialize the response content to the specified TResult type
+            var result = await response.Content.ReadFromJsonAsync<TResult?>().ConfigureAwait(false);
 
-            return await response.Content.ReadFromJsonAsync<TResult?>().ConfigureAwait(false);
+            return (result, message);
         }
         catch (TaskCanceledException ex) when (ex.InnerException is TimeoutException)
         {
@@ -214,7 +319,7 @@ public static class RequestProvider
             message = new ErrorMessage(AppResources.ApiError_Exception, ex.Message);
         }
         message.Body = $"{nameof(PostSingleAsync)} {message.Body}";
-        WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
+        //WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
         return default;
     }
 
@@ -320,6 +425,58 @@ public static class RequestProvider
         }
         message.Body = $"{nameof(PutAsync)} {message.Body}";
         WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
+        return default;
+    }
+
+    public static async Task<TResult?> DeleteAsync<TResult>(string uri)
+    {
+        ErrorMessage message;
+
+        using var client = new HttpClient();
+        using var request = new HttpRequestMessage(HttpMethod.Delete, uri);
+
+        try
+        {
+            // Send the PUT request and ensure the response status code indicates success
+            using var response = await client.SendAsync(request).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            if (response.StatusCode == HttpStatusCode.NoContent)
+            {
+                return default;
+            }
+
+            // Deserialize the response content to the specified TResult type
+            return await response.Content.ReadFromJsonAsync<TResult>().ConfigureAwait(false);
+        }
+        catch (TaskCanceledException ex) when (ex.InnerException is TimeoutException)
+        {
+            // Handle request timeout
+            message = new ErrorMessage(AppResources.ApiError_TaskCanceledException, ex.Message);
+        }
+
+        // Occurs when the HTTP response code is not successful (like 404, 500, etc.)
+        catch (HttpRequestException ex)
+        {
+            // Handle specific HTTP request exceptions
+            message = new ErrorMessage(AppResources.ApiError_HttpRequestException, ex.Message);
+        }
+        catch (NotSupportedException ex)
+        {
+            // Handle content not being supported (e.g., JSON content could not be read)
+            message = new ErrorMessage(AppResources.ApiError_NotSupportedException, ex.Message);
+        }
+        catch (JsonException ex)
+        {
+            // Handle JSON deserialization errors
+            message = new ErrorMessage(AppResources.ApiError_JsonException, ex.Message);
+        }
+        catch (Exception ex)
+        {
+            // Handle any other unexpected exceptions
+            message = new ErrorMessage(AppResources.ApiError_Exception, ex.Message);
+        }
+        message.Body = $"{nameof(DeleteAsync)} {message.Body}";
+        //WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
         return default;
     }
 }

@@ -4,12 +4,12 @@ using PharmaStoreInventory.Messages;
 
 namespace PharmaStoreInventory.Views;
 
-public partial class DashboardView : ContentPage, IRecipient<NotificationMessage>
+public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotification>
 {
     public DashboardView()
     {
         InitializeComponent();
-        WeakReferenceMessenger.Default.Register<NotificationMessage>(this);
+        WeakReferenceMessenger.Default.Register<DashboardViewNotification>(this);
 
     }
 
@@ -75,8 +75,8 @@ public partial class DashboardView : ContentPage, IRecipient<NotificationMessage
 
     private async void HamburgerTapped(object sender, TappedEventArgs e)
     {
+        await Navigation.PushAsync(new UserView());
         notification.ShowMessage(new Models.ErrorMessage("Title","Body"));
-        //await Navigation.PushAsync(new UserView());
         //var v = (BindingContext as ViewModels.DashboardViewModel);
         //v.IsPlaceholderElementVisible = !v.IsPlaceholderElementVisible;
     }
@@ -118,7 +118,7 @@ public partial class DashboardView : ContentPage, IRecipient<NotificationMessage
 
     }
 
-    public void Receive(NotificationMessage message)
+    public void Receive(DashboardViewNotification message)
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {

@@ -36,10 +36,26 @@ public static class Alerts
 
         await snackbar.Show(cancellationTokenSource.Token);
     }
+    
+    //public static async Task DisplaySnackbar2(string text, int durations = 10)
+    //{
 
-    public static void SendNotification(ErrorMessage errorMessage)
+    //    CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
+    //    ToastDuration duration = ToastDuration.Long;
+    //    double fontSize = 14;
+
+    //    var toast = Toast.Make(text, duration, fontSize);
+
+    //    await toast.Show(cancellationTokenSource.Token);
+    //}
+
+    public static async Task SendNotification(ErrorMessage errorMessage)
     {
-        WeakReferenceMessenger.Default.Send(new NotificationMessage(errorMessage));
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(errorMessage));
+        await Task.Run(() =>
+        {
+        });
     }
 
     private static Popup? popup;
@@ -56,6 +72,4 @@ public static class Alerts
             await popup.CloseAsync();
         }
     }
-
-
 }

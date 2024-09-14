@@ -12,11 +12,12 @@ namespace PharmaStoreInventory.Views;
 public partial class LoginView : ContentPage
 {
     private readonly JsonFileHanler jsonFileHanler;
+    private readonly XmlFileHandler xFileHanler;
     public LoginView()
     {
         InitializeComponent();
         jsonFileHanler = new JsonFileHanler(AppValues.UserFileName);
-
+        xFileHanler = new(AppValues.XBranchsFileName);
     }
 
     private void ClearFocusFromAllInputsTapped(object sender, TappedEventArgs e)
@@ -29,6 +30,7 @@ public partial class LoginView : ContentPage
         base.OnDisappearing();
         password.InputText = string.Empty;
     }
+
     private async void SubmitClicked(object sender, EventArgs e)
     {
         try
@@ -65,9 +67,6 @@ public partial class LoginView : ContentPage
                 res = await ApiServices.AdminLoginByEmailAsync(adminModel);
             }
 
-
-
-
             if (res == null)
             {
                 _ = Alerts.DisplaySnackbar("Something went wrong");
@@ -75,16 +74,20 @@ public partial class LoginView : ContentPage
                 return;
             }
 
-            if(res.Data != null)
-            {
-                AppPreferences.HostUserId = res.Data.Id;
-            }
-           // = res.Data != null ? res.Data.Id : 0;
-
             // Navigation
             _ = Alerts.DisplaySnackbar(res.Message);
             if (res.IsSuccess)
             {
+                // Save user data in json file
+                if (res.Data != null)
+                {
+                    AppPreferences.HostUserId = res.Data.Id;
+                    AppPreferences.IsLoggedIn = true;
+                    AppPreferences.IsUserActivated = true;
+                    _ = jsonFileHanler.WriteToFile(res.Data);
+                }
+
+                // Navigation
                 if (check == InputType.Admin)
                 {
                     await Navigation.PushAsync(new UsersView());
@@ -95,18 +98,7 @@ public partial class LoginView : ContentPage
                 }
                 else
                 {
-                    await Navigation.PushAsync(new CreateBranchView());
-                }
-                Navigation.RemovePage(this);
-
-                // Save status in AppPreferences
-                AppPreferences.IsLoggedIn = true;
-                AppPreferences.IsUserActivated = true;
-                
-                // Save user data in json file
-                if (res.Data != null)
-                {
-                    await jsonFileHanler.WriteToFile(res.Data);
+                    await Navigation.PushAsync(new BranchesView());
                 }
             }
             else
@@ -121,6 +113,7 @@ public partial class LoginView : ContentPage
 
             //end try
             Alerts.CloseActivityIndicator();
+            Navigation.RemovePage(this);
         }
 
         catch

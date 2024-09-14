@@ -39,6 +39,9 @@ public class AllStockViewModel : BaseViewModel
         get => products;
         set => SetProperty(ref products, value);
     }
+    public NoDataModel NoDataModel =>
+     new("nodataicon.png", "No Data", "There is no data to show you right now", false);
+
 
     public bool BottomSheet
     {
@@ -128,9 +131,12 @@ public class AllStockViewModel : BaseViewModel
             }
 
             ProductQueryParam.Text = text;
-            var list = await ApiServices.GetAllProducts(ProductQueryParam);
-            if (list != null)
-                Products = list;
+            Products = await ApiServices.GetAllProducts(ProductQueryParam);
+            if (Products != null && Products.Count > 0)
+            {
+                IsNoDataElementVisible = false;
+            }
+            else IsNoDataElementVisible = true;
         }
         catch (Exception ex)
         {
@@ -153,6 +159,11 @@ public class AllStockViewModel : BaseViewModel
                 ProductQueryParam.IsGroup = FilterIsGroup;
                 await Task.Delay(250);
                 Products = await ApiServices.GetAllProducts(ProductQueryParam).ConfigureAwait(true);
+                if (Products != null && Products.Count > 0)
+                {
+                    IsNoDataElementVisible = false;
+                }
+                else IsNoDataElementVisible = true;
             });
         }
         catch

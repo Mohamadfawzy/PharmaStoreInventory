@@ -1,8 +1,6 @@
-﻿using System.Net;
+﻿namespace DataAccess.Entities;
 
-namespace DataAccess.DomainModel;
-
-public class BranchModel
+public class Branche
 {
     public Guid Id { get; set; }
     public string? BrachName { get; set; } = string.Empty;
@@ -11,11 +9,6 @@ public class BranchModel
     public string? Telephone { get; set; } = string.Empty;
     public string IpAddress { get; set; } = string.Empty;
     public string Port { get; set; } = string.Empty;
-    public DateTime? CreateOn { get; set; }
+    public DateTime CreateOn { get; set; }
     public int UserId { get; set; }
-
-    public string HidIpAddress
-    {
-        get => $"***.***.***.{IpAddress[(IpAddress.LastIndexOf('.') + 1)..]}";
-    }
 }

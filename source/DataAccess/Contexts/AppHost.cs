@@ -13,11 +13,12 @@ public class AppHost: DbContext
     
     public AppHost()
     {
-        connectionString = $"Data Source=localhost; Initial Catalog=mosoftphram;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
+        connectionString = $"Data Source=localhost; Initial Catalog=msoftStock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
         //connectionString = $"workstation id=msoftStock.mssql.somee.com;packet size=4096;user id=mfawzyH_SQLLogin_1;pwd=kd35ziwgqs;data source=msoftStock.mssql.somee.com;persist security info=False;initial catalog=msoftStock;TrustServerCertificate=True";
     }
 
     public DbSet<UserAccount> Users { get; set; }
+    public DbSet<Branche> Branches { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -25,6 +26,12 @@ public class AppHost: DbContext
         {
             entity.HasKey(x => x.Id);
             entity.Property(e => e.Email).HasMaxLength(255);
+            entity.Property(e => e.CreateOn).HasDefaultValueSql("(getutcdate())");
+        });
+        
+        modelBuilder.Entity<Branche>(entity =>
+        {
+            entity.HasKey(x => x.Id);
             entity.Property(e => e.CreateOn).HasDefaultValueSql("(getutcdate())");
         });
     }

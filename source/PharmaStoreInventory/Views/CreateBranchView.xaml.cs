@@ -1,21 +1,30 @@
-﻿using DataAccess.DomainModel;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using DataAccess.DomainModel;
 using DataAccess.Dtos;
-using DataAccess.Helper;
-using DataAccess.Repository;
 using DataAccess.Services;
 using PharmaStoreInventory.Extensions;
 using PharmaStoreInventory.Helpers;
+using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.Services;
 namespace PharmaStoreInventory.Views;
 
-public partial class CreateBranchView : ContentPage
+public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchViewotification>
 {
+
     private readonly XmlFileHandler xFileHanler;
+    private EmployeeDto? employee = null;
+
+    public void Receive(CreateBranchViewotification message)
+    {
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            notification.ShowMessage(message.Value);
+        });
+    }
     public CreateBranchView()
     {
         InitializeComponent();
-        xFileHanler = new(Helpers.AppValues.XBranchsFileName);
-
+        xFileHanler = new(AppValues.XBranchsFileName);
     }
 
     private void ClearFocusFromAllInputsTapped(object sender, TappedEventArgs e)
@@ -23,50 +32,122 @@ public partial class CreateBranchView : ContentPage
         inputsContainer.ClearFocusFromAllInputs();
     }
 
-    private async void SubmitButton(object sender, EventArgs e)
+    private async void CreateBranchClicked(object sender, EventArgs e)
     {
-        Helpers.Alerts.DisplayActivityIndicator(this);
+        activityIndicator.IsRunning = true;
+        btnCreateBranch.IsEnabled = false;
+        inputsContainer.ClearFocusFromAllInputs();
 
-        submitButton.IsEnabled = false;
-
-        if (!DataValidaityCheck())
-            return;
-
-        var branch = new BranchModel()
+        if (AreEntriesValid())
         {
-            Id = Guid.NewGuid(),
-            BrachName = brachName.InputText,
-            Password = password.InputText,
-            Telephone = telephone.InputText,
-            Username = username.InputText,
-            IpAddress = ipAdrress.InputText,
-            Port = port.InputText
-        };
-        var status = await Connection(branch);
-        if (status == ErrorType.Success)
-        {
-            await Helpers.Alerts.DisplaySnackbar("The branch has been contacted successfully");
-
-            // save new brash in file
-            await xFileHanler.Add(branch);
-            Helpers.AppPreferences.HasBranchRegistered = true;
-
-            await Navigation.PushAsync(new BranchesView());
+            var branch = new BranchModel()
+            {
+                //Id = Guid.Parse("e3b9f4f0-0e47-46ad-bd68-bf9587b85776"),// Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                BrachName = brachName.InputText,
+                Telephone = telephone.InputText,
+                IpAddress = ipAdrress.InputText,
+                Port = port.InputText,
+                Username = username.InputText,
+                Password = password.InputText,
+                UserId = AppPreferences.HostUserId,
+            };
+            CreateBranch(branch);
         }
-        else if (status == ErrorType.ConnectionString)
+
+        activityIndicator.IsRunning = false;
+        btnCreateBranch.IsEnabled = true;
+    }
+
+    private bool AreEntriesValid()
+    {
+        var bools = new List<bool>(6);
+        if (string.IsNullOrEmpty(brachName.InputText))
         {
-            await Helpers.Alerts.DisplaySnackbar("IP or Port is Incorrect");
+            brachName.IsError = true;
+            bools.Add(false);
+        }
+        if (string.IsNullOrEmpty(telephone.InputText) || telephone.IsError)
+        {
+            telephone.IsError = true;
+            bools.Add(false);
+        }
+        if (string.IsNullOrEmpty(ipAdrress.InputText))
+        {
+            ipAdrress.IsError = true;
+            bools.Add(false);
+        }
+        if (string.IsNullOrEmpty(port.InputText))
+        {
+            port.IsError = true;
+            bools.Add(false);
+        }
+        if (string.IsNullOrEmpty(username.InputText))
+        {
+            username.IsError = true;
+            bools.Add(false);
+        }
+        if (string.IsNullOrEmpty(password.InputText))
+        {
+            password.IsError = true;
+            bools.Add(false);
+        }
+
+        if (bools.Count > 0)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    async void CreateBranch(BranchModel branch)
+    {
+        // check if this bransh is already exist. if ture? We will not add it.
+        if (await xFileHanler.IsIpAdrressExist(branch.IpAddress))
+        {
+            notification.ShowMessage("Failure", "Ip Adrress already Exist");
+            return;
+        }
+
+        var (status, message) = await ApiServices.ApiEmployeeLogin(branch);
+        if (status == ConnectionErrorCode.Success)
+        {
+            // 1 Save branch data on host
+            var result = await ApiServices.AddBranche(branch);
+
+            if (result != null && !result.IsSuccess)
+            {
+                notification.ShowMessage("حدث خطأ عن اضافة الفرع علي الهوست", result.Message);
+                return;
+            }
+
+            notification.ShowMessage("Contacted successfully", "The branch has been contacted successfully");
+
+            // 2 Save branch data locally
+            var t1 = xFileHanler.Add(branch);
+
+            // 3 Save Preferences
+            var t2 = SetPreferences(branch);
+
+            // 4 Navigation
+            var t4 = Navigation.PushAsync(new BranchesView());
+            await Task.WhenAll(t1, t2, t4);
+        }
+        else if (status == ConnectionErrorCode.Fail)
+        {
+            notification.ShowMessage("فشل في الاتصال بالسيرفر", "IP or Port is Incorrect");
+        }
+        else if (status == ConnectionErrorCode.UsernameOrPass)
+        {
+            notification.ShowMessage("فشل في الاتصال بالنظام", "username or Password is Incorrect");
         }
         else
         {
-            await Helpers.Alerts.DisplaySnackbar("EmailOrPhone or Password is Incorrect");
+            notification.ShowMessage("Something went wrong", message);
         }
-
-        ClosePopup();
-        submitButton.IsEnabled = true;
     }
 
-    private async Task<ErrorType> Connection(BranchModel branch)
+    private async Task<ConnectionErrorCode> ApiEmployeeLogin(BranchModel branch)
     {
         try
         {
@@ -75,146 +156,56 @@ public partial class CreateBranchView : ContentPage
             // http://192.168.1.103:5144/api
             //var repo = new EmployeeRepo();
 
-            AppPreferences.LocalBaseURI = AppValues.LocalBaseURI = $"http://{branch.IpAddress}:{branch.Port}/api";
+            var uri = await Configuration.ConfigureBaseUrl(branch.IpAddress, branch.Port);
 
             var emp = new LoginDto(branch.Username, branch.Password);
-            var result = await ApiServices.EmpLogin(emp);
+            var result = await ApiServices.EmpLogin(uri, emp);
+
+            // status 1 Unable to connect to server
+            if (result == null)
+            {
+                return ConnectionErrorCode.Fail;
+            }
+            // status 2 Server connection IsSuccess
             if (result != null && result.IsSuccess)
             {
-                AppPreferences.LocalDbUserId = result.Data.Id;
-                return ErrorType.Success;
+                if (result.Data != null)
+                {
+                    employee = result.Data;
+                }
+                return ConnectionErrorCode.Success;
             }
-
+            // status 3 Server connection IsSuccess, but username or password is incorrect
             else
-                return ErrorType.UsernameOrPass;
+                return ConnectionErrorCode.UsernameOrPass;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return ErrorType.ConnectionString;
+            notification.ShowMessage("Something went wrong", ex.Message);
+            return ConnectionErrorCode.Exception;
         }
     }
 
-    private bool DataValidaityCheck()
+    async Task SetPreferences(BranchModel branch)
     {
-        // if validation contentnio ...
-
-        return true;
+        AppPreferences.LocalBaseURI = AppValues.LocalBaseURI = await Configuration.ConfigureBaseUrl(branch.IpAddress, branch.Port);
+        AppPreferences.LocalDbUserId = employee != null ? employee.Id : 0;
+        AppPreferences.HasBranchRegistered = true;
+        //AppPreferences.EmpUsername = branch.Username;
+        //AppPreferences.EmpPassword = branch.Password;
     }
 
-    public void DisplayPopup()
+    // will deleted
+    private void SetInputText_Tapped(object sender, TappedEventArgs e)
     {
-        //popup = new PopupWin();
-        //await this.ShowPopupAsync(popup);
-        Helpers.Alerts.DisplayActivityIndicator(this);
+        brachName.InputText = "شبين الكوم";
+        telephone.InputText = "0402555550";
+        ipAdrress.InputText = "192.168.1.103";
+        port.InputText = "5144";
+        username.InputText = "admin";
+        password.InputText = "admin";
+        inputsContainer.PositioningOfPlaceHolder();
     }
-
-    public void ClosePopup()
-    {
-        //await popup.CloseAsync();
-        Helpers.Alerts.CloseActivityIndicator();
-    }
-
-    private enum ErrorType
-    {
-        Success,
-        Username,
-        Password,
-        UsernameOrPass,
-        ConnectionString
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    private void ThisPage_NavigatedTo(object sender, NavigatedToEventArgs e)
-    {
-
-
-        //Device.BeginInvokeOnMainThread(() =>
-        //{
-        //    var t1 = AddElement1();
-        //    var t2 = AddElement2();
-        //    var t3 = AddElement3();
-        //    var t4 = AddElement4();
-        //    var t5 = AddElement5();
-        //    var t6 = AddElement6();
-
-        //    Task.WhenAll(t1, t2, t3, t4);
-        //});
-        //inputsContainer.IsVisible = true;
-        //refresh.IsRefreshing = false;
-
-    }
-    /*
-
-    private Task AddElement1()
-    {
-        AnimatedInput a1 = new AnimatedInput() { InputPlaceholder = "Filed 1" };
-        inputsContainer.Add(a1);
-        return Task.CompletedTask;
-    }
-    private Task AddElement2()
-    {
-        AnimatedInput a1 = new AnimatedInput() { InputPlaceholder = "Filed 2" };
-        inputsContainer.Add(a1);
-        return Task.CompletedTask;
-    }
-
-    private Task AddElement3()
-    {
-        AnimatedInput a1 = new AnimatedInput() { InputPlaceholder = "Filed 3" };
-        inputsContainer.Add(a1);
-        return Task.CompletedTask;
-    }
-    private async Task AddElement4()
-    {
-        await Task.Delay(1000);
-        AnimatedInput a1 = new AnimatedInput() { InputPlaceholder = "Filed 4" };
-        inputsContainer.Add(a1);
-        //return Task.CompletedTask;
-    }
-
-    private async Task AddElement5()
-    {
-        await Task.Delay(1100);
-        AnimatedInput a1 = new AnimatedInput() { InputPlaceholder = "Filed 5" };
-        inputsContainer.Add(a1);
-        //return Task.CompletedTask;
-    }
-
-    private async Task AddElement6()
-    {
-        await Task.Delay(1200);
-        AnimatedInput a1 = new AnimatedInput() { InputPlaceholder = "Filed 6" };
-        inputsContainer.Add(a1);
-        //return Task.CompletedTask;
-    }
-    */
 }
 
 

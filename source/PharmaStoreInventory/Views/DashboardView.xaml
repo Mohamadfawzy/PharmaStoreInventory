@@ -330,14 +330,14 @@
                 </Grid>
                 <!--  End Popup  -->
 
-                <!--  PlaceholderElement Empty Templeate  -->
+                <!--  PlaceholderElement Empty Element  -->
                 <VerticalStackLayout
                     x:Name="placeholderElement"
                     Grid.Row="1"
                     Padding="15"
                     Loaded="placeholderElement_Loaded"
                     BackgroundColor="{StaticResource Primary100}"
-                    IsVisible="{Binding IsEmptyColleciton}"
+                    IsVisible="{Binding IsPlaceholderVisible}"
                     Spacing="20">
                     <BoxView Style="{StaticResource PlaceholderBox}" Loaded="BoxView_Loaded" />
                     <BoxView Style="{StaticResource PlaceholderBox}" Loaded="BoxView_Loaded" />
@@ -376,6 +376,8 @@
                         Loaded="BoxView_Loaded" />
                 </VerticalStackLayout>
 
+                <!--  No Data Template : Something went wrong  -->
+                <template:NoDataTemplate IsVisible="{Binding IsNoDataElementVisible}" Command="{Binding RefreshCommand}" />
 
                 <ActivityIndicator
                     Grid.Row="0"

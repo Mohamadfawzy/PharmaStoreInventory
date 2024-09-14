@@ -67,3 +67,15 @@ public enum InputType
     Empty = 3,
     Admin = 4
 }
+
+
+public enum ConnectionErrorCode
+{
+    Success,
+    Fail,
+    Exception,
+    Username,
+    Password,
+    UsernameOrPass,
+    ConnectionString
+}

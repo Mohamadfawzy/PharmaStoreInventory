@@ -27,7 +27,7 @@
             </Border>
 
             <!--  Refresh  -->
-            <Border
+            <!--<Border
                 Margin="15,0"
                 Padding="10,3"
                 BackgroundColor="{StaticResource Primary050}"
@@ -45,7 +45,7 @@
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="RefreshTapped" />
                 </Border.GestureRecognizers>
-            </Border>
+            </Border>-->
 
             <Label
                 Margin="20,0"

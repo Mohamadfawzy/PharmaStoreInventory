@@ -30,8 +30,8 @@ public class XmlFileHandler
     {
         try
         {
-            if (await IsIpAdrressExist(branch.IpAddress))
-                return Result.Failure(ErrorCode.ItemIsExist);
+            //if (await IsIpAdrressExist(branch.IpAddress))
+            //    return Result.Failure(ErrorCode.ItemIsExist);
 
             var doc = XDocument.Load(path);
             if (doc != null)
@@ -47,7 +47,9 @@ public class XmlFileHandler
                                 new XElement(nameof(BranchModel.Password), branch.Password),
                                 new XElement(nameof(BranchModel.Telephone), branch.Telephone),
                                 new XElement(nameof(BranchModel.IpAddress), branch.IpAddress),
-                                new XElement(nameof(BranchModel.Port), branch.Port)
+                                new XElement(nameof(BranchModel.Port), branch.Port),
+                                new XElement(nameof(BranchModel.UserId), branch.UserId)
+
                     ));
                     root.Save(path);
                 }
@@ -81,7 +83,7 @@ public class XmlFileHandler
         }
     }
 
-    private Task<bool> IsIpAdrressExist(string ipAddress)
+    public Task<bool> IsIpAdrressExist(string ipAddress)
     {
         var doc = XDocument.Load(path);
         var existing = doc.Descendants(emlementName).Any(x => x.Element("IpAddress")!.Value == ipAddress);
@@ -100,11 +102,12 @@ public class XmlFileHandler
                  {
                      Id = Guid.Parse(x.Attribute("Id")?.Value ?? Guid.Empty.ToString()),
                      BrachName = x.Element("BrachName")?.Value ?? string.Empty,
-                     Username = x.Element("EmailOrPhone")?.Value ?? string.Empty,
+                     Username = x.Element("Username")?.Value ?? string.Empty,
                      Password = x.Element("Password")?.Value ?? string.Empty,
                      Telephone = x.Element("Telephone")?.Value ?? string.Empty,
                      IpAddress = x.Element("IpAddress")?.Value ?? string.Empty,
-                     Port = x.Element("Port")?.Value ?? string.Empty
+                     Port = x.Element("Port")?.Value ?? string.Empty,
+                     UserId = int.Parse(x.Element("UserId")?.Value ?? "0"),
                  }).ToList();
                  return students;
              });

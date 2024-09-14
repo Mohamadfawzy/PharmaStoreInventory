@@ -61,16 +61,16 @@ public static class AppPreferences
         
     }
 
-    public static string Port
+    public static string EmpUsername
     {
-        get => GetValue(nameof(Port), "1433");
-        set => Preferences.Default.Set(nameof(Port), value);
+        get => GetValue("EmpUsername", ".");
+        set => Preferences.Default.Set("EmpUsername", value);
     }
 
-    public static string IP
+    public static string EmpPassword
     {
-        get => GetValue(nameof(IP), ".");
-        set => Preferences.Default.Set(nameof(IP), value);
+        get => GetValue("EmpPassword", ".");
+        set => Preferences.Default.Set("EmpPassword", value);
     }
 
     public static string GetDeviceID()
