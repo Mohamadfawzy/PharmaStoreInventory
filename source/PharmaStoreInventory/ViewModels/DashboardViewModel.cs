@@ -7,7 +7,6 @@ using PharmaStoreInventory.Models;
 using PharmaStoreInventory.Services;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace PharmaStoreInventory.ViewModels;
 
 public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>

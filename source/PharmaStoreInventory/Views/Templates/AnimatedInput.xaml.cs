@@ -310,19 +310,18 @@ public partial class AnimatedInput : ContentView
         await Task.WhenAll(scaleTask, translateTask);
     }
 
-    public async void PositioningOfPlaceHolder()
+    public void PositioningOfPlaceHolder()
     {
         if (!string.IsNullOrEmpty(InputText)) // InputText is have value
         {
-            await Task.Delay(300);
-
-            await Task.Run(() =>
-            {
-                SetFocusColors();
-                placeholder.Scale = 0.8;
-                placeholder.TranslationX = CalculateTranslationX();
-                placeholder.TranslationY = CalculateTranslationY();
-            });
+            //await Task.Delay(500);
+            SetFocusColors();
+            placeholder.Scale = 0.8;
+            placeholder.TranslationX = CalculateTranslationX();
+            placeholder.TranslationY = CalculateTranslationY();
+            //await Task.Run(() =>
+            //{
+            //});
         }
     }
 

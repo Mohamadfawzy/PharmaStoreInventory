@@ -8,10 +8,10 @@ namespace DataAccess.Dtos;
 public class ProductDetailsDto 
 {
 
+    public decimal? ExpiryGroupID { get; set; } //Counter_id
     public decimal Id { get; set; }
     public decimal ProductId { get; set; }
     public decimal? StoreId { get; set; }
-    public decimal? ExpiryGroupID { get; set; } //Counter_id
     public string? IsInventoried { get; set; }
     //public decimal? VendorId { get; set; }
     public DateTime? ExpDate { get; set; }
@@ -23,6 +23,7 @@ public class ProductDetailsDto
     public decimal? ProductUnit13 { get; set; }
     public string? VendorNameAr { get; set; }
     public string? CompanyNameAr { get; set; }
+    public string? ProductHasExpire { get; set; }
 
     //public event NotifyCollectionChangedEventHandler? CollectionChanged;
 

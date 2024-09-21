@@ -33,4 +33,16 @@ internal static class Validator
         //return regex.IsMatch(phoneNumber);
     }
 
+    internal static bool IsNetworkAccess()
+    {
+        NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+
+        if (accessType != NetworkAccess.Internet)
+        {
+            //notification.ShowMessage(new Models.ErrorMessage("No NetworkAccess", "please check your WiFi"));
+            return true;
+        }
+        return false;
+    }
+
 }

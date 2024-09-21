@@ -30,7 +30,6 @@ public partial class UserView : ContentPage
         var user = await jsonFileHanler.SingleObject<UserLoginResponseDto>();
         if (user != null)
         {
-
             nameEntry.Text = user.FullName;
             pharmaName.Text = user.PharmcyName;
             phone.Text = user.PhoneNumber;
@@ -94,12 +93,14 @@ public partial class UserView : ContentPage
 
     private async void MenuItemTapped(object sender, TappedEventArgs e)
     {
+        var border = (Border)sender;
         if (e.Parameter == null)
             return;
         string parameter = (string)e.Parameter;
 
         if (parameter == "Branches")
         {
+            border.BackgroundColor = Color.FromArgb("#400056a9");
             await Navigation.PushAsync(new BranchesView());
         }
         else if (parameter == "AddBranch")
@@ -120,7 +121,7 @@ public partial class UserView : ContentPage
         }
         else
         {
-
+            Reset();
         }
 
     }
@@ -157,6 +158,17 @@ public partial class UserView : ContentPage
 
     private void Logout()
     {
+        File.Delete(AppValues.XBranchsFileName);
+        File.Delete(AppValues.UserFileName);
+        File.Delete(AppValues.BranchsFileName);
+
+
+        AppPreferences.LocalDbUserId = 0;
+        AppPreferences.StoreId = 1;
+        AppPreferences.HasBranchRegistered = false;
+        AppPreferences.LeftScanIcon = false;
+
+
         if (Application.Current != null)
             Application.Current.MainPage = new NavigationPage(new LoginView());
         AppPreferences.IsLoggedIn = false;
@@ -165,5 +177,57 @@ public partial class UserView : ContentPage
         // delete all be low
         AppPreferences.StoreId = 0;
     }
+    
+    private async void Reset()
+    {
+        File.Delete(AppValues.XBranchsFileName);
+        File.Delete(AppValues.UserFileName);
+        File.Delete(AppValues.BranchsFileName);
 
+        AppPreferences.HostUserId = 0;
+        AppPreferences.LocalDbUserId = 0;
+        AppPreferences.StoreId = 1;
+        AppPreferences.IsLoggedIn = false;
+        AppPreferences.IsFirstTime = true;
+        AppPreferences.IsUserActivated = false;
+        AppPreferences.HasBranchRegistered = false;
+        AppPreferences.LeftScanIcon = false;
+
+        if (Application.Current != null)
+            Application.Current.MainPage = new NavigationPage(new OnbordingView());
+    }
+
+    private async void TouchBehavior_TouchGestureCompleted(object sender, CommunityToolkit.Maui.Core.TouchGestureCompletedEventArgs e)
+    {
+        var border = (Border)sender;
+        if (e.TouchCommandParameter == null)
+            return;
+        string parameter = (string)e.TouchCommandParameter;
+
+        if (parameter == "Branches")
+        {
+            border.BackgroundColor = Color.FromArgb("#400056a9");
+            await Navigation.PushAsync(new BranchesView());
+        }
+        else if (parameter == "AddBranch")
+        {
+            await Navigation.PushAsync(new CreateBranchView());
+        }
+        else if (parameter == "Cog")
+        {
+            await Navigation.PushAsync(new SettingView());
+        }
+        else if (parameter == "ResetPassword")
+        {
+            OpenPopup();
+        }
+        else if (parameter == "Logout")
+        {
+            Logout();
+        }
+        else
+        {
+            Reset();
+        }
+    }
 }

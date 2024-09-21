@@ -15,6 +15,7 @@ public partial class OnbordingView : ContentPage
     {
         InitializeComponent();
         OnboardingTextCV.ItemsSource = OnboardingTextList;
+        AppPreferences.LocalDeviceId = Guid.NewGuid().ToString();
     }
 
     private void Button_Clicked(object sender, EventArgs e)

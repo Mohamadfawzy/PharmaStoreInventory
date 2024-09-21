@@ -19,7 +19,7 @@ public static class Alerts
         {
             BackgroundColor = Colors.DarkBlue,
             TextColor = Colors.White,
-            
+
             //ActionButtonTextColor = Colors.Yellow,
             // ActionButtonFont = Microsoft.Maui.Font.SystemFontOfSize(14),
             CornerRadius = new CornerRadius(10),
@@ -36,23 +36,23 @@ public static class Alerts
 
         await snackbar.Show(cancellationTokenSource.Token);
     }
-    
-    //public static async Task DisplaySnackbar2(string text, int durations = 10)
-    //{
 
-    //    CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+    public static async Task DisplayToast(string text)
+    {
 
-    //    ToastDuration duration = ToastDuration.Long;
-    //    double fontSize = 14;
+        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-    //    var toast = Toast.Make(text, duration, fontSize);
+        ToastDuration duration = ToastDuration.Long;
+        double fontSize = 14;
 
-    //    await toast.Show(cancellationTokenSource.Token);
-    //}
+        var toast = Toast.Make(text, duration, fontSize);
+
+        await toast.Show(cancellationTokenSource.Token);
+    }
 
     public static async Task SendNotification(ErrorMessage errorMessage)
     {
-            WeakReferenceMessenger.Default.Send(new NotificationMessage(errorMessage));
+        WeakReferenceMessenger.Default.Send(new NotificationMessage(errorMessage));
         await Task.Run(() =>
         {
         });

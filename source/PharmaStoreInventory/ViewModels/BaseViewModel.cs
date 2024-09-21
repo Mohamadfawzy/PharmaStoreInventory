@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System.ComponentModel;
+using System.Windows.Input;
 
 namespace PharmaStoreInventory.ViewModels;
 
@@ -12,7 +12,7 @@ public class BaseViewModel : ObservableObject
         get => activityIndicatorRunning;
         set => SetProperty(ref activityIndicatorRunning, value);
     }
-    
+
     private bool isRefreshing = false;
 
     public bool IsRefreshing
@@ -35,4 +35,17 @@ public class BaseViewModel : ObservableObject
         get => isNoDataElementVisible;
         set => SetProperty(ref isNoDataElementVisible, value);
     }
+
+    private bool isEmptyViewVisible = true;
+    public bool IsEmptyViewVisible
+    {
+        get => isEmptyViewVisible;
+        set => SetProperty(ref isEmptyViewVisible, value);
+    }
+
+    public ICommand NavigationPopCommand => new Command(async () =>
+    {
+        if (Application.Current != null && Application.Current.MainPage != null)
+            await Application.Current.MainPage.Navigation.PopAsync();
+    });
 }

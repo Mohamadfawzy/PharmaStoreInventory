@@ -10,34 +10,34 @@ public partial class App : Application
     public App()
     {
         //Context = new AppDb();
+        UserAppTheme = AppTheme.Light;
         InitializeComponent();
+        AppValues.Language = "ar";
         GetCulture();
         HandlePreferencesKeys();
         if (AppPreferences.IsFirstTime)
         {
             MainPage = new NavigationPage(new OnbordingView());
         }
-        else if(!AppPreferences.IsLoggedIn)
+        else if (!AppPreferences.IsLoggedIn)
         {
             MainPage = new NavigationPage(new LoginView());
         }
-        else if(AppPreferences.IsLoggedIn && !AppPreferences.IsUserActivated)
-        {
-            MainPage = new NavigationPage(new WaitingApprovalView());
-        }
+        //else if(AppPreferences.IsLoggedIn && !AppPreferences.IsUserActivated)
+        //{
+        //    MainPage = new NavigationPage(new WaitingApprovalView());
+        //}
         else if (!AppPreferences.HasBranchRegistered)
         {
             //MainPage = new NavigationPage(new CreateBranchView());
-            MainPage = new NavigationPage(new BranchesView());
+            MainPage = new NavigationPage(new BranchesView(false));
         }
         else
         {
             MainPage = new NavigationPage(new DashboardView());
         }
-
-        UserAppTheme = AppTheme.Light;
     }
-    
+
 #pragma warning disable CA1822
     void GetCulture()
     {
@@ -59,6 +59,7 @@ public partial class App : Application
             //DataAccess.Helper.Strings.IP = AppPreferences.IP;
             AppValues.LocalBaseURI = AppPreferences.LocalBaseURI;
             AppValues.LeftScanIcon = AppPreferences.LeftScanIcon;
+            AppValues.ProductHasQuantityOnly = AppPreferences.ProductHasQuantityOnly;
         }
         catch
         {

@@ -1,6 +1,8 @@
-﻿using DataAccess.DomainModel;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using DataAccess.DomainModel;
 using DataAccess.Dtos.UserDtos;
 using DataAccess.Services;
+using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.Models;
 using PharmaStoreInventory.Services;
 using PharmaStoreInventory.Views;
@@ -25,11 +27,6 @@ public class RegisterViewModel : BaseViewModel
     // ########################################################################
     public RegisterViewModel()
     {
-        //var repo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<UserRepository>();
-
-        //repo ??= new UserRepository(new AppHost());
-
-        //authService = new(repo);
         mailingService = new();
         UserRegister = new()
         {
@@ -44,6 +41,7 @@ public class RegisterViewModel : BaseViewModel
         Helpers.AppPreferences.SetDeviceID();
         UserRegister.DeviceID = Helpers.AppPreferences.GetDeviceID();
         Code = new();
+        ShowNotification(new Models.ErrorMessage("test", "") );
     }
 
     public VerificationCodeValues Code { get; set; }
@@ -99,31 +97,36 @@ public class RegisterViewModel : BaseViewModel
         }
     }
     
-    public async Task<ErrorCode> CheckEmailValidityAndSendEmail()
+    //public async Task<ErrorCode> CheckEmailValidityAndSendEmail()
+    //{
+    //    try
+    //    {
+    //        //cheack if email is not exist
+    //        var res = await ApiServices.AreEmailAndPhoneNonExistentAsync(uRegister.Email!, uRegister.PhoneNumber!);
+    //        //_ = Helpers.Alerts.DisplaySnackbar(res.Message);
+    //        if (res == null)
+    //            return ErrorCode.NullValue;
+
+    //        if (res.IsSuccess)
+    //        {
+    //            VerificationViewTemplateVisible = true;
+    //            verificationCodeSended = "1111";// await mailingService.SendVerificationCodeAsync(uRegister.Email!, null, "mohamed fawzy");
+    //            return ErrorCode.NoError;
+    //        }
+    //        return res.ErrorCode;
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        var exceptionMessage = $"Message: {ex.Message}\nInnerException: {ex.InnerException?.Message}";
+    //        await Helpers.Alerts.DisplaySnackbar(exceptionMessage);
+    //        return ErrorCode.ExceptionError;
+    //    }
+    //}
+
+
+    void ShowNotification(ErrorMessage error)
     {
-        try
-        {
-            //cheack if email is not exist
-            var res = await ApiServices.IsEmailOrPhoneExistAsync(UserRegister.Email!, UserRegister.PhoneNumber!);
-            //_ = Helpers.Alerts.DisplaySnackbar(res.Message);
-            if (res == null)
-                return ErrorCode.NullValue;
-
-            if (res.IsSuccess)
-            {
-                VerificationViewTemplateVisible = true;
-                verificationCodeSended = "1111";// await mailingService.SendVerificationCodeAsync(UserRegister.Email!, null, "mohamed fawzy");
-                return ErrorCode.NoError;
-            }
-            return res.ErrorCode;
-        }
-        catch (Exception ex)
-        {
-            var exceptionMessage = $"Message: {ex.Message}\nInnerException: {ex.InnerException?.Message}";
-            await Helpers.Alerts.DisplaySnackbar(exceptionMessage);
-            return ErrorCode.ExceptionError;
-        }
+        WeakReferenceMessenger.Default.Send(new RegisterViewNotification(error));
     }
-
 
 }

@@ -8,13 +8,13 @@ using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.Services;
 namespace PharmaStoreInventory.Views;
 
-public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchViewotification>
+public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchViewNotification>
 {
 
     private readonly XmlFileHandler xFileHanler;
     private EmployeeDto? employee = null;
 
-    public void Receive(CreateBranchViewotification message)
+    public void Receive(CreateBranchViewNotification message)
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
@@ -121,7 +121,8 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
                 return;
             }
 
-            notification.ShowMessage("Contacted successfully", "The branch has been contacted successfully");
+            //notification.ShowMessage("Contacted successfully", "The branch has been contacted successfully");
+            await Alerts.DisplayToast("Contacted successfully");
 
             // 2 Save branch data locally
             var t1 = xFileHanler.Add(branch);
@@ -196,7 +197,7 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
     }
 
     // will deleted
-    private void SetInputText_Tapped(object sender, TappedEventArgs e)
+    private async void SetInputText_Tapped(object sender, TappedEventArgs e)
     {
         brachName.InputText = "شبين الكوم";
         telephone.InputText = "0402555550";
@@ -204,7 +205,7 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
         port.InputText = "5144";
         username.InputText = "admin";
         password.InputText = "admin";
-        inputsContainer.PositioningOfPlaceHolder();
+        await inputsContainer.PositioningOfPlaceHolder();
     }
 }
 

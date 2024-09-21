@@ -23,7 +23,10 @@
 
             <!--  Login Title  -->
             <Border Style="{StaticResource TitleBorderStyle}">
-                <Label Style="{StaticResource TitleCenter}" Text="مرحبا دكتور محمد أحمد" />
+                <Label
+                    x:Name="userFullName"
+                    Style="{StaticResource TitleCenter}"
+                    Text="مرحبا" />
             </Border>
 
             <!--  Refresh  -->
@@ -50,14 +53,12 @@
             <Label
                 Margin="20,0"
                 Style="{StaticResource Titleline}"
-                Text="نقدر إنتظاركم ونعمل علي إعتماد استخدامكم للتطبيق  شكرا لاستخدامكم e-stock" />
+                Text="نقدر إنتظارك وسيتم تنشيط حسابك في أقرب وقت شكرا لاستخدامك e-stock" />
 
             <Image
                 Source="logoicon.svg"
                 Aspect="AspectFill"
                 HeightRequest="250" />
-
-
 
             <!--  Logout  -->
             <Border
@@ -65,15 +66,15 @@
                 Padding="10,3"
                 BackgroundColor="{StaticResource Primary050}"
                 StrokeThickness="1"
-                HorizontalOptions="Start"
-                Stroke="{StaticResource ErrorDarkColor}"
+                HorizontalOptions="Center"
+                Stroke="{StaticResource Secondary}"
                 StrokeShape="RoundRectangle 15">
                 <StackLayout
                     Padding="15,0"
                     Orientation="Horizontal"
                     Spacing="20">
-                    <Label Text="تسجيل خروج" TextColor="{StaticResource Primary700}" />
-                    <Label Style="{StaticResource Iconline}" Text="{x:Static icon:IconFont.Logout}" />
+                    <Label Text="تسجيل دخول" TextColor="{StaticResource Primary700}" />
+                    <Label Style="{StaticResource Iconline}" Text="{x:Static icon:IconFont.Login}" />
                 </StackLayout>
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="LogoutTapped" />

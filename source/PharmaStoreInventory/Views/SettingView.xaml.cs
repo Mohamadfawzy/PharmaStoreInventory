@@ -7,7 +7,8 @@ public partial class SettingView : ContentPage
 	public SettingView()
 	{
 		InitializeComponent();
-		styleSwitch.IsToggled = AppPreferences.LeftScanIcon;
+		styleSwitch.IsToggled = AppValues.LeftScanIcon;
+		quantitySwitch.IsToggled = AppValues.ProductHasQuantityOnly;
 
     }
 
@@ -19,5 +20,15 @@ public partial class SettingView : ContentPage
         }
 		else
 			AppPreferences.LeftScanIcon = AppValues.LeftScanIcon = false;
+    }
+	
+	private void QuantitySwitch_Toggled(object sender, ToggledEventArgs e)
+    {
+		if (e.Value)
+		{
+			AppPreferences.ProductHasQuantityOnly = AppValues.ProductHasQuantityOnly = true;
+        }
+		else
+			AppPreferences.ProductHasQuantityOnly = AppValues.ProductHasQuantityOnly = false;
     }
 }

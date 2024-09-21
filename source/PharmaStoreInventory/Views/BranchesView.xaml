@@ -12,41 +12,89 @@
     x:Name="ThisPage"
     Title="الفروع"
     NavigationPage.HasNavigationBar="False">
-    <Grid Padding="20,0" RowDefinitions="Auto,*">
+    <Grid
+        Padding="0"
+        RowDefinitions="Auto,*"
+        BackgroundColor="Transparent"
+        RowSpacing="10">
+
+        <!--  Notification  -->
         <template:NotificationTemplate
             x:Name="notification"
-            ZIndex="2"
-            IsVisible="False" />
+            Grid.RowSpan="2"
+            ZIndex="2" />
 
-        <!--  BackButton  -->
-        <Button
-            Margin="15"
-            Padding="0"
-            HeightRequest="30"
-            WidthRequest="30"
-            HorizontalOptions="Start"
-            VerticalOptions="Start"
-            CornerRadius="20"
-            Clicked="BackButtonClicked"
-            FontFamily="{StaticResource IconFont}"
-            Text="{x:Static help:IconFontManager.ArrowIcon}" />
-
-        <Button
-            Margin="15"
-            Padding="10,0"
-            Text="إضافة فرع"
+        <!--  Header  -->
+        <StackLayout
+            Padding="10,5"
             IsVisible="True"
-            MaximumHeightRequest="30"
-            VerticalOptions="Center"
-            FontSize="10"
-            HorizontalOptions="End"
-            Clicked="GotoCreateBranchClicked" />
+            Orientation="Horizontal"
+            BackgroundColor="{StaticResource Primary800}">
+            <Label
+                x:Name="backArrowIcon"
+                Margin="0"
+                Padding="10,0"
+                FontSize="22"
+                TextColor="{StaticResource Primary050}"
+                FontFamily="{StaticResource IconFont}"
+                VerticalTextAlignment="Center"
+                VerticalOptions="FillAndExpand"
+                Text="{x:Static help:IconFontManager.ArrowIcon}">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="NavigationPop_Tapped" />
+                </Label.GestureRecognizers>
+                <Label.Behaviors>
+                    <toolkit:TouchBehavior
+                        DefaultAnimationDuration="250"
+                        DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+                        PressedBackgroundColor="#50000000"
+                        PressedOpacity="0.6"
+                        PressedScale="0.8" />
+                </Label.Behaviors>
+            </Label>
+            <Label
+                Text="Branches"
+                VerticalTextAlignment="Center"
+                TextColor="{StaticResource Primary050}" />
+
+            <!--  add new bransh button  -->
+            <Border
+                Margin="0"
+                Padding="10,5"
+                HorizontalOptions="EndAndExpand"
+                BackgroundColor="{StaticResource Primary700}"
+                StrokeThickness="2"
+                Stroke="{StaticResource Secondary}"
+                StrokeShape="RoundRectangle 15">
+                <StackLayout
+                    Padding="5,0"
+                    Orientation="Horizontal"
+                    Spacing="5">
+                    <Label
+                        FontSize="13"
+                        Style="{StaticResource Iconline}"
+                        TextColor="{StaticResource Primary050}"
+                        VerticalTextAlignment="Center"
+                        Text="{x:Static icon:IconFont.Plus}" />
+                    <Label
+                        Text="إضافة فرع"
+                        FontSize="13"
+                        VerticalTextAlignment="Center"
+                        TextColor="{StaticResource Primary050}" />
+                </StackLayout>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="GotoCreateBranchTapped" />
+                </Border.GestureRecognizers>
+            </Border>
+        </StackLayout>
+
+
 
         <!--  Collection  -->
         <CollectionView
             x:Name="clBranches"
             Grid.Row="1"
-            Margin="5,10,5,0"
+            Margin="10,0"
             FlowDirection="LeftToRight"
             BackgroundColor="{StaticResource White}"
             SelectionMode="Single">
@@ -74,84 +122,96 @@
                             </SwipeItems>
                         </SwipeView.RightItems>
 
-                        <Border
-                            Padding="10,0"
-                            StrokeShape="RoundRectangle 10"
-                            BackgroundColor="{StaticResource Primary800}">
-                            <Grid
-                                RowDefinitions="Auto,Auto,Auto,Auto,80"
-                                ColumnDefinitions="*,Auto"
-                                RowSpacing="0">
-                                <Label
-                                    Grid.ColumnSpan="2"
-                                    Text="{Binding BrachName}"
-                                    FontSize="22"
-                                    HorizontalOptions="Center"
-                                    TextColor="{StaticResource Primary050}" />
-                                <Label
-                                    Grid.Row="1"
-                                    Grid.ColumnSpan="2"
-                                    Text="{Binding HidIpAddress}"
-                                    TextColor="{StaticResource Primary050}" />
-                                <!--  Username  -->
-                                <Label
-                                    Grid.Row="2"
-                                    Margin="0,5,0,0"
-                                    FontSize="13"
-                                    Text="Username"
-                                    TextColor="{StaticResource Primary050}" />
-                                <Label
-                                    Grid.Row="3"
-                                    Margin="0,-13,0,0"
-                                    Padding="0"
-                                    Text="{Binding Username}"
-                                    TextColor="{StaticResource Primary050}" />
-                                <!--  Port  -->
-                                <Label
-                                    Grid.Row="2"
-                                    Grid.Column="1"
-                                    Margin="0,5,0,0"
-                                    FontSize="13"
-                                    Text="Port"
-                                    TextColor="{StaticResource Primary050}" />
-                                <Label
-                                    Grid.Row="3"
-                                    Grid.Column="1"
-                                    Margin="0,-13,10,0"
-                                    Padding="0"
-                                    Text="{Binding Port}"
-                                    TextColor="{StaticResource Primary050}" />
+                        <Grid BackgroundColor="{StaticResource White}">
+                            <Border
+                                Padding="20,0"
+                                StrokeShape="RoundRectangle 20"
+                                BackgroundColor="{StaticResource Primary800}">
+                                <Grid
+                                    RowDefinitions="Auto,Auto,Auto,Auto,80"
+                                    ColumnDefinitions="*,Auto"
+                                    RowSpacing="0">
+                                    <Label
+                                        Grid.ColumnSpan="2"
+                                        Padding="0"
+                                        VerticalTextAlignment="Start"
+                                        Text="{Binding BrachName}"
+                                        FontSize="22"
+                                        HorizontalOptions="Center"
+                                        TextColor="{StaticResource Primary050}" />
+                                    <Label
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="2"
+                                        Text="{Binding HidIpAddress}"
+                                        TextColor="{StaticResource Primary050}" />
+                                    <!--  Username  -->
+                                    <Label
+                                        Grid.Row="2"
+                                        Margin="0,5,0,0"
+                                        FontSize="13"
+                                        Text="Username"
+                                        TextColor="{StaticResource Primary050}" />
+                                    <Label
+                                        Grid.Row="3"
+                                        Margin="0,-13,0,0"
+                                        Padding="0"
+                                        Text="{Binding Username}"
+                                        TextColor="{StaticResource Primary050}" />
+                                    <!--  Port  -->
+                                    <Label
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Margin="0,5,0,0"
+                                        FontSize="13"
+                                        Text="Port"
+                                        TextColor="{StaticResource Primary050}" />
+                                    <Label
+                                        Grid.Row="3"
+                                        Grid.Column="1"
+                                        Margin="0,-13,10,0"
+                                        Padding="0"
+                                        Text="{Binding Port}"
+                                        TextColor="{StaticResource Primary050}" />
 
-                                <!--  Contact Button  -->
-                                <Button
-                                    Grid.Row="4"
-                                    Grid.ColumnSpan="2"
-                                    Margin="20,0"
-                                    Padding="0"
-                                    Text="Contact"
-                                    FontSize="20"
-                                    Clicked="ConnectionClicked"
-                                    BackgroundColor="{StaticResource SuccessColor}"
-                                    CommandParameter="{Binding .}"
-                                    VerticalOptions="Center" />
-                            </Grid>
-                        </Border>
+                                    <!--  Contact Button  -->
+                                    <Button
+                                        Grid.Row="4"
+                                        Grid.ColumnSpan="2"
+                                        Margin="0,0,0,12"
+                                        Padding="0"
+                                        CornerRadius="20"
+                                        Text="Contact"
+                                        FontSize="20"
+                                        Clicked="ConnectionClicked"
+                                        TextColor="{StaticResource Primary300}"
+                                        BackgroundColor="{StaticResource Primary950}"
+                                        CommandParameter="{Binding .}"
+                                        VerticalOptions="End" />
+                                </Grid>
+                            </Border>
+                        </Grid>
                     </SwipeView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
+        <!--  Empty Template  -->
         <template:NoDataTemplate
             x:Name="noDataTemplate"
-            Grid.Row="2"
+            Grid.Row="1"
             Grid.RowSpan="2"
+            ZIndex="2"
+            BindingContext="{x:Reference ThisPage}"
+            Data="{Binding NoDataModel}"
             IsVisible="True" />
+
+        <!--  ActivityIndicator  -->
         <ActivityIndicator
             x:Name="activityIndicator"
-            Grid.Row="0"
+            Grid.Row="1"
             Grid.RowSpan="2"
-            VerticalOptions="Center"
-            ZIndex="2"
+            VerticalOptions="Start"
+            ZIndex="3"
             IsRunning="True"
             Color="{StaticResource Primary600}" />
     </Grid>

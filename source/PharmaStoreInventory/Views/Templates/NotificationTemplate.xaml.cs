@@ -29,23 +29,32 @@ public partial class NotificationTemplate : ContentView
 
     public async void ShowMessage(ErrorMessage model)
     {
-        //CommunityToolkit.Maui.Core.Platform.StatusBar.SetColor(Color.Parse("#b9ddfe"));
-        //CommunityToolkit.Maui.Core.Platform.StatusBar.SetStyle(StatusBarStyle.LightContent);
-        this.IsVisible = true;
-        Message = model.Title;
-        bodyMessage.Text = model.Body;
-        container.Opacity = 1;
-        await container.TranslateTo(0,0);
-        container.TranslationY = 0;
+        try
+        {
+            //CommunityToolkit.Maui.Core.Platform.StatusBar.SetColor(Color.Parse("#b9ddfe"));
+            //CommunityToolkit.Maui.Core.Platform.StatusBar.SetStyle(StatusBarStyle.LightContent);
+            this.IsVisible = true;
+            Message = model.Title;
+            bodyMessage.Text = model.Body;
+            container.Opacity = 1;
+            await container.TranslateTo(0, 0);
+            container.TranslationY = 0;
 
-        await Task.Delay(TimeSpan.FromSeconds(15));
-        HideMessage();
+            await Task.Delay(TimeSpan.FromSeconds(15));
+            HideMessage();
+        }
+        catch
+        {
+            this.IsVisible = true;
+            Message = model.Title;
+            bodyMessage.Text = model.Body;
+            container.Opacity = 1;
+            container.TranslationY = 0;
+        }
     }
     
     public async void ShowMessage(string title, string body= "")
     {
-        //CommunityToolkit.Maui.Core.Platform.StatusBar.SetColor(Color.Parse("#b9ddfe"));
-        //CommunityToolkit.Maui.Core.Platform.StatusBar.SetStyle(StatusBarStyle.LightContent);
         this.IsVisible = true;
         Message = title;
         bodyMessage.Text = body;

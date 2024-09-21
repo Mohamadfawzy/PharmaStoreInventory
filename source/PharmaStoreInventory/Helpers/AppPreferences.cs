@@ -12,6 +12,12 @@ public static class AppPreferences
         set => Preferences.Default.Set(nameof(HostUserId),value);
     }
 
+    public static string UserFullName
+    {
+        get => GetValue(nameof(UserFullName), "مرحبا");
+        set => Preferences.Default.Set(nameof(UserFullName), value);
+    }
+
     public static int LocalDbUserId
     {
         get => GetValue(nameof(LocalDbUserId), 0);
@@ -53,6 +59,12 @@ public static class AppPreferences
         get => GetValue(nameof(LeftScanIcon), false);
         set => Preferences.Default.Set(nameof(LeftScanIcon), value);
     }
+    
+    public static bool ProductHasQuantityOnly
+    {
+        get => GetValue(nameof(ProductHasQuantityOnly), false);
+        set => Preferences.Default.Set(nameof(ProductHasQuantityOnly), value);
+    }
 
     public static string LocalBaseURI
     {
@@ -66,11 +78,17 @@ public static class AppPreferences
         get => GetValue("EmpUsername", ".");
         set => Preferences.Default.Set("EmpUsername", value);
     }
-
     public static string EmpPassword
     {
         get => GetValue("EmpPassword", ".");
         set => Preferences.Default.Set("EmpPassword", value);
+    }
+    
+    
+    public static string LocalDeviceId
+    {
+        get => GetValue("LocalDeviceId", ".");
+        set => Preferences.Default.Set("LocalDeviceId", value);
     }
 
     public static string GetDeviceID()
@@ -104,7 +122,7 @@ public static class AppPreferences
             }
             else
             {
-                Preferences.Default.Set("DeviceId", Guid.NewGuid().ToString());
+                Preferences.Default.Set("DeviceId", LocalDeviceId);
             }
         }
         catch

@@ -1,6 +1,5 @@
 ﻿using DataAccess.DomainModel.QueryParams;
 using DataAccess.Dtos;
-using DataAccess.Repository;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Models;
 using PharmaStoreInventory.Services;
@@ -40,7 +39,7 @@ public class AllStockViewModel : BaseViewModel
         set => SetProperty(ref products, value);
     }
     public NoDataModel NoDataModel =>
-     new("nodataicon.png", "No Data", "There is no data to show you right now", false);
+     new("nodataicon.png", "No Data", "There is no data to show you right now", true);
 
 
     public bool BottomSheet
@@ -56,10 +55,9 @@ public class AllStockViewModel : BaseViewModel
     public ICommand SearchBoxTypingCommand => new Command<string>(SearchBoxTyping);
     public ICommand StoreSelectionChangedCommand => new Command<SortModel>(StoreSelectionChanged);
     public ICommand FiltersCommand => new Command(ExecuteFilters);
-
-
     public ICommand OpenBottomSheetCommand => new Command(ExecuteOpenBottomSheet);
     public ICommand CloseBottomSheetCommand => new Command(CloseOpenBottomSheet);
+    public ICommand ShowAllProductCommand => new Command(ExecutShowAllProduct);
     public List<SortModel> SortListItems
     {
         get => sortListItems;
@@ -67,12 +65,48 @@ public class AllStockViewModel : BaseViewModel
     }
 
     // #######################################
+    private async Task GetProducts()
+    {
+        try
+        {
+            Products = await ApiServices.GetAllProducts(ProductQueryParam);
+            if (Products != null && Products.Count > 0)
+            {
+                IsNoDataElementVisible = false;
+            }
+            else IsNoDataElementVisible = true;
+        }
+        catch (Exception ex)
+        {
+            await Alerts.DisplaySnackbar("GetProducts: " + ex.Message);
+        }
+    }
+
     void ExecuteOpenBottomSheet()
     {
         BottomSheet = true;
     }
 
-   
+    async void ExecutShowAllProduct()
+    {
+        ActivityIndicatorRunning = true;
+        try
+        {
+            ProductQueryParam.Text = string.Empty;
+            await GetProducts();
+        }
+        catch (Exception ex)
+        {
+            await Alerts.DisplaySnackbar("ExecutShowAllProduct: " + ex.Message);
+        }
+        finally
+        {
+            IsEmptyViewVisible = false;
+            ActivityIndicatorRunning = false;
+        }
+
+    }
+
     private async void SearchBoxTyping(string text)
     {
         try
@@ -82,40 +116,13 @@ public class AllStockViewModel : BaseViewModel
                 ProductQueryParam.Text = string.Empty;
                 return;
             }
-
             await GetFromSearch(text);
             ActivityIndicatorRunning = false;
         }
         catch (Exception ex)
         {
-            await Helpers.Alerts.DisplaySnackbar("SearchBoxTyping: " + ex.Message);
+            await Alerts.DisplaySnackbar("SearchBoxTyping: " + ex.Message);
         }
-
-    }
-
-
-    private async Task GetAllProducts()
-    {
-        try
-        {
-            //await Task.Delay(300);
-            await Task.Run(async () =>
-            {
-                var list = await ApiServices.GetAllProducts(ProductQueryParam);
-                if (list != null)
-                {
-                    Products = list;
-                    //await Task.Delay(1000);
-                    productsListTemp = list;
-                }
-            });
-        }
-        catch (Exception ex)
-        {
-            await Alerts.DisplaySnackbar($"{ex.Message}");
-        }
-
-        ActivityIndicatorRunning = false;
     }
 
     private async Task GetFromSearch(string text)
@@ -131,16 +138,16 @@ public class AllStockViewModel : BaseViewModel
             }
 
             ProductQueryParam.Text = text;
-            Products = await ApiServices.GetAllProducts(ProductQueryParam);
-            if (Products != null && Products.Count > 0)
-            {
-                IsNoDataElementVisible = false;
-            }
-            else IsNoDataElementVisible = true;
+            await GetProducts();
         }
         catch (Exception ex)
         {
             await Helpers.Alerts.DisplaySnackbar("GetFromSearch: " + ex.Message);
+        }
+        finally
+        {
+            IsEmptyViewVisible = false;
+            ActivityIndicatorRunning = false;
         }
     }
 
@@ -158,19 +165,15 @@ public class AllStockViewModel : BaseViewModel
                 ProductQueryParam.QuantityBiggerThanZero = FilterQuantityBiggerThanZero;
                 ProductQueryParam.IsGroup = FilterIsGroup;
                 await Task.Delay(250);
-                Products = await ApiServices.GetAllProducts(ProductQueryParam).ConfigureAwait(true);
-                if (Products != null && Products.Count > 0)
-                {
-                    IsNoDataElementVisible = false;
-                }
-                else IsNoDataElementVisible = true;
+                await GetProducts();
+                IsEmptyViewVisible = false;
+                ActivityIndicatorRunning = false;
             });
         }
         catch
         {
             await Alerts.DisplaySnackbar("Exception from ExecuteFilters");
         }
-        ActivityIndicatorRunning = false;
     }
 
     // exectued method

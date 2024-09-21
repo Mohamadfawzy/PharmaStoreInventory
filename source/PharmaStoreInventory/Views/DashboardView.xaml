@@ -8,8 +8,11 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
     xmlns:trigger="clr-namespace:PharmaStoreInventory.Triggers"
+    xmlns:help="clr-namespace:PharmaStoreInventory.Helpers"
     x:Name="ThisPage"
     Title="DashboardView"
+    BackgroundColor="{AppThemeBinding Light={StaticResource White},
+                                      Dark={StaticResource Primary900}}"
     NavigatedTo="ThisPage_NavigatedTo"
     NavigationPage.HasNavigationBar="False">
 
@@ -63,7 +66,11 @@
                     Padding="20,7"
                     Orientation="Horizontal"
                     BackgroundColor="{StaticResource PrimaryDark}">
-                    <Label Text="ترحيب باسم المستخدم" TextColor="{StaticResource Primary050}" />
+                    <Label
+                        x:Name="userFullName"
+                        Text="مرحبا"
+                        TextColor="{StaticResource Primary050}" />
+                    <!--  MenuIcon  -->
                     <Frame
                         Padding="8,8"
                         CornerRadius="70"
@@ -330,12 +337,11 @@
                 </Grid>
                 <!--  End Popup  -->
 
-                <!--  PlaceholderElement Empty Element  -->
+                <!--  Empty Placeholder Element  -->
                 <VerticalStackLayout
                     x:Name="placeholderElement"
                     Grid.Row="1"
                     Padding="15"
-                    Loaded="placeholderElement_Loaded"
                     BackgroundColor="{StaticResource Primary100}"
                     IsVisible="{Binding IsPlaceholderVisible}"
                     Spacing="20">
@@ -377,7 +383,10 @@
                 </VerticalStackLayout>
 
                 <!--  No Data Template : Something went wrong  -->
-                <template:NoDataTemplate IsVisible="{Binding IsNoDataElementVisible}" Command="{Binding RefreshCommand}" />
+                <template:NoDataTemplate
+                    IsVisible="{Binding IsNoDataElementVisible}"
+                    Data="{Binding NoDataModel}"
+                    Command="{Binding RefreshCommand}" />
 
                 <ActivityIndicator
                     Grid.Row="0"

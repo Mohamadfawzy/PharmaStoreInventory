@@ -2,9 +2,9 @@
 
 namespace DataAccess.Services;
 
-public class JsonFileHanler(string fileName)
+public class JsonFileHanler(string fullPath)
 {
-    public string FullPath { get; set; } = fileName;
+    public string FullPath { get; set; } = fullPath;
 
     public async Task Add<T>(T item)
     {

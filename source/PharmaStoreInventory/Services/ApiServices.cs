@@ -114,6 +114,19 @@ public static class ApiServices
         var url = AppValues.LocalBaseURI + "/Products/edit-quantity";
         return await RequestProvider.PutAsync<Result, UpdateProductQuantityDto>(url, model);
     }
+
+    public static async Task<Result?> CopyProductAmout(CopyProductAmoutDto model)
+    {
+        var url = AppValues.LocalBaseURI + "/Products/copy";
+        var (content, error) = await RequestProvider.PostSingleAsync<Result, CopyProductAmoutDto>(url, model);
+        if (error != null)
+        {
+            //WeakReferenceMessenger.Default.Send(new PickingViewNotification(error));
+        }
+        return content;
+    }
+
+
     #endregion
 
     #region Branche
@@ -139,7 +152,7 @@ public static class ApiServices
         var (content, error) = await RequestProvider.GetAllAsync<BranchModel>($"{AppValues.HostBaseURI}/Branche/all?userId={userId}");
         if (error != null)
         {
-            WeakReferenceMessenger.Default.Send(new CreateBranchViewotification(error));
+            WeakReferenceMessenger.Default.Send(new CreateBranchViewNotification(error));
         }
         return content;
     }
@@ -210,7 +223,7 @@ public static class ApiServices
         return content;
     }
 
-    public static async Task<Result?> IsEmailOrPhoneExistAsync(string email, string phone)
+    public static async Task<Result?> AreEmailAndPhoneNonExistentAsync(string email, string phone)
     {
         var queryParams = new Dictionary<string, string?>
             {
@@ -240,7 +253,7 @@ public static class ApiServices
     }
     public static async Task<Result<UserLoginResponseDto>?> UserLoginByPhoneAsync(UserLoginRequestDto model)
     {
-        var url = AppValues.HostBaseURI + "/userAuth/login-email";
+        var url = AppValues.HostBaseURI + "/userAuth/login-phone";
         var (content, error) = await RequestProvider.PostSingleAsync<Result<UserLoginResponseDto>?, UserLoginRequestDto>(url, model);
         if (error != null)
         {

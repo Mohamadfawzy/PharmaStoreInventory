@@ -1,7 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using DataAccess.DomainModel;
 using DataAccess.Dtos;
 using DataAccess.Repository;
 using PharmaStoreInventory.Helpers;
+using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.Models;
 using PharmaStoreInventory.Services;
 using System.Collections.ObjectModel;
@@ -12,38 +15,33 @@ namespace PharmaStoreInventory.ViewModels;
 public class PickingViewModel : BaseViewModel
 {
     //#########*PrivateFields*############
-    //private readonly ProductAmountRepo repo;
     private string nameEn = string.Empty;
     private string nameAr = string.Empty;
+    private string popupType = "edit";// or "editAndCopy"
     private string barcode = "0000";
     private string microUnitQuantity = "0";
     private decimal modifiedQuantity = 0;
-    private bool isVisibleEditQuantityAndExpiryPopup = false;
+    private bool isEditPopupVisible = false;
+    private bool isDateSectionInPopupVisible = true;
     private string modifiedExpiaryDate = string.Empty;
     private DateTime? expiaryDateLabel;
     private Product SelectedProduct = new();
-    public ObservableCollection<Product> listOfStoc = [];
+    public List<Product> listOfStoc = [];
 
     //#########*Constructor_1*############
-    //###########ScanMode###############
     public PickingViewModel()
     {
         ActivityIndicatorRunning = false;
-        //repo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<ProductAmountRepo>()!;
-        //ListOfStoc = [];
-        //Task.Run(async () => { await FetchStockDetails(NavigationProductCode); });
     }
+
     //#########*Constructor_2*############
-    //###########DataMode###############
     public PickingViewModel(string _barcode)
     {
-        //ActivityIndicatorRunning = true;
-        //ListOfStoc = [];
+        IsEmptyViewVisible = false;
         Task.Run(() => { FetchStockDetails(_barcode); });
     }
 
     //########*PublicProperties*########
-    //##################################
     #region Public Properties
     public List<Product> ListOfStoc { get; set; } = [];
     //{
@@ -52,6 +50,7 @@ public class PickingViewModel : BaseViewModel
     //}
     public string NameEn { get => nameEn; set => SetProperty(ref nameEn, value); }
     public string NameAr { get => nameAr; set => SetProperty(ref nameAr, value); }
+    public string PopupType { get => popupType; set => SetProperty(ref popupType, value); }
     public string Barcode
     {
         get => barcode;
@@ -78,33 +77,35 @@ public class PickingViewModel : BaseViewModel
         get => expiaryDateLabel;
         set => SetProperty(ref expiaryDateLabel, value);
     }
-    public bool IsVisibleEditQuantityAndExpiryPopup
+    public bool IsEditPopupVisible
     {
-        get => isVisibleEditQuantityAndExpiryPopup;
-        set => SetProperty(ref isVisibleEditQuantityAndExpiryPopup, value);
+        get => isEditPopupVisible;
+        set => SetProperty(ref isEditPopupVisible, value);
+    }
+    public bool IsExpiryDateFramInPopupVisible
+    {
+        get => isDateSectionInPopupVisible;
+        set => SetProperty(ref isDateSectionInPopupVisible, value);
     }
 
     #endregion
 
     //############*CommandS*############
-    //##################################
     #region CommandS
     public ICommand CopyProductCommand => new Command<Product>(ExecuteCopyProduct);
     public ICommand MakeInventoryCommand => new Command<Product>(ExecuteMakeInventory);
     public ICommand SelectionChangedCommand => new Command<Product>(ExecuteSelectionChanged);
-    public ICommand ExpiaryChangedCommand => new Command<string>(ExecuteExpiaryChanged);
+    public ICommand ExpiryDateChangedCommand => new Command<string>(ExecuteExpiryDateChanged);
     public ICommand SaveChangesCommand => new Command(ExecuteSaveChanges);
     #endregion
 
     //############*Fethch*##############
-    //##################################
     #region Fetch Data
     public async void FetchStockDetails(string? productCode)
     {
-
         ActivityIndicatorRunning = true;
+        IsEmptyViewVisible = false;
         ResetValues();
-        //ListOfStoc.Clear();
         if (productCode == null)
         {
             return;
@@ -112,37 +113,34 @@ public class PickingViewModel : BaseViewModel
         try
         {
             Barcode = productCode;
-            var list = await ApiServices.GetProductDetails(false, productCode, AppPreferences.StoreId);
+            var list = await ApiServices.GetProductDetails(AppValues.ProductHasQuantityOnly, productCode, AppPreferences.StoreId);
             if (list != null && list.Count > 0)
             {
                 NameAr = list.First().ProductNameAr ?? "اسم المنتج غير موجود";
                 NameEn = list.First().ProductNameEn ?? "Product name not found";
-                //foreach (var item in list)
-                //{
-                //    ListOfStoc.Add(item);
-                //    OnPropertyChanged(nameof(ListOfStoc));
-                //}
                 ListOfStoc = list;
-                OnPropertyChanged(nameof(ListOfStoc));
             }
             else
             {
                 ResetValues();
+                ListOfStoc = listOfStoc;
+                IsEmptyViewVisible = true;
+
             }
-            //await Task.Run(async () =>
-            //{
-            //});
         }
         catch (Exception ex)
         {
-            await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
+            await Alerts.DisplaySnackbar(ex.Message, 7);
         }
-        ActivityIndicatorRunning = false;
+        finally
+        {
+            ActivityIndicatorRunning = false;
+            OnPropertyChanged(nameof(ListOfStoc));
+        }
     }
     #endregion
 
     //#########*ExectueMethods*#########
-    //##################################
     #region Exectue Methods
     private async void ExecuteMakeInventory(Product item)
     {
@@ -160,50 +158,93 @@ public class PickingViewModel : BaseViewModel
         }
 
     }
+
     private void ExecuteCopyProduct(Product stock)
     {
-        //ListOfStoc(stock);
-        //OnPropertyChanged(nameof(ListOfStoc));
-    }
 
-    public void ExecuteSelectionChanged(Product dto)
-    {
-        if (dto != null && dto.Quantity != null)
+        if (stock == null)
         {
-            IsVisibleEditQuantityAndExpiryPopup = true;
-            ModifiedQuantity = dto.Quantity.Value;
-            ConvertDateToNumber(dto.ExpDate);
-            ExpiaryDateLabel = dto.ExpDate;
-            SelectedProduct = dto;
+            return;
         }
+
+        if (stock.ProductHasExpire == "0")
+        {
+            ShowNotification(new ErrorMessage("المنتج ليس له تاريخ صلاحية", "يمكنك تعديل الكمية فقط"));
+            return;
+        }
+
+        PopupType = "editAndCopy";
+        if (stock.ProductHasExpire != "1")
+        {
+            IsExpiryDateFramInPopupVisible = false;
+        }
+        IsEditPopupVisible = true;
+        ConvertDateToNumber(stock.ExpDate);
+        ExpiaryDateLabel = stock.ExpDate;
+        ModifiedQuantity = stock.Quantity ?? 0;
+        this.SelectedProduct = stock;
     }
 
-    private void ExecuteExpiaryChanged(string text)
+    public void ExecuteSelectionChanged(Product pro)
+    {
+        if (pro == null)
+        {
+            return;
+        }
+
+        PopupType = "edit";
+        if (pro.ProductHasExpire != "1")
+        {
+            IsExpiryDateFramInPopupVisible = false;
+        }
+        IsEditPopupVisible = true;
+        ConvertDateToNumber(pro.ExpDate);
+        ExpiaryDateLabel = pro.ExpDate;
+        ModifiedQuantity = pro.Quantity ?? 0;
+        this.SelectedProduct = pro;
+    }
+
+    private void ExecuteExpiryDateChanged(string text)
     {
         ConvertNumberToDate(text);
     }
-    #endregion
 
-    void ResetValues()
+    private async void ExecuteSaveChanges()
     {
-        NameAr = string.Empty;
-        NameEn = string.Empty;
-        Barcode = string.Empty;
-       
-    }
-
-    async void ExecuteSaveChanges()
-    {
-        //var res = await repo.CanAddExpirationDate((int)SelectedProduct.Id, (int)SelectedProduct.ProductId, ExpiaryDateLabel.Value);
-        //res = await repo.UpdateQuantity((int)SelectedProduct.Id, SelectedProduct.Quantity.Value, ModifiedQuantity, ExpiaryDateLabel, AppPreferences.LocalDbUserId.ToString());
         try
         {
+            if (PopupType == "edit")
+            {
+                SaveEditProduct();
+            }
+            else
+            {
+                SaveCopyProduct();
+            }
+        }
+        catch (Exception ex)
+        {
+            await Alerts.DisplaySnackbar($"{nameof(ExecuteSaveChanges)}:{ex.Message}");
+        }
+    }
+    #endregion
+
+    //#########*PrivateMethods*#########
+    async void SaveEditProduct()
+    {
+        try
+        {
+            if (SelectedProduct.Quantity == null)
+            {
+                return;
+            }
+
             UpdateProductQuantityDto model = new()
             {
                 Id = SelectedProduct.Id,
                 OldQuantity = SelectedProduct.Quantity.Value,
                 NewQuantity = ModifiedQuantity,
-                ExpDate = ExpiaryDateLabel.Value,
+                ExpDate = ExpiaryDateLabel,
                 EmpId = AppPreferences.LocalDbUserId.ToString()
             };
 
@@ -212,16 +253,78 @@ public class PickingViewModel : BaseViewModel
             {
                 SelectedProduct.Quantity = ModifiedQuantity;
                 SelectedProduct.ExpDate = ExpiaryDateLabel;
+                SelectedProduct.IsInventoried = "1";
+                IsEditPopupVisible = false;
+
             }
             else
-                await Helpers.Alerts.DisplaySnackbar(res.Message, 20);
-            IsVisibleEditQuantityAndExpiryPopup = false;
+                await Alerts.DisplaySnackbar(res.Message, 20);
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+
+    }
+
+    async void SaveCopyProduct()
+    {
+        try
+        {
+            if (ExpiaryDateLabel == null)
+                return;
+
+            CopyProductAmoutDto copyPro = new()
+            {
+                Id = SelectedProduct.Id,
+                ProductId = SelectedProduct.ProductId,
+                Quantity = ModifiedQuantity,
+                ExpDate = ExpiaryDateLabel.Value,
+                EmpId = AppPreferences.LocalDbUserId.ToString()
+            };
+
+
+            var res = await ApiServices.CopyProductAmout(copyPro);
+            if (res == null)
+            {
+                ShowNotification(new ErrorMessage("حدث خطأ تحقق من الاتصال بالسيرفر", ""));
+            }
+            else if (res.IsSuccess)
+            {
+                FetchStockDetails(Barcode);
+                ShowNotification(new ErrorMessage("تم حفظ التغيرات بنجاح", ""));
+                IsEditPopupVisible = false;
+            }
+            else if (res.ErrorCode == ErrorCode.ItemIsExist)
+            {
+                ShowNotification(new ErrorMessage("تاريخ الصلاحية موجود بالفعل", ""));
+            }
+            else if (res.ErrorCode == ErrorCode.NotFoundById)
+            {
+                ShowNotification(new ErrorMessage("لم يتم العثور علي هذا الصنف", "ربما قام أحد بحذفه من قليل"));
+            }
+            else if (res.ErrorCode == ErrorCode.OperationFailed)
+            {
+                ShowNotification(new ErrorMessage("لم يتم حفظ  هذه الصنف", ""));
+            }
+            else if (res.ErrorCode == ErrorCode.ExceptionError)
+            {
+                ShowNotification(new ErrorMessage("حدث خطأ داخل السيرفر", ""));
+            }
         }
         catch (Exception ex)
         {
-            await Helpers.Alerts.DisplaySnackbar($"{nameof(ExecuteSaveChanges)}:{ex.Message}");
+            ShowNotification(new ErrorMessage("An unknown error occurred. in your app", ex.Message));
         }
     }
+    void ResetValues()
+    {
+        NameAr = string.Empty;
+        NameEn = string.Empty;
+        //Barcode = string.Empty;
+    }
+
     void ConvertDateToNumber(DateTime? dateTime)
     {
         if (dateTime != null)
@@ -241,9 +344,13 @@ public class PickingViewModel : BaseViewModel
         }
     }
 
+    void ShowNotification(ErrorMessage error)
+    {
+        WeakReferenceMessenger.Default
+            .Send(new PickingViewNotification(error));
+        //WeakReferenceMessenger.Default.Send(new PickingViewNotification(new ErrorMessage("حدث خطأ داخل السيرفر", "")));
+    }
     #region deleted
-
-
     //private void ExecuteOnCameraDetectionFinished(BarcodeResult[] result)
     //{
     //    if (result.Length > 0)

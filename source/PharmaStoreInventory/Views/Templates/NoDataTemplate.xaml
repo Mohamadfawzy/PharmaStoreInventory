@@ -14,20 +14,20 @@
         <VerticalStackLayout
             VerticalOptions="Center"
             Spacing="15"
-            BindingContext="{Binding NoDataModel}">
-            <Image Source="{Binding Image}" HeightRequest="130" />
+            BindingContext="{x:Reference ThisPage}">
+            <Image Source="{Binding Data.Image}" HeightRequest="130" />
             <Label
-                Text="{Binding Title}"
+                Text="{Binding Data.Title}"
                 HorizontalOptions="Center"
                 FontAttributes="Bold"
                 FontSize="25" />
             <Label
-                Text="{Binding Description}"
+                Text="{Binding Data.Description}"
                 HorizontalOptions="Center"
                 FontSize="14" />
             <Button
                 Padding="20,0"
-                IsVisible="{Binding IsTryVisibl}"
+                IsVisible="{Binding Data.IsTryVisibl}"
                 TextColor="{StaticResource Primary700}"
                 HorizontalOptions="Center"
                 CornerRadius="40"
@@ -35,7 +35,7 @@
                 BackgroundColor="Transparent"
                 BorderColor="{StaticResource Primary700}"
                 BorderWidth="2"
-                Text="Try again"
+                Text="{Binding ButtonText, Source={x:Reference ThisPage}}"
                 Command="{Binding Command, Source={x:Reference ThisPage}}" />
         </VerticalStackLayout>
     </Grid>

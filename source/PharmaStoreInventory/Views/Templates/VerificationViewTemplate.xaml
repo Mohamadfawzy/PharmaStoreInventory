@@ -21,6 +21,7 @@
                 <Setter Property="Keyboard" Value="Numeric" />
                 <Setter Property="MaxLength" Value="1" />
                 <Setter Property="IsReadOnly" Value="True" />
+                <Setter Property="TextColor" Value="{StaticResource Primary500}" />
             </Style>
 
             <Style TargetType="Frame">
@@ -35,7 +36,6 @@
                 <Setter Property="VerticalTextAlignment" Value="Center" />
                 <Setter Property="FontSize" Value="14" />
             </Style>
-
         </ResourceDictionary>
     </ContentView.Resources>
 
@@ -62,6 +62,7 @@
                             <Span TextColor="{StaticResource AccentDarkColor}" Text="إلى" />
                             <Span Text="  " />
                             <Span
+                                x:Name="spanEmail"
                                 FontAttributes="Bold"
                                 TextColor="{StaticResource Secondary050}"
                                 Text="yourEmail@gmail.com" />
@@ -80,7 +81,6 @@
                     <Frame Margin="10" Padding="0">
                         <Entry
                             x:Name="entry1"
-                            Text="{Binding Code.Value1}"
                             HorizontalTextAlignment="Center"
                             IsReadOnly="False"
                             TextChanged="Entry_TextChanged"
@@ -90,7 +90,6 @@
                     <Frame Margin="10" Padding="0">
                         <Entry
                             x:Name="entry2"
-                            Text="{Binding Code.Value2}"
                             HorizontalTextAlignment="Center"
                             TextChanged="Entry_TextChanged"
                             ReturnCommandParameter="2" />
@@ -99,7 +98,6 @@
                     <Frame Margin="10" Padding="0">
                         <Entry
                             x:Name="entry3"
-                            Text="{Binding Code.Value3}"
                             HorizontalTextAlignment="Center"
                             TextChanged="Entry_TextChanged"
                             ReturnCommandParameter="3" />
@@ -108,14 +106,13 @@
                     <Frame Margin="10" Padding="0">
                         <Entry
                             x:Name="entry4"
-                            Text="{Binding Code.Value4}"
                             HorizontalTextAlignment="Center"
                             TextChanged="Entry_TextChanged"
                             ReturnCommandParameter="4" />
                     </Frame>
                 </HorizontalStackLayout>
 
-                <HorizontalStackLayout HorizontalOptions="Center">
+                <HorizontalStackLayout HorizontalOptions="Center" IsVisible="False">
                     <Label
                         Margin="10,0"
                         Text="لم تستلم الرمز؟"
@@ -148,25 +145,40 @@
         <Button
             Margin="30,20"
             Text="تأكيد"
-            Command="{Binding SubmitCommand}" />
+            Clicked="Button_Clicked" />
         <!--  Back to  -->
         <HorizontalStackLayout HorizontalOptions="Center">
             <Label
+                x:Name="backArrowIcon"
                 Margin="0"
-                Style="{StaticResource ParagrapherLabel}"
-                TextColor="{StaticResource Primary}"
+                Padding="0,0"
+                FontSize="22"
+                TextColor="{StaticResource Primary700}"
                 FontFamily="{StaticResource IconFont}"
+                VerticalTextAlignment="Center"
+                VerticalOptions="FillAndExpand"
                 Text="{x:Static help:IconFontManager.ArrowIcon}" />
-
             <Label
                 Margin="10,0"
                 Style="{StaticResource ParagrapherLabel}"
                 TextColor="{StaticResource Primary}"
                 Text="العودة للخلف" />
+
+            <HorizontalStackLayout.Behaviors>
+                <toolkit:TouchBehavior
+                    DefaultAnimationDuration="250"
+                    DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+                    PressedBackgroundColor="#30000000"
+                    PressedOpacity="0.6"
+                    PressedScale="0.8" />
+            </HorizontalStackLayout.Behaviors>
+
             <HorizontalStackLayout.GestureRecognizers>
-                <TapGestureRecognizer Tapped="PopTapped" />
+                <TapGestureRecognizer Tapped="NavigationPop_Tapped" />
             </HorizontalStackLayout.GestureRecognizers>
         </HorizontalStackLayout>
+
+        <!--  Gesture On Main Stack  -->
         <VerticalStackLayout.GestureRecognizers>
             <TapGestureRecognizer />
         </VerticalStackLayout.GestureRecognizers>

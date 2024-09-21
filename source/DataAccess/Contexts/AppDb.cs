@@ -1,7 +1,5 @@
 ﻿using DataAccess.Entities;
-using DataAccess.Helper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 namespace DataAccess.Contexts;
 
 public class AppDb : DbContext
@@ -21,14 +19,14 @@ public class AppDb : DbContext
 
     public AppDb()
     {
-        if (!string.IsNullOrEmpty(Strings.IP))
-        {
-            connectionString = $"Data Source={Strings.IP},{Strings.Port}; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
-        }
-        else
-            //connectionString = $"Server=192.168.1.125,1433;Database=stock;User Id=sa;Password=Ph@store;Persist Security Info=True;Encrypt=True;TrustServerCertificate=True;";
+        //if (!string.IsNullOrEmpty(Strings.IP))
+        //{
+        //    connectionString = $"Data Source={Strings.IP},{Strings.Port}; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
+        //}
+        //else
 
-        connectionString = $"Data Source=192.168.1.103,1433; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
+        connectionString = $"Server=192.168.1.25,1433;Database=stock;User Id=sa;Password=Ph@store;Persist Security Info=True;Encrypt=True;TrustServerCertificate=True;";
+        //connectionString = $"Data Source=192.168.1.103,1433; Initial Catalog=stock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
     }
 
     public AppDb(string db)

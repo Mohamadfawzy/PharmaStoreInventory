@@ -5,7 +5,6 @@ using DataAccess.Dtos.UserDtos;
 using DataAccess.Entities;
 using DataAccess.Helper;
 using DataAccess.Repository;
-using Microsoft.IdentityModel.Tokens;
 
 namespace DataAccess.Services;
 
@@ -134,6 +133,49 @@ public class AuthService(UserRepository _repo)
         return Result.Success();
     }
 
+    public async Task<Result> AreEmailAndPhoneNonExistentAsync(string email, string phone)
+    {
+        // 
+        try
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(phone))
+            {
+                return Result.Failure(ErrorCode.NullValue, "Email or phone IsNullOrEmpty");
+            }
+
+            Result res = new()
+            {
+                IsSuccess = false,
+                Errors = []
+            };
+
+            if (await repo.IsPhoneExistAsync(phone))
+            {
+                res.Errors.Add(ErrorCode.PhoneNumberAlreadyExists);
+            }
+
+            if (await repo.IsEmailExistAsync(email))
+            {
+                res.Errors.Add(ErrorCode.EmailAlreadyExists);
+            }
+
+            if (res.Errors.Count > 0)
+            {
+                res.Message = "some errores founded";
+                res.ErrorCode = ErrorCode.MultipleErrors;
+                return res;
+            }
+            else
+            {
+                return Result.Success();
+            }
+        }
+        catch (Exception ex)
+        {
+            return Result.Failure(ErrorCode.ExceptionError,ex.Message);
+        }
+    }
+
     public async Task<Result> IsUserActiveAsync(int userId)
     {
         // Ensure that the email does not already exist
@@ -160,7 +202,7 @@ public class AuthService(UserRepository _repo)
         // Check if email and password are provided
         if (string.IsNullOrEmpty(dto.EmailOrPhone) || string.IsNullOrEmpty(dto.Password))
         {
-            return Result<UserLoginResponseDto>.Failure("Email or password is missing.");
+            return Result<UserLoginResponseDto>.Failure(ErrorCode.NullValue, "Email or password is missing.");
         }
         try
         {
@@ -168,15 +210,15 @@ public class AuthService(UserRepository _repo)
             var userAccount = await repo.FindUserByEmailAsync(dto.EmailOrPhone).ConfigureAwait(false);
             if (userAccount is null)
             {
-                // Return failure result if email or password is incorrect 
-                return Result<UserLoginResponseDto>.Failure("Invalid email or password.");
+                // Return failure result if email Not Exist
+                return Result<UserLoginResponseDto>.Failure(ErrorCode.EmailNotExist, "Email Not Exist");
             }
 
             return await Login(userAccount, dto.Password, dto.DviceId, dto.IsNewDevice).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
-            return Result<UserLoginResponseDto>.Failure($"An error occurred: {ex.Message}");
+            return Result<UserLoginResponseDto>.Failure(ErrorCode.ExceptionError, $"An error occurred: {ex.Message}");
         }
     }
 
@@ -190,22 +232,22 @@ public class AuthService(UserRepository _repo)
         // Check if phone and password are provided
         if (string.IsNullOrEmpty(dto.EmailOrPhone) || string.IsNullOrEmpty(dto.Password))
         {
-            return Result<UserLoginResponseDto>.Failure("Phone or password is missing.");
+            return Result<UserLoginResponseDto>.Failure(ErrorCode.NullValue, "Phone or password is missing.");
         }
         try
         {
-            // All user account by phone
+            // get user account by phone
             var userAccount = await repo.FindUserByPhoneNumberAsync(dto.EmailOrPhone).ConfigureAwait(false);
             if (userAccount is null)
             {
-                // Return failure result if phone or password is incorrect
-                return Result<UserLoginResponseDto>.Failure("Invalid phone or password.");
+                // Return failure result if phone Not Exist
+                return Result<UserLoginResponseDto>.Failure(ErrorCode.PhoneNumberNotExist, "Phone Number Not Exist");
             }
             return await Login(userAccount, dto.Password, dto.DviceId, dto.IsNewDevice).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
-            return Result<UserLoginResponseDto>.Failure($"An error occurred: {ex.Message}");
+            return Result<UserLoginResponseDto>.Failure(ErrorCode.ExceptionError, $"An error occurred: {ex.Message}");
         }
     }
 
@@ -334,50 +376,72 @@ public class AuthService(UserRepository _repo)
     /// <returns>A <see cref="Result{UserLoginResponseDto}"/> containing the user's login information if authentication is successful, or an error message if authentication fails.</returns>
     private async Task<Result<UserLoginResponseDto>> Login(UserAccount userAccount, string password, string deviceId, bool isNewDevice)
     {
-        // Check if account is active
-        if (!userAccount.IsActive)
+        try
         {
-            return Result<UserLoginResponseDto>.Failure(ErrorCode.UserNotActive, "Your account is not active.");
-        }
+            // Check if account is active
+            //if (!userAccount.IsActive)
+            //{
+            //    return Result<UserLoginResponseDto>.Failure(ErrorCode.UserNotActive, "Your account is not active.");
+            //}
 
-        // Check if user is logged in another device
-        if (userAccount.IsLoggedIn && (!string.IsNullOrEmpty(userAccount.DeviceID) && userAccount.DeviceID != deviceId) && !isNewDevice)
-        {
-            return Result<UserLoginResponseDto>.Failure("You are logged in on another device, please log out from it.");
-        }
-
-        // Verify the provided password with the stored password hash
-        var isPasswordCorrect = await hasher.VerifyPasswordAsync(password, userAccount.PasswordHash).ConfigureAwait(false);
-        if (isPasswordCorrect)
-        {
-
-            // if The password will be correct. and user wanted login from new device you shoud admin activate this new device
-            userAccount.IsActive = !isNewDevice;
-            userAccount.DeviceID = deviceId;
-            // Map user account to UserLoginResponseDto
-            var loginRes = new UserLoginResponseDto
+            // Check if user is logged in another device
+            if (userAccount.IsLoggedIn && (!string.IsNullOrEmpty(userAccount.DeviceID) && userAccount.DeviceID != deviceId) && !isNewDevice)
             {
-                Id = userAccount.Id,
-                Email = userAccount.Email,
-                EmailConfirmed = userAccount.EmailConfirmed,
-                FullName = userAccount.FullName,
-                PharmcyName = userAccount.PharmacyName,
-                PhoneNumber = userAccount.PhoneNumber,
-                LockoutEnd = userAccount.LockoutEnd = DateTimeOffset.UtcNow.AddDays(7),
-                IsActive = userAccount.IsActive,
-            };
+                return Result<UserLoginResponseDto>.Failure(ErrorCode.AccessLimitation, "You are logged in on another device, please log out from it.");
+            }
 
-            // Update access in userAccount
-            await repo.SetUserAccountIsAccessAsync(userAccount).ConfigureAwait(false);
 
-            // Return successful result with user login response and welcome message
-            return Result<UserLoginResponseDto>.Success(loginRes, $"Welcome {userAccount.FullName}");
+            // Verify the provided password with the stored password hash
+            var isPasswordCorrect = await hasher.VerifyPasswordAsync(password, userAccount.PasswordHash).ConfigureAwait(false);
+            if (isPasswordCorrect)
+            {
+                // if The password will be correct. and user wanted login from new device you shoud admin activate this new device
+
+
+                // Map user account to UserLoginResponseDto
+                var loginRes = new UserLoginResponseDto
+                {
+                    Id = userAccount.Id,
+                    Email = userAccount.Email,
+                    EmailConfirmed = userAccount.EmailConfirmed,
+                    FullName = userAccount.FullName,
+                    PharmcyName = userAccount.PharmacyName,
+                    PhoneNumber = userAccount.PhoneNumber,
+                    LockoutEnd = userAccount.LockoutEnd = DateTimeOffset.UtcNow.AddDays(7),
+                    IsActive = userAccount.IsActive,
+                };
+
+                // Check if account is active
+                if (!userAccount.IsActive)
+                {
+                    return Result<UserLoginResponseDto>.Failure(ErrorCode.UserNotActive, loginRes, "Your account is not active.");
+                }
+
+                userAccount.IsActive = !isNewDevice;
+                userAccount.DeviceID = deviceId;
+                // Update access in userAccount
+                await repo.SetUserAccountIsAccessAsync(userAccount).ConfigureAwait(false);
+
+                if (isNewDevice)
+                {
+                    return Result<UserLoginResponseDto>.Failure(ErrorCode.UserNotActive, "Your account is not active.");
+                }
+                else
+                {
+                    // Return successful result with user login response and welcome message
+                    return Result<UserLoginResponseDto>.Success(loginRes, $"Welcome {userAccount.FullName}");
+                }
+            }
+            else
+            {
+                // Increment AccessFailedCount if the password is incorrect
+                await repo.IncrementAccessFailedCountAsync(userAccount).ConfigureAwait(false);
+                return Result<UserLoginResponseDto>.Failure(ErrorCode.PasswordIsIncorrect, "Invalid password.");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            // Increment AccessFailedCount if the password is incorrect
-            await repo.IncrementAccessFailedCountAsync(userAccount).ConfigureAwait(false);
-            return Result<UserLoginResponseDto>.Failure("Invalid password.");
+            return Result<UserLoginResponseDto>.Failure(ErrorCode.ExceptionError, ex.Message);
         }
     }
 

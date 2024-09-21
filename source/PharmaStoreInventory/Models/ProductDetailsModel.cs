@@ -23,6 +23,7 @@ public class ProductDetailsModel : ObservableObject
     public decimal? ProductUnit13 { get; set; }
     public string? VendorNameAr { get; set; }
     public string? CompanyNameAr { get; set; }
+    public string? ProductHasExpire { get; set; }
 
     public static implicit operator ProductDetailsModel(ProductDetailsDto? item)
     {
@@ -48,6 +49,7 @@ public class ProductDetailsModel : ObservableObject
             ExpDate = item.ExpDate,
             IsInventoried = item.IsInventoried,
             SellPrice = item.SellPrice,
+            ProductHasExpire = item.ProductHasExpire,
 
         };
     }

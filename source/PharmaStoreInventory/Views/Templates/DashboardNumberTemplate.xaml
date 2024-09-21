@@ -4,16 +4,18 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
+    xmlns:help="clr-namespace:PharmaStoreInventory.Helpers"
     x:Name="ThisView">
 
+    <!--  StrokeShape="RoundRectangle 50 6 6 6"  -->
     <Border
+        x:Name="border"
         Margin="0,0"
         Padding="0"
         Stroke="{StaticResource Primary100}"
         StrokeThickness="1"
         HorizontalOptions="Fill"
-        StrokeShape="RoundRectangle 50 6 6 6"
-        Background="{AppThemeBinding Light={StaticResource White},
+        Background="{AppThemeBinding Light={StaticResource Primary050},
                                      Dark={StaticResource Primary950}}">
         <StackLayout Orientation="Horizontal" BindingContext="{x:Reference ThisView}">
             <BoxView
@@ -29,11 +31,11 @@
                     Text="{Binding Number}"
                     TextColor="{StaticResource Primary800}"
                     FontSize="20" />
-                <Label
+                <!--<Label
                     FontSize="22"
                     HorizontalOptions="End"
                     FontFamily="{StaticResource IconFont}"
-                    Text="{x:Static icon:IconFont.ChevronLeft}" />
+                    Text="{x:Static icon:IconFont.ChevronLeft}" />-->
             </VerticalStackLayout>
         </StackLayout>
     </Border>

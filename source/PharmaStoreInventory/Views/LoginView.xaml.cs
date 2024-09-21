@@ -1,11 +1,9 @@
-using DataAccess.DomainModel;
-using DataAccess.Dtos;
+﻿using DataAccess.DomainModel;
 using DataAccess.Dtos.UserDtos;
 using DataAccess.Services;
 using PharmaStoreInventory.Extensions;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Services;
-using PharmaStoreInventory.Views.Admin;
 
 namespace PharmaStoreInventory.Views;
 
@@ -20,6 +18,15 @@ public partial class LoginView : ContentPage
         xFileHanler = new(AppValues.XBranchsFileName);
     }
 
+    private void ThisPage_NavigatedTo(object sender, NavigatedToEventArgs e)
+    {
+        AppPreferences.SetDeviceID();
+        if (Validations.Validator.IsNetworkAccess())
+        {
+            NetworkNotAccessAlert();
+        }
+    }
+
     private void ClearFocusFromAllInputsTapped(object sender, TappedEventArgs e)
     {
         inputsContainer.ClearFocusFromAllInputs();
@@ -28,20 +35,32 @@ public partial class LoginView : ContentPage
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
+        Helpers.AppPreferences.SetDeviceID();
         password.InputText = string.Empty;
     }
 
-    private async void SubmitClicked(object sender, EventArgs e)
+    private async void LoginClicked(object sender, EventArgs e)
     {
         try
         {
+            loginButton.IsEnabled = false;
+            activityIndicator.IsRunning = true;
+
             Result<UserLoginResponseDto>? res = null;
-            Alerts.DisplayActivityIndicator(this);
             InputType check = CheckInputs();
 
+            // if No Enternet
+            if (Validations.Validator.IsNetworkAccess())
+            {
+                NetworkNotAccessAlert();
+                LoginEnded();
+                return;
+            }
+
+            // if eny input is invalid
             if (check == InputType.Empty)
             {
-                Alerts.CloseActivityIndicator();
+                LoginEnded();
                 return;
             }
 
@@ -49,7 +68,7 @@ public partial class LoginView : ContentPage
             {
                 EmailOrPhone = email.InputText,
                 Password = password.InputText,
-                IsNewDevice = false,
+                IsNewDevice = newDeviceCheckBox.IsChecked,
                 DviceId = AppPreferences.GetDeviceID()
             };
 
@@ -61,65 +80,86 @@ public partial class LoginView : ContentPage
             {
                 res = await ApiServices.UserLoginByEmailAsync(userModel);
             }
-            else if (check == InputType.Admin)
-            {
-                var adminModel = new LoginDto(email.InputText, password.InputText);
-                res = await ApiServices.AdminLoginByEmailAsync(adminModel);
-            }
 
+            // server in not running
             if (res == null)
             {
-                _ = Alerts.DisplaySnackbar("Something went wrong");
-                Alerts.CloseActivityIndicator();
+                notification.ShowMessage("تحقق من الاتصال بالسيرفر");
+                LoginEnded();
                 return;
             }
 
-            // Navigation
-            _ = Alerts.DisplaySnackbar(res.Message);
             if (res.IsSuccess)
             {
                 // Save user data in json file
-                if (res.Data != null)
+                if (res.Data == null)
                 {
-                    AppPreferences.HostUserId = res.Data.Id;
-                    AppPreferences.IsLoggedIn = true;
-                    AppPreferences.IsUserActivated = true;
-                    _ = jsonFileHanler.WriteToFile(res.Data);
+                    LoginEnded();
+                    notification.ShowMessage("حدث خطأ غير معروف");
+                    return;
                 }
+                AppPreferences.HostUserId = res.Data.Id;
+                AppPreferences.IsLoggedIn = true;
+                AppPreferences.IsUserActivated = true;
+
+                _ = jsonFileHanler.WriteToFile(res.Data);
+                _ = Alerts.DisplayToast("Welcom: " + res.Data.FullName);
 
                 // Navigation
-                if (check == InputType.Admin)
-                {
-                    await Navigation.PushAsync(new UsersView());
-                }
-                else if (AppPreferences.HasBranchRegistered)
-                {
-                    await Navigation.PushAsync(new DashboardView());
-                }
-                else
-                {
-                    await Navigation.PushAsync(new BranchesView());
-                }
+                await Navigation.PushAsync(new BranchesView());
+
+                Navigation.RemovePage(this);
             }
+
+            // if Failure
             else
             {
+                if (res.Data != null)
+                    AppPreferences.UserFullName = res.Data.FullName;
+
                 if (res.ErrorCode == ErrorCode.UserNotActive)
                 {
+                    AppPreferences.IsUserActivated = false;
                     await Navigation.PushAsync(new WaitingApprovalView());
+                    Navigation.RemovePage(this);
                 }
-                AppPreferences.IsLoggedIn = true;
-                AppPreferences.IsUserActivated = false;
+                else if (res.ErrorCode == ErrorCode.AccessLimitation)
+                {
+                    notification.ShowMessage("تقيد الوصول", "يرجي الخروج من الهاتف القديم،او يمكنك طلب تسجيل جهاز جديد");
+                    newDviceStack.IsVisible = true;
+                }
+                else if (res.ErrorCode == ErrorCode.EmailNotExist)
+                {
+                    notification.ShowMessage("هذا الايميل غير موجود");
+                }
+                else if (res.ErrorCode == ErrorCode.PhoneNumberNotExist)
+                {
+                    notification.ShowMessage("رقم الهاتف غير موجود");
+                }
+                else if (res.ErrorCode == ErrorCode.PasswordIsIncorrect)
+                {
+                    notification.ShowMessage("الرقم السري غير صحيح");
+                }
+                else if (res.ErrorCode == ErrorCode.ExceptionError)
+                {
+                    notification.ShowMessage("حدث خطأ ما  من جهة السيرفر");
+                }
             }
 
             //end try
-            Alerts.CloseActivityIndicator();
-            Navigation.RemovePage(this);
+            LoginEnded();
         }
-
         catch
         {
+            LoginEnded();
         }
+    }
 
+    void LoginEnded()
+    {
+        loginButton.IsEnabled = true;
+        activityIndicator.IsRunning = false;
+        refreshView.IsRefreshing = false;
     }
 
     private InputType CheckInputs()
@@ -140,11 +180,10 @@ public partial class LoginView : ContentPage
             {
                 inputType = InputType.Email;
             }
-            else if (email.InputText == "admin")
-            {
-                inputType = InputType.Admin;
-
-            }
+            //else if (email.InputText == "admin")
+            //{
+            //    inputType = InputType.Admin;
+            //}
         }
 
         if (string.IsNullOrEmpty(password.InputText))
@@ -156,9 +195,34 @@ public partial class LoginView : ContentPage
         return inputType;
     }// end CheckInputs
 
-    private async void Button_Clicked(object sender, EventArgs e)
+    private async void GoToRegisterViewClicked(object sender, EventArgs e)
     {
         await Navigation.PushAsync(new RegisterView());
         Navigation.RemovePage(this);
+    }
+
+    private void RefreshView_Refreshing(object sender, EventArgs e)
+    {
+        if (Validations.Validator.IsNetworkAccess())
+        {
+            NetworkNotAccessAlert();
+        }
+        refreshView.IsRefreshing = false;
+    }
+
+    private void PhoneDialerTapped(object sender, TappedEventArgs e)
+    {
+        if (PhoneDialer.Default.IsSupported)
+            PhoneDialer.Default.Open("01200007275");
+    }
+
+    private void NetworkNotAccessAlert()
+    {
+        notification.ShowMessage(new Models.ErrorMessage("No NetworkAccess", "please check your WiFi"));
+    }
+
+    private void NewDviceStack_Tapped(object sender, TappedEventArgs e)
+    {
+        newDeviceCheckBox.IsChecked = !newDeviceCheckBox.IsChecked;
     }
 }

@@ -15,10 +15,11 @@ public static class InputsExtensions
         }
     }
     
-    public static void PositioningOfPlaceHolder(this VerticalStackLayout inputsContainer)
+    public static async Task PositioningOfPlaceHolder(this VerticalStackLayout inputsContainer)
     {
         foreach (var item in inputsContainer.Children)
         {
+            await Task.Delay(300);
             var input = item as AnimatedInput;
             input?.PositioningOfPlaceHolder();
         }

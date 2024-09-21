@@ -38,5 +38,15 @@ public static class FlowDirectionManager
                 return IconFont.ArrowLeft;
         }
     }
+    //public static string DashboardNumberTemplateMargin
+    //{
+    //    get
+    //    {
+    //        if (AppValues.Language == "ar")
+    //            return "RoundRectangle 50 6 6 6";
+    //        else
+    //            return "RoundRectangle 6 50 6 6";
+    //    }
+    //}
 
 }

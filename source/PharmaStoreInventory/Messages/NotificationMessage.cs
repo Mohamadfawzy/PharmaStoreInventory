@@ -10,6 +10,13 @@ public class DashboardViewNotification(ErrorMessage value) : ValueChangedMessage
 {
 }
 
-public class CreateBranchViewotification(ErrorMessage value) : ValueChangedMessage<ErrorMessage>(value)
+public class CreateBranchViewNotification(ErrorMessage value) : ValueChangedMessage<ErrorMessage>(value)
+{
+}
+
+public class PickingViewNotification(ErrorMessage value) : ValueChangedMessage<ErrorMessage>(value)
+{
+}
+public class RegisterViewNotification(ErrorMessage value) : ValueChangedMessage<ErrorMessage>(value)
 {
 }

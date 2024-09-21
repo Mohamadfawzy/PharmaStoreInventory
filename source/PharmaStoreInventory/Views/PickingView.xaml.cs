@@ -1,11 +1,14 @@
 using BarcodeScanning;
+using CommunityToolkit.Mvvm.Messaging;
 using PharmaStoreInventory.Helpers;
+using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.Models;
 using PharmaStoreInventory.ViewModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PharmaStoreInventory.Views;
 
-public partial class PickingView : ContentPage
+public partial class PickingView : ContentPage, IRecipient<PickingViewNotification>
 {
     readonly PickingViewModel viewModel;
     readonly bool IsScanMode = false;
@@ -13,6 +16,7 @@ public partial class PickingView : ContentPage
     {
         Methods.AskForRequiredPermissionAsync();
         InitializeComponent();
+        WeakReferenceMessenger.Default.Register<PickingViewNotification>(this);
         viewModel = new PickingViewModel();
         this.BindingContext = viewModel;
         IsScanMode = true;
@@ -21,8 +25,26 @@ public partial class PickingView : ContentPage
     public PickingView(string barcode)
     {
         InitializeComponent();
+        WeakReferenceMessenger.Default.Register<PickingViewNotification>(this);
         viewModel = new PickingViewModel(barcode);
         this.BindingContext = viewModel;
+    }
+    protected override bool OnBackButtonPressed()
+    {
+        if (viewModel.IsEditPopupVisible)
+        {
+            viewModel.IsEditPopupVisible = false;
+            return true;
+        }
+        return base.OnBackButtonPressed();
+
+    }
+    public void Receive(PickingViewNotification message)
+    {
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            notification.ShowMessage(message.Value);
+        });
     }
 
     private void ThisPage_NavigatedTo(object sender, NavigatedToEventArgs e)
@@ -97,8 +119,6 @@ public partial class PickingView : ContentPage
         nativeBarcode.TorchOn = !nativeBarcode.TorchOn;
     }
 
-
-
     private void OnDoneSwipeItemInvoked(object sender, EventArgs e)
     {
 
@@ -129,7 +149,7 @@ public partial class PickingView : ContentPage
 
     void ClosePopup()
     {
-        viewModel.IsVisibleEditQuantityAndExpiryPopup = false;
+        viewModel.IsEditPopupVisible = false;
         entry.HideSoftInputAsync(CancellationToken.None);
     }
 

@@ -25,24 +25,30 @@ public enum UsersOrderBy
 public enum ErrorCode
 {
     NoError = 0,
+
     EmailNotExist = 1, //
-    PasswordIsIncorrect = 2,
-    UserNotActive = 3,
-    VerificationCodeIsIncorrect = 4, //
-    UserLogOut = 5,
-    InvalidIdentifier = 6,//
-    OperationFailed = 7,
-    ManyFailedAttempts = 8,
-    NotFoundById = 9,
-    EmailAlreadyExists =10,
-    PhoneNumberAlreadyExists = 11,
-    ExceptionError =12,
-    ItemIsExist = 13,
-    NullValue = 14,
+    EmailAlreadyExists = 2,
+    PhoneNumberNotExist = 3,
+    PhoneNumberAlreadyExists =4,
+    ItemIsExist = 5,
+
+    PasswordIsIncorrect = 10,
+    VerificationCodeIsIncorrect = 7, //
+    InvalidIdentifier = 11,//
+    OperationFailed = 12,
+    ManyFailedAttempts = 13,
+    NotFoundById = 14,
+
+    NullValue = 21,
+    ExceptionError =22,
+
+    AccessLimitation = 31,
+    UserNotActive = 32,
+    UserLogOut = 33,
 
     // General Errors
     UnknownError = 1000,
-
+    MultipleErrors = 1001,
     // Authentication Errors
     InvalidCredentials = 2000,
     UserLockedOut = 2001,

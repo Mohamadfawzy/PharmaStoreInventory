@@ -1,19 +1,44 @@
 ﻿using DataAccess.DomainModel;
+using DataAccess.Entities;
 using DataAccess.Services;
-using Microsoft.Maui.Controls;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Models;
 using PharmaStoreInventory.Services;
 namespace PharmaStoreInventory.Views;
 public partial class BranchesView : ContentPage
 {
-    readonly XmlFileHandler xFileHanler;
-    public BranchesView()
+    private readonly XmlFileHandler xFileHanler;
+    public NoDataModel NoDataModel =>
+        new("nodataicon.png", "No Data", "There is no data to show you right now", false);
+    public BranchesView(bool hasBackButton = true)
     {
         InitializeComponent();
         xFileHanler = new(AppValues.XBranchsFileName);
         GetAllBranchs();
+
+        if (!hasBackButton)
+        {
+            backArrowIcon.IsVisible = false;
+        }
     }
+
+    //protected override bool OnBackButtonPressed()
+    //{
+    //    Navigation.PushAsync(new DashboardView());
+    //    return true;
+
+    //}
+
+    //protected override void OnAppearing()
+    //{
+    //    base.OnAppearing();
+    //    var count = Navigation.NavigationStack.Count;
+    //    if (count == 1)
+    //    {
+    //        backArrowIcon.IsVisible = false;
+    //    }
+    //}
+
     private async void BackButtonClicked(object sender, EventArgs e)
     {
         await Navigation.PopAsync();
@@ -21,12 +46,10 @@ public partial class BranchesView : ContentPage
 
     private async void ConnectionClicked(object sender, EventArgs e)
     {
-
         var btn = sender as Button;
         if (btn == null)
-        {
             return;
-        }
+
         activityIndicator.IsRunning = true;
         btn.IsEnabled = false;
 
@@ -39,7 +62,8 @@ public partial class BranchesView : ContentPage
                 notification.ShowMessage("Contacted successfully", "The branch has been contacted successfully");
                 AppPreferences.LocalBaseURI = AppValues.LocalBaseURI = await Configuration.ConfigureBaseUrl(branch.IpAddress, branch.Port);
                 AppPreferences.HasBranchRegistered = true;
-                App.Current.MainPage = new NavigationPage(new DashboardView());
+                if (App.Current != null)
+                    App.Current.MainPage = new NavigationPage(new DashboardView());
             }
             else if (status == ConnectionErrorCode.Fail)
             {
@@ -53,7 +77,7 @@ public partial class BranchesView : ContentPage
             {
                 notification.ShowMessage("Something went wrong", message);
             }
-            GetAllBranchs();
+            //GetAllBranchs();
         }
 
 
@@ -61,15 +85,10 @@ public partial class BranchesView : ContentPage
         activityIndicator.IsRunning = false;
     }
 
-    protected override bool OnBackButtonPressed()
-    {
-        Navigation.PushAsync(new DashboardView());
-        return true;
-
-    }
-
     private async void GetAllBranchs()
     {
+        activityIndicator.IsRunning = true;
+
         var branches = await xFileHanler.All();
 
         if (branches == null || branches.Count < 1)
@@ -84,14 +103,17 @@ public partial class BranchesView : ContentPage
                 branches = list;
             }
         }
-        clBranches.ItemsSource = branches;
 
-        if(branches != null)
+        if (branches != null && branches.Count > 0)
         {
+            clBranches.ItemsSource = branches;
             noDataTemplate.IsVisible = false;
         }
         else
+        {
             noDataTemplate.IsVisible = true;
+        }
+
         activityIndicator.IsRunning = false;
     }
 
@@ -106,12 +128,30 @@ public partial class BranchesView : ContentPage
                 await xFileHanler.RemoveById(item.Id.ToString());
                 await ApiServices.DeleteBranche(item.Id);
                 GetAllBranchs();
+
+                var url = await Configuration.ConfigureBaseUrl(item.IpAddress, item.Port);
+                if (url == AppValues.LocalBaseURI)
+                {
+                    AppPreferences.LocalBaseURI = AppValues.LocalBaseURI = string.Empty;
+                    AppPreferences.HasBranchRegistered = false;
+                    await Alerts.DisplayToast("قمت بحذف الفرع الحالي");
+                    if (Application.Current != null)
+                        Application.Current.MainPage = new NavigationPage(new BranchesView(false));
+                }
             }
         }
     }
 
-    private async void GotoCreateBranchClicked(object sender, EventArgs e)
+    private async void GotoCreateBranchTapped(object sender, TappedEventArgs e)
     {
+        activityIndicator.IsRunning = true;
         await Navigation.PushAsync(new CreateBranchView());
+        activityIndicator.IsRunning = false;
+
+    }
+
+    private async void NavigationPop_Tapped(object sender, TappedEventArgs e)
+    {
+        await Navigation.PopAsync();
     }
 }

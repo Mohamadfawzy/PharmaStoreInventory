@@ -1,15 +1,18 @@
-using PharmaStoreInventory.Helpers;
-
 namespace PharmaStoreInventory.Views.Templates;
 
 public partial class VerificationViewTemplate : ContentView
 {
-	public VerificationViewTemplate()
-	{
-		InitializeComponent();
-	}
+    public event EventHandler SubmitClicked;
+    public VerificationViewTemplate()
+    {
+        InitializeComponent();
+    }
+    private void NavigationPop_Tapped(object sender, TappedEventArgs e)
+    {
+        this.IsVisible = false;
+    }
 
-    private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+    private async void Entry_TextChanged(object sender, TextChangedEventArgs e)
     {
         if (sender is Entry entry)
         {
@@ -65,6 +68,7 @@ public partial class VerificationViewTemplate : ContentView
                             break;
 
                         case "4":
+                            await entry4.HideSoftInputAsync(CancellationToken.None);
                             break;
                     }
                 }
@@ -72,12 +76,10 @@ public partial class VerificationViewTemplate : ContentView
         }
     }
 
-    //private async void Button_Clicked(object sender, EventArgs e)
-    //{
-    //    await Helpers.Alerts.DisplaySnackbar($"{entry1.Text}{entry2.Text}{entry3.Text}{entry4.Text}");
-    //    AppValues.VerificationCodeFromUser = $"{entry1.Text}{entry2.Text}{entry3.Text}{entry4.Text}";
-    //    ThisPage.IsVisible = false;
-    //}
+    public string GetCode()
+    {
+        return $"{entry1.Text}{entry2.Text}{entry3.Text}{entry4.Text}";
+    }
 
     private void Button_Clicked_1(object sender, EventArgs e)
     {
@@ -120,9 +122,13 @@ public partial class VerificationViewTemplate : ContentView
         ResendCodeButton.IsEnabled = true;
     }
 
-
-
-
-
-
+    public void SetSpanEmail(string email)
+    {
+        spanEmail.Text = email;
+    }
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+        EventHandler handler = SubmitClicked;
+        handler?.Invoke(this, new EventArgs());
+    }
 }

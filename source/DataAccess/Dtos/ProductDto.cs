@@ -9,4 +9,5 @@ public class ProductDto
     public decimal? SalePrice { get; set; }
     public decimal? Quantity { get; set; }
     public decimal? StoreId { get; set; }
+    public string? HasExpire { get; set; }
 }

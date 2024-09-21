@@ -12,15 +12,19 @@
     NavigatedTo="ThisPage_NavigatedTo"
     NavigationPage.HasNavigationBar="False">
 
-    <ContentPage.BindingContext>
+    <!--<ContentPage.BindingContext>
         <vm:RegisterViewModel />
-    </ContentPage.BindingContext>
+    </ContentPage.BindingContext>-->
 
     <ScrollView x:Name="scroll">
         <Grid
             x:Name="manStack"
             Padding="0,0,0,50"
             RowDefinitions="Auto,Auto,*">
+            <template:NotificationTemplate
+                x:Name="notification"
+                Grid.RowSpan="3"
+                ZIndex="3" />
             <!--  Register Title  -->
             <Border
                 Margin="0,0,0,30"
@@ -33,7 +37,11 @@
                     TextColor="{StaticResource White}"
                     Text="إنشاء حساب"
                     VerticalOptions="Center"
-                    HorizontalOptions="Center" />
+                    HorizontalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="SetInputText_Tapped" />
+                    </Label.GestureRecognizers>
+                </Label>
             </Border>
             <!--  Inputs  -->
             <VerticalStackLayout
@@ -44,40 +52,32 @@
                 <template:AnimatedInput
                     x:Name="fullName"
                     InputPlaceholder="الاسم كاملاً"
-                    InputText="{Binding UserRegister.FullName}"
                     ErrorMessage="أدخل اسمك مطلوب" />
                 <!--  Pharmacy  -->
-                <template:AnimatedInput
-                    x:Name="pharmacyName"
-                    InputText="{Binding UserRegister.PharmcyName}"
-                    InputPlaceholder="اسم الصيدلية" />
+                <template:AnimatedInput x:Name="pharmacyName" InputPlaceholder="اسم الصيدلية" />
                 <!--  Email  -->
                 <template:AnimatedInput
                     x:Name="email"
-                    InputText="{Binding UserRegister.Email}"
                     EntryKeyboard="Email"
                     ErrorMessage="ايميل خاطئ"
                     InputPlaceholder="البريد الالكتروني" />
                 <!--  Phone  -->
                 <template:AnimatedInput
                     x:Name="telephone"
-                    InputText="{Binding UserRegister.PhoneNumber}"
                     EntryKeyboard="Telephone"
                     ErrorMessage="رقم هاتف غير صحيح"
                     InputPlaceholder="التليفون" />
                 <!--  Password  -->
                 <template:AnimatedInput
                     x:Name="password"
-                    InputText="{Binding UserRegister.Password}"
                     IsPassword="True"
                     HasEyeIcon="True"
-                    InputPlaceholder="الرقم السري" />
+                    InputPlaceholder="كلمة مرور فريدة" />
                 <!--  Confirm Password  -->
                 <template:AnimatedInput
                     x:Name="confirmPassword"
-                    InputText="{Binding UserRegister.ConfirmNewPassword}"
                     HasEyeIcon="False"
-                    InputPlaceholder="تأكيد الرقم السري">
+                    InputPlaceholder="تأكيد كلمة المرور">
                     <template:AnimatedInput.Triggers>
                         <DataTrigger
                             TargetType="template:AnimatedInput"
@@ -93,8 +93,9 @@
             <VerticalStackLayout Grid.Row="2" Padding="20,0">
                 <!--  Submit  -->
                 <Button
+                    x:Name="mainCreationButton"
                     Margin="0,30,0,0"
-                    Text="إنشاء حساب"
+                    Text="التحقق"
                     Clicked="SubmitClicked" />
                 <!--  Have Acount? sign in  -->
                 <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
@@ -118,9 +119,21 @@
             </VerticalStackLayout>
 
             <template:VerificationViewTemplate
+                x:Name="verificationViewTemplate"
                 Grid.RowSpan="3"
-                IsVisible="{Binding VerificationViewTemplateVisible}"
+                IsVisible="False"
+                SubmitClicked="VerificationViewTemplate_SubmitClicked"
                 ZIndex="2" />
+            <!--  ActivityIndicator  -->
+            <ActivityIndicator
+                x:Name="activityIndicator"
+                Grid.Row="0"
+                Grid.RowSpan="4"
+                VerticalOptions="Center"
+                ZIndex="3"
+                IsRunning="False"
+                Color="{StaticResource Primary600}" />
+
             <Grid.GestureRecognizers>
                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
             </Grid.GestureRecognizers>

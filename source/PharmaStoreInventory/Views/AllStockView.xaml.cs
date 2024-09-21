@@ -69,7 +69,7 @@ public partial class AllStockView : ContentPage
         var checkBox = sender as CheckBox;
         if (checkBox?.ClassId == "CheckBox_1")
         {
-            await Helpers.Alerts.DisplaySnackbar("1_CheckBox");
+            await Alerts.DisplaySnackbar("1_CheckBox");
         }
     }
 
