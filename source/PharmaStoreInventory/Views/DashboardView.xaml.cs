@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Messages;
+using PharmaStoreInventory.ViewModels;
 
 namespace PharmaStoreInventory.Views;
 
@@ -12,6 +13,7 @@ public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotifi
         WeakReferenceMessenger.Default.Register<DashboardViewNotification>(this);
 
     }
+
     //protected override void OnAppearing()
     //{
     //    base.OnAppearing();
@@ -21,6 +23,16 @@ public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotifi
     //        return;
     //    }
     //}
+
+    protected override bool OnBackButtonPressed()
+    {
+        if (DashboardViewModel.CanBackButtonPressed())
+        {
+            return base.OnBackButtonPressed();
+        }
+        return true;
+    }
+
     public void Receive(DashboardViewNotification message)
     {
         MainThread.BeginInvokeOnMainThread(() =>
@@ -42,7 +54,7 @@ public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotifi
 
     private async void GoToScanPage(object sender, TappedEventArgs e)
     {
-        await Navigation.PushAsync(new PickingView());
+        await Navigation.PushAsync(new PickingView("22"));
     }
 
     private async void GoToAllProductsPage(object sender, TappedEventArgs e)

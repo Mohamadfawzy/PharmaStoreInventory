@@ -5,13 +5,11 @@ using DataAccess.Services;
 using PharmaStoreInventory.Extensions;
 using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.Services;
-using PharmaStoreInventory.ViewModels;
 
 namespace PharmaStoreInventory.Views;
 
 public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotification>
 {
-    private readonly RegisterViewModel vm;
     private string verificationCodeSended = string.Empty;
     bool isEmailVerified = false;
     private UserRegisterDto uRegister = new();
@@ -22,15 +20,11 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
         InitializeComponent();
         mailingService = new();
         WeakReferenceMessenger.Default.Register<RegisterViewNotification>(this);
-        vm = (RegisterViewModel)BindingContext;
     }
-    private void ThisPage_NavigatedTo(object sender, NavigatedToEventArgs e)
+    private async void ThisPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {
         // when releas remove this
-        inputsContainer.PositioningOfPlaceHolder();
-        //var verfViewTemplate = new VerificationViewTemplate() { ZIndex = 2 };
-        //manStack.SetRowSpan(verfViewTemplate, 3);
-        //manStack.Add(verfViewTemplate);
+        await inputsContainer.PositioningOfPlaceHolder();
     }
 
     public void Receive(RegisterViewNotification message)
@@ -80,7 +74,7 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
                 {
                     verificationViewTemplate.IsVisible = true;
                     verificationViewTemplate.SetSpanEmail(uRegister.Email);
-                    verificationCodeSended = "1111"; // await mailingService.SendVerificationCodeAsync(uRegister.Email!, null, "mohamed fawzy");
+                    verificationCodeSended = await mailingService.SendVerificationCodeAsync(uRegister.Email!, null, uRegister.FullName);
                 }
             }
         }
@@ -90,7 +84,8 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
         }
         finally { activityIndicator.IsRunning = false; }
     }
-    async Task<bool> AreEmailAndPhoneNonExistentAsync(string uEmail, string uPhone)
+
+    private async Task<bool> AreEmailAndPhoneNonExistentAsync(string uEmail, string uPhone)
     {
         var res = await ApiServices.AreEmailAndPhoneNonExistentAsync(uEmail, uPhone);
 
@@ -190,7 +185,6 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
         return isError;
     }
 
-
     private void VerificationViewTemplate_SubmitClicked(object sender, EventArgs e)
     {
         if (verificationCodeSended == verificationViewTemplate.GetCode())
@@ -218,31 +212,6 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
         telephone.InputText = "01093052421";
         await inputsContainer.PositioningOfPlaceHolder();
     }
-    //private async Task<ErrorCode> CheckEmailValidityAndSendEmail(string uEmail, string uPhone)
-    //{
-    //    try
-    //    {
-    //        //cheack if email is not exist
-    //        var res = await ApiServices.AreEmailAndPhoneNonExistentAsync(uEmail, uPhone);
-    //        //_ = Helpers.Alerts.DisplaySnackbar(res.Message);
-    //        if (res == null)
-    //            return ErrorCode.NullValue;
-
-    //        if (res.IsSuccess)
-    //        {
-    //            verificationViewTemplate.IsVisible = true;
-    //            verificationCodeSended = "1111";// await mailingService.SendVerificationCodeAsync(uRegister.Email!, null, "mohamed fawzy");
-    //            return ErrorCode.NoError;
-    //        }
-    //        return res.ErrorCode;
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        var exceptionMessage = $"Message: {ex.Message}\nInnerException: {ex.InnerException?.Message}";
-    //        await Helpers.Alerts.DisplaySnackbar(exceptionMessage);
-    //        return ErrorCode.ExceptionError;
-    //    }
-    //}
 }
 
 

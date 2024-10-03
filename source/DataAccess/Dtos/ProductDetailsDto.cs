@@ -1,8 +1,4 @@
 ﻿using DataAccess.Entities;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
 namespace DataAccess.Dtos;
 
 public class ProductDetailsDto 
@@ -20,9 +16,9 @@ public class ProductDetailsDto
     public string? ProductNameAr { get; set; }
     public string? ProductNameEn { get; set; }
     public decimal? ProductUnit1 { get; set; }
-    public decimal? ProductUnit13 { get; set; }
+    //public decimal? ProductUnit13 { get; set; }
     public string? VendorNameAr { get; set; }
-    public string? CompanyNameAr { get; set; }
+    //public string? CompanyNameAr { get; set; }
     public string? ProductHasExpire { get; set; }
 
     //public event NotifyCollectionChangedEventHandler? CollectionChanged;

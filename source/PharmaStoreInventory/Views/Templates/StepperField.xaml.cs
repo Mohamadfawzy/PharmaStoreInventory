@@ -16,7 +16,7 @@ public partial class StepperField : ContentView
         get => (string)GetValue(TextProperty);
         set => SetValue(TextProperty, value);
     }
-    public ICommand LongPressCommand => new Command(() => { Text = $"{0.00}"; });
+    public ICommand LongPressCommand => new Command(() => { Text = $"{0}"; });
     public StepperField()
 	{
 		InitializeComponent();
@@ -24,18 +24,41 @@ public partial class StepperField : ContentView
 
     private void Plus_Clicked(object sender, EventArgs e)
     {
-        var number = decimal.Parse(Text);
-        number++;
-        Text = number.ToString();
+        try
+        {
+            if (string.IsNullOrEmpty(Text))
+            {
+                Text = "0";
+                return;
+            }
+            var number = decimal.Parse(Text);
+            number++;
+            Text = number.ToString();
+        }
+        catch
+        {
+            Text = "0";
+        }
     }
     
     private void Minus_Clicked(object sender, EventArgs e)
     {
-        var number = decimal.Parse(Text);
-        if (number <= 0) 
-            return;
-        number--;
-        Text = number.ToString();
-
+        try
+        {
+            if (string.IsNullOrEmpty(Text))
+            {
+                Text = "0";
+                return;
+            }
+            var number = decimal.Parse(Text);
+            if (number <= 0)
+                return;
+            number--;
+            Text = number.ToString();
+        }
+        catch 
+        {
+            Text = "0";
+        }
     }
 }

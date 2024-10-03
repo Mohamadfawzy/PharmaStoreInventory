@@ -6,19 +6,9 @@ using DataAccess.DomainModel;
 
 namespace DataAccess.Repository;
 
-public class CommonsRepo
+public class CommonsRepo(AppDb context)
 {
-    private readonly AppDb context;
-
-    public CommonsRepo()
-    {
-        context = new();
-    }
-
-    public CommonsRepo(string db)
-    {
-        context = new(db);
-    }
+    private readonly AppDb context = context;
 
     public async Task<List<Stores>?> GetAllStores()
     {

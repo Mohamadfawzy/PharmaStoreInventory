@@ -16,7 +16,7 @@
             BackgroundColor="Transparent">
 
             <Label
-                Text="الفلاش في جهة اليسار"
+                Text="الفلاش جهة اليسار"
                 VerticalOptions="Center"
                 HorizontalOptions="StartAndExpand">
                 <Label.Triggers>
@@ -25,7 +25,7 @@
                         Binding="{Binding Source={x:Reference styleSwitch}, Path=IsToggled}"
                         Value="true">
                         <Setter Property="FontAttributes" Value="Bold" />
-                        <Setter Property="FontSize" Value="18" />
+                        <Setter Property="TextColor" Value="{StaticResource Primary700}" />
                         <Setter Property="Text" Value="الفلاش جهة اليمين" />
                     </DataTrigger>
                 </Label.Triggers>
@@ -47,7 +47,7 @@
             BackgroundColor="Transparent">
 
             <Label
-                Text="عرض الكميات أقل من صفر"
+                Text="عرض الكميات الأقل من أو يساوى صفر"
                 VerticalOptions="Center"
                 HorizontalOptions="StartAndExpand">
                 <Label.Triggers>
@@ -56,8 +56,8 @@
                         Binding="{Binding Source={x:Reference quantitySwitch}, Path=IsToggled}"
                         Value="true">
                         <Setter Property="FontAttributes" Value="Bold" />
-                        <Setter Property="FontSize" Value="18" />
-                        <Setter Property="Text" Value="لا تعرض الكميات الأقل من صفر" />
+                        <Setter Property="TextColor" Value="{StaticResource Primary700}" />
+                        <Setter Property="Text" Value="لا تعرض الكميات الأقل من أو يساوى صفر" />
                     </DataTrigger>
                 </Label.Triggers>
             </Label>

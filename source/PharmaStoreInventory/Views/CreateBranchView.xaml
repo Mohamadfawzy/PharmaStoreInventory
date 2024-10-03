@@ -62,7 +62,7 @@
                         x:Name="ipAdrress"
                         ErrorMessage="هذا الحقل مطلوب"
                         InputPlaceholder="عنوان IP" />
-                    
+
                     <template:AnimatedInput
                         x:Name="port"
                         ErrorMessage="هذا الحقل مطلوب"

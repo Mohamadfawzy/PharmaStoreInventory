@@ -39,6 +39,11 @@
                 <Setter Property="StrokeThickness" Value="2" />
                 <Setter Property="Stroke" Value="{StaticResource Secondary700}" />
             </Style>
+
+            <Style x:Key="CentralLabel" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource Primary800}" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -223,10 +228,7 @@
                     BackgroundColor="Transparent" />
 
                 <!--  Barcod Section  -->
-                <HorizontalStackLayout
-                    Padding="20,0"
-                    Spacing="10"
-                    BackgroundColor="{StaticResource Primary800}">
+                <HorizontalStackLayout Padding="20,0" Spacing="10" BackgroundColor="{StaticResource Primary800}">
                     <!--  barcod Icon  -->
                     <Label
                         Text="{x:Static icon:IconFont.BarcodeScan}"
@@ -307,10 +309,7 @@
                                             TextColor="{StaticResource Primary200}"
                                             VerticalOptions="Center">
                                             <Label.Triggers>
-                                                <DataTrigger
-                                                    TargetType="Label"
-                                                    Binding="{Binding IsInventoried}"
-                                                    Value="1">
+                                                <DataTrigger TargetType="Label" Binding="{Binding IsInventoried}" Value="1">
                                                     <Setter Property="Text" Value="{x:Static icon:IconFont.CheckboxMarkedCircle}" />
                                                     <Setter Property="TextColor" Value="{StaticResource Primary700}" />
                                                     <!--  Multiple Setter elements are allowed  -->
@@ -319,10 +318,7 @@
                                         </Label>
 
                                         <!--  Data  -->
-                                        <VerticalStackLayout
-                                            Grid.Column="1"
-                                            InputTransparent="True"
-                                            Spacing="0">
+                                        <VerticalStackLayout Grid.Column="1" InputTransparent="True" Spacing="0">
                                             <!--  Date Binding="{Binding Text.Length, Source={x:Reference dataLabel}}"  -->
                                             <!--  dd, mm, yyyy  ,StringFormat='{}{0:dd-MM-yyyy}'  -->
                                             <Label
@@ -334,19 +330,13 @@
                                                 FontSize="23"
                                                 TextColor="{StaticResource Primary800}">
                                                 <Label.Triggers>
-                                                    <DataTrigger
-                                                        TargetType="Label"
-                                                        Binding="{Binding ProductHasExpire}"
-                                                        Value="0">
+                                                    <DataTrigger TargetType="Label" Binding="{Binding ProductHasExpire}" Value="0">
                                                         <Setter Property="IsVisible" Value="False" />
                                                     </DataTrigger>
                                                 </Label.Triggers>
                                             </Label>
 
-                                            <HorizontalStackLayout
-                                                Margin="0,10,0,0"
-                                                Spacing="15"
-                                                InputTransparent="True">
+                                            <HorizontalStackLayout Margin="0,10,0,0" Spacing="15" InputTransparent="True">
 
                                                 <!--  Quantity  -->
                                                 <Frame
@@ -362,10 +352,7 @@
                                                             FontSize="22"
                                                             Text="{Binding Quantity}"
                                                             VerticalTextAlignment="End" />
-                                                        <Label
-                                                            Text="Stock"
-                                                            VerticalTextAlignment="End"
-                                                            FontSize="10" />
+                                                        <Label Text="Stock" VerticalTextAlignment="End" FontSize="10" />
                                                     </HorizontalStackLayout>
                                                 </Frame>
 
@@ -394,10 +381,7 @@
                                                             Text="{Binding SellPrice}"
                                                             FontSize="18"
                                                             VerticalTextAlignment="End" />
-                                                        <Label
-                                                            Text="L.E"
-                                                            VerticalTextAlignment="End"
-                                                            FontSize="10" />
+                                                        <Label Text="L.E" VerticalTextAlignment="End" FontSize="10" />
                                                     </HorizontalStackLayout>
                                                 </Frame>
                                             </StackLayout>
@@ -441,7 +425,7 @@
             </StackLayout>
         </Grid>
 
-        <!--  Popup  -->
+        <!--#region  Floats-->
         <Grid
             x:Name="popup"
             Grid.Row="0"
@@ -461,23 +445,45 @@
                 InputTransparent="False"
                 BackgroundColor="{AppThemeBinding Light={StaticResource Primary050},
                                                   Dark={StaticResource Primary950}}">
-                <VerticalStackLayout Padding="25,25" VerticalOptions="Center">
+                <VerticalStackLayout
+                    Padding="25"
+                    Spacing="10"
+                    VerticalOptions="Center"
+                    FlowDirection="LeftToRight">
 
-                    <!--  The Quantity section  -->
-                    <Label Text="الكمية " HorizontalOptions="CenterAndExpand" />
+                    <!--  Quantity Section  -->
+                    <Label Text="الكمية" Style="{StaticResource CentralLabel}" />
                     <!--  StepperS  -->
                     <template:StepperField Text="{Binding ModifiedQuantity}" HorizontalOptions="CenterAndExpand" />
 
-                    <!--  The date section  -->
+                    <!--  Title  -->
+                    <Label Margin="0,10,0,0" Text="تاريخ إنتهاء الصلاحية" Style="{StaticResource CentralLabel}" />
+
+
+                    <!--  ExpiryDate Entry inside border  -->
+                    <Grid x:Name="yearMonthDayStack" ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                        <template:UpDownStepper Text="{Binding Year}" MinimumValue="2020" TextPlaceholder="السنة" />
+                        <template:UpDownStepper
+                            Grid.Column="1"
+                            Text="{Binding Month}"
+                            MaximumValue="12"
+                            TextPlaceholder="الشهر" />
+                        <template:UpDownStepper
+                            Grid.Column="2"
+                            Text="{Binding Day}"
+                            MaximumValue="31"
+                            TextPlaceholder="اليوم" />
+                    </Grid>
+
+                    <!--  ExpiryDate Section  -->
                     <VerticalStackLayout IsVisible="{Binding IsExpiryDateFramInPopupVisible}">
-                        <!--  date Label  -->
-                        <Label Margin="0,20,0,0" Text="تاريخ إنتهاء الصلاحية" />
-                        <Label
-                            Margin="5,0"
-                            Text="{Binding ExpiaryDateLabel, StringFormat='{}{0:dd-MM-yyyy}', Mode=OneWay}"
-                            TextColor="{StaticResource Gray400}" />
-                        <!--  Date Entry  -->
-                        <Border
+
+
+                        <!--  ExpiryDate Label  -->
+                        <!--<Label Margin="5,0" Text="{Binding ExpiaryDateLabel, StringFormat='{}{0:dd-MM-yyyy}', Mode=OneWay}" TextColor="{StaticResource Gray400}" />-->
+
+
+                        <!--<Border
                             Padding="10,0"
                             Stroke="#C49B33"
                             StrokeThickness="1"
@@ -512,18 +518,13 @@
                                     TextColor="{StaticResource Gray400}"
                                     VerticalTextAlignment="Center" />
                             </Grid>
-                        </Border>
+                        </Border>-->
                     </VerticalStackLayout>
 
-                    <Button
-                        Margin="0,20,0,0"
-                        Text="حفظ التعديلات"
-                        Command="{Binding SaveChangesCommand}">
+                    <!--  Save Button  -->
+                    <Button Margin="0,0,0,0" Text="حفظ التعديلات" Command="{Binding SaveChangesCommand}">
                         <Button.Triggers>
-                            <DataTrigger
-                                TargetType="Button"
-                                Binding="{Binding PopupType}"
-                                Value="editAndCopy">
+                            <DataTrigger TargetType="Button" Binding="{Binding PopupType}" Value="editAndCopy">
                                 <!--<Setter Property="Text" Value="{x:Static icon:IconFont.CheckboxMarkedCircle}" />-->
                                 <Setter Property="Text" Value="حفظ كـنسخة مختلفة" />
                                 <Setter Property="BackgroundColor" Value="{StaticResource Secondary900}" />
@@ -535,10 +536,7 @@
                     <TapGestureRecognizer Tapped="Popup_HideSoftInput_Tapped" />
                 </Border.GestureRecognizers>
                 <Border.Triggers>
-                    <DataTrigger
-                        TargetType="Border"
-                        Binding="{Binding PopupType}"
-                        Value="editAndCopy">
+                    <DataTrigger TargetType="Border" Binding="{Binding PopupType}" Value="editAndCopy">
                         <Setter Property="BackgroundColor" Value="{StaticResource Primary200}" />
                     </DataTrigger>
                 </Border.Triggers>
@@ -556,10 +554,8 @@
             ZIndex="4"
             IsRunning="{Binding ActivityIndicatorRunning}"
             Color="{StaticResource Primary600}" />
-        <template:NotificationTemplate
-            x:Name="notification"
-            Grid.RowSpan="5"
-            ZIndex="5" />
+        <!--#endregion-->
+        <template:NotificationTemplate x:Name="notification" Grid.RowSpan="5" ZIndex="5" />
     </Grid>
 
 </ContentPage>

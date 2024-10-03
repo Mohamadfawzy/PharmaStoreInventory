@@ -20,9 +20,9 @@ public class ProductDetailsModel : ObservableObject
     public string? ProductNameAr { get; set; }
     public string? ProductNameEn { get; set; }
     public decimal? ProductUnit1 { get; set; }
-    public decimal? ProductUnit13 { get; set; }
     public string? VendorNameAr { get; set; }
-    public string? CompanyNameAr { get; set; }
+    //public decimal? ProductUnit13 { get; set; }
+    //public string? CompanyNameAr { get; set; }
     public string? ProductHasExpire { get; set; }
 
     public static implicit operator ProductDetailsModel(ProductDetailsDto? item)
@@ -43,9 +43,9 @@ public class ProductDetailsModel : ObservableObject
             ProductNameAr = item.ProductNameAr,
             ProductNameEn = item.ProductNameEn,
             ProductUnit1 = item.ProductUnit1,
-            ProductUnit13 = item.ProductUnit13,
+            //ProductUnit13 = item.ProductUnit13,
             VendorNameAr = item.VendorNameAr,
-            CompanyNameAr = item.CompanyNameAr,
+            //CompanyNameAr = item.CompanyNameAr,
             ExpDate = item.ExpDate,
             IsInventoried = item.IsInventoried,
             SellPrice = item.SellPrice,

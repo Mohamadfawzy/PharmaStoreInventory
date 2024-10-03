@@ -9,7 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PharmaStoreInventoryApi", "..\..\..\Backend\PharmaStoreInventoryApi\PharmaStoreInventoryApi\PharmaStoreInventoryApi.csproj", "{3E15C039-2292-47B6-9CDB-EE26CFF94893}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModernSoftApi", "..\..\..\Backend\ModernSoftApi\ModernSoftApi.csproj", "{43BFB12F-AC8F-4B56-91EF-67B7EB6EC375}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModernSoftApi", "..\..\..\Backend\ModernSoftApi\ModernSoftApi.csproj", "{43BFB12F-AC8F-4B56-91EF-67B7EB6EC375}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PharmaStoreSetup", "..\..\..\Backend\PharmaStoreSetup\PharmaStoreSetup.vdproj", "{24621E5C-E66A-4597-8B15-8D2C38E8DE9F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RunBatchFileApp", "..\..\..\Common\RunBatchFileApp\RunBatchFileApp.csproj", "{1D8B7EF4-184D-4F74-9201-6DAA7A824AA6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiSettingsManager", "..\..\..\Common\ApiSettingsManager\ApiSettingsManager.csproj", "{56835148-28E8-49CE-92B5-181936BFEA32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +41,16 @@ Global
 		{43BFB12F-AC8F-4B56-91EF-67B7EB6EC375}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43BFB12F-AC8F-4B56-91EF-67B7EB6EC375}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43BFB12F-AC8F-4B56-91EF-67B7EB6EC375}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24621E5C-E66A-4597-8B15-8D2C38E8DE9F}.Debug|Any CPU.ActiveCfg = Debug
+		{24621E5C-E66A-4597-8B15-8D2C38E8DE9F}.Release|Any CPU.ActiveCfg = Release
+		{1D8B7EF4-184D-4F74-9201-6DAA7A824AA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D8B7EF4-184D-4F74-9201-6DAA7A824AA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D8B7EF4-184D-4F74-9201-6DAA7A824AA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D8B7EF4-184D-4F74-9201-6DAA7A824AA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56835148-28E8-49CE-92B5-181936BFEA32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56835148-28E8-49CE-92B5-181936BFEA32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56835148-28E8-49CE-92B5-181936BFEA32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56835148-28E8-49CE-92B5-181936BFEA32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

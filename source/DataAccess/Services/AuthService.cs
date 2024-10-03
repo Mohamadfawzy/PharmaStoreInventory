@@ -8,13 +8,17 @@ using DataAccess.Repository;
 
 namespace DataAccess.Services;
 
-public class AuthService(UserRepository _repo)
+public class AuthService
 {
     //private readonly Repository.UserRepository repo = new();
     private readonly PasswordHasher hasher = new();
     private readonly MailingService mailService = new();
-    private readonly UserRepository repo = _repo;
+    private readonly UserRepository repo;
 
+    public AuthService(UserRepository _repo)
+    {
+        this.repo = _repo;
+    }
 
     #region Admin Section
     public async Task<Result<UserLoginResponseDto>> AdminLoginByEmailAsync(LoginDto model)
@@ -23,7 +27,7 @@ public class AuthService(UserRepository _repo)
         // Check if email and password are provided
         if (string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password))
         {
-            return Result<UserLoginResponseDto>.Failure("Email or password is missing.");
+            return Result<UserLoginResponseDto>.Failure(ErrorCode.NullValue, "Email or password is missing.");
         }
 
         try
@@ -32,7 +36,12 @@ public class AuthService(UserRepository _repo)
             var userAccount = await repo.FindUserByEmailAsync(model.Username.ToLower()).ConfigureAwait(false);
             if (userAccount == null)
             {
-                return Result<UserLoginResponseDto>.Failure("admin Invalid email");
+                return Result<UserLoginResponseDto>.Failure(ErrorCode.EmailNotExist, "admin Invalid email");
+            }
+
+            if(userAccount.UserRole != 'A' && userAccount.UserRole != 'E')
+            {
+                return Result<UserLoginResponseDto>.Failure(ErrorCode.InvalidRole, "invaled Role");
             }
 
             // If admin is the first time he will login
@@ -40,7 +49,6 @@ public class AuthService(UserRepository _repo)
             {
                 var result = await repo.UpdatePasswordByEmailAsync(model.Username, model.Password).ConfigureAwait(false);
                 isPasswordCorrect = result.IsSuccess;
-
             }
             else
             {
@@ -61,6 +69,7 @@ public class AuthService(UserRepository _repo)
                     PhoneNumber = userAccount.PhoneNumber,
                     LockoutEnd = userAccount.LockoutEnd = DateTimeOffset.UtcNow.AddDays(7),
                     IsActive = userAccount.IsActive,
+                    UserRole  = userAccount.UserRole,
                 };
 
                 // Return successful result with user login response and welcome message
@@ -70,18 +79,24 @@ public class AuthService(UserRepository _repo)
             {
                 // Increment AccessFailedCount if the password is incorrect
                 await repo.IncrementAccessFailedCountAsync(userAccount).ConfigureAwait(false);
-                return Result<UserLoginResponseDto>.Failure("Invalid password.");
+                return Result<UserLoginResponseDto>.Failure(ErrorCode.PasswordIsIncorrect, "Invalid password.");
             }
         }
         catch (Exception ex)
         {
-            return Result<UserLoginResponseDto>.Failure(ex.Message);
+            return Result<UserLoginResponseDto>.Failure(ErrorCode.ExceptionError, ex.Message);
         }
     }
 
-    public async Task<Result> ChangeUserStatus(int userId, bool status)
+    public async Task<Result> ChangeUserStatus(string email, bool status)
     {
-        return await repo.UpdateActivationUserAccountAsync(userId, status);
+        var userAccount = await repo.FindUserByEmailAsync(email).ConfigureAwait(false);
+        if (userAccount is null)
+        {
+            // Return failure result if email Not Exist
+            return Result.Failure(ErrorCode.EmailNotExist, "Email Not Exist");
+        }
+        return await repo.UpdateActivationUserAccountAsync(userAccount, status);
     }
 
     public async Task<List<UserInfoDto>> GetAllUsersAsync(FilterUsersQParam query)
@@ -424,7 +439,7 @@ public class AuthService(UserRepository _repo)
 
                 if (isNewDevice)
                 {
-                    return Result<UserLoginResponseDto>.Failure(ErrorCode.UserNotActive, "Your account is not active.");
+                    return Result<UserLoginResponseDto>.Failure(ErrorCode.UserNotActive, "you order add a new account and Your account become not active.");
                 }
                 else
                 {

@@ -284,7 +284,7 @@
 
                     <!--  Is there a group option filter?  -->
                     <CheckBox IsChecked="{Binding FilterIsGroup}" />
-                    <Label Text="دمج حسب تاريخ الصلاحية" />
+                    <Label Text="دمج حسب سعر البيع" />
 
                     <!--  Is there a ... option filter?  -->
                     <CheckBox Grid.Row="1" IsChecked="{Binding FilterQuantityBiggerThanZero}" />

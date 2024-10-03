@@ -8,4 +8,6 @@ public class UpdateProductQuantityDto
     public decimal NewQuantity { get; set; }
     public DateTime? ExpDate { get; set; }
     public string EmpId { get; set; } = null!;
+    public decimal? ProductUnit1 { get; set; }
+    public string? Notes { get; set; }
 }

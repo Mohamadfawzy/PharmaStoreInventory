@@ -11,7 +11,7 @@ namespace PharmaStoreInventory.Services;
 public static class RequestProvider
 {
     // request.Headers.Add("DbConnectionString", Helpers.AppValues.ConnectionString);
-    private const short timeoutInSeconds = 10;
+    private const short timeoutInSeconds = 8;
     public static async Task<List<TResult>?> GetAllAsync3<TResult>(string uri)
     {
         ErrorMessage message;
@@ -267,7 +267,7 @@ public static class RequestProvider
     }
 
 
-    public static async Task<(TResult? content, ErrorMessage? error)> PostSingleAsync<TResult, TTake>(string uri, TTake data)
+    public static async Task<(TResult? content, ErrorMessage? error)> PostSingleAsync<TResult, TTake>(string uri, TTake data,string tokn = "")
     {
         ErrorMessage? message = null;
         using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(timeoutInSeconds) };

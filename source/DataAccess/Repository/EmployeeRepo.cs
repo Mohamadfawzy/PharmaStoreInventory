@@ -5,14 +5,9 @@ using DataAccess.Contexts;
 using DataAccess.DomainModel;
 
 namespace DataAccess.Repository;
-public class EmployeeRepo
+public class EmployeeRepo(AppDb context)
 {
-
-    private readonly AppDb context;
-    public EmployeeRepo()
-    {
-        context = new();
-    }
+    private readonly AppDb context = context;
 
     public async Task<Result<EmployeeDto?>> EmpLogin(LoginDto emp)
     {
@@ -39,6 +34,29 @@ public class EmployeeRepo
         catch (Exception ex)
         {
             return Result<EmployeeDto?>.Failure($"Error: {ex.Message}");
+        }
+    }
+
+
+    public async Task<Result<string>> Testonnection()
+    {
+        try
+        {
+            var employees = await context.Employee
+                .Select(x => new { emp_id = x.Emp_id })
+                .Take(10)
+                .ToListAsync();
+
+            if (employees != null && employees.Count > 0)
+            {
+                return Result<string>.Success("successfuly");
+            }
+            return Result<string>.Failure("not founeded this username");
+
+        }
+        catch (Exception ex)
+        {
+            return Result<string>.Failure($"Error: {ex.Message}");
         }
     }
 }

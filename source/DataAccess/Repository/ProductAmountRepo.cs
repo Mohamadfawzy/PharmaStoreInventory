@@ -2,6 +2,7 @@
 using DataAccess.DomainModel;
 using DataAccess.DomainModel.QueryParams;
 using DataAccess.Dtos;
+using DataAccess.Entities;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -19,16 +20,11 @@ namespace DataAccess.Repository;
 //    public decimal? ProductUnit13 { get; set; }
 //    public string? CompanyNameAr { get; set; }
 //}
-public class ProductAmountRepo
+public class ProductAmountRepo(AppDb context)
 {
-    private readonly AppDb context;
+    private readonly AppDb context = context;
     const string whereDeletedActiveStatement = " WHERE p.Deleted = 1 AND p.active = 1 ";
     const string columnsStatement = @" p.product_code AS [ProductCode], p.product_int_code AS [InternationalCode], ISNULL(NULLIF(p.product_name_en, ''), p.product_name_ar) AS [Name], pa.Sell_price AS [SalePrice], pa.Amount AS [Quantity], pa.Store_id AS [StoreId] , p.product_has_expire AS [HasExpire] ";
-
-    public ProductAmountRepo()
-    {
-        context = new();
-    }
 
     public async Task<List<ProductDto>> GetAllProducts(ProductQParam qParam)
     {
@@ -36,7 +32,7 @@ public class ProductAmountRepo
         string whereQuantity = qParam.QuantityBiggerThanZero ? " AND pa.Amount > 0 " : "";
         string whereStoreId = string.IsNullOrEmpty(qParam.StoreId) ? "" : $" AND pa.Store_id = {qParam.StoreId} ";
         string whereSiteId = string.IsNullOrEmpty(qParam.SiteId) ? "" : $" AND p.site_id = {qParam.SiteId} ";
-        string whereHasExpire = string.IsNullOrEmpty(qParam.HasExpire) ? " " :$" AND p.product_has_expire = {qParam.HasExpire} ";
+        string whereHasExpire = string.IsNullOrEmpty(qParam.HasExpire) ? " " : $" AND p.product_has_expire = {qParam.HasExpire} ";
         string whereOrderBy = $" ORDER BY {BringOrderByQuery(qParam.OrderBy)}";
         string whereSearchText = await BringSearchQuery(qParam.Text);
         //string offset = await BringPaginationQuery(qParam.Page);
@@ -75,14 +71,11 @@ public class ProductAmountRepo
                     p.product_name_ar AS [ProductNameAr],
                     p.product_name_en AS [ProductNameEn],
                     p.product_unit1 AS [ProductUnit1],
-                    p.product_unit1_3 AS [ProductUnit13],
                     p.product_has_expire AS [ProductHasExpire],
-                    vendor.vendor_name_ar AS [VendorNameAr],
-                    companys.co_name_ar AS [CompanyNameAr]
+                    vendor.vendor_name_ar AS [VendorNameAr]
 
                 FROM products as p
                 INNER JOIN Product_Amount as pa ON p.Product_id = pa.Product_id 
-                INNER JOIN companys ON p.company_id = companys.company_id
                 INNER JOIN product_units ON p.product_unit1 = product_units.unit_id
                 LEFT OUTER JOIN vendor ON pa.Vendor_id = vendor.Vendor_id
                     {whereDeletedActiveStatement} 
@@ -92,7 +85,8 @@ public class ProductAmountRepo
                     p.[product_code]       = @Barcode OR
                     p.[product_int_code]   = @Barcode) 
                     order by pa.counter_id desc ";
-        // order by pa.Exp_date desc 
+        //          order by pa.Exp_date desc 
+
         // Define parameters to avoid SQL injection and type issues
         var parameters = new[]
         {
@@ -167,6 +161,16 @@ public class ProductAmountRepo
             if (product == null)
                 return Result.Failure(ErrorCode.NotFoundById, "this product is not founded");
 
+            var param = new ProductUpdateAndChangeQParam()
+            {
+                Notice = "إضافة كمية جديدة بتاريخ جديد",
+                OldExp_date = product.Exp_date,
+                Old_amount = 0,
+                Product_unit1 = model.ProductUnit1,
+                EmpId = model.EmpId,
+            };
+
+
             product.Pa_id = 0;
             product.Amount = model.Quantity;
             product.Counter_id = ++expiryBatchID;
@@ -182,6 +186,12 @@ public class ProductAmountRepo
                 return Result.Failure(ErrorCode.OperationFailed, "Can not add this product, effectedRow = 0");
             }
 
+            var row1 = await InsertProductAmountUpdatesAsync(product, param).ConfigureAwait(false);
+            var row2 = await InsertProductAmountChangesAsync(product, param).ConfigureAwait(false);
+            if (!row1 || !row2)
+            {
+                return Result.Success($"product: {model.ProductId} is added successfuly put not save transaction");
+            }
             return Result.Success($"{effectedRow} row effected");
         }
         catch (Exception ex)
@@ -195,10 +205,20 @@ public class ProductAmountRepo
         try
         {
             var product = await context.Product_Amount
-            .FirstOrDefaultAsync(x => x.Pa_id == dto.Id);
+                .FirstOrDefaultAsync(x => x.Pa_id == dto.Id);
 
             if (product == null)
                 return Result.Failure(ErrorCode.NotFoundById);
+
+
+            var param = new ProductUpdateAndChangeQParam()
+            {
+                Notice = dto.Notes,
+                OldExp_date = product.Exp_date,
+                Old_amount = product.Amount,
+                Product_unit1 = dto.ProductUnit1,
+                EmpId = dto.EmpId,
+            };
 
             product.Amount = (dto.NewQuantity - dto.OldQuantity) + product.Amount;
             product.Exp_date = dto.ExpDate;
@@ -211,6 +231,12 @@ public class ProductAmountRepo
             var effectedRow = await context.SaveChangesAsync();
             if (effectedRow > 0)
             {
+                var row1 = await InsertProductAmountUpdatesAsync(product, param).ConfigureAwait(false);
+                var row2 = await InsertProductAmountChangesAsync(product, param).ConfigureAwait(false);
+                if (!row1|| !row2)
+                {
+                    return Result.Success($"product: {dto.ProductId} is updated successfuly put not save transaction");
+                }
                 return Result.Success($"product: {dto.ProductId} is updated successfuly");
             };
 
@@ -219,6 +245,92 @@ public class ProductAmountRepo
         catch (Exception ex)
         {
             return Result.Failure("An error occurred while checking the expiration date." + ex.Message + ex.InnerException?.Message);
+        }
+    }
+
+
+    public async Task<bool> InsertProductAmountUpdatesAsync(Product_Amount pa, ProductUpdateAndChangeQParam param)
+    {
+        try
+        {
+            
+            var pau = new ProductAmountUpdate()
+            {
+                Product_id = pa.Product_id,
+                Store_id = pa.Store_id,
+                Counter_id = pa.Counter_id,
+                Insert_uid = param.EmpId,
+
+                Old_amount = param.Old_amount,
+                Old_exp_date = param.OldExp_date,
+
+                New_amount = pa.Amount,
+                New_exp_date = pa.Exp_date,
+                Notes = param.Notice,
+
+                Buy_price = pa.Buy_price,
+                Store_date = pa.Insert_date,
+                Sell_price = pa.Sell_price,
+                Tax_price = pa.Tax_price,
+                Vendor_id = pa.Vendor_id,
+                Product_unit = param.Product_unit1,
+                Insert_date = DateTime.Now,
+            };
+
+
+            await context.ProductAmountUpdates.AddAsync(pau);
+
+            var effectedRow = await context.SaveChangesAsync();
+            if (effectedRow > 0)
+            {
+                return true;
+            };
+            return false;
+        }
+        catch (Exception e)
+        {
+            await Console.Out.WriteLineAsync(e.Message);
+            return false;
+        }
+    }
+    
+    public async Task<bool> InsertProductAmountChangesAsync(Product_Amount pa, ProductUpdateAndChangeQParam parm)
+    {
+        try
+        {
+            var pac = new ProductAmountChange()
+            {
+                Product_id = pa.Product_id,
+                Store_id = pa.Store_id,
+                Counter_id = pa.Counter_id,
+                New_amount = pa.Amount,
+                Buy_price = pa.Buy_price,
+                Sell_price = pa.Sell_price,
+                Tax_price = pa.Tax_price,
+                Vendor_id = pa.Vendor_id,
+                Exp_date = pa.Exp_date,
+                Form_type = 26,
+                In_type = "0",
+
+                Old_amount = parm.Old_amount,
+                Insert_uid = parm.EmpId,
+                Form_notice = parm.Notice,
+                Insert_date = DateTime.Now,
+            };
+
+            await context.ProductAmountChanges.AddAsync(pac);
+
+            var effectedRow = await context.SaveChangesAsync();
+            if (effectedRow > 0)
+            {
+                return true;
+            };
+            return false;
+        }
+        catch (Exception e)
+        {
+            await Console.Out.WriteLineAsync(e.Message);
+            return false;
         }
     }
 

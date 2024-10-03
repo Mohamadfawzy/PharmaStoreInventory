@@ -34,29 +34,41 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
 
     private async void CreateBranchClicked(object sender, EventArgs e)
     {
-        activityIndicator.IsRunning = true;
-        btnCreateBranch.IsEnabled = false;
-        inputsContainer.ClearFocusFromAllInputs();
-
-        if (AreEntriesValid())
+        try
         {
-            var branch = new BranchModel()
+            activityIndicator.IsRunning = true;
+            btnCreateBranch.IsEnabled = false;
+            inputsContainer.ClearFocusFromAllInputs();
+
+            if (AreEntriesValid())
             {
-                //Id = Guid.Parse("e3b9f4f0-0e47-46ad-bd68-bf9587b85776"),// Guid.NewGuid(),
-                Id = Guid.NewGuid(),
-                BrachName = brachName.InputText,
-                Telephone = telephone.InputText,
-                IpAddress = ipAdrress.InputText,
-                Port = port.InputText,
-                Username = username.InputText,
-                Password = password.InputText,
-                UserId = AppPreferences.HostUserId,
-            };
-            CreateBranch(branch);
+                var branch = new BranchModel()
+                {
+                    //Id = Guid.Parse("e3b9f4f0-0e47-46ad-bd68-bf9587b85776"),// Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
+                    BrachName = brachName.InputText,
+                    Telephone = telephone.InputText,
+                    IpAddress = ipAdrress.InputText,
+                    Port = port.InputText,
+                    Username = username.InputText,
+                    Password = password.InputText,
+                    UserId = AppPreferences.HostUserId,
+                };
+                await CreateBranch(branch);
+            }
+        }
+        catch (Exception ex)
+        {
+
+            notification.ShowMessage("exception in event clicked", ex.Message);
+        }
+        finally
+        {
+            activityIndicator.IsRunning = false;
+            btnCreateBranch.IsEnabled = true;
+
         }
 
-        activityIndicator.IsRunning = false;
-        btnCreateBranch.IsEnabled = true;
     }
 
     private bool AreEntriesValid()
@@ -100,7 +112,7 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
         return true;
     }
 
-    async void CreateBranch(BranchModel branch)
+    async Task CreateBranch(BranchModel branch)
     {
         // check if this bransh is already exist. if ture? We will not add it.
         if (await xFileHanler.IsIpAdrressExist(branch.IpAddress))

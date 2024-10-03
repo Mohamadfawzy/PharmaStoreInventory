@@ -13,9 +13,9 @@ public class BrancheRepository
 {
     private readonly AppHost context;
 
-    public BrancheRepository()
+    public BrancheRepository(AppHost context)
     {
-        this.context = new AppHost();
+        this.context = context;
     }
 
     public async Task<Result> CreateAsync(BrancheDto dto)

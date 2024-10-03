@@ -12,6 +12,7 @@ public class UserAccount
     public bool IsLoggedIn { get; set; }
     public bool IsActive { get; set; }
     public int AccessFailedCount { get; set; }
+    public char UserRole { get; set; } 
 
     public bool EmailConfirmed { get; set; }
     public bool PhoneNumberConfirmed { get; set; }

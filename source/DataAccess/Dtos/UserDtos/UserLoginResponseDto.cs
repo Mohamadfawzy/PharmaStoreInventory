@@ -10,4 +10,5 @@ public class UserLoginResponseDto
     public bool EmailConfirmed { get; set; }
     public DateTimeOffset? LockoutEnd { get; set; }
     public bool IsActive { get; set; }
+    public char UserRole { get; set; }
 }

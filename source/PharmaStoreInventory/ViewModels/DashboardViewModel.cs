@@ -15,6 +15,7 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
     private int storeId = 0;
     private DateOnly latestInventoryDate;
     private SortModel? currentSelectedStore = null;
+    private bool confirmNewInventoryExecutionVisibility = false;
     private string title = "العنوان";
     private string storeName = "غير محدد";
     private int LatestInventoryId = 0;
@@ -28,6 +29,10 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
         OnStart();
     }
 
+    public static bool CanBackButtonPressed()
+    {
+        return true;
+    }
     private async void OnStart()
     {
         ActivityIndicatorRunning = true;
@@ -64,6 +69,12 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
         get => title;
         set => SetProperty(ref title, value);
     }
+    
+    public bool ConfirmNewInventoryExecutionVisibility
+    {
+        get => confirmNewInventoryExecutionVisibility;
+        set => SetProperty(ref confirmNewInventoryExecutionVisibility, value);
+    }
 
     public bool IsStoresPopupVisible
     {
@@ -82,8 +93,9 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
     public ICommand RefreshCommand => new Command(ExecuteCRefresh);
     public ICommand StoreSelectionChangedCommand => new Command<SortModel>(StoreSelectionChanged);
     public ICommand ToggleStoresPopupVisibilityCommand => new Command<string>(ExecuteToggleStoresPopupVisibility);
+    public ICommand ToggleConfirmNewInventoryVisibilityCommand => new Command(() => ConfirmNewInventoryExecutionVisibility = !ConfirmNewInventoryExecutionVisibility);
     public ICommand SubmitStoreSelectionChangedCommand => new Command(ExecuteSubmitStoreSelectionChanged);
-    public ICommand StartNewInventoryCommand => new Command(StartNewInventory);
+    public ICommand StartNewInventoryCommand => new Command<string>(StartNewInventory);
 
 
     #region Get Data
@@ -219,6 +231,7 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
     void ExecuteToggleStoresPopupVisibility(string status)
     {
         IsStoresPopupVisible = !IsStoresPopupVisible;
+        ConfirmNewInventoryExecutionVisibility = !ConfirmNewInventoryExecutionVisibility;
     }
 
     void ExecuteSubmitStoreSelectionChanged()
@@ -232,28 +245,36 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
         }
     }
 
-    private async void StartNewInventory()
+    private async void StartNewInventory(string commandParameter)
     {
         try
         {
-            await Task.Run(async () =>
+            if(commandParameter == "init")
             {
-                var model = new StartNewInventoryHistoryDto()
+                ConfirmNewInventoryExecutionVisibility = true;
+            }
+            else
+            {
+                await Task.Run(async () =>
                 {
-                    EmpId = AppPreferences.LocalDbUserId,
-                    LatestHistoryId = LatestInventoryId,
-                    StoreId = storeId,
-                };
+                    var model = new StartNewInventoryHistoryDto()
+                    {
+                        EmpId = AppPreferences.LocalDbUserId,
+                        LatestHistoryId = LatestInventoryId,
+                        StoreId = storeId,
+                    };
 
-                var result = await ApiServices.StartNewInventoryAsync(model);
-                if (result != null && result.IsSuccess)
-                {
-                    await Helpers.Alerts.DisplaySnackbar("Start New Inventory Success", 7);
-                    await GetLatestInventoryHistory();
-                    CountAllIsInventoryed = 0;
-                    OnPropertyChanged(nameof(CountAllIsInventoryed));
-                }
-            });
+                    var result = await ApiServices.StartNewInventoryAsync(model);
+                    if (result != null && result.IsSuccess)
+                    {
+                        await Helpers.Alerts.DisplaySnackbar("Start New Inventory Success", 7);
+                        await GetLatestInventoryHistory();
+                        CountAllIsInventoryed = 0;
+                        OnPropertyChanged(nameof(CountAllIsInventoryed));
+                    }
+                });
+                ConfirmNewInventoryExecutionVisibility = false;
+            }
         }
         catch (Exception ex)
         {

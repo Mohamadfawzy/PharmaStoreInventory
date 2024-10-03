@@ -5,18 +5,20 @@ namespace DataAccess.Contexts;
 
 public class AppHost: DbContext
 {
-    private readonly string connectionString;
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlServer(connectionString);
-    }
-    
-    public AppHost()
-    {
-        connectionString = $"Data Source=localhost; Initial Catalog=msoftStock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
-        //connectionString = $"workstation id=msoftStock.mssql.somee.com;packet size=4096;user id=mfawzyH_SQLLogin_1;pwd=kd35ziwgqs;data source=msoftStock.mssql.somee.com;persist security info=False;initial catalog=msoftStock;TrustServerCertificate=True";
-    }
+    //private readonly string connectionString;
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //{
+    //    optionsBuilder.UseSqlServer(connectionString);
+    //}
 
+    //public AppHost()
+    //{
+    //    //connectionString = $"Data Source=localhost; Initial Catalog=msoftStock;User ID=admin;Password=admin; Trusted_Connection=false; TrustServerCertificate=true;";
+    //    //connectionString = $"workstation id=msoftStock.mssql.somee.com;packet size=4096;user id=mfawzyH_SQLLogin_1;pwd=kd35ziwgqs;data source=msoftStock.mssql.somee.com;persist security info=False;initial catalog=msoftStock;TrustServerCertificate=True";
+    //}
+    public AppHost(DbContextOptions<AppHost> options) : base(options)
+    {
+    }
     public DbSet<UserAccount> Users { get; set; }
     public DbSet<Branche> Branches { get; set; }
 

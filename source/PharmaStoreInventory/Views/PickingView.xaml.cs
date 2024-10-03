@@ -150,12 +150,13 @@ public partial class PickingView : ContentPage, IRecipient<PickingViewNotificati
     void ClosePopup()
     {
         viewModel.IsEditPopupVisible = false;
-        entry.HideSoftInputAsync(CancellationToken.None);
+        //entry.HideSoftInputAsync(CancellationToken.None);
     }
 
     private void Popup_HideSoftInput_Tapped(object sender, TappedEventArgs e)
     {
-        entry.HideSoftInputAsync(CancellationToken.None);
+        //entry.HideSoftInputAsync(CancellationToken.None);
+        //yearMonthDayStack.
     }
 
     private void ExecuteSelectionChanged_Tapped(object sender, TappedEventArgs e)

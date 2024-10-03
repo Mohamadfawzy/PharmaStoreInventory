@@ -124,7 +124,7 @@ public class UserRepository
             throw new Exception(ex.Message + nameof(FindUserByEmailAsync));
         }
     }
-    
+
     public async Task<bool> IsUserActiveAsync(int userId)
     {
         try
@@ -264,7 +264,14 @@ public class UserRepository
     }
 
     #region Admin
-    public async Task<Result> UpdateActivationUserAccountAsync(int userId, bool active)
+    public async Task<Result> UpdateActivationUserAccountAsync(UserAccount user, bool active)
+    {
+        user.IsActive = active;
+        await context.SaveChangesAsync();
+        return Result.Success($"active email{user.Email}");
+    }
+
+    public async Task<Result> UpdateActivationUserAccountAsyncOld(int userId, bool active)
     {
         var q = await context.Users
             .Where(b => b.Id == userId)

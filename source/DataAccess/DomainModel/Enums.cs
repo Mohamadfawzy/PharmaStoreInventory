@@ -45,7 +45,7 @@ public enum ErrorCode
     AccessLimitation = 31,
     UserNotActive = 32,
     UserLogOut = 33,
-
+    InvalidRole = 34,
     // General Errors
     UnknownError = 1000,
     MultipleErrors = 1001,

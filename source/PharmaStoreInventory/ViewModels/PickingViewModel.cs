@@ -1,13 +1,10 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Messaging;
+﻿using CommunityToolkit.Mvvm.Messaging;
 using DataAccess.DomainModel;
 using DataAccess.Dtos;
-using DataAccess.Repository;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.Models;
 using PharmaStoreInventory.Services;
-using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Product = PharmaStoreInventory.Models.ProductDetailsModel; //DataAccess.Dtos.ProductDetailsDto;
 namespace PharmaStoreInventory.ViewModels;
@@ -21,6 +18,9 @@ public class PickingViewModel : BaseViewModel
     private string barcode = "0000";
     private string microUnitQuantity = "0";
     private decimal modifiedQuantity = 0;
+    private int year = 0;
+    private int month = 0;
+    private int day = 0;
     private bool isEditPopupVisible = false;
     private bool isDateSectionInPopupVisible = true;
     private string modifiedExpiaryDate = string.Empty;
@@ -66,6 +66,27 @@ public class PickingViewModel : BaseViewModel
         get => modifiedQuantity;
         set => SetProperty(ref modifiedQuantity, value);
     }
+
+    public int Year
+    {
+        get => year;
+        set
+        {
+            SetProperty(ref year, value);
+        }
+    }
+
+    public int Month
+    {
+        get => month;
+        set => SetProperty(ref month, value);
+    }
+
+    public int Day
+    {
+        get => day;
+        set => SetProperty(ref day, value);
+    }
     public string ExpiaryDateAsNumber
     {
         get => modifiedExpiaryDate;
@@ -99,7 +120,7 @@ public class PickingViewModel : BaseViewModel
     public ICommand SaveChangesCommand => new Command(ExecuteSaveChanges);
     #endregion
 
-    //############*Fethch*##############
+    //############*Fetch*##############
     #region Fetch Data
     public async void FetchStockDetails(string? productCode)
     {
@@ -140,7 +161,7 @@ public class PickingViewModel : BaseViewModel
     }
     #endregion
 
-    //#########*ExectueMethods*#########
+    //#########*ExecuteMethods*#########
     #region Exectue Methods
     private async void ExecuteMakeInventory(Product item)
     {
@@ -179,8 +200,14 @@ public class PickingViewModel : BaseViewModel
             IsExpiryDateFramInPopupVisible = false;
         }
         IsEditPopupVisible = true;
-        ConvertDateToNumber(stock.ExpDate);
+        //ConvertDateToNumber(stock.ExpDate);
         ExpiaryDateLabel = stock.ExpDate;
+        if (stock.ExpDate != null)
+        {
+            Year = stock.ExpDate.Value.Year;
+            Month = stock.ExpDate.Value.Month;
+            Day = stock.ExpDate.Value.Day;
+        }
         ModifiedQuantity = stock.Quantity ?? 0;
         this.SelectedProduct = stock;
     }
@@ -191,28 +218,34 @@ public class PickingViewModel : BaseViewModel
         {
             return;
         }
+        IsExpiryDateFramInPopupVisible = pro.ProductHasExpire == "1" ? true : false;
 
         PopupType = "edit";
-        if (pro.ProductHasExpire != "1")
-        {
-            IsExpiryDateFramInPopupVisible = false;
-        }
         IsEditPopupVisible = true;
-        ConvertDateToNumber(pro.ExpDate);
+
+        //ConvertDateToNumber(pro.ExpDate);
         ExpiaryDateLabel = pro.ExpDate;
+
+        if (pro.ExpDate != null)
+        {
+            Year = pro.ExpDate.Value.Year;
+            Month = pro.ExpDate.Value.Month;
+            Day = pro.ExpDate.Value.Day;
+        }
         ModifiedQuantity = pro.Quantity ?? 0;
         this.SelectedProduct = pro;
     }
 
     private void ExecuteExpiryDateChanged(string text)
     {
-        ConvertNumberToDate(text);
+        //ConvertNumberToDate(text);
     }
 
     private async void ExecuteSaveChanges()
     {
         try
         {
+            AggregationExpiryDate();
             if (PopupType == "edit")
             {
                 SaveEditProduct();
@@ -238,15 +271,40 @@ public class PickingViewModel : BaseViewModel
             {
                 return;
             }
-
+            var changes = false;
             UpdateProductQuantityDto model = new()
             {
                 Id = SelectedProduct.Id,
                 OldQuantity = SelectedProduct.Quantity.Value,
                 NewQuantity = ModifiedQuantity,
                 ExpDate = ExpiaryDateLabel,
+                ProductUnit1 = SelectedProduct.ProductUnit1,
                 EmpId = AppPreferences.LocalDbUserId.ToString()
             };
+
+            var notes = new System.Text.StringBuilder("تعديل");
+
+
+            if (model.NewQuantity != SelectedProduct.Quantity)
+            {
+                notes.Append(" كمية");
+                notes.Append(',');
+                changes = true;
+            }
+
+            if (model.ExpDate != SelectedProduct.ExpDate)
+            {
+                notes.Append(" تاريخ صلاحية");
+                changes = true;
+            }
+
+            if (!changes)
+            {
+                ShowNotification(new ErrorMessage("لا يوجد أي تغيرات",""));
+                return;
+            }
+
+            model.Notes = notes.ToString().TrimEnd(',');
 
             var res = await ApiServices.UpdateQuantity(model);
             if (res != null && res.IsSuccess)
@@ -263,11 +321,14 @@ public class PickingViewModel : BaseViewModel
         catch (Exception)
         {
 
-            throw;
         }
 
     }
-
+    void AggregationExpiryDate()
+    {
+        if (Year < 1) return;
+        ExpiaryDateLabel = new DateTime(Year,Month,Day);
+    }
     async void SaveCopyProduct()
     {
         try
@@ -281,6 +342,7 @@ public class PickingViewModel : BaseViewModel
                 ProductId = SelectedProduct.ProductId,
                 Quantity = ModifiedQuantity,
                 ExpDate = ExpiaryDateLabel.Value,
+                ProductUnit1 = SelectedProduct.ProductUnit1,
                 EmpId = AppPreferences.LocalDbUserId.ToString()
             };
 
@@ -325,24 +387,24 @@ public class PickingViewModel : BaseViewModel
         //Barcode = string.Empty;
     }
 
-    void ConvertDateToNumber(DateTime? dateTime)
-    {
-        if (dateTime != null)
-        {
-            ExpiaryDateAsNumber = dateTime.Value.ToString("MMyy");
-        }
-    }
+    //void ConvertDateToNumber(DateTime? dateTime)
+    //{
+    //    if (dateTime != null)
+    //    {
+    //        ExpiryDateAsNumber = dateTime.Value.ToString("MMyy");
+    //    }
+    //}
 
-    void ConvertNumberToDate(string value)
-    {
-        if (value.Length == 4)
-        {
-            var month = value[..2];
-            var year = $"20{value[2..]}";
-            //Do check if month > 12
-            ExpiaryDateLabel = new DateTime(int.Parse(year), int.Parse(month), 01);
-        }
-    }
+    //void ConvertNumberToDate(string value)
+    //{
+    //    if (value.Length == 4)
+    //    {
+    //        var month = value[..2];
+    //        var year = $"20{value[2..]}";
+    //        //Do check if month > 12
+    //        ExpiaryDateLabel = new DateTime(int.Parse(year), int.Parse(month), 01);
+    //    }
+    //}
 
     void ShowNotification(ErrorMessage error)
     {

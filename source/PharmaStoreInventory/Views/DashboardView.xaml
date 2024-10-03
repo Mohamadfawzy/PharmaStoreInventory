@@ -208,7 +208,7 @@
                             <Label Text="جرد جديد" />
                         </HorizontalStackLayout>
                         <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding StartNewInventoryCommand}" />
+                            <TapGestureRecognizer Command="{Binding StartNewInventoryCommand}" CommandParameter="init" />
                         </Frame.GestureRecognizers>
                     </Frame>
 
@@ -248,6 +248,46 @@
                     </Frame>
                 </VerticalStackLayout>
 
+                <!--  New inventory execution confirmation Popup  -->
+                <Grid
+                    Grid.RowSpan="2"
+                    IsVisible="Collapse"
+                    ZIndex="2"
+                    BackgroundColor="{StaticResource BackgroundTransparence}">
+                    <Border
+                        Margin="10,0"
+                        VerticalOptions="Center"
+                        Stroke="#00C49B33"
+                        StrokeThickness="1"
+                        FlowDirection="RightToLeft"
+                        StrokeShape="RoundRectangle 6"
+                        InputTransparent="False"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource Primary050},
+                                                          Dark={StaticResource Primary950}}">
+                        <StackLayout Padding="30" Spacing="30">
+                            <Label Text="تحذير ستقوم بتحديد كافة الأصناف علي أنها تم جردها" />
+                            <Button
+                                Text="تأكيد الجرد "
+                                BackgroundColor="{StaticResource Secondary900}"
+                                Command="{Binding StartNewInventoryCommand}" />
+
+                        </StackLayout>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer />
+                        </Border.GestureRecognizers>
+                    </Border>
+                    <Grid.Triggers>
+                        <DataTrigger
+                            TargetType="Grid"
+                            Binding="{Binding ConfirmNewInventoryExecutionVisibility}"
+                            Value="true">
+                            <Setter Property="IsVisible" Value="Visible" />
+                        </DataTrigger>
+                    </Grid.Triggers>
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ToggleConfirmNewInventoryVisibilityCommand}" />
+                    </Grid.GestureRecognizers>
+                </Grid>
                 <!--  Start Popup  -->
                 <Grid
                     x:Name="popup"
