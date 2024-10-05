@@ -17,14 +17,8 @@
     </ContentPage.BindingContext>-->
 
     <ScrollView x:Name="scroll">
-        <Grid
-            x:Name="manStack"
-            Padding="0,0,0,50"
-            RowDefinitions="Auto,Auto,*">
-            <template:NotificationTemplate
-                x:Name="notification"
-                Grid.RowSpan="3"
-                ZIndex="3" />
+        <Grid x:Name="manStack" Padding="0,0,0,50" RowDefinitions="Auto,Auto,*">
+            <template:NotificationTemplate x:Name="notification" Grid.RowSpan="3" ZIndex="3" />
             <!--  Register Title  -->
             <Border
                 Margin="0,0,0,30"
@@ -44,15 +38,9 @@
                 </Label>
             </Border>
             <!--  Inputs  -->
-            <VerticalStackLayout
-                x:Name="inputsContainer"
-                Grid.Row="1"
-                Padding="20,0">
+            <VerticalStackLayout x:Name="inputsContainer" Grid.Row="1" Padding="20,0">
                 <!--  FullName  -->
-                <template:AnimatedInput
-                    x:Name="fullName"
-                    InputPlaceholder="الاسم كاملاً"
-                    ErrorMessage="أدخل اسمك مطلوب" />
+                <template:AnimatedInput x:Name="fullName" InputPlaceholder="الاسم كاملاً" ErrorMessage="أدخل اسمك مطلوب" />
                 <!--  Pharmacy  -->
                 <template:AnimatedInput x:Name="pharmacyName" InputPlaceholder="اسم الصيدلية" />
                 <!--  Email  -->
@@ -74,15 +62,9 @@
                     HasEyeIcon="True"
                     InputPlaceholder="كلمة مرور فريدة" />
                 <!--  Confirm Password  -->
-                <template:AnimatedInput
-                    x:Name="confirmPassword"
-                    HasEyeIcon="False"
-                    InputPlaceholder="تأكيد كلمة المرور">
+                <template:AnimatedInput x:Name="confirmPassword" HasEyeIcon="False" InputPlaceholder="تأكيد كلمة المرور">
                     <template:AnimatedInput.Triggers>
-                        <DataTrigger
-                            TargetType="template:AnimatedInput"
-                            Binding="{Binding Source={x:Reference password}, Path=IsPassword}"
-                            Value="True">
+                        <DataTrigger TargetType="template:AnimatedInput" Binding="{Binding Source={x:Reference password}, Path=IsPassword}" Value="True">
                             <Setter Property="IsPassword" Value="True" />
                         </DataTrigger>
                     </template:AnimatedInput.Triggers>
@@ -100,10 +82,7 @@
                 <!--  Have Acount? sign in  -->
                 <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
                     <!--  label  -->
-                    <Label
-                        Text="ليس لديك حساب؟"
-                        VerticalOptions="Center"
-                        FontSize="{StaticResource Small}" />
+                    <Label Text="ليس لديك حساب؟" VerticalOptions="Center" FontSize="{StaticResource Small}" />
                     <!--  login button  -->
                     <Button Style="{StaticResource Anchor}" Text="تسجيل دخول">
                         <Button.Behaviors>

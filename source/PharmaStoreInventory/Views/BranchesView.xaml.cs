@@ -1,5 +1,4 @@
 ﻿using DataAccess.DomainModel;
-using DataAccess.Entities;
 using DataAccess.Services;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Models;
@@ -113,7 +112,6 @@ public partial class BranchesView : ContentPage
         {
             noDataTemplate.IsVisible = true;
         }
-
         activityIndicator.IsRunning = false;
     }
 

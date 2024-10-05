@@ -30,6 +30,12 @@ public static class AppPreferences
         set => Preferences.Default.Set(nameof(StoreId),value);
     }
     
+    public static int PageSize
+    {
+        get => GetValue(nameof(PageSize), 20);
+        set => Preferences.Default.Set(nameof(PageSize),value);
+    }
+    
     public static bool IsLoggedIn
     {
         get => GetValue(nameof(IsLoggedIn), false);

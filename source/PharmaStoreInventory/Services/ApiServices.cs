@@ -61,6 +61,8 @@ public static class ApiServices
                 { "query.IsGroup",qParam.IsGroup.ToString()},
                 { "query.QuantityBiggerThanZero",qParam.QuantityBiggerThanZero.ToString()},
                 { "query.Text",qParam.Text},
+                { "query.HasExpire",qParam.HasExpire.ToString()},
+                { "query.PageSize",qParam.PageSize.ToString()},
                 { "query.OrderBy",qParam.OrderBy.ToString()},
             };
 

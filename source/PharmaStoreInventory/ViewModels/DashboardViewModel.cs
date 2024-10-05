@@ -91,6 +91,7 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
 
 
     public ICommand RefreshCommand => new Command(ExecuteCRefresh);
+    public ICommand GotoBranchesViewCommand => new Command(GotoBranchesView);
     public ICommand StoreSelectionChangedCommand => new Command<SortModel>(StoreSelectionChanged);
     public ICommand ToggleStoresPopupVisibilityCommand => new Command<string>(ExecuteToggleStoresPopupVisibility);
     public ICommand ToggleConfirmNewInventoryVisibilityCommand => new Command(() => ConfirmNewInventoryExecutionVisibility = !ConfirmNewInventoryExecutionVisibility);
@@ -214,6 +215,16 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
         if (await TestConnection())
         {
             OnStart();
+        }
+        IsRefreshing = false;
+    }
+    
+    async void GotoBranchesView()
+    {
+        IsRefreshing = true;
+        if (Application.Current!=null && Application.Current.MainPage != null)
+        {
+            await Application.Current.MainPage.Navigation.PushAsync(new Views.BranchesView());
         }
         IsRefreshing = false;
     }

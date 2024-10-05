@@ -62,7 +62,7 @@ public partial class MainPage : ContentPage
             //};
             //smptClient.Send(message);
 
-            await Helpers.Alerts.DisplaySnackbar(code, 7);
+            //await Helpers.Alerts.DisplaySnackbar(code, 7);
         }
         catch (Exception ex)
         {

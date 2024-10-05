@@ -114,7 +114,7 @@ public class AuthService
     #endregion
 
 
-    public async Task<Result> RegisterUserAcync(UserRegisterDto userDto)
+    public async Task<Result> RegisterUserAsync(UserRegisterDto userDto)
     {
         // Ensure that the email does not already exist
         if (!string.IsNullOrEmpty(userDto.Email) && await repo.IsEmailExistAsync(userDto.Email))
@@ -128,7 +128,7 @@ public class AuthService
             return Result.Failure("The provided phone number is already in use by an existing user. Each user must have a unique phone number.");
         }
 
-        // Send data to UserRepository for create new user acount
+        // Send data to UserRepository for create new user account
         return await repo.CreateAsync(userDto);
     }
 
@@ -176,7 +176,7 @@ public class AuthService
 
             if (res.Errors.Count > 0)
             {
-                res.Message = "some errores founded";
+                res.Message = "some errors founded";
                 res.ErrorCode = ErrorCode.MultipleErrors;
                 return res;
             }

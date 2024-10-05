@@ -68,13 +68,22 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
             {
                 if (isEmailVerified)
                 {
-                    await CreateAcount(uRegister);
+                    await CreateAccount(uRegister);
                 }
                 else
                 {
                     verificationViewTemplate.IsVisible = true;
                     verificationViewTemplate.SetSpanEmail(uRegister.Email);
-                    verificationCodeSended = await mailingService.SendVerificationCodeAsync(uRegister.Email!, null, uRegister.FullName);
+                    var res = await mailingService.SendVerificationCodeAsync(uRegister.Email!, null, uRegister.FullName);
+                    if (res != null && res.IsSuccess)
+                    {
+                        verificationCodeSended = res.Data;
+                        notification.ShowMessage("تم ارسال كود تحقق");
+                    }
+                    else
+                    {
+                        notification.ShowMessage("حدثت مشكلة ولم يتم ارسال الكود");
+                    }
                 }
             }
         }
@@ -124,10 +133,14 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
                 }
             }
         }
+        else
+        {
+            notification.ShowMessage(res.Message);
+        }
         return false;
     }
 
-    private async Task CreateAcount(UserRegisterDto user)
+    private async Task CreateAccount(UserRegisterDto user)
     {
         try
         {
@@ -139,7 +152,7 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
             }
             if (res.IsSuccess)
             {
-                _ = Helpers.Alerts.DisplayToast("welcom " + user.FullName);
+                _ = Helpers.Alerts.DisplayToast("welcome " + user.FullName);
 
                 await Navigation.PushAsync(new LoginView());
                 Navigation.RemovePage(this);
@@ -189,7 +202,7 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
     {
         if (verificationCodeSended == verificationViewTemplate.GetCode())
         {
-            notification.ShowMessage("good");
+            notification.ShowMessage("تم التحقق من الإيميل");
             mainCreationButton.Text = "تأكيد إنشاء الحساب";
             verificationViewTemplate.IsVisible = false;
             email.IsEnabled = false;
@@ -204,12 +217,12 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
     // will deleted
     private async void SetInputText_Tapped(object sender, TappedEventArgs e)
     {
-        fullName.InputText = "محمد رجب";
-        confirmPassword.InputText = "123";
-        password.InputText = "123";
-        email.InputText = "user1@test.com";
+        fullName.InputText = "محمد هلال";
+        confirmPassword.InputText = "123456";
+        password.InputText = "123456";
+        email.InputText = "mofawzyhelal@gmail.com";
         pharmacyName.InputText = "صيدلية 1";
-        telephone.InputText = "01093052421";
+        telephone.InputText = "01093052427";
         await inputsContainer.PositioningOfPlaceHolder();
     }
 }

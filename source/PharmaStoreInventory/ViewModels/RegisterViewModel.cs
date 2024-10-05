@@ -63,7 +63,7 @@ public class RegisterViewModel : BaseViewModel
 
     async void ExecuteSendEmail()
     {
-        verificationCodeSended = await mailingService.SendVerificationCodeAsync(UserRegister.Email!, null, "mohamed fawzy");
+        //verificationCodeSended = await mailingService.SendVerificationCodeAsync(UserRegister.Email!, null, "mohamed fawzy");
     }
     private async Task CreateAcount()
     {
@@ -72,7 +72,7 @@ public class RegisterViewModel : BaseViewModel
             var res = await ApiServices.RegisterUserAcync(UserRegister);
             if (res == null)
             {
-                await Helpers.Alerts.DisplaySnackbar("RegisterUserAcync return null");
+                await Helpers.Alerts.DisplaySnackbar("RegisterUserAsync return null");
                 return;
             }
             _ = Helpers.Alerts.DisplaySnackbar(res.Message);

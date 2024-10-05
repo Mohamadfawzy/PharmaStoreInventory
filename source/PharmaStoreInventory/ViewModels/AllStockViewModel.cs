@@ -21,13 +21,22 @@ public class AllStockViewModel : BaseViewModel
         new () { Id = 6, IsSelected = false , Name = "أقل كمية" },
         new () { Id = 5, IsSelected = false  , Name = "أكبر كمية" },
     ];
+
+    public List<HasExpiryModel> hasExpiryCollectionItems =
+    [
+        new () { Id = "1", IsSelected = false , Name="لها صلاحية"},
+        new () { Id = "0", IsSelected = false , Name="ليس لها صلاحية"},
+        new () { Id = "", IsSelected = true , Name="كلاهما"},
+    ];
     private bool bottomSheet = false;
+    private int pageSize;
     // #######*Constructor*#########
     //     ################
     public AllStockViewModel()
     {
         //repo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<ProductAmountRepo>()!;
-        ProductQueryParam = new() { StoreId = AppPreferences.StoreId.ToString() };
+        PageSize = AppPreferences.PageSize;
+        ProductQueryParam = new() { StoreId = AppPreferences.StoreId.ToString() , PageSize= PageSize};
         //GetAllProducts();
     }
 
@@ -48,20 +57,38 @@ public class AllStockViewModel : BaseViewModel
         set => SetProperty(ref bottomSheet, value);
     }
 
+    public int PageSize
+    {
+        get => pageSize;
+        set
+        {
+            AppPreferences.PageSize = value;
+            SetProperty(ref pageSize, value);
+        }
+    }
+
     public short SelectedSortBy { get; set; }
     public bool FilterIsGroup { get; set; } = true;
     public bool FilterQuantityBiggerThanZero { get; set; } = true;
 
     public ICommand SearchBoxTypingCommand => new Command<string>(SearchBoxTyping);
     public ICommand StoreSelectionChangedCommand => new Command<SortModel>(StoreSelectionChanged);
+    public ICommand HasExpiryFilterSelectionChangedCommand => new Command<HasExpiryModel>(HasExpiryFilterSelectionChanged);
     public ICommand FiltersCommand => new Command(ExecuteFilters);
     public ICommand OpenBottomSheetCommand => new Command(ExecuteOpenBottomSheet);
     public ICommand CloseBottomSheetCommand => new Command(CloseOpenBottomSheet);
     public ICommand ShowAllProductCommand => new Command(ExecutShowAllProduct);
+
     public List<SortModel> SortListItems
     {
         get => sortListItems;
         set => SetProperty(ref sortListItems, value);
+    }
+
+    public List<HasExpiryModel> HasExpiryCollectionItems
+    {
+        get => hasExpiryCollectionItems;
+        set => SetProperty(ref hasExpiryCollectionItems, value);
     }
 
     // #######################################
@@ -69,6 +96,7 @@ public class AllStockViewModel : BaseViewModel
     {
         try
         {
+            ProductQueryParam.PageSize = PageSize;
             Products = await ApiServices.GetAllProducts(ProductQueryParam);
             if (Products != null && Products.Count > 0)
             {
@@ -183,6 +211,14 @@ public class AllStockViewModel : BaseViewModel
         oldItem.IsSelected = false;
         item.IsSelected = true;
         SelectedSortBy = item.Id;
+    }
+
+    void HasExpiryFilterSelectionChanged(HasExpiryModel item)
+    {
+        var oldItem = HasExpiryCollectionItems.First(c => c.IsSelected);
+        oldItem.IsSelected = false;
+        item.IsSelected = true;
+        ProductQueryParam.HasExpire = item.Id;
     }
 
 

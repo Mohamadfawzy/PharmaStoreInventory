@@ -28,7 +28,7 @@ public class ProductAmountRepo(AppDb context)
 
     public async Task<List<ProductDto>> GetAllProducts(ProductQParam qParam)
     {
-        string selectClause = await BringSelectAllProductsIncludeJoinQuery(qParam.IsGroup);
+        string selectClause = await BringSelectAllProductsIncludeJoinQuery(qParam.IsGroup, qParam.PageSize);
         string whereQuantity = qParam.QuantityBiggerThanZero ? " AND pa.Amount > 0 " : "";
         string whereStoreId = string.IsNullOrEmpty(qParam.StoreId) ? "" : $" AND pa.Store_id = {qParam.StoreId} ";
         string whereSiteId = string.IsNullOrEmpty(qParam.SiteId) ? "" : $" AND p.site_id = {qParam.SiteId} ";
@@ -442,11 +442,11 @@ public class ProductAmountRepo(AppDb context)
     // The code that's violating the rule is on this line.
     #region Methods for creating queries
 #pragma warning disable CA1822
-    private Task<string> BringSelectAllProductsIncludeJoinQuery(bool isGroup)
+    private Task<string> BringSelectAllProductsIncludeJoinQuery(bool isGroup, int pageSize=50)
     {
         if (isGroup)
         {
-            var sql = @$" SELECT top (50) {columnsStatement}
+            var sql = @$" SELECT top ({pageSize}) {columnsStatement}
                     FROM (SELECT Store_id, Product_id, SUM(Amount) AS Amount, Sell_price 
                         FROM Product_Amount GROUP BY Product_id,Sell_price,Store_id) 
                         AS pa 
@@ -455,7 +455,7 @@ public class ProductAmountRepo(AppDb context)
         }
         else
         {
-            var sql = @$" SELECT top (50) {columnsStatement}
+            var sql = @$" SELECT top ({pageSize}) {columnsStatement}
                         FROM Products p
                         INNER JOIN Product_Amount pa ON p.Product_id = pa.Product_id ";
             return Task.FromResult(sql);
