@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using BarcodeScanning;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Views;
 using System.Globalization;
@@ -9,33 +9,30 @@ public partial class App : Application
     //public static AppDb Context = null!;
     public App()
     {
-        //Context = new AppDb();
         UserAppTheme = AppTheme.Light;
         InitializeComponent();
-        AppValues.Language = "ar";
-        GetCulture();
+        SetCulture("ar");
         HandlePreferencesKeys();
-        if (AppPreferences.IsFirstTime)
-        {
-            MainPage = new NavigationPage(new OnbordingView());
-        }
-        else if (!AppPreferences.IsLoggedIn)
-        {
-            MainPage = new NavigationPage(new LoginView());
-        }
-        //else if(AppPreferences.IsLoggedIn && !AppPreferences.IsUserActivated)
+
+        //if (AppPreferences.IsFirstTime)
         //{
-        //    MainPage = new NavigationPage(new WaitingApprovalView());
+        //    MainPage = new NavigationPage(new OnbordingView());
         //}
-        else if (!AppPreferences.HasBranchRegistered)
-        {
-            //MainPage = new NavigationPage(new CreateBranchView());
-            MainPage = new NavigationPage(new BranchesView(false));
-        }
-        else
-        {
-            MainPage = new NavigationPage(new DashboardView());
-        }
+        //else if (!AppPreferences.IsLoggedIn)
+        //{
+        //    MainPage = new NavigationPage(new LoginView());
+        //}
+        //else if (!AppPreferences.HasBranchRegistered)
+        //{
+        //    //MainPage = new NavigationPage(new CreateBranchView());
+        //    MainPage = new NavigationPage(new BranchesView(false));
+        //}
+        //else
+        //{
+        //    MainPage = new NavigationPage(new DashboardView());
+        //}
+
+        MainPage = new NavigationPage(new OnbordingView ());
     }
 
 #pragma warning disable CA1822
@@ -48,7 +45,16 @@ public partial class App : Application
         //    AppValues.Language = "en";
 
         //CultureInfo culture = CultureInfo.GetCultureInfo("en-US");
+        CultureInfo culture = CultureInfo.GetCultureInfo("ar");
 
+    }
+    public void SetCulture(string cultureCode)
+    {
+        var culture = new CultureInfo(cultureCode);
+
+        AppValues.Language = cultureCode;
+        Thread.CurrentThread.CurrentCulture = culture;
+        Thread.CurrentThread.CurrentUICulture = culture;
     }
 
     void HandlePreferencesKeys()

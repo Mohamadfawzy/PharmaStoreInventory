@@ -3,6 +3,8 @@ using DataAccess.DomainModel;
 using DataAccess.Dtos.UserDtos;
 using DataAccess.Services;
 using PharmaStoreInventory.Extensions;
+using PharmaStoreInventory.Helpers;
+using PharmaStoreInventory.Languages;
 using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.Services;
 
@@ -62,6 +64,7 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
                 PhoneNumber = telephone.InputText,
             };
 
+            AppPreferences.UserEmail = uRegister.Email;
             var anyNotFounded = await AreEmailAndPhoneNonExistentAsync(uRegister.Email, uRegister.PhoneNumber);
 
             if (anyNotFounded)
@@ -217,13 +220,17 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
     // will deleted
     private async void SetInputText_Tapped(object sender, TappedEventArgs e)
     {
-        fullName.InputText = "محمد هلال";
-        confirmPassword.InputText = "123456";
-        password.InputText = "123456";
-        email.InputText = "mofawzyhelal@gmail.com";
-        pharmacyName.InputText = "صيدلية 1";
-        telephone.InputText = "01093052427";
-        await inputsContainer.PositioningOfPlaceHolder();
+        if (AppValues.IsDevelopment)
+        {
+            if(AppPreferences.HasBranchRegistered)
+            fullName.InputText = "محمد هلال";
+            confirmPassword.InputText = "123456";
+            password.InputText = "123456";
+            email.InputText = "mofawzyhelal@gmail.com";
+            pharmacyName.InputText = "صيدلية 1";
+            telephone.InputText = "01093052427";
+            await inputsContainer.PositioningOfPlaceHolder();
+        }
     }
 }
 

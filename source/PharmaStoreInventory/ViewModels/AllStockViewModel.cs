@@ -35,8 +35,8 @@ public class AllStockViewModel : BaseViewModel
     public AllStockViewModel()
     {
         //repo = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<ProductAmountRepo>()!;
-        PageSize = AppPreferences.PageSize;
-        ProductQueryParam = new() { StoreId = AppPreferences.StoreId.ToString() , PageSize= PageSize};
+        PageSize = 20;
+        ProductQueryParam = new() { StoreId = AppPreferences.StoreId.ToString(), PageSize = PageSize };
         //GetAllProducts();
     }
 
@@ -62,7 +62,7 @@ public class AllStockViewModel : BaseViewModel
         get => pageSize;
         set
         {
-            AppPreferences.PageSize = value;
+            //AppPreferences.PageSize = value;
             SetProperty(ref pageSize, value);
         }
     }
@@ -187,16 +187,16 @@ public class AllStockViewModel : BaseViewModel
 
         try
         {
-            await Task.Run(async () =>
-            {
-                ProductQueryParam.OrderBy = (DataAccess.DomainModel.ProductsOrderBy)SelectedSortBy;
-                ProductQueryParam.QuantityBiggerThanZero = FilterQuantityBiggerThanZero;
-                ProductQueryParam.IsGroup = FilterIsGroup;
-                await Task.Delay(250);
-                await GetProducts();
-                IsEmptyViewVisible = false;
-                ActivityIndicatorRunning = false;
-            });
+            ProductQueryParam.OrderBy = (DataAccess.DomainModel.ProductsOrderBy)SelectedSortBy;
+            ProductQueryParam.QuantityBiggerThanZero = FilterQuantityBiggerThanZero;
+            ProductQueryParam.IsGroup = FilterIsGroup;
+            await Task.Delay(250);
+            await GetProducts();
+            IsEmptyViewVisible = false;
+            ActivityIndicatorRunning = false;
+            //await Task.Run(async () =>
+            //{
+            //});
         }
         catch
         {
@@ -222,7 +222,7 @@ public class AllStockViewModel : BaseViewModel
     }
 
 
-    void CloseOpenBottomSheet()
+    public void CloseOpenBottomSheet()
     {
         BottomSheet = false;
     }

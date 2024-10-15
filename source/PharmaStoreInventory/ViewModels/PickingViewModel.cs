@@ -38,7 +38,8 @@ public class PickingViewModel : BaseViewModel
     public PickingViewModel(string _barcode)
     {
         IsEmptyViewVisible = false;
-        Task.Run(() => { FetchStockDetails(_barcode); });
+        //Task.Run(() => { FetchStockDetails(_barcode); });
+         FetchStockDetails(_barcode);
     }
 
     //########*PublicProperties*########
@@ -87,12 +88,13 @@ public class PickingViewModel : BaseViewModel
         get => day;
         set => SetProperty(ref day, value);
     }
-    public string ExpiaryDateAsNumber
-    {
-        get => modifiedExpiaryDate;
-        set => SetProperty(ref modifiedExpiaryDate, value);
 
-    }
+    //public string ExpiaryDateAsNumber
+    //{
+    //    get => modifiedExpiaryDate;
+    //    set => SetProperty(ref modifiedExpiaryDate, value);
+
+    //}
     public DateTime? ExpiaryDateLabel
     {
         get => expiaryDateLabel;
@@ -212,28 +214,36 @@ public class PickingViewModel : BaseViewModel
         this.SelectedProduct = stock;
     }
 
-    public void ExecuteSelectionChanged(Product pro)
+    public async void ExecuteSelectionChanged(Product pro)
     {
-        if (pro == null)
+        try
         {
-            return;
+
+            if (pro == null)
+            {
+                return;
+            }
+            IsExpiryDateFramInPopupVisible = pro.ProductHasExpire == "1" ? true : false;
+
+            PopupType = "edit";
+            IsEditPopupVisible = true;
+
+            //ConvertDateToNumber(pro.ExpDate);
+            ExpiaryDateLabel = pro.ExpDate;
+
+            if (pro.ExpDate != null)
+            {
+                Year = pro.ExpDate.Value.Year;
+                Month = pro.ExpDate.Value.Month;
+                Day = pro.ExpDate.Value.Day;
+            }
+            ModifiedQuantity = pro.Quantity ?? 0;
+            this.SelectedProduct = pro;
         }
-        IsExpiryDateFramInPopupVisible = pro.ProductHasExpire == "1" ? true : false;
-
-        PopupType = "edit";
-        IsEditPopupVisible = true;
-
-        //ConvertDateToNumber(pro.ExpDate);
-        ExpiaryDateLabel = pro.ExpDate;
-
-        if (pro.ExpDate != null)
+        catch (Exception ex)
         {
-            Year = pro.ExpDate.Value.Year;
-            Month = pro.ExpDate.Value.Month;
-            Day = pro.ExpDate.Value.Day;
+            await Alerts.DisplaySnackbar(ex.Message);
         }
-        ModifiedQuantity = pro.Quantity ?? 0;
-        this.SelectedProduct = pro;
     }
 
     private void ExecuteExpiryDateChanged(string text)
@@ -245,6 +255,7 @@ public class PickingViewModel : BaseViewModel
     {
         try
         {
+            ActivityIndicatorRunning = true;
             AggregationExpiryDate();
             if (PopupType == "edit")
             {
@@ -258,6 +269,11 @@ public class PickingViewModel : BaseViewModel
         catch (Exception ex)
         {
             await Alerts.DisplaySnackbar($"{nameof(ExecuteSaveChanges)}:{ex.Message}");
+        }
+        finally
+        {
+            ActivityIndicatorRunning = false;
+
         }
     }
     #endregion
@@ -275,6 +291,7 @@ public class PickingViewModel : BaseViewModel
             UpdateProductQuantityDto model = new()
             {
                 Id = SelectedProduct.Id,
+                ProductId = (int)SelectedProduct.ProductId,
                 OldQuantity = SelectedProduct.Quantity.Value,
                 NewQuantity = ModifiedQuantity,
                 ExpDate = ExpiaryDateLabel,
@@ -307,6 +324,12 @@ public class PickingViewModel : BaseViewModel
             model.Notes = notes.ToString().TrimEnd(',');
 
             var res = await ApiServices.UpdateQuantity(model);
+
+            if(res == null)
+            {
+                ShowNotification(new ErrorMessage("حدثت مشكلة أثناء التعديل", ""));
+            }
+
             if (res != null && res.IsSuccess)
             {
                 SelectedProduct.Quantity = ModifiedQuantity;
@@ -316,7 +339,9 @@ public class PickingViewModel : BaseViewModel
 
             }
             else
-                await Alerts.DisplaySnackbar(res.Message, 20);
+            {
+                ShowNotification(new ErrorMessage("تاريخ صلاحية موجود بالفعل",""));
+            }
         }
         catch (Exception)
         {
@@ -410,7 +435,6 @@ public class PickingViewModel : BaseViewModel
     {
         WeakReferenceMessenger.Default
             .Send(new PickingViewNotification(error));
-        //WeakReferenceMessenger.Default.Send(new PickingViewNotification(new ErrorMessage("حدث خطأ داخل السيرفر", "")));
     }
     #region deleted
     //private void ExecuteOnCameraDetectionFinished(BarcodeResult[] result)

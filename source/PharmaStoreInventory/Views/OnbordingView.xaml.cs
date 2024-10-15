@@ -7,9 +7,6 @@ public partial class OnbordingView : ContentPage
     List<string> OnboardingTextList = new List<string>()
     {
         Languages.AppResources.onbording_OnboardingText1,
-        "للبدء، قم بإدخال بيانات تسجيل الدخول الخاصة بك. تأكد من صحة المعلومات لضمان الوصول السريع إلى بيانات صيدليتك.يمكنك إضافة وتحديث الأصناف والأدوية بسهولة باستخدام ماسح الباركود أو البحث اليدوي. استعرض تقارير دقيقة وشاملة لتحليل أداء المخزون والمبيعات، واتخذ قرارات مستنيرة للحفاظ على صيدليتك في أفضل حالاتها."
-
-
     };
     public OnbordingView()
     {
@@ -17,7 +14,11 @@ public partial class OnbordingView : ContentPage
         OnboardingTextCV.ItemsSource = OnboardingTextList;
         AppPreferences.LocalDeviceId = Guid.NewGuid().ToString();
     }
-
+    protected async override void OnAppearing()
+    {
+        base.OnAppearing();
+        await Permissions.RequestAsync<Permissions.Camera>();
+    }
     private void Button_Clicked(object sender, EventArgs e)
     {
         if (OnboardingTextCV.Position == 0)
@@ -32,7 +33,6 @@ public partial class OnbordingView : ContentPage
             LoginActionsLayout.IsVisible = true;
         }
     }
-
 
     private void OnboardingTextCV_PositionChanged(object sender, PositionChangedEventArgs e)
     {
@@ -53,11 +53,55 @@ public partial class OnbordingView : ContentPage
         Navigation.PushAsync(new LoginView());
         //App.Current.MainPage = new NavigationPage(new PharmaTabbedPage());
         //Navigation.NavigationStack.LastOrDefault()
-          
+
     }
 
     private void GoToRegister(object sender, EventArgs e)
     {
         Navigation.PushAsync(new RegisterView());
+    }
+    short position = 1;
+    private async void Button_Clicked_1(object sender, EventArgs e)
+    {
+        try
+        {
+            switch (position)
+            {
+                case 1:
+                    await ChangeIndicatorBoxColor(indicatorBox1, indicatorBox2);
+                    await Move(bord1, bord2);
+                    position = 2;
+                    break;
+
+                case 2:
+                    await ChangeIndicatorBoxColor(indicatorBox2, indicatorBox1);
+                    await Move(bord2, bord1);
+                    position = 1;
+                    break;
+            }
+        }
+        catch
+        {
+        }
+    }
+
+    private async Task Move(View currentView, View nextView)
+    {
+        nextView.IsVisible = true;
+        var t1 = currentView.FadeTo(0);
+        var t2 = nextView.FadeTo(1);
+        currentView.IsVisible = false;
+        await Task.WhenAll(t1, t2);
+    }
+    
+    
+    private Task ChangeIndicatorBoxColor(BoxView currentBox, BoxView nextBox)
+    {
+        if(Application.Current!= null)
+        {
+            currentBox.Color = (Color)Application.Current.Resources["Primary700"];
+            nextBox.Color = (Color)Application.Current.Resources["White"];
+        }
+        return Task.CompletedTask;
     }
 }

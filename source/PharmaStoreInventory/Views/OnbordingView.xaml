@@ -5,25 +5,187 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
     xmlns:help="clr-namespace:PharmaStoreInventory.Helpers"
+    xmlns:res="clr-namespace:PharmaStoreInventory.Languages"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     Title="OnbordingView"
     NavigationPage.HasNavigationBar="False">
 
-    <Grid RowDefinitions="*,1.1*">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="BoardTitle" TargetType="Label">
+                <Setter Property="FontSize" Value="27" />
+                <Setter Property="FontFamily" Value="{StaticResource KufiSemiBold}" />
+                <Setter Property="TextColor" Value="{StaticResource Primary800}" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>
+
+            <Style x:Key="BoardIndicatorBoxDefault" TargetType="BoxView">
+                <Setter Property="Color" Value="{StaticResource Primary700}" />
+                <Setter Property="HeightRequest" Value="5" />
+                <Setter Property="WidthRequest" Value="20" />
+                <Setter Property="CornerRadius" Value="20" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="VerticalOptions" Value="Start" />
+            </Style>
+
+            <Style
+                x:Key="BoardIndicatorBoxSelected"
+                TargetType="BoxView"
+                BasedOn="{StaticResource BoardIndicatorBoxDefault}">
+                <Setter Property="Color" Value="{StaticResource White}" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Behaviors>
+        <toolkit:StatusBarBehavior StatusBarColor="{StaticResource White}" StatusBarStyle="LightContent" />
+    </ContentPage.Behaviors>
+
+    <Grid RowDefinitions="*,Auto">
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="1,0">
+                <GradientStop Offset="0.5" Color="{StaticResource White}" />
+                <GradientStop Offset="0.5" Color="{StaticResource Primary800}" />
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Border
+            Margin="0,0,0,0"
+            Padding="10"
+            StrokeShape="RoundRectangle 0 0 0 90 "
+            StrokeThickness="0"
+            BackgroundColor="{AppThemeBinding Light={StaticResource White},
+                                              Dark={StaticResource Primary950}}" />
+        <!--  Bord 1  -->
+        <StackLayout
+            x:Name="bord1"
+            Margin="0,0,0,0"
+            Padding="20,0">
+            <Image
+                Aspect="AspectFit"
+                Source="mslogo.png"
+                HeightRequest="300" />
+
+            <VerticalStackLayout>
+                <Label Style="{StaticResource BoardTitle}" Text="مرحبًا بك في تطبيق" />
+                <Label Style="{StaticResource BoardTitle}" Text="Pharma Store" />
+            </VerticalStackLayout>
+
+            <Label
+                Grid.Row="3"
+                Margin="0,10,0,20"
+                SemanticProperties.Description="Justify"
+                Text="{x:Static res:AppResources.onbording_OnboardingText1}" />
+
+        </StackLayout>
+
+        <!--  Bord 2  -->
+        <StackLayout
+            x:Name="bord2"
+            Grid.RowSpan="2"
+            IsVisible="Hidden"
+            Opacity="0"
+            BackgroundColor="Transparent">
+
+            <Image
+                Margin="0,50"
+                Aspect="AspectFit"
+                HeightRequest="250"
+                Source="pharma_logo_blue.png"
+                VerticalOptions="Center" />
+
+            <!--  Login Actions Layout  -->
+            <StackLayout
+                x:Name="LoginActionsLayout1"
+                VerticalOptions="Center"
+                Spacing="10">
+                <Button
+                    Margin="30,0"
+                    Text="تسجيل دخول"
+                    VerticalOptions="Center"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="{StaticResource White}"
+                    FontFamily="{StaticResource KufiSemiBold}"
+                    Clicked="GoToLogin" />
+                <Button
+                    Margin="30,0"
+                    Text="إنشاء حساب"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="{StaticResource White}"
+                    FontFamily="{StaticResource KufiSemiBold}"
+                    VerticalOptions="Center"
+                    Clicked="GoToRegister" />
+            </StackLayout>
+        </StackLayout>
+
+        <Border
+            Grid.Row="1"
+            Margin="0,0,0,0"
+            Padding="10"
+            StrokeShape="RoundRectangle 90 0 0 0 "
+            StrokeThickness="0"
+            BackgroundColor="{AppThemeBinding Light={StaticResource Primary800},
+                                              Dark={StaticResource Primary950}}">
+            <VerticalStackLayout>
+                <HorizontalStackLayout
+                    Grid.Row="1"
+                    HorizontalOptions="Center"
+                    Spacing="5">
+                    <BoxView x:Name="indicatorBox1" Style="{StaticResource BoardIndicatorBoxSelected}" />
+                    <BoxView x:Name="indicatorBox2" Style="{StaticResource BoardIndicatorBoxDefault}" />
+                </HorizontalStackLayout>
+
+                <Button
+                    Grid.Row="1"
+                    Margin="0,40"
+                    VerticalOptions="EndAndExpand"
+                    CornerRadius="25"
+                    WidthRequest="50"
+                    HeightRequest="50"
+                    Clicked="Button_Clicked_1"
+                    BorderColor="{StaticResource Primary}"
+                    BorderWidth="2"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource White},
+                                                      Dark={StaticResource White}}">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontAutoScalingEnabled="True"
+                            FontFamily="{StaticResource IconFont}"
+                            Size="22"
+                            Glyph="{x:Static help:IconFontManager.ChevronDouble}"
+                            Color="{AppThemeBinding Light={StaticResource Primary},
+                                                    Dark={StaticResource Primary}}" />
+                    </Button.ImageSource>
+                </Button>
+            </VerticalStackLayout>
+        </Border>
+
+
+
+
+
+
+        <!--  deleted  -->
+        <!--  deleted  -->
+        <!--  deleted  -->
+        <!--  deleted  -->
+        <!--  deleted  -->
+        <!--  deleted  -->
         <Image
             x:Name="OnBordimage"
+            IsVisible="Hidden"
             Aspect="AspectFill"
             Source="pharma2.jpg" />
 
         <Border
             Grid.Row="1"
             Margin="0,-40,0,0"
+            IsVisible="Hidden"
             StrokeShape="RoundRectangle 40 40 0 0 "
             StrokeThickness="0"
             BackgroundColor="{AppThemeBinding Light={StaticResource Primary050},
                                               Dark={StaticResource Primary950}}">
             <ScrollView>
                 <StackLayout>
-
                     <!--  Welcom text  -->
                     <Label
                         Margin="15,15,15,0"
@@ -85,6 +247,7 @@
             x:Name="ArrowNext"
             Grid.Row="1"
             Margin="0,40"
+            IsVisible="Hidden"
             VerticalOptions="EndAndExpand"
             Clicked="Button_Clicked"
             CornerRadius="25"

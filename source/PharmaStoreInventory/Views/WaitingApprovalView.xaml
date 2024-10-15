@@ -26,40 +26,24 @@
                 <Label
                     x:Name="userFullName"
                     Style="{StaticResource TitleCenter}"
-                    Text="مرحبا" />
+                    Text="مرحبا بك" />
             </Border>
 
-            <!--  Refresh  -->
-            <!--<Border
-                Margin="15,0"
-                Padding="10,3"
-                BackgroundColor="{StaticResource Primary050}"
-                StrokeThickness="1"
-                HorizontalOptions="Center"
-                Stroke="{StaticResource Primary400}"
-                StrokeShape="RoundRectangle 15">
-                <StackLayout
-                    Padding="15,0"
-                    Orientation="Horizontal"
-                    Spacing="20">
-                    <Label Text="تحديث" TextColor="{StaticResource Primary700}" />
-                    <Label Style="{StaticResource Iconline}" Text="{x:Static icon:IconFont.DatabaseRefresh}" />
-                </StackLayout>
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="RefreshTapped" />
-                </Border.GestureRecognizers>
-            </Border>-->
-
+            <!--  Logo  -->
+            <Image
+                Source="pharma_logo_blue.png"
+                Aspect="AspectFit"
+                HeightRequest="250" />
             <Label
                 Margin="20,0"
                 Style="{StaticResource Titleline}"
-                Text="نقدر إنتظارك وسيتم تنشيط حسابك في أقرب وقت شكرا لاستخدامك e-stock" />
+                Text="نقدّر انتظارك، وسيتم تفعيل حسابك في أقرب وقت" />
 
-            <Image
-                Source="logoicon.svg"
-                Aspect="AspectFill"
-                HeightRequest="250" />
-
+            <Label
+                Margin="20,0"
+                HorizontalOptions="Center"
+                Style="{StaticResource Titleline}"
+                Text="شكرًا لاستخدامك Pharma Store" />
             <!--  Logout  -->
             <Border
                 Margin="15"
@@ -82,28 +66,7 @@
             </Border>
 
             <!--  Call Us  -->
-            <VerticalStackLayout VerticalOptions="EndAndExpand">
-                <Label
-                    Text="اتصل بنا"
-                    TextColor="{StaticResource Primary}"
-                    HorizontalOptions="Center" />
-                <Label
-                    Text="الاصدار 1.0"
-                    VerticalOptions="EndAndExpand"
-                    FontSize="{StaticResource VerySmall}"
-                    TextColor="{StaticResource AccentDarkColor}"
-                    HorizontalOptions="Center" />
-                <VerticalStackLayout.Behaviors>
-                    <toolkit:TouchBehavior
-                        DefaultAnimationDuration="250"
-                        DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
-                        PressedOpacity="0.8"
-                        PressedScale="0.9" />
-                </VerticalStackLayout.Behaviors>
-                <VerticalStackLayout.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="PhoneDialerTapped" />
-                </VerticalStackLayout.GestureRecognizers>
-            </VerticalStackLayout>
+            <template:CallUsTemplate />
         </StackLayout>
     </ScrollView>
 </ContentPage>

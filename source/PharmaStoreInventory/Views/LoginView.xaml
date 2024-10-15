@@ -11,144 +11,142 @@
     Title="LoginView"
     NavigatedTo="ThisPage_NavigatedTo"
     NavigationPage.HasNavigationBar="False">
+    <ContentPage.Behaviors>
+        <toolkit:StatusBarBehavior StatusBarColor="{StaticResource Primary800}" StatusBarStyle="LightContent" />
+    </ContentPage.Behaviors>
     <!--  20.6.2024 9:08PM  -->
-    <RefreshView
-        x:Name="refreshView"
-        IsRefreshing="False"
-        Refreshing="RefreshView_Refreshing">
-        <ScrollView>
-            <Grid>
-                <template:NotificationTemplate
-                    x:Name="notification"
-                    Grid.RowSpan="5"
-                    ZIndex="1" />
-                <StackLayout
-                    Margin="0"
-                    Padding="0,0,0,50"
-                    Spacing="0">
+    <Grid>
+        <template:NotificationTemplate
+            x:Name="notification"
+            Grid.RowSpan="5"
+            ZIndex="1" />
+        <RefreshView
+            x:Name="refreshView"
+            IsRefreshing="False"
+            Refreshing="RefreshView_Refreshing">
+            <ScrollView>
+                <StackLayout BackgroundColor="{StaticResource Primary800}">
 
-                    <!--  Login Title  -->
+                    <VerticalStackLayout Padding="30" InputTransparent="True">
+                        <!--  Logo  -->
+                        <Image
+                            Source="pharma_logo.png"
+                            Aspect="AspectFit"
+                            HeightRequest="130" />
+                    </VerticalStackLayout>
+
+                    <!--  Form  -->
                     <Border
-                        Margin="0,0,0,30"
+                        Margin="0,0,0,0"
+                        Padding="0,10"
                         StrokeThickness="0"
-                        BackgroundColor="{StaticResource PrimaryDark}"
-                        StrokeShape="RoundRectangle 0 0 30 30"
-                        HeightRequest="150">
-                        <Label
-                            FontSize="20"
-                            TextColor="{StaticResource White}"
-                            Text="{x:Static res:AppResources.Login_Login}"
-                            VerticalOptions="Center"
-                            HorizontalOptions="Center" />
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 90 0 0 0 ">
+
+                        <Grid RowDefinitions="*,500">
+                            <VerticalStackLayout>
+
+                                <Label
+                                    Margin="20"
+                                    FontSize="20"
+                                    TextColor="{StaticResource Primary}"
+                                    Text="تسجيل الدخول"
+                                    FontFamily="{StaticResource KufiSemiBold}"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Center" />
+
+                                <!--  Inputs  -->
+                                <VerticalStackLayout
+                                    x:Name="inputsContainer"
+                                    Padding="20,0"
+                                    MinimumHeightRequest="100">
+                                    <!--<template:AnimatedInput
+                                    x:Name="email"
+                                    ErrorMessage="أدخل الايميل أور قم الهاتف بشكل صحيح"
+                                    InputPlaceholder="entrer you email" />
+
+                                <template:AnimatedInput
+                                    x:Name="password"
+                                    IsPassword="True"
+                                    HasEyeIcon="True"
+                                    InputPlaceholder="{x:Static res:AppResources.Login_Password}" />-->
+                                </VerticalStackLayout>
+
+                                <!--  Buttons Section  -->
+                                <VerticalStackLayout Padding="20,0">
+
+                                    <!--  requet new device  -->
+                                    <HorizontalStackLayout
+                                        x:Name="newDviceStack"
+                                        Margin="20,0"
+                                        Spacing="5"
+                                        IsVisible="False"
+                                        HorizontalOptions="Start">
+                                        <!--  label  -->
+                                        <Label Text="طلب تغير الجهاز القديم" VerticalOptions="Center" />
+                                        <!--  login button  -->
+                                        <CheckBox
+                                            x:Name="newDeviceCheckBox"
+                                            IsChecked="False"
+                                            Color="{StaticResource Primary700}" />
+                                        <HorizontalStackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="NewDviceStack_Tapped" />
+                                        </HorizontalStackLayout.GestureRecognizers>
+                                    </HorizontalStackLayout>
+
+                                    <!--  Login Button  -->
+                                    <Button
+                                        x:Name="loginButton"
+                                        Margin="0,30,0,0"
+                                        Text="{x:Static res:AppResources.Login_submit}"
+                                        Clicked="LoginClicked" />
+
+                                    <!--  Have Acount? sign in  -->
+                                    <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                                        <!--  label  -->
+                                        <Label Text="{x:Static res:AppResources.Login_DoYouHaveAcount}" VerticalOptions="Center" />
+
+                                        <!--  go to signup  -->
+                                        <Button
+                                            Style="{StaticResource Anchor}"
+                                            Text="{x:Static res:AppResources.Login_SignUp}"
+                                            Clicked="GoToRegisterViewClicked">
+                                            <Button.Behaviors>
+                                                <toolkit:TouchBehavior
+                                                    DefaultAnimationDuration="250"
+                                                    DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+                                                    PressedOpacity="0.6"
+                                                    PressedScale="0.8" />
+                                            </Button.Behaviors>
+                                        </Button>
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+
+                                <!--  Call Us  -->
+                                <template:CallUsTemplate VerticalOptions="EndAndExpand" />
+                            </VerticalStackLayout>
+
+                        </Grid>
+
                     </Border>
-
-                    <!--  Inputs  -->
-                    <VerticalStackLayout x:Name="inputsContainer" Padding="20,0">
-                        <template:AnimatedInput
-                            x:Name="email"
-                            InputText="user2@mosoft.com"
-                            ErrorMessage="أدخل الايميل أور قم الهاتف بشكل صحيح"
-                            InputPlaceholder="entrer you email" />
-
-                        <template:AnimatedInput
-                            x:Name="password"
-                            IsPassword="True"
-                            HasEyeIcon="True"
-                            InputText="123456"
-                            InputPlaceholder="{x:Static res:AppResources.Login_Password}" />
-                    </VerticalStackLayout>
-
-                    <!--  requet new device  -->
-                    <HorizontalStackLayout
-                        x:Name="newDviceStack"
-                        Margin="20,0"
-                        Spacing="5"
-                        IsVisible="False"
-                        HorizontalOptions="Start">
-                        <!--  label  -->
-                        <Label Text="طلب تغير الجهاز القديم" VerticalOptions="Center" />
-                        <!--  login button  -->
-                        <CheckBox
-                            x:Name="newDeviceCheckBox"
-                            IsChecked="False"
-                            Color="{StaticResource Primary700}" />
-                        <HorizontalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="NewDviceStack_Tapped" />
-                        </HorizontalStackLayout.GestureRecognizers>
-                    </HorizontalStackLayout>
-
-                    <!--  Submit Buttons  -->
-                    <VerticalStackLayout Padding="20,0">
-
-                        <!--  Login Button  -->
-                        <Button
-                            x:Name="loginButton"
-                            Margin="0,30,0,0"
-                            Text="{x:Static res:AppResources.Login_submit}"
-                            Clicked="LoginClicked" />
-
-                        <!--  Have Acount? sign in  -->
-                        <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                            <!--  label  -->
-                            <Label Text="{x:Static res:AppResources.Login_DoYouHaveAcount}" VerticalOptions="Center" />
-
-                            <!--  go to signup  -->
-                            <Button
-                                Style="{StaticResource Anchor}"
-                                Text="{x:Static res:AppResources.Login_SignUp}"
-                                Clicked="GoToRegisterViewClicked">
-                                <Button.Behaviors>
-                                    <toolkit:TouchBehavior
-                                        DefaultAnimationDuration="250"
-                                        DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
-                                        PressedOpacity="0.6"
-                                        PressedScale="0.8" />
-                                </Button.Behaviors>
-                            </Button>
-                        </HorizontalStackLayout>
-
-                    </VerticalStackLayout>
-
-                    <!--  Call Us  -->
-                    <VerticalStackLayout VerticalOptions="EndAndExpand">
-                        <Label
-                            Text="اتصل بنا"
-                            TextColor="{StaticResource Primary}"
-                            HorizontalOptions="Center" />
-                        <Label
-                            Text="الاصدار 1.0"
-                            VerticalOptions="EndAndExpand"
-                            FontSize="{StaticResource VerySmall}"
-                            TextColor="{StaticResource AccentDarkColor}"
-                            HorizontalOptions="Center" />
-                        <VerticalStackLayout.Behaviors>
-                            <toolkit:TouchBehavior
-                                DefaultAnimationDuration="250"
-                                DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
-                                PressedOpacity="0.8"
-                                PressedScale="0.9" />
-                        </VerticalStackLayout.Behaviors>
-                        <VerticalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="PhoneDialerTapped" />
-                        </VerticalStackLayout.GestureRecognizers>
-                    </VerticalStackLayout>
-
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Tapped="ClearFocusFromAllInputsTapped" />
                     </StackLayout.GestureRecognizers>
-                </StackLayout>
 
-                <!--  ActivityIndicator  -->
-                <ActivityIndicator
-                    x:Name="activityIndicator"
-                    Grid.Row="0"
-                    Grid.RowSpan="4"
-                    VerticalOptions="Center"
-                    ZIndex="1"
-                    IsRunning="False"
-                    Color="{StaticResource Primary600}" />
-            </Grid>
-        </ScrollView>
-    </RefreshView>
+                </StackLayout>
+            </ScrollView>
+        </RefreshView>
+
+
+        <!--  ActivityIndicator  -->
+        <ActivityIndicator
+            x:Name="activityIndicator"
+            Grid.Row="0"
+            Grid.RowSpan="4"
+            VerticalOptions="Center"
+            ZIndex="1"
+            IsRunning="False"
+            Color="{StaticResource Primary600}" />
+    </Grid>
 
 </ContentPage>

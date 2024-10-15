@@ -99,8 +99,13 @@
 
                 <!--  Container  -->
                 <VerticalStackLayout Grid.Row="1" Padding="20,0" Spacing="20">
+
                     <!--  last  inventory and  ChevronDown icon  -->
-                    <Label VerticalTextAlignment="Center" HorizontalOptions="Center" TextColor="{StaticResource Primary500}">
+                    <!--<Label
+                        VerticalTextAlignment="Center"
+                        IsVisible="False"
+                        HorizontalOptions="Center"
+                        TextColor="{StaticResource Primary500}">
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span Text="آخر جرد" FontFamily="{StaticResource KufiRegular}" FontSize="13" />
@@ -108,8 +113,30 @@
                             </FormattedString>
                         </Label.FormattedText>
                     </Label>
+                    -->
                     <!--  the date of Latest Inventory  -->
-                    <Label Margin="0,-20,0,0" Text="{Binding LatestInventoryDate}" HorizontalOptions="Center" />
+                    <!--
+                    <Label
+                        Margin="0,-20,0,0"
+                        IsVisible="False"
+                        Text="{Binding LatestInventoryDate}"
+                        HorizontalOptions="Center" />-->
+
+                    <Border
+                        Margin="0,10"
+                        Padding="20,0"
+                        Style="{StaticResource BorderToAction}"
+                        HorizontalOptions="Center">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="تاريخ آخر جرد" TextColor="{StaticResource Primary500}" />
+                            <Label
+                                Margin="0,0,0,0"
+                                Text="{Binding LatestInventoryDate}"
+                                FontAttributes="Bold"
+                                HorizontalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </Border>
+
 
                     <!--  The Stores Border  -->
                     <Border Style="{StaticResource BorderToAction}">
@@ -252,6 +279,8 @@
                         <TapGestureRecognizer Command="{Binding ToggleConfirmNewInventoryVisibilityCommand}" />
                     </Grid.GestureRecognizers>
                 </Grid>
+
+
                 <!--  Start Popup  -->
                 <Grid
                     x:Name="popup"

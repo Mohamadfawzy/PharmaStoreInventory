@@ -309,6 +309,11 @@ public partial class AnimatedInput : ContentView
         var translateTask = placeholder.TranslateTo(translationX, translationY, (uint)TranslateDuration, easing);
         await Task.WhenAll(scaleTask, translateTask);
     }
+    public void SetInputText(string text)
+    {
+        InputText = text;
+        PositioningOfPlaceHolder();
+    }
 
     public void PositioningOfPlaceHolder()
     {
@@ -353,6 +358,7 @@ public partial class AnimatedInput : ContentView
     private void SetFocusColors()
     {
         border.Stroke = FocusColor;
+        border.StrokeThickness = 2;
         placeholder.TextColor = FocusColor;
         eyeIcon.TextColor = FocusColor;
     }
@@ -361,6 +367,7 @@ public partial class AnimatedInput : ContentView
     {
         placeholder.TextColor = UnFocusColor;
         border.Stroke = UnFocusColor;
+        border.StrokeThickness = 1;
         eyeIcon.TextColor = UnFocusColor;
     }
 

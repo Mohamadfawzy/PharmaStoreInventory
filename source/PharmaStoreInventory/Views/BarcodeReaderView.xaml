@@ -32,10 +32,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid
-        x:Name="cameraViewContianer"
-        RowDefinitions="*,300,*"
-        ColumnDefinitions="*,300,*">
+    <Grid x:Name="cameraViewContianer" RowDefinitions="*,300,*" ColumnDefinitions="*,300,*">
 
         <!--  Barcode scanner view in the center  -->
         <scanner:CameraView
@@ -87,18 +84,12 @@
                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1" />
             </Label.GestureRecognizers>
             <Label.Triggers>
-                <DataTrigger
-                    TargetType="Label"
-                    Binding="{Binding Source={x:Reference ThisPage}, Path=FlowDirection}"
-                    Value="RightToLeft">
+                <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference ThisPage}, Path=FlowDirection}" Value="RightToLeft">
                     <Setter Property="Text" Value="{x:Static icon:IconFont.ArrowRight}" />
                     <!--  Multiple Setter elements are allowed  -->
                 </DataTrigger>
 
-                <DataTrigger
-                    TargetType="Label"
-                    Binding="{Binding Source={x:Reference ThisPage}, Path=FlowDirection}"
-                    Value="LeftToRight">
+                <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference ThisPage}, Path=FlowDirection}" Value="LeftToRight">
                     <Setter Property="Text" Value="{x:Static icon:IconFont.ArrowLeft}" />
                     <!--  Multiple Setter elements are allowed  -->
                 </DataTrigger>

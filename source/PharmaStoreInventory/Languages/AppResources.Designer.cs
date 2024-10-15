@@ -187,7 +187,7 @@ namespace PharmaStoreInventory.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We are here to help you organize and manage your medication inventory easily and efficiently. Using this app, you can track quantities and expiration dates of every product in your pharmacy at any time. You won&apos;t need to worry about forgetting to reorder or expired medications anymore. We are here to remind you of everything you need..
+        ///   Looks up a localized string similar to We are here to help you organize, manage, and inventory your stock of medications with ease and efficiency. With Pharma Store, you can adjust quantities and expiration dates for every product in your pharmacy at any time by searching for the medicine name or scanning the barcode with the camera..
         /// </summary>
         internal static string onbording_OnboardingText1 {
             get {

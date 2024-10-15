@@ -11,111 +11,145 @@
     FlowDirection="RightToLeft"
     NavigatedTo="ThisPage_NavigatedTo"
     NavigationPage.HasNavigationBar="False">
-
+    <ContentPage.Behaviors>
+        <toolkit:StatusBarBehavior StatusBarColor="{StaticResource Primary800}" StatusBarStyle="LightContent" />
+    </ContentPage.Behaviors>
     <!--<ContentPage.BindingContext>
         <vm:RegisterViewModel />
     </ContentPage.BindingContext>-->
+    <Grid>
+        <template:NotificationTemplate
+            x:Name="notification"
+            Grid.RowSpan="3"
+            ZIndex="3" />
+        <ScrollView x:Name="scroll">
+            <StackLayout x:Name="manStack" BackgroundColor="{StaticResource Primary800}">
 
-    <ScrollView x:Name="scroll">
-        <Grid x:Name="manStack" Padding="0,0,0,50" RowDefinitions="Auto,Auto,*">
-            <template:NotificationTemplate x:Name="notification" Grid.RowSpan="3" ZIndex="3" />
-            <!--  Register Title  -->
-            <Border
-                Margin="0,0,0,30"
-                StrokeThickness="0"
-                BackgroundColor="{StaticResource PrimaryDark}"
-                StrokeShape="RoundRectangle 0 0 30 30"
-                HeightRequest="150">
-                <Label
-                    FontSize="20"
-                    TextColor="{StaticResource White}"
-                    Text="إنشاء حساب"
-                    VerticalOptions="Center"
-                    HorizontalOptions="Center">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="SetInputText_Tapped" />
-                    </Label.GestureRecognizers>
-                </Label>
-            </Border>
-            <!--  Inputs  -->
-            <VerticalStackLayout x:Name="inputsContainer" Grid.Row="1" Padding="20,0">
-                <!--  FullName  -->
-                <template:AnimatedInput x:Name="fullName" InputPlaceholder="الاسم كاملاً" ErrorMessage="أدخل اسمك مطلوب" />
-                <!--  Pharmacy  -->
-                <template:AnimatedInput x:Name="pharmacyName" InputPlaceholder="اسم الصيدلية" />
-                <!--  Email  -->
-                <template:AnimatedInput
-                    x:Name="email"
-                    EntryKeyboard="Email"
-                    ErrorMessage="ايميل خاطئ"
-                    InputPlaceholder="البريد الالكتروني" />
-                <!--  Phone  -->
-                <template:AnimatedInput
-                    x:Name="telephone"
-                    EntryKeyboard="Telephone"
-                    ErrorMessage="رقم هاتف غير صحيح"
-                    InputPlaceholder="التليفون" />
-                <!--  Password  -->
-                <template:AnimatedInput
-                    x:Name="password"
-                    IsPassword="True"
-                    HasEyeIcon="True"
-                    InputPlaceholder="كلمة مرور فريدة" />
-                <!--  Confirm Password  -->
-                <template:AnimatedInput x:Name="confirmPassword" HasEyeIcon="False" InputPlaceholder="تأكيد كلمة المرور">
-                    <template:AnimatedInput.Triggers>
-                        <DataTrigger TargetType="template:AnimatedInput" Binding="{Binding Source={x:Reference password}, Path=IsPassword}" Value="True">
-                            <Setter Property="IsPassword" Value="True" />
-                        </DataTrigger>
-                    </template:AnimatedInput.Triggers>
-                </template:AnimatedInput>
-            </VerticalStackLayout>
+                <VerticalStackLayout Padding="30" InputTransparent="True">
+                    <!--  Logo  -->
+                    <Image
+                        Source="pharma_logo.png"
+                        Aspect="AspectFit"
+                        HeightRequest="100" />
+                </VerticalStackLayout>
 
-            <!--  BottonS  -->
-            <VerticalStackLayout Grid.Row="2" Padding="20,0">
-                <!--  Submit  -->
-                <Button
-                    x:Name="mainCreationButton"
-                    Margin="0,30,0,0"
-                    Text="التحقق"
-                    Clicked="SubmitClicked" />
-                <!--  Have Acount? sign in  -->
-                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                    <!--  label  -->
-                    <Label Text="ليس لديك حساب؟" VerticalOptions="Center" FontSize="{StaticResource Small}" />
-                    <!--  login button  -->
-                    <Button Style="{StaticResource Anchor}" Text="تسجيل دخول">
-                        <Button.Behaviors>
-                            <toolkit:TouchBehavior
-                                DefaultAnimationDuration="250"
-                                DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
-                                PressedOpacity="0.6"
-                                PressedScale="0.8" />
-                        </Button.Behaviors>
-                    </Button>
-                </HorizontalStackLayout>
-                <!--<Label x:Name="timer" HorizontalOptions="Center"/>-->
-            </VerticalStackLayout>
+                <!--  Form  -->
+                <Border
+                    Margin="0,0,0,0"
+                    Padding="0,10"
+                    StrokeThickness="0"
+                    BackgroundColor="White"
+                    StrokeShape="RoundRectangle 90 0 0 0 ">
+                    <Grid RowDefinitions="*,500">
+                        <VerticalStackLayout>
 
-            <template:VerificationViewTemplate
-                x:Name="verificationViewTemplate"
-                Grid.RowSpan="3"
-                IsVisible="False"
-                SubmitClicked="VerificationViewTemplate_SubmitClicked"
-                ZIndex="2" />
-            <!--  ActivityIndicator  -->
-            <ActivityIndicator
-                x:Name="activityIndicator"
-                Grid.Row="0"
-                Grid.RowSpan="4"
-                VerticalOptions="Center"
-                ZIndex="3"
-                IsRunning="False"
-                Color="{StaticResource Primary600}" />
+                            <Label
+                                Margin="20"
+                                FontSize="20"
+                                TextColor="{StaticResource Primary}"
+                                Text="إنشاء حساب"
+                                FontFamily="{StaticResource KufiSemiBold}"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Center" />
+                            <!--  Inputs  -->
+                            <VerticalStackLayout
+                                x:Name="inputsContainer"
+                                Grid.Row="1"
+                                Padding="20,0">
+                                <!--  FullName  -->
+                                <template:AnimatedInput
+                                    x:Name="fullName"
+                                    InputPlaceholder="الاسم كاملاً"
+                                    ErrorMessage="أدخل اسمك مطلوب" />
+                                <!--  Pharmacy  -->
+                                <template:AnimatedInput x:Name="pharmacyName" InputPlaceholder="اسم الصيدلية" />
+                                <!--  Email  -->
+                                <template:AnimatedInput
+                                    x:Name="email"
+                                    EntryKeyboard="Email"
+                                    ErrorMessage="ايميل خاطئ"
+                                    InputPlaceholder="البريد الالكتروني" />
+                                <!--  Phone  -->
+                                <template:AnimatedInput
+                                    x:Name="telephone"
+                                    EntryKeyboard="Telephone"
+                                    ErrorMessage="رقم هاتف غير صحيح"
+                                    InputPlaceholder="التليفون" />
+                                <!--  Password  -->
+                                <template:AnimatedInput
+                                    x:Name="password"
+                                    IsPassword="True"
+                                    HasEyeIcon="True"
+                                    InputPlaceholder="كلمة مرور فريدة" />
+                                <!--  Confirm Password  -->
+                                <template:AnimatedInput
+                                    x:Name="confirmPassword"
+                                    HasEyeIcon="False"
+                                    InputPlaceholder="تأكيد كلمة المرور">
+                                    <template:AnimatedInput.Triggers>
+                                        <DataTrigger
+                                            TargetType="template:AnimatedInput"
+                                            Binding="{Binding Source={x:Reference password}, Path=IsPassword}"
+                                            Value="True">
+                                            <Setter Property="IsPassword" Value="True" />
+                                        </DataTrigger>
+                                    </template:AnimatedInput.Triggers>
+                                </template:AnimatedInput>
+                            </VerticalStackLayout>
 
-            <Grid.GestureRecognizers>
-                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
-            </Grid.GestureRecognizers>
-        </Grid>
-    </ScrollView>
+                            <!--  BottonS  -->
+                            <VerticalStackLayout Grid.Row="2" Padding="20,0">
+                                <!--  Submit  -->
+                                <Button
+                                    x:Name="mainCreationButton"
+                                    Margin="0,30,0,0"
+                                    Text="التحقق"
+                                    Clicked="SubmitClicked" />
+                                <!--  Have Acount? sign in  -->
+                                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                                    <!--  label  -->
+                                    <Label
+                                        Text="ليس لديك حساب؟"
+                                        VerticalOptions="Center"
+                                        FontSize="{StaticResource Small}" />
+                                    <!--  login button  -->
+                                    <Button Style="{StaticResource Anchor}" Text="تسجيل دخول">
+                                        <Button.Behaviors>
+                                            <toolkit:TouchBehavior
+                                                DefaultAnimationDuration="250"
+                                                DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+                                                PressedOpacity="0.6"
+                                                PressedScale="0.8" />
+                                        </Button.Behaviors>
+                                    </Button>
+                                </HorizontalStackLayout>
+                                <!--<Label x:Name="timer" HorizontalOptions="Center"/>-->
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+
+                    </Grid>
+                </Border>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+        </ScrollView>
+
+        <template:VerificationViewTemplate
+            x:Name="verificationViewTemplate"
+            Grid.RowSpan="3"
+            IsVisible="False"
+            SubmitClicked="VerificationViewTemplate_SubmitClicked"
+            ZIndex="2" />
+        <!--  ActivityIndicator  -->
+        <ActivityIndicator
+            x:Name="activityIndicator"
+            Grid.Row="0"
+            Grid.RowSpan="4"
+            VerticalOptions="Center"
+            ZIndex="3"
+            IsRunning="False"
+            Color="{StaticResource Primary600}" />
+
+    </Grid>
 </ContentPage>

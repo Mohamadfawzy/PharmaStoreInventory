@@ -1,10 +1,6 @@
 ﻿using BarcodeScanning;
 using CommunityToolkit.Maui;
-using DataAccess.Contexts;
-using DataAccess.Repository;
-using DataAccess.Services;
 using Microsoft.Extensions.Logging;
-using ZXing.Net.Maui.Controls;
 
 namespace PharmaStoreInventory
 {
@@ -24,17 +20,17 @@ namespace PharmaStoreInventory
                     fonts.AddFont("NotoKufiArabic-ExtraLight.ttf", "KufiExtraLight");
                     fonts.AddFont("NotoKufiArabic-Regular.ttf", "KufiRegular");
                     fonts.AddFont("NotoKufiArabic-SemiBold.ttf", "KufiSemiBold");
-                })
-                .UseBarcodeReader()
-                .UseBarcodeScanning();
-            builder.Services.AddSingleton<AppHost>();
-            builder.Services.AddSingleton<UserRepository>();
-            builder.Services.AddSingleton<AuthService>();
+                }).UseBarcodeScanning();
 
-            builder.Services.AddSingleton<AppDb>();
-            builder.Services.AddSingleton<EmployeeRepo>();
-            builder.Services.AddSingleton<CommonsRepo>();
-            builder.Services.AddSingleton<ProductAmountRepo>();
+
+            //builder.Services.AddSingleton<AppHost>();
+            //builder.Services.AddSingleton<UserRepository>();
+            //builder.Services.AddSingleton<AuthService>();
+
+            //builder.Services.AddSingleton<AppDb>();
+            //builder.Services.AddSingleton<EmployeeRepo>();
+            //builder.Services.AddSingleton<CommonsRepo>();
+            //builder.Services.AddSingleton<ProductAmountRepo>();
 
 
 #if DEBUG

@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using AndroidX.AppCompat.App;
 using PharmaStoreInventory.Helpers;
 using System.Globalization;
 
@@ -12,7 +13,7 @@ namespace PharmaStoreInventory
         protected override void OnCreate(Bundle? savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            //AppCompatDelegate.DefaultNightMode = AppCompatDelegate.ModeNightNo;
+            AppCompatDelegate.DefaultNightMode = AppCompatDelegate.ModeNightNo;
             if (Window != null)
             {
                 //var ss = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;

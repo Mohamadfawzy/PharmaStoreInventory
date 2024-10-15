@@ -38,74 +38,80 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<AndroidLinkMode>SdkOnly</AndroidLinkMode>
+		<!-- For Android -->
+		<iOSLinkMode>SdkOnly</iOSLinkMode>
+		<!-- For iOS -->
+	</PropertyGroup>
+	
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
-	  <AndroidPackageFormat>aab</AndroidPackageFormat>
-	  <AndroidUseAapt2>True</AndroidUseAapt2>
-	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+		<AndroidPackageFormat>aab</AndroidPackageFormat>
+		<AndroidUseAapt2>True</AndroidUseAapt2>
+		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
-	  <AndroidUseAapt2>True</AndroidUseAapt2>
-	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
-	  <AndroidPackageFormat>aab</AndroidPackageFormat>
+		<AndroidUseAapt2>True</AndroidUseAapt2>
+		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+		<AndroidPackageFormat>aab</AndroidPackageFormat>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android34.0|AnyCPU'">
-	  <ApplicationTitle>Ph Inventory</ApplicationTitle>
-	  <ApplicationId>com.modernsoft.pharmastoreinventory</ApplicationId>
-	  <ApplicationVersion>3</ApplicationVersion>
-	  <ApplicationDisplayVersion>1.0.3</ApplicationDisplayVersion>
+		<ApplicationTitle>Pharma Store</ApplicationTitle>
+		<ApplicationId>com.modernsoft.pharmastore4</ApplicationId>
+		<ApplicationVersion>4</ApplicationVersion>
+		<ApplicationDisplayVersion>1.10.08</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android34.0|AnyCPU'">
-	  <AndroidLinkTool>r8</AndroidLinkTool>
-	  <ApplicationTitle>Ph Inventory</ApplicationTitle>
-	  <ApplicationId>com.modernsoft.pharmastoreinventory</ApplicationId>
-	  <ApplicationVersion>3</ApplicationVersion>
-	  <ApplicationDisplayVersion>1.0.3</ApplicationDisplayVersion>
-	  <AndroidPackageFormat>apk</AndroidPackageFormat>
+		<ApplicationTitle>Pharma Store</ApplicationTitle>
+		<ApplicationId>com.modernsoft.pharmastore4</ApplicationId>
+		<ApplicationVersion>4</ApplicationVersion>
+		<ApplicationDisplayVersion>1.10.08</ApplicationDisplayVersion>
+		<AndroidPackageFormat>apk</AndroidPackageFormat>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
-	  <ApplicationTitle>Ph Inventory</ApplicationTitle>
-	  <ApplicationId>com.modernsoft.pharmastoreinventory</ApplicationId>
-	  <ApplicationVersion>3</ApplicationVersion>
-	  <ApplicationDisplayVersion>1.0.3</ApplicationDisplayVersion>
+		<ApplicationTitle>Pharma Store</ApplicationTitle>
+		<ApplicationId>com.modernsoft.pharmastore4</ApplicationId>
+		<ApplicationVersion>4</ApplicationVersion>
+		<ApplicationDisplayVersion>1.10.08</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
-	  <ApplicationTitle>Ph Inventory</ApplicationTitle>
-	  <ApplicationId>com.modernsoft.pharmastoreinventory</ApplicationId>
-	  <ApplicationVersion>3</ApplicationVersion>
-	  <ApplicationDisplayVersion>1.0.3</ApplicationDisplayVersion>
+		<ApplicationTitle>Pharma Store</ApplicationTitle>
+		<ApplicationId>com.modernsoft.pharmastore4</ApplicationId>
+		<ApplicationVersion>4</ApplicationVersion>
+		<ApplicationDisplayVersion>1.10.08</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows10.0.19041.0|AnyCPU'">
-	  <ApplicationTitle>Ph Inventory</ApplicationTitle>
-	  <ApplicationId>com.modernsoft.pharmastoreinventory</ApplicationId>
-	  <ApplicationVersion>3</ApplicationVersion>
-	  <ApplicationDisplayVersion>1.0.3</ApplicationDisplayVersion>
+		<ApplicationTitle>Pharma Store</ApplicationTitle>
+		<ApplicationId>com.modernsoft.pharmastore4</ApplicationId>
+		<ApplicationVersion>4</ApplicationVersion>
+		<ApplicationDisplayVersion>1.10.08</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
-	  <ApplicationTitle>Ph Inventory</ApplicationTitle>
-	  <ApplicationId>com.modernsoft.pharmastoreinventory</ApplicationId>
-	  <ApplicationVersion>3</ApplicationVersion>
-	  <ApplicationDisplayVersion>1.0.3</ApplicationDisplayVersion>
+		<ApplicationTitle>Pharma Store</ApplicationTitle>
+		<ApplicationId>com.modernsoft.pharmastore4</ApplicationId>
+		<ApplicationVersion>4</ApplicationVersion>
+		<ApplicationDisplayVersion>1.10.08</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">
-	  <ApplicationTitle>Ph Inventory</ApplicationTitle>
-	  <ApplicationId>com.modernsoft.pharmastoreinventory</ApplicationId>
-	  <ApplicationVersion>3</ApplicationVersion>
-	  <ApplicationDisplayVersion>1.0.3</ApplicationDisplayVersion>
+		<ApplicationTitle>Pharma Store</ApplicationTitle>
+		<ApplicationId>com.modernsoft.pharmastore4</ApplicationId>
+		<ApplicationVersion>4</ApplicationVersion>
+		<ApplicationDisplayVersion>1.10.08</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows10.0.19041.0|AnyCPU'">
-	  <ApplicationTitle>Ph Inventory</ApplicationTitle>
-	  <ApplicationId>com.modernsoft.pharmastoreinventory</ApplicationId>
-	  <ApplicationVersion>3</ApplicationVersion>
-	  <ApplicationDisplayVersion>1.0.3</ApplicationDisplayVersion>
+		<ApplicationTitle>Pharma Store</ApplicationTitle>
+		<ApplicationId>com.modernsoft.pharmastore4</ApplicationId>
+		<ApplicationVersion>4</ApplicationVersion>
+		<ApplicationDisplayVersion>1.10.08</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -127,154 +133,163 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\Fonts\materialdesignicons.ttf" />
-	  <None Remove="Resources\Fonts\NotoKufiArabic-ExtraLight.ttf" />
-	  <None Remove="Resources\Fonts\NotoKufiArabic-Regular.ttf" />
-	  <None Remove="Resources\Fonts\NotoKufiArabic-SemiBold.ttf" />
-	  <None Remove="Resources\Images\logoicon.svg" />
-	  <None Remove="Resources\Images\logout.svg" />
-	  <None Remove="Resources\Images\msLogo.png" />
-	  <None Remove="Resources\Images\noconnection.png" />
-	  <None Remove="Resources\Images\nodataicon.png" />
-	  <None Remove="Resources\Images\onbord1.jpg" />
-	  <None Remove="Resources\Images\Onbord2.jpg" />
-	  <None Remove="Resources\Images\pharma1.jpg" />
-	  <None Remove="Resources\Images\pharma2.jpg" />
-	  <None Remove="Resources\Images\pharma3.jpg" />
-	  <None Remove="Resources\Images\searchscane.svg" />
-	  <None Remove="Resources\Images\searchscane1.svg" />
-	  <None Remove="Resources\Images\searchscane_bold.svg" />
-	  <None Remove="Resources\Raw\branches.json" />
+		<None Remove="Resources\Fonts\materialdesignicons.ttf" />
+		<None Remove="Resources\Fonts\NotoKufiArabic-ExtraLight.ttf" />
+		<None Remove="Resources\Fonts\NotoKufiArabic-Regular.ttf" />
+		<None Remove="Resources\Fonts\NotoKufiArabic-SemiBold.ttf" />
+		<None Remove="Resources\Fonts\OpenSans-Regular.ttf" />
+		<None Remove="Resources\Fonts\OpenSans-Semibold.ttf" />
+		<None Remove="Resources\Images\logoicon.svg" />
+		<None Remove="Resources\Images\logout.svg" />
+		<None Remove="Resources\Images\msLogo.png" />
+		<None Remove="Resources\Images\noconnection.png" />
+		<None Remove="Resources\Images\nodataicon.png" />
+		<None Remove="Resources\Images\onbord1.jpg" />
+		<None Remove="Resources\Images\Onbord2.jpg" />
+		<None Remove="Resources\Images\pharma1.jpg" />
+		<None Remove="Resources\Images\pharma2.jpg" />
+		<None Remove="Resources\Images\pharma3.jpg" />
+		<None Remove="Resources\Images\pharma_logo.png" />
+		<None Remove="Resources\Images\pharma_logo_blue.png" />
+		<None Remove="Resources\Images\searchscane.svg" />
+		<None Remove="Resources\Images\searchscane1.svg" />
+		<None Remove="Resources\Images\searchscane_bold.svg" />
+		<None Remove="Resources\Raw\branches.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="BarcodeScanning.Native.Maui" Version="1.5.6" />
-		<PackageReference Include="CommunityToolkit.Maui" Version="9.0.2" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+		<PackageReference Include="BarcodeScanning.Native.Maui" Version="1.5.8" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="8.0.1" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.1" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.61" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.61" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-		<PackageReference Include="ZXing.Net.Maui.Controls" Version="0.4.0" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.91" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.91" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
+		<ProjectReference Include="..\DataAccess\DataAccess.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Resources\Styles\FontImageSource.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Admin\UserDetailsView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Admin\UsersView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\AllStockView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\BranchesView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\SettingView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Templates\CLInPickingTemplate.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Templates\NoDataTemplate.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Templates\NotificationTemplate.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Templates\PopupWin.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Templates\UpDownStepper.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Templates\VerificationViewTemplate.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Trash\AnimateBoxes.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\BarcodeReaderView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\CreateBranchView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\DashboardView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\LoginView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\OnbordingView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Trash\GetDataFromDatabase.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Trash\PharmaTabbedPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\PickingView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\RegisterView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Trash\StockDetails.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Trash\StockDetailsView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Templates\AnimatedInput.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Templates\DashboardNumberTemplate.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Templates\SearchBoxTemplate.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Templates\StepperField.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\UserView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Trash\VerificationView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\WaitingApprovalView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+		<MauiXaml Update="Resources\Styles\FontImageSource.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Admin\UserDetailsView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Admin\UsersView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\AllStockView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\BranchesView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\SettingView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Templates\CallUsTemplate.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Templates\CLInPickingTemplate.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Templates\NoDataTemplate.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Templates\NotificationTemplate.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Templates\PopupWin.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Templates\UpDownStepper.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Templates\VerificationViewTemplate.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Trash\AnimateBoxes.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\BarcodeReaderView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\CreateBranchView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\DashboardView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\LoginView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\OnbordingView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Trash\GetDataFromDatabase.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Trash\PharmaTabbedPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\PickingView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\RegisterView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Trash\StockDetails.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Trash\StockDetailsView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Templates\AnimatedInput.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Templates\DashboardNumberTemplate.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Templates\SearchBoxTemplate.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Templates\StepperField.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Trash\TextPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\UserView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Trash\VerificationView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\WaitingApprovalView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Languages\AppResources.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>AppResources.resx</DependentUpon>
-	  </Compile>
+		<Compile Update="Languages\AppResources.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>AppResources.resx</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Update="Languages\AppResources.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
-	  </EmbeddedResource>
+		<EmbeddedResource Update="Languages\AppResources.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>AppResources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Views\Popups\" />
+		<Folder Include="Views\Popups\" />
 	</ItemGroup>
 
 </Project>

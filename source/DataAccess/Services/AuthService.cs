@@ -399,8 +399,16 @@ public class AuthService
             //    return Result<UserLoginResponseDto>.Failure(ErrorCode.UserNotActive, "Your account is not active.");
             //}
 
+            /*
             // Check if user is logged in another device
             if (userAccount.IsLoggedIn && (!string.IsNullOrEmpty(userAccount.DeviceID) && userAccount.DeviceID != deviceId) && !isNewDevice)
+            {
+                return Result<UserLoginResponseDto>.Failure(ErrorCode.AccessLimitation, "You are logged in on another device, please log out from it.");
+            }
+            */
+
+
+            if ((!string.IsNullOrEmpty(userAccount.DeviceID) && userAccount.DeviceID != deviceId) && !isNewDevice)
             {
                 return Result<UserLoginResponseDto>.Failure(ErrorCode.AccessLimitation, "You are logged in on another device, please log out from it.");
             }

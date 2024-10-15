@@ -282,10 +282,15 @@
                             <Entry HorizontalTextAlignment="Center" Text="{Binding PageSize}" TextColor="Black" />
                         </Border>
 
+                        <!--  عدد الاصناف في الصفحة  -->
                         <HorizontalStackLayout Grid.Row="2" IsVisible="False" Spacing="10">
                             <Label Text="عدد الأصناف في الصفحة" VerticalTextAlignment="Center" />
                             <Border Padding="10,0" HorizontalOptions="Start" StrokeShape="RoundRectangle 8">
-                                <Entry HorizontalTextAlignment="Center" Text="{Binding PageSize}" TextColor="Black" />
+                                <Entry
+                                    Keyboard="Numeric"
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding PageSize}"
+                                    TextColor="Black" />
                             </Border>
                         </HorizontalStackLayout>
 

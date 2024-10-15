@@ -4,7 +4,6 @@ using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.Models;
 using PharmaStoreInventory.ViewModels;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PharmaStoreInventory.Views;
 
@@ -94,7 +93,7 @@ public partial class PickingView : ContentPage, IRecipient<PickingViewNotificati
             Task.Run(() => { viewModel.FetchStockDetails(e.BarcodeResults[0].DisplayValue); });
             //viewModel.FetchStockDetails(e.BarcodeResults[0].DisplayValue);
             // Dispatcher.DispatchAsync(() => { });
-            
+
         });
     }
 

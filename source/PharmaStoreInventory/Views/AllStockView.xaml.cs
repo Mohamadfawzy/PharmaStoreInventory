@@ -13,9 +13,10 @@ public partial class AllStockView : ContentPage
 
     protected override bool OnBackButtonPressed()
     {
-        if (filterIsOpen)
+        var vm = BindingContext as AllStockViewModel;
+        if (vm!= null &&  vm.BottomSheet)
         {
-            _ = CloseFilterFrameAninmation();
+            vm.CloseOpenBottomSheet();
             return true;
         }
         return base.OnBackButtonPressed();

@@ -21,10 +21,31 @@ namespace PharmaStoreInventory
                     // handler.PlatformView.SetHintTextColor(ColorStateList.ValueOf(Android.Graphics.Color.Red));
                 }
             });
-            
-            
 
 
+            Microsoft.Maui.Handlers.LabelHandler.Mapper.AppendToMapping(nameof(Label), (handler, view) =>
+            {
+                try
+                {
+                    if (view is Label label)
+                    {
+                        var description = SemanticProperties.GetDescription(label);
+                        if (description == "Justify")
+                        {
+                            // Apply text justification on Android
+                            handler.PlatformView.JustificationMode = Android.Text.JustificationMode.InterWord;
+                        }
+                        else
+                        {
+                            // Reset or apply default alignment for non-justified labels
+                            handler.PlatformView.JustificationMode = Android.Text.JustificationMode.None;
+                        }
+                    }
+                }
+                catch 
+                {
+                }
+            });
         }
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
     }

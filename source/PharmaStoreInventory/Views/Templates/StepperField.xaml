@@ -39,7 +39,7 @@
             <!--  Entry  -->
             <Entry
                 x:Name="entry"
-                WidthRequest="60"
+                MinimumWidthRequest="80"
                 BindingContext="{x:Reference ThisView}"
                 Text="{Binding Text}"
                 FontSize="18"

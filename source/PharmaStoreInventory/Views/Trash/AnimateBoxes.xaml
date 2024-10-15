@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage x:Class="PharmaStoreInventory.Views.Trash.AnimateBoxes"
+<ContentPage
+    x:Class="PharmaStoreInventory.Views.Trash.AnimateBoxes"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Name="ThisPage"
@@ -13,31 +14,13 @@
     <VerticalStackLayout>
         <Grid BindingContext="{x:Reference ThisPage}">
             <BoxView x:Name="box1" Color="Aqua" />
-            <BoxView
-                x:Name="box2"
-                TranslationX="{Binding ScreenWidth}"
-                Color="Beige" />
-            <BoxView
-                x:Name="box3"
-                TranslationX="{Binding ScreenWidth}"
-                Color="Black" />
-            <BoxView
-                x:Name="box4"
-                TranslationX="{Binding ScreenWidth}"
-                Color="Blue" />
-            <BoxView
-                x:Name="box5"
-                TranslationX="{Binding ScreenWidth}"
-                Color="Crimson" />
+            <BoxView x:Name="box2" TranslationX="{Binding ScreenWidth}" Color="Beige" />
+            <BoxView x:Name="box3" TranslationX="{Binding ScreenWidth}" Color="Black" />
+            <BoxView x:Name="box4" TranslationX="{Binding ScreenWidth}" Color="Blue" />
+            <BoxView x:Name="box5" TranslationX="{Binding ScreenWidth}" Color="Crimson" />
         </Grid>
-        <Label
-            Text="392.77"
-            FontSize="30"
-            TextColor="Black" />
-        <Button
-            Margin="0,20"
-            Text="الامام"
-            Clicked="OnAnimateButtonClicked" />
+        <Label Text="392.77" FontSize="30" TextColor="Black" />
+        <Button Margin="0,20" Text="الامام" Clicked="OnAnimateButtonClicked" />
         <Button Text="الخلف" Clicked="OnAnimateBackwardButtonClicked" />
 
     </VerticalStackLayout>

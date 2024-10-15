@@ -35,7 +35,7 @@ public partial class UpDownStepper : ContentView
             nameof(MinimumValue),
             typeof(int),
             typeof(UpDownStepper),
-            0, BindingMode.TwoWay);
+            1, BindingMode.TwoWay);
 
     public int MinimumValue
     {

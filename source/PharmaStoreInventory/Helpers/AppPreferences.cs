@@ -17,6 +17,12 @@ public static class AppPreferences
         get => GetValue(nameof(UserFullName), "مرحبا");
         set => Preferences.Default.Set(nameof(UserFullName), value);
     }
+    
+    public static string UserEmail
+    {
+        get => GetValue(nameof(UserEmail), string.Empty);
+        set => Preferences.Default.Set(nameof(UserEmail), value);
+    }
 
     public static int LocalDbUserId
     {

@@ -211,13 +211,16 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
     // will deleted
     private async void SetInputText_Tapped(object sender, TappedEventArgs e)
     {
-        brachName.InputText = "شبين الكوم";
-        telephone.InputText = "0402555550";
-        ipAdrress.InputText = "192.168.1.103";
-        port.InputText = "5144";
-        username.InputText = "admin";
-        password.InputText = "admin";
-        await inputsContainer.PositioningOfPlaceHolder();
+        if (AppValues.IsDevelopment)
+        {
+            brachName.InputText = "اسم الفرع";
+            telephone.InputText = "0402555550";
+            ipAdrress.InputText = "192.168.1.103";
+            port.InputText = "5144";
+            username.InputText = "1";
+            password.InputText = "1";
+            await inputsContainer.PositioningOfPlaceHolder();
+        }
     }
 }
 

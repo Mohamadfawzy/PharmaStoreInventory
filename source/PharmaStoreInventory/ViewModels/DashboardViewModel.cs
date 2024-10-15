@@ -7,6 +7,7 @@ using PharmaStoreInventory.Models;
 using PharmaStoreInventory.Services;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace PharmaStoreInventory.ViewModels;
 
 public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
@@ -242,7 +243,7 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
     void ExecuteToggleStoresPopupVisibility(string status)
     {
         IsStoresPopupVisible = !IsStoresPopupVisible;
-        ConfirmNewInventoryExecutionVisibility = !ConfirmNewInventoryExecutionVisibility;
+        //ConfirmNewInventoryExecutionVisibility = !ConfirmNewInventoryExecutionVisibility;
     }
 
     void ExecuteSubmitStoreSelectionChanged()
@@ -278,10 +279,13 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
                     var result = await ApiServices.StartNewInventoryAsync(model);
                     if (result != null && result.IsSuccess)
                     {
-                        await Helpers.Alerts.DisplaySnackbar("Start New Inventory Success", 7);
+                        //await Helpers.Alerts.DisplaySnackbar("Start New Inventory Success", 7);
                         await GetLatestInventoryHistory();
                         CountAllIsInventoryed = 0;
                         OnPropertyChanged(nameof(CountAllIsInventoryed));
+                        WeakReferenceMessenger.Default
+                        .Send(new DashboardViewNotification(new ErrorMessage("بدأ جرد جديد","تم بدأ جدرد بتاريخ اليوم")));
+
                     }
                 });
                 ConfirmNewInventoryExecutionVisibility = false;

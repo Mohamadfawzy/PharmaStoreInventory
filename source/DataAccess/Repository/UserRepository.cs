@@ -171,14 +171,33 @@ public class UserRepository
 
     public async Task<Result> UpdateLogoutUserAsync(int id)
     {
-        var q = await context.Users
-            .Where(b => b.Id == id)
-            .ExecuteUpdateAsync(setters => setters
-            .SetProperty(b => b.IsLoggedIn, false)
-            .SetProperty(b => b.LoggedOutAt, DateTimeOffset.UtcNow));
-        if (q > 0)
-            return Result.Success("you are logout successfily");
-        return Result.Failure("logout not successfily");
+        try
+        {
+            var res = context.Users.FirstOrDefault(x => x.Id == id);
+            if (res != null)
+            {
+                res.IsLoggedIn = false;
+                res.LoggedOutAt = DateTimeOffset.UtcNow;
+                var row = await context.SaveChangesAsync();
+                if (row > 0)
+                    return Result.Success("you are logout successfully");
+                return Result.Failure("logout Failure");
+            }
+            return Result.Failure();
+        }
+        catch (Exception ex)
+        {
+            return Result.Failure(ErrorCode.ExceptionError, ex.Message);
+        }
+
+        //var q = await context.Users
+        //    .Where(b => b.Id == id)
+        //    .ExecuteUpdateAsync(setters => setters
+        //    .SetProperty(b => b.IsLoggedIn, false)
+        //    .SetProperty(b => b.LoggedOutAt, DateTimeOffset.UtcNow));
+        //if (q > 0)
+        //    return Result.Success("you are logout successfily");
+        //return Result.Failure("logout not successfily");
     }
 
 

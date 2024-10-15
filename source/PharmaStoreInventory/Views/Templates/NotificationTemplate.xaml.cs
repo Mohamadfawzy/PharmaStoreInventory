@@ -1,10 +1,11 @@
-using CommunityToolkit.Maui.Core;
 using PharmaStoreInventory.Models;
 
 namespace PharmaStoreInventory.Views.Templates;
 
 public partial class NotificationTemplate : ContentView
 {
+    TimeSpan Duration = TimeSpan.FromSeconds(5);
+
     public static readonly BindableProperty MessageProperty =
         BindableProperty.Create(
             nameof(Message),
@@ -40,7 +41,7 @@ public partial class NotificationTemplate : ContentView
             await container.TranslateTo(0, 0);
             container.TranslationY = 0;
 
-            await Task.Delay(TimeSpan.FromSeconds(15));
+            await Task.Delay(Duration);
             HideMessage();
         }
         catch
@@ -62,7 +63,7 @@ public partial class NotificationTemplate : ContentView
         await container.TranslateTo(0,0);
         container.TranslationY = 0;
 
-        await Task.Delay(TimeSpan.FromSeconds(15));
+        await Task.Delay(Duration);
         HideMessage();
     }
 

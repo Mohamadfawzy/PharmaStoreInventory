@@ -12,7 +12,7 @@
 
     <!--  Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}"  -->
     <Style TargetType="template:AnimatedInput">
-        <Setter Property="UnFocusColor" Value="{AppThemeBinding Light={StaticResource Primary400}, Dark={StaticResource Primary600}}" />
+        <Setter Property="UnFocusColor" Value="{AppThemeBinding Light={StaticResource Primary600}, Dark={StaticResource Primary600}}" />
         <Setter Property="FocusColor" Value="{AppThemeBinding Light={StaticResource PrimaryDark}, Dark={StaticResource Primary050}}" />
         <Setter Property="InputBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Primary950}}" />
     </Style>

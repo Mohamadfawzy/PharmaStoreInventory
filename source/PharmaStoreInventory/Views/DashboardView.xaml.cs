@@ -54,7 +54,9 @@ public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotifi
 
     private async void GoToScanPage(object sender, TappedEventArgs e)
     {
-        await Navigation.PushAsync(new PickingView("22"));
+        //await Methods.AskForRequiredPermissionAsync();
+
+        await Navigation.PushAsync(new PickingView());
     }
 
     private async void GoToAllProductsPage(object sender, TappedEventArgs e)

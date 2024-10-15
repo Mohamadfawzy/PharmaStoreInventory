@@ -3,7 +3,9 @@ using DataAccess.Dtos.UserDtos;
 using DataAccess.Services;
 using PharmaStoreInventory.Extensions;
 using PharmaStoreInventory.Helpers;
+using PharmaStoreInventory.Languages;
 using PharmaStoreInventory.Services;
+using PharmaStoreInventory.Views.Templates;
 
 namespace PharmaStoreInventory.Views;
 
@@ -11,22 +13,51 @@ public partial class LoginView : ContentPage
 {
     private readonly JsonFileHanler jsonFileHanler;
     private readonly XmlFileHandler xFileHanler;
+    AnimatedInput email;
+    AnimatedInput password;
     public LoginView()
     {
         InitializeComponent();
         jsonFileHanler = new JsonFileHanler(AppValues.UserFileName);
         xFileHanler = new(AppValues.XBranchsFileName);
+
     }
 
-    private void ThisPage_NavigatedTo(object sender, NavigatedToEventArgs e)
+    private async void ThisPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {
+        await Task.Delay(1);
+        email = new()
+        {
+            ErrorMessage = "أدخل الايميل أور قم الهاتف بشكل صحيح",
+            InputPlaceholder = "البريد أو رقم الهاتف"
+        };
+        inputsContainer.Add(email);
+        await Task.Delay(1);
+
+        password = new()
+        {
+            IsPassword = true,
+            HasEyeIcon = true,
+            InputPlaceholder = AppResources.Login_Password
+        };
+        inputsContainer.Add(password);
+
         AppPreferences.SetDeviceID();
         if (Validations.Validator.IsNetworkAccess())
         {
             NetworkNotAccessAlert();
         }
+        SetValues();
     }
 
+    void SetValues()
+    {
+        if (!string.IsNullOrEmpty(AppPreferences.UserEmail))
+        {
+            email.SetInputText(AppPreferences.UserEmail);
+        }
+
+    }
     private void ClearFocusFromAllInputsTapped(object sender, TappedEventArgs e)
     {
         inputsContainer.ClearFocusFromAllInputs();
@@ -101,9 +132,10 @@ public partial class LoginView : ContentPage
                 AppPreferences.HostUserId = res.Data.Id;
                 AppPreferences.IsLoggedIn = true;
                 AppPreferences.IsUserActivated = true;
+                AppPreferences.UserEmail = userModel.EmailOrPhone;
 
                 _ = jsonFileHanler.WriteToFile(res.Data);
-                _ = Alerts.DisplayToast("Welcom: " + res.Data.FullName);
+                _ = Alerts.DisplayToast("Welcome: " + res.Data.FullName);
 
                 // Navigation
                 await Navigation.PushAsync(new BranchesView());
@@ -120,6 +152,7 @@ public partial class LoginView : ContentPage
                 if (res.ErrorCode == ErrorCode.UserNotActive)
                 {
                     AppPreferences.IsUserActivated = false;
+                    AppPreferences.UserEmail = userModel.EmailOrPhone;
                     await Navigation.PushAsync(new WaitingApprovalView());
                     Navigation.RemovePage(this);
                 }
@@ -127,6 +160,7 @@ public partial class LoginView : ContentPage
                 {
                     notification.ShowMessage("تقيد الوصول", "يرجي الخروج من الهاتف القديم،او يمكنك طلب تسجيل جهاز جديد");
                     newDviceStack.IsVisible = true;
+                    AppPreferences.UserEmail = userModel.EmailOrPhone;
                 }
                 else if (res.ErrorCode == ErrorCode.EmailNotExist)
                 {
@@ -172,13 +206,18 @@ public partial class LoginView : ContentPage
         }
         else
         {
-            if (DataAccess.DomainModel.Validator.IsValidTelephone(email.InputText))
+            if (PharmaStoreInventory.Validations.Validator.IsValidTelephone(email.InputText))
             {
                 inputType = InputType.Phone;
             }
-            else if (DataAccess.DomainModel.Validator.IsValidEmail(email.InputText))
+            else if (PharmaStoreInventory.Validations.Validator.IsValidEmail(email.InputText))
             {
                 inputType = InputType.Email;
+            }
+            else
+            {
+                email.IsError = true;
+                email.ErrorMessage = "تحقق من المدخلات";
             }
             //else if (email.InputText == "admin")
             //{
@@ -208,12 +247,6 @@ public partial class LoginView : ContentPage
             NetworkNotAccessAlert();
         }
         refreshView.IsRefreshing = false;
-    }
-
-    private void PhoneDialerTapped(object sender, TappedEventArgs e)
-    {
-        if (PhoneDialer.Default.IsSupported)
-            PhoneDialer.Default.Open("01200007275");
     }
 
     private void NetworkNotAccessAlert()

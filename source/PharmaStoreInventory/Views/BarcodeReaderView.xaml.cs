@@ -46,11 +46,11 @@ public partial class BarcodeReaderView : ContentPage
         {
             //await DisplayAlert("NavigationProductCode Detected", first.DisplayValue, "OK");
             //await Navigation.PushAsync(new StockDetailsView(first.DisplayValue) ,false);
-            await Navigation.PushAsync(new StockDetailsView() ,false);
+            await Navigation.PushAsync(new StockDetailsView(), false);
 
         });
         nativeBarcode.PauseScanning = true;
-        
+
     }
 
     private void Button_Clicked1(object sender, EventArgs e)
