@@ -5,19 +5,22 @@ using DataAccess.Dtos.UserDtos;
 using DataAccess.Entities;
 using DataAccess.Helper;
 using DataAccess.Repository;
+using System.Data;
 
 namespace DataAccess.Services;
 
 public class AuthService
 {
     //private readonly Repository.UserRepository repo = new();
-    private readonly PasswordHasher hasher = new();
-    private readonly MailingService mailService = new();
+    private readonly PasswordHasher hasher;
+    private readonly MailingService mailService;
     private readonly UserRepository repo;
 
-    public AuthService(UserRepository _repo)
+    public AuthService(UserRepository _repo, MailingService mailService, PasswordHasher hasher)
     {
         this.repo = _repo;
+        this.mailService = mailService;
+        this.hasher = hasher;
     }
 
     #region Admin Section
@@ -39,9 +42,9 @@ public class AuthService
                 return Result<UserLoginResponseDto>.Failure(ErrorCode.EmailNotExist, "admin Invalid email");
             }
 
-            if(userAccount.UserRole != 'A' && userAccount.UserRole != 'E')
+            if (userAccount.UserRole != 'A' && userAccount.UserRole != 'E')
             {
-                return Result<UserLoginResponseDto>.Failure(ErrorCode.InvalidRole, "invaled Role");
+                return Result<UserLoginResponseDto>.Failure(ErrorCode.InvalidRole, "invalid Role");
             }
 
             // If admin is the first time he will login
@@ -69,7 +72,7 @@ public class AuthService
                     PhoneNumber = userAccount.PhoneNumber,
                     LockoutEnd = userAccount.LockoutEnd = DateTimeOffset.UtcNow.AddDays(7),
                     IsActive = userAccount.IsActive,
-                    UserRole  = userAccount.UserRole,
+                    UserRole = userAccount.UserRole,
                 };
 
                 // Return successful result with user login response and welcome message
@@ -88,6 +91,35 @@ public class AuthService
         }
     }
 
+    public async Task<Result> CreateUserAsync(UserRegisterDto userDto, char role)
+    {
+        if (string.IsNullOrEmpty(userDto.Email) || string.IsNullOrEmpty(userDto.PhoneNumber))
+        {
+            return Result.Failure("Email or phone is missing.");
+        }
+
+        // Ensure that the email does not already exist
+        if (!string.IsNullOrEmpty(userDto.Email) && await repo.IsEmailExistAsync(userDto.Email))
+        {
+            return Result.Failure("The provided email is already in use by an existing user. Each user must have a unique email.");
+        }
+
+        // Ensure that the Phone Number does not already exist
+        if (!string.IsNullOrEmpty(userDto.PhoneNumber) && await repo.IsPhoneExistAsync(userDto.PhoneNumber))
+        {
+            return Result.Failure("The provided phone number is already in use by an existing user. Each user must have a unique phone number.");
+        }
+
+        // Convert the UserAccount Dto to UserAccount Entity
+        var userAccount = (UserAccount)userDto;
+        userAccount.PasswordHash = hasher.HashPassword(userDto.Password);
+        userAccount.UserRole = role;
+        userAccount.DeviceID = string.Empty;
+        userAccount.IsActive = true;
+
+        return await repo.AddUserAsync(userAccount);
+    }
+
     public async Task<Result> ChangeUserStatus(string email, bool status)
     {
         var userAccount = await repo.FindUserByEmailAsync(email).ConfigureAwait(false);
@@ -103,6 +135,11 @@ public class AuthService
     {
         return await repo.ReadAllUsers(query);
     }
+    
+    public async Task<Result> RemoveUserAsync(int userId)
+    {
+        return await repo.RemoveUser(userId);
+    }
 
     public async Task<Result> AdminConfirmsUserEmail(int userId)
     {
@@ -114,8 +151,21 @@ public class AuthService
     #endregion
 
 
+
+
+
+
+
+
+
+
     public async Task<Result> RegisterUserAsync(UserRegisterDto userDto)
     {
+        if (string.IsNullOrEmpty(userDto.Email) || string.IsNullOrEmpty(userDto.PhoneNumber))
+        {
+            return Result.Failure("Email or phone is missing.");
+        }
+
         // Ensure that the email does not already exist
         if (!string.IsNullOrEmpty(userDto.Email) && await repo.IsEmailExistAsync(userDto.Email))
         {
@@ -128,8 +178,16 @@ public class AuthService
             return Result.Failure("The provided phone number is already in use by an existing user. Each user must have a unique phone number.");
         }
 
-        // Send data to UserRepository for create new user account
-        return await repo.CreateAsync(userDto);
+        // next update = add verification Email after check with database
+
+        // Convert the UserAccount Dto to UserAccount Entity
+        var userAccount = (UserAccount)userDto;
+        userAccount.PasswordHash = hasher.HashPassword(userDto.Password);
+        userAccount.UserRole = 'C';
+        userAccount.EmailConfirmed = true;
+        userAccount.VCodeExpirationTime = DateTimeOffset.UtcNow.AddMinutes(Helper.Strings.VerificationCodeMinutesExpires);
+
+        return await repo.AddUserAsync(userAccount);
     }
 
     public async Task<Result> IsEmailOrPhoneExistAsync(string email, string phone)
@@ -187,7 +245,7 @@ public class AuthService
         }
         catch (Exception ex)
         {
-            return Result.Failure(ErrorCode.ExceptionError,ex.Message);
+            return Result.Failure(ErrorCode.ExceptionError, ex.Message);
         }
     }
 
@@ -314,7 +372,7 @@ public class AuthService
 
         }
         // Update the password and return the result
-        return await repo.UpdatePasswordByUserIdAsync(dto.UserId, dto.NewPassword).ConfigureAwait(false);
+        return await repo.UpdatePasswordByUserIdAsync(user.Id, dto.NewPassword).ConfigureAwait(false);
     }
 
     public async Task<Result> SaveAndSendVerificationCodeAsync(string email)
@@ -380,7 +438,6 @@ public class AuthService
     }
 
 
-
     // ### PrivateMethods ###########################################################################################################################################################################
     /// <summary>
     /// Verifies the provided password and logs in the user if the credentials are correct.
@@ -430,8 +487,9 @@ public class AuthService
                     FullName = userAccount.FullName,
                     PharmcyName = userAccount.PharmacyName,
                     PhoneNumber = userAccount.PhoneNumber,
-                    LockoutEnd = userAccount.LockoutEnd = DateTimeOffset.UtcNow.AddDays(7),
+                    LockoutEnd = userAccount.LockoutEnd = DateTimeOffset.UtcNow.AddDays(10),
                     IsActive = userAccount.IsActive,
+                    UserRole = userAccount.UserRole,
                 };
 
                 // Check if account is active

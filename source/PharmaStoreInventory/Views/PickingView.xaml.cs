@@ -75,7 +75,7 @@ public partial class PickingView : ContentPage, IRecipient<PickingViewNotificati
         }
         catch (Exception ex)
         {
-            await Alerts.DisplaySnackbar("OnAppearing" + ex.Message);
+            await Alerts.DisplaySnackBar("OnAppearing" + ex.Message);
         }
 
     }

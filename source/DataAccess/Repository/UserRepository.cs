@@ -15,15 +15,11 @@ public class UserRepository
     readonly PasswordHasher passwordHasher;
     private readonly AppHost context;
 
-    //readonly AppHost context;
-
-
     public UserRepository(AppHost context)
     {
-        //context = new AppHost();
         passwordHasher = new PasswordHasher();
         this.context = context;
-        OpenConnection();
+        // OpenConnection();
     }
 
 
@@ -50,12 +46,12 @@ public class UserRepository
             en.EmailConfirmed = true;
 
             // set lockout end 7 day form now
-            //en.LockoutEnd = DateTimeOffset.UtcNow.AddDays(7);
+            //userAccount.LockoutEnd = DateTimeOffset.UtcNow.AddDays(7);
 
 
 
             ////Add the new userDto entity to the context
-            //var entityEntry = await context.Users.AddAsync(en);
+            //var entityEntry = await context.Users.AddAsync(userAccount);
 
             ////Check if the entity state is "Added" and save the changes to the database
             //if (entityEntry.State == EntityState.Added)
@@ -88,6 +84,30 @@ public class UserRepository
 
         // Return the result
         return result;
+    }
+
+
+    public async Task<Result> AddUserAsync(UserAccount userAccount)
+    {
+        try
+        {
+            var entityEntry = await context.Users.AddAsync(userAccount);
+
+            int rowsAffected = await context.SaveChangesAsync();
+            if (rowsAffected > 0)
+            {
+                return Result.Success($"Id:{entityEntry.Entity.Id}");
+            }
+            else
+            {
+                return Result.Failure($"Failed to add the userDto. EntityState:");
+            }
+        }
+        catch (Exception ex)
+        {
+            var exceptionMessage = $"Message: {ex.Message}\nInnerException: {ex.InnerException?.Message}";
+            return Result.Failure(exceptionMessage);
+        }
     }
 
     /// <summary>
@@ -232,7 +252,10 @@ public class UserRepository
     {
         try
         {
-            return await context.Users.FindAsync(userId);
+            return await context.Users
+                .AsNoTracking()
+                .Where(id => id.Id == userId)
+                .FirstOrDefaultAsync();
         }
         catch
         {
@@ -317,6 +340,11 @@ public class UserRepository
             query = query.Where(x => x.EmailConfirmed == qParam.EmailConfirmed);
         }
 
+        if (qParam.Role is not null)
+        {
+            query = query.Where(x => x.UserRole == qParam.Role);
+        }
+
         if (qParam.OrderBy != UsersOrderBy.Non)
         {
             switch (qParam.OrderBy)
@@ -342,9 +370,8 @@ public class UserRepository
         query = query.Pagination(qParam.Page, qParam.PageSize);
 
         var users = await query
-            .Select(userAcount => (UserInfoDto)userAcount)
+            .Select(userAccount => (UserInfoDto)userAccount)
             .ToListAsync();
-
         return users;
     }
 
@@ -366,6 +393,30 @@ public class UserRepository
             }
 
             return Result.Failure(ErrorCode.OperationFailed, "Failed to update the userDto info.");
+        }
+        catch (Exception ex)
+        {
+            // Log the exception if necessary
+            return Result.Exception(ex.Message);
+        }
+    }
+    
+    public async Task<Result> RemoveUser(int userId)
+    {
+        try
+        {
+            // Execute the update
+            var rowsAffected = await context.Users
+                .Where(p => p.Id == userId)
+                .ExecuteDeleteAsync();
+
+            // Check if the update was successful
+            if (rowsAffected > 0)
+            {
+                return Result.Success("user is deleted successfully.");
+            }
+
+            return Result.Failure(ErrorCode.OperationFailed, "not found this user");
         }
         catch (Exception ex)
         {

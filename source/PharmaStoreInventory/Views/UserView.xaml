@@ -209,7 +209,7 @@
                 </Border>
 
                 <!--  Reset  -->
-                <Border Style="{StaticResource MenuItemBorderStyle}" BackgroundColor="{StaticResource ErrorDarkColor}">
+                <!--<Border Style="{StaticResource MenuItemBorderStyle}" BackgroundColor="{StaticResource ErrorDarkColor}">
                     <StackLayout Orientation="Horizontal">
                         <Label Style="{StaticResource MenuItemTestStyle}" Text="إعادة تهئية" />
                         <Label
@@ -226,7 +226,7 @@
                             CommandParameter="Reset"
                             TouchGestureCompleted="TouchBehavior_TouchGestureCompleted" />
                     </Border.Behaviors>
-                </Border>
+                </Border>-->
 
             </StackLayout>
         </ScrollView>
@@ -294,7 +294,12 @@
                                 </DataTrigger>
                             </template:AnimatedInput.Triggers>
                         </template:AnimatedInput>
-
+                        <Label
+                            x:Name="errorLabel"
+                            Text=""
+                            IsVisible="False"
+                            FontSize="13"
+                            TextColor="{StaticResource ErrorColor}" />
                         <Button
                             Margin="0,20,0,0"
                             Text="حفظ"

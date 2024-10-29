@@ -27,12 +27,15 @@
             <ScrollView>
                 <StackLayout BackgroundColor="{StaticResource Primary800}">
 
-                    <VerticalStackLayout Padding="30" InputTransparent="True">
+                    <VerticalStackLayout Padding="0,15" HorizontalOptions="Center">
                         <!--  Logo  -->
                         <Image
                             Source="pharma_logo.png"
                             Aspect="AspectFit"
                             HeightRequest="130" />
+                        <VerticalStackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="SetInputText_Tapped" />
+                        </VerticalStackLayout.GestureRecognizers>
                     </VerticalStackLayout>
 
                     <!--  Form  -->

@@ -10,8 +10,9 @@ public class UserRegisterDto
     public string? PhoneNumber { get; set; }
     public string Password { get; set; } = null!;
     public string ConfirmNewPassword { get; set; } = null!;
-    public string? DeviceID { get; set; } = "ddd";
-    
+    public string? DeviceID { get; set; } = "emptyFromDto";
+    public string? VerificationCode { get; set; }
+
 
     public static implicit operator UserAccount(UserRegisterDto dto)
     {

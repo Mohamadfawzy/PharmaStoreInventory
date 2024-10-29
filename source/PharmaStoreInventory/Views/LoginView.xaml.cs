@@ -13,13 +13,12 @@ public partial class LoginView : ContentPage
 {
     private readonly JsonFileHanler jsonFileHanler;
     private readonly XmlFileHandler xFileHanler;
-    AnimatedInput email;
-    AnimatedInput password;
+    AnimatedInput email, password;
     public LoginView()
     {
         InitializeComponent();
         jsonFileHanler = new JsonFileHanler(AppValues.UserFileName);
-        xFileHanler = new(AppValues.XBranchsFileName);
+        xFileHanler = new(AppValues.XBranchesFileName);
 
     }
 
@@ -133,12 +132,13 @@ public partial class LoginView : ContentPage
                 AppPreferences.IsLoggedIn = true;
                 AppPreferences.IsUserActivated = true;
                 AppPreferences.UserEmail = userModel.EmailOrPhone;
+                AppPreferences.UserFullName = res.Data.FullName;
 
                 _ = jsonFileHanler.WriteToFile(res.Data);
                 _ = Alerts.DisplayToast("Welcome: " + res.Data.FullName);
 
                 // Navigation
-                await Navigation.PushAsync(new BranchesView());
+                await Navigation.PushAsync(new BranchesView(false));
 
                 Navigation.RemovePage(this);
             }
@@ -257,5 +257,14 @@ public partial class LoginView : ContentPage
     private void NewDviceStack_Tapped(object sender, TappedEventArgs e)
     {
         newDeviceCheckBox.IsChecked = !newDeviceCheckBox.IsChecked;
+    }
+
+    private void SetInputText_Tapped(object sender, TappedEventArgs e)
+    {
+        if (AppValues.IsDevelopment)
+        {
+            email.SetInputText("mofawzyhelal@gmail.com");
+            password.SetInputText("123");
+        }
     }
 }

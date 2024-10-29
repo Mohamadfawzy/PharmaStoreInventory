@@ -63,19 +63,19 @@ public class RegisterViewModel : BaseViewModel
 
     async void ExecuteSendEmail()
     {
-        //verificationCodeSended = await mailingService.SendVerificationCodeAsync(UserRegister.Email!, null, "mohamed fawzy");
+        //verificationCodeSent = await mailingService.SendVerificationCodeAsync(UserRegister.Email!, null, "mohamed fawzy");
     }
     private async Task CreateAcount()
     {
         try
         {
-            var res = await ApiServices.RegisterUserAcync(UserRegister);
+            var res = await ApiServices.RegisterUserAsync(UserRegister);
             if (res == null)
             {
-                await Helpers.Alerts.DisplaySnackbar("RegisterUserAsync return null");
+                await Helpers.Alerts.DisplaySnackBar("RegisterUserAsync return null");
                 return;
             }
-            _ = Helpers.Alerts.DisplaySnackbar(res.Message);
+            _ = Helpers.Alerts.DisplaySnackBar(res.Message);
             if (res.IsSuccess)
             {
                 if (Application.Current != null && Application.Current.MainPage != null)
@@ -93,7 +93,7 @@ public class RegisterViewModel : BaseViewModel
         catch (Exception ex)
         {
             var exceptionMessage = $"Message: {ex.Message}\nInnerException: {ex.InnerException?.Message}";
-            await Helpers.Alerts.DisplaySnackbar(exceptionMessage);
+            await Helpers.Alerts.DisplaySnackBar(exceptionMessage);
         }
     }
     
@@ -103,14 +103,14 @@ public class RegisterViewModel : BaseViewModel
     //    {
     //        //cheack if email is not exist
     //        var res = await ApiServices.AreEmailAndPhoneNonExistentAsync(uRegister.Email!, uRegister.PhoneNumber!);
-    //        //_ = Helpers.Alerts.DisplaySnackbar(res.Message);
+    //        //_ = Helpers.Alerts.DisplaySnackBar(res.Message);
     //        if (res == null)
     //            return ErrorCode.NullValue;
 
     //        if (res.IsSuccess)
     //        {
     //            VerificationViewTemplateVisible = true;
-    //            verificationCodeSended = "1111";// await mailingService.SendVerificationCodeAsync(uRegister.Email!, null, "mohamed fawzy");
+    //            verificationCodeSent = "1111";// await mailingService.SendVerificationCodeAsync(uRegister.Email!, null, "mohamed fawzy");
     //            return ErrorCode.NoError;
     //        }
     //        return res.ErrorCode;
@@ -118,7 +118,7 @@ public class RegisterViewModel : BaseViewModel
     //    catch (Exception ex)
     //    {
     //        var exceptionMessage = $"Message: {ex.Message}\nInnerException: {ex.InnerException?.Message}";
-    //        await Helpers.Alerts.DisplaySnackbar(exceptionMessage);
+    //        await Helpers.Alerts.DisplaySnackBar(exceptionMessage);
     //        return ErrorCode.ExceptionError;
     //    }
     //}

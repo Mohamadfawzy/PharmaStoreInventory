@@ -10,7 +10,6 @@
     xmlns:res="clr-namespace:PharmaStoreInventory.Languages"
     xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
     x:Name="ThisPage"
-    Title="الفروع"
     NavigationPage.HasNavigationBar="False">
     <Grid
         Padding="0"
@@ -19,7 +18,10 @@
         RowSpacing="10">
 
         <!--  Notification  -->
-        <template:NotificationTemplate x:Name="notification" Grid.RowSpan="2" ZIndex="2" />
+        <template:NotificationTemplate
+            x:Name="notification"
+            Grid.RowSpan="2"
+            ZIndex="2" />
 
         <!--  Header  -->
         <StackLayout
@@ -49,7 +51,10 @@
                         PressedScale="0.8" />
                 </Label.Behaviors>
             </Label>
-            <Label Text="Branches" VerticalTextAlignment="Center" TextColor="{StaticResource Primary050}" />
+            <Label
+                Text="الفروع"
+                VerticalTextAlignment="Center"
+                TextColor="{StaticResource Primary050}" />
 
             <!--  add new bransh button  -->
             <Border
@@ -60,7 +65,10 @@
                 StrokeThickness="2"
                 Stroke="{StaticResource Secondary}"
                 StrokeShape="RoundRectangle 15">
-                <StackLayout Padding="5,0" Orientation="Horizontal" Spacing="5">
+                <StackLayout
+                    Padding="5,0"
+                    Orientation="Horizontal"
+                    Spacing="5">
                     <Label
                         FontSize="13"
                         Style="{StaticResource Iconline}"
@@ -114,8 +122,14 @@
                         </SwipeView.RightItems>
 
                         <Grid BackgroundColor="{StaticResource White}">
-                            <Border Padding="20,0" StrokeShape="RoundRectangle 20" BackgroundColor="{StaticResource Primary800}">
-                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,80" ColumnDefinitions="*,Auto" RowSpacing="0">
+                            <Border
+                                Padding="20,0"
+                                StrokeShape="RoundRectangle 20"
+                                BackgroundColor="{StaticResource Primary800}">
+                                <Grid
+                                    RowDefinitions="Auto,Auto,Auto,Auto,80"
+                                    ColumnDefinitions="*,Auto"
+                                    RowSpacing="0">
                                     <Label
                                         Grid.ColumnSpan="2"
                                         Padding="0"

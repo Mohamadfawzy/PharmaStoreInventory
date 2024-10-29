@@ -1,4 +1,7 @@
-﻿namespace DataAccess.Dtos;
+﻿using System.Diagnostics;
+using System.Globalization;
+
+namespace DataAccess.Dtos;
 
 public class ProductDto
 {
@@ -10,4 +13,7 @@ public class ProductDto
     public decimal? Quantity { get; set; }
     public decimal? StoreId { get; set; }
     public string? HasExpire { get; set; }
+
+    public string? FormattedPrice =>  SalePrice?.ToString("F2", CultureInfo.InvariantCulture);
+    public string? FormattedQuantity => Quantity?.ToString("F3", CultureInfo.InvariantCulture);
 }

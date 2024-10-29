@@ -17,6 +17,7 @@ public partial class AnimatedInput : ContentView
         Email,
         Telephone,
         Numeric,
+        IP
     }
     private readonly double height = 25.0;
     private readonly Easing easing = Easing.SinInOut;
@@ -261,7 +262,10 @@ public partial class AnimatedInput : ContentView
                 IsError = true;
                 ErrorMessage = "رقم هاتف غير صحيح";
             }
-            
+        }
+        if (EntryKeyboard == KeyboardEnum.IP)
+        {
+
         }
     }
 
@@ -285,7 +289,7 @@ public partial class AnimatedInput : ContentView
         catch (Exception ex)
         {
             error.IsVisible = false;
-            await Helpers.Alerts.DisplaySnackbar(ex.Message);
+            await Helpers.Alerts.DisplaySnackBar(ex.Message);
         }
     }
 
@@ -388,7 +392,21 @@ public partial class AnimatedInput : ContentView
             KeyboardEnum.Email => Keyboard.Email,
             KeyboardEnum.Telephone => Keyboard.Telephone,
             KeyboardEnum.Numeric => Keyboard.Numeric,
+            KeyboardEnum.IP => Keyboard.Telephone,
             _ => Keyboard.Default,
         };
+
+        // Set the flow direction for email
+        if (EntryKeyboard == KeyboardEnum.Email 
+            || EntryKeyboard == KeyboardEnum.Telephone
+            ||EntryKeyboard == KeyboardEnum.Numeric
+            ||EntryKeyboard == KeyboardEnum.IP)
+        {
+            entry.FlowDirection = FlowDirection.LeftToRight;
+        }
+        else
+        {
+            entry.FlowDirection = FlowDirection.MatchParent;
+        }
     }
 }

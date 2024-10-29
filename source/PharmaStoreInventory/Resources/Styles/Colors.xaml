@@ -10,6 +10,8 @@
     <x:String x:Key="KufiExtraLight">KufiExtraLight</x:String>
     <x:String x:Key="KufiRegular">KufiRegular</x:String>
     <x:String x:Key="KufiSemiBold">KufiSemiBold</x:String>
+    <x:String x:Key="OpenSansRegular">OpenSansRegular</x:String>
+    <x:String x:Key="OpenSansSemibold">OpenSansSemibold</x:String>
 
     <x:Double x:Key="Header">34</x:Double>
     <x:Double x:Key="Title">20</x:Double>

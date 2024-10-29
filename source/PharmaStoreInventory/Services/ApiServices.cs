@@ -13,7 +13,6 @@ namespace PharmaStoreInventory.Services;
 public static class ApiServices
 {
     #region Dashboard
-
     public static async Task<bool> TestConnection()
     {
         return await RequestProvider.GetBooleanValueAsync(AppValues.LocalBaseURI + "/connection");
@@ -50,7 +49,6 @@ public static class ApiServices
         return content;
     }
     #endregion
-
 
     #region Product
     public static async Task<List<ProductDto>?> GetAllProducts(ProductQParam qParam)
@@ -117,7 +115,7 @@ public static class ApiServices
         return await RequestProvider.PutAsync<Result, UpdateProductQuantityDto>(url, model);
     }
 
-    public static async Task<Result?> CopyProductAmout(CopyProductAmoutDto model)
+    public static async Task<Result?> CopyProductAmount(CopyProductAmoutDto model)
     {
         var url = AppValues.LocalBaseURI + "/Products/copy";
         var (content, error) = await RequestProvider.PostSingleAsync<Result, CopyProductAmoutDto>(url, model);
@@ -127,8 +125,6 @@ public static class ApiServices
         }
         return content;
     }
-
-
     #endregion
 
     #region Branche
@@ -143,9 +139,9 @@ public static class ApiServices
         return content;
     }
 
-    public static async Task<Result?> DeleteBranche(Guid brachId)
+    public static async Task<Result?> DeleteBranche(Guid branchId)
     {
-        var uri = $"{AppValues.HostBaseURI}/Branche/delete?brancheId={brachId}";
+        var uri = $"{AppValues.HostBaseURI}/Branche/delete?brancheId={branchId}";
         return await RequestProvider.DeleteAsync<Result>(uri);
     }
 
@@ -161,18 +157,6 @@ public static class ApiServices
     #endregion
 
     #region Employee
-    public static async Task<Result<EmployeeDto?>?> EmpLogin(string baseUrl, LoginDto model)
-    {
-        var url = baseUrl + "/Employee/login";
-        var (content, error) = await RequestProvider.PostSingleAsync<Result<EmployeeDto?>, LoginDto>(url, model);
-        if (error != null)
-        {
-            //WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
-        }
-        return content;
-
-    }
-
     public static async Task<(ConnectionErrorCode err, string message)> ApiEmployeeLogin(BranchModel branch)
     {
         try
@@ -183,26 +167,31 @@ public static class ApiServices
 
 
             var url = baseUrl + "/Employee/login";
-            var (result, error) = await RequestProvider.PostSingleAsync<Result<EmployeeDto?>, LoginDto>(url, emp);
+            var (response, error) = await RequestProvider.PostSingleAsync<AuthResult<EmployeeDto?>, LoginDto>(url, emp);
 
 
             // status 1 Unable to connect to server
-            if (result == null)
+            if (response == null)
             {
                 return (ConnectionErrorCode.Fail, string.Empty);
             }
             // status 2 Server connection IsSuccess
-            if (result != null && result.IsSuccess)
+            if (response != null && response.Result != null)
             {
-                if (result.Data != null)
+                if (response.Result.IsSuccess)
                 {
-                    AppPreferences.LocalDbUserId = result.Data.Id;
+                    if (response.Result.Data != null )
+                    {
+                        AppPreferences.LocalDbUserId = response.Result.Data.Id;
+                        AppPreferences.Token = "Bearer " + response.Auth?.Token;
+                        return (ConnectionErrorCode.Success, string.Empty);
+                    }
+                    return (ConnectionErrorCode.Fail, "data or token in null");
                 }
-                return (ConnectionErrorCode.Success, string.Empty); ;
+                // status 3 Server connection IsSuccess, but username or password is incorrect
+                return (ConnectionErrorCode.UsernameOrPass, response.Result.Message);
             }
-            // status 3 Server connection IsSuccess, but username or password is incorrect
-            else
-                return (ConnectionErrorCode.UsernameOrPass, string.Empty); ;
+            return (ConnectionErrorCode.Fail, "response or result or auth in null");
         }
         catch (Exception ex)
         {
@@ -211,10 +200,8 @@ public static class ApiServices
     }
     #endregion
 
-
-
     #region User
-    public static async Task<Result?> RegisterUserAcync(UserRegisterDto model)
+    public static async Task<Result?> RegisterUserAsync(UserRegisterDto model)
     {
         var url = AppValues.HostBaseURI + "/userAuth/registration";
         var (content, error) = await RequestProvider.PostSingleAsync<Result, UserRegisterDto>(url, model);
@@ -271,78 +258,6 @@ public static class ApiServices
     }
     #endregion
 
-
-
-    #region AdminUser
-    public static async Task<List<UserInfoDto>?> GetAllUsersAsync(FilterUsersQParam query)
-    {
-        var queryParams = new Dictionary<string, string?>
-            {
-                { "query.IsActive",query.IsActive.ToString()},
-                { "query.EmailConfirmed",query.EmailConfirmed.ToString()},
-                { "query.PageSize",query.PageSize.ToString()},
-                { "query.Page",query.Page.ToString()},
-                { "query.OrderBy",query.OrderBy.ToString()},
-            };
-
-        var url = AppValues.HostBaseURI + "/admin/all-users" + await BuildQueryString(queryParams);
-
-        var (content, error) = await RequestProvider.GetAllAsync<UserInfoDto>(url);
-        if (error != null)
-        {
-            WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
-        }
-        return content;
-    }
-
-    public static async Task<Result?> ChangeUserStatus(int userId)
-    {
-        var queryParams = new Dictionary<string, string?>
-            {
-                { "userId",userId.ToString()},
-                { "status","true"}
-            };
-
-        var url = AppValues.HostBaseURI + "/admin/activate-user-account" + await BuildQueryString(queryParams);
-
-        return await RequestProvider.PutByQueryParamsAsync<Result>(url);
-    }
-
-    public static async Task<Result<UserLoginResponseDto>?> AdminLoginByEmailAsync(LoginDto model)
-    {
-        var url = AppValues.HostBaseURI + "/admin/login";
-        var (content, error) = await RequestProvider.PostSingleAsync<Result<UserLoginResponseDto>, LoginDto>(url, model);
-        if (error != null)
-        {
-            WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
-        }
-        return content;
-    }
-    #endregion
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // BuildQueryString
     private static async Task<string> BuildQueryString(Dictionary<string, string?> queryParams)
     {
@@ -366,7 +281,7 @@ public static class ApiServices
         }
         catch (Exception ex)
         {
-            await Helpers.Alerts.DisplaySnackbar($"{nameof(RequestProvider)}:{nameof(BuildQueryString)}, Message:{ex.Message}");
+            await Helpers.Alerts.DisplaySnackBar($"{nameof(RequestProvider)}:{nameof(BuildQueryString)}, Message:{ex.Message}");
             return string.Empty;
         }
     }

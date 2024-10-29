@@ -66,7 +66,10 @@
                     Padding="20,7"
                     Orientation="Horizontal"
                     BackgroundColor="{StaticResource PrimaryDark}">
-                    <Label x:Name="userFullName" Text="مرحبا" TextColor="{StaticResource Primary050}" />
+                    <Label
+                        x:Name="userFullName"
+                        Text="مرحبا"
+                        TextColor="{StaticResource Primary050}" />
                     <!--  MenuIcon  -->
                     <Frame
                         Padding="8,8"
@@ -98,7 +101,10 @@
                 </StackLayout>
 
                 <!--  Container  -->
-                <VerticalStackLayout Grid.Row="1" Padding="20,0" Spacing="20">
+                <VerticalStackLayout
+                    Grid.Row="1"
+                    Padding="20,0"
+                    Spacing="20">
 
                     <!--  last  inventory and  ChevronDown icon  -->
                     <!--<Label
@@ -148,7 +154,10 @@
                                 VerticalOptions="Fill"
                                 BackgroundColor="{StaticResource Primary100}"
                                 VerticalTextAlignment="Center" />
-                            <Label Text="{Binding StoreName}" TextColor="{StaticResource Primary}" VerticalTextAlignment="Center" />
+                            <Label
+                                Text="{Binding StoreName}"
+                                TextColor="{StaticResource Primary}"
+                                VerticalTextAlignment="Center" />
                             <Label
                                 Margin="20,0"
                                 FontSize="22"
@@ -184,7 +193,10 @@
                         ColumnSpacing="20">
                         <template:DashboardNumberTemplate Title="كل الأصناف" Number="{Binding StatisticsModel.TotalProducts}" />
 
-                        <template:DashboardNumberTemplate Title="الأصناف منتهية الصلاحية" Grid.Column="1" Number="{Binding StatisticsModel.ExpiredProducts}" />
+                        <template:DashboardNumberTemplate
+                            Title="الأصناف منتهية الصلاحية"
+                            Grid.Column="1"
+                            Number="{Binding StatisticsModel.ExpiredProducts}" />
 
                         <template:DashboardNumberTemplate
                             Title="أصناف تنتهي صلاحيتها بعد ثلاثة أشهر"
@@ -192,7 +204,10 @@
                             Grid.Column="1"
                             Number="{Binding StatisticsModel.WillExpireIn3Months}" />
 
-                        <template:DashboardNumberTemplate Title=" أصناف تم جردها" Grid.Row="1" Number="{Binding StatisticsModel.InventoryedProducts}" />
+                        <template:DashboardNumberTemplate
+                            Title=" أصناف تم جردها"
+                            Grid.Row="1"
+                            Number="{Binding StatisticsModel.InventoryedProducts}" />
 
                     </Grid>
 
@@ -226,8 +241,14 @@
                     </Frame>
 
                     <!--  Search About Item  -->
-                    <Frame Padding="20,10" Style="{StaticResource FrameTextIconCenter}" BackgroundColor="{StaticResource Primary700}">
-                        <HorizontalStackLayout Style="{StaticResource HSLinFrame}" Spacing="20" VerticalOptions="Center">
+                    <Frame
+                        Padding="20,10"
+                        Style="{StaticResource FrameTextIconCenter}"
+                        BackgroundColor="{StaticResource Primary700}">
+                        <HorizontalStackLayout
+                            Style="{StaticResource HSLinFrame}"
+                            Spacing="20"
+                            VerticalOptions="Center">
                             <Label Text="البحث عن صنف" TextColor="{StaticResource Primary050}" />
                             <Image Source="searchscane_bold.svg" VerticalOptions="Center" />
                         </HorizontalStackLayout>
@@ -263,7 +284,10 @@
                                                           Dark={StaticResource Primary950}}">
                         <StackLayout Padding="30" Spacing="30">
                             <Label Text="تحذير ستقوم بتحديد كافة الأصناف علي أنها تم جردها" />
-                            <Button Text="تأكيد الجرد " BackgroundColor="{StaticResource Secondary900}" Command="{Binding StartNewInventoryCommand}" />
+                            <Button
+                                Text="تأكيد الجرد "
+                                BackgroundColor="{StaticResource Secondary900}"
+                                Command="{Binding StartNewInventoryCommand}" />
 
                         </StackLayout>
                         <Border.GestureRecognizers>
@@ -271,7 +295,10 @@
                         </Border.GestureRecognizers>
                     </Border>
                     <Grid.Triggers>
-                        <DataTrigger TargetType="Grid" Binding="{Binding ConfirmNewInventoryExecutionVisibility}" Value="true">
+                        <DataTrigger
+                            TargetType="Grid"
+                            Binding="{Binding ConfirmNewInventoryExecutionVisibility}"
+                            Value="true">
                             <Setter Property="IsVisible" Value="Visible" />
                         </DataTrigger>
                     </Grid.Triggers>
@@ -322,7 +349,10 @@
                                                 HorizontalOptions="End"
                                                 VerticalOptions="Center">
                                                 <Label.Triggers>
-                                                    <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
+                                                    <DataTrigger
+                                                        TargetType="Label"
+                                                        Binding="{Binding IsSelected}"
+                                                        Value="True">
                                                         <Setter Property="Text" Value="{x:Static icon:IconFont.CheckboxMarkedCircle}" />
                                                         <Setter Property="TextColor" Value="{StaticResource Primary700}" />
                                                         <!--  Multiple Setter elements are allowed  -->
@@ -336,7 +366,10 @@
                                                 VerticalOptions="End" />
                                             <!--  Trigger for switch selected store  -->
                                             <Grid.Triggers>
-                                                <DataTrigger TargetType="Grid" Binding="{Binding IsSelected}" Value="True">
+                                                <DataTrigger
+                                                    TargetType="Grid"
+                                                    Binding="{Binding IsSelected}"
+                                                    Value="True">
                                                     <Setter Property="BackgroundColor" Value="{StaticResource Primary200}" />
 
                                                 </DataTrigger>
@@ -380,7 +413,10 @@
                         RowDefinitions="*,*"
                         ColumnSpacing="10"
                         RowSpacing="10">
-                        <BoxView Style="{StaticResource PlaceholderBox}" HeightRequest="150" Loaded="BoxView_Loaded" />
+                        <BoxView
+                            Style="{StaticResource PlaceholderBox}"
+                            HeightRequest="150"
+                            Loaded="BoxView_Loaded" />
                         <BoxView
                             Grid.Column="1"
                             Loaded="BoxView_Loaded"
@@ -400,7 +436,13 @@
                     </Grid>
                     <BoxView HeightRequest="50" Style="{StaticResource PlaceholderBox}" />
                     <BoxView HeightRequest="35" Style="{StaticResource PlaceholderBox}" />
-                    <BoxView HeightRequest="35" Style="{StaticResource PlaceholderBox}" Loaded="BoxView_Loaded" />
+                    <BoxView
+                        HeightRequest="35"
+                        Style="{StaticResource PlaceholderBox}"
+                        Loaded="BoxView_Loaded" />
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer />
+                    </VerticalStackLayout.GestureRecognizers>
                 </VerticalStackLayout>
 
                 <!--  No Data Template : Something went wrong  -->

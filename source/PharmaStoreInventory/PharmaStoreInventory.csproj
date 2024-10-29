@@ -58,60 +58,60 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android34.0|AnyCPU'">
-		<ApplicationTitle>Pharma Store</ApplicationTitle>
-		<ApplicationId>com.modernsoft.pharmastore4</ApplicationId>
-		<ApplicationVersion>4</ApplicationVersion>
-		<ApplicationDisplayVersion>1.10.08</ApplicationDisplayVersion>
+		<ApplicationTitle>Ph.S Inventory</ApplicationTitle>
+		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
+		<ApplicationVersion>6</ApplicationVersion>
+		<ApplicationDisplayVersion>1.10.29</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android34.0|AnyCPU'">
-		<ApplicationTitle>Pharma Store</ApplicationTitle>
-		<ApplicationId>com.modernsoft.pharmastore4</ApplicationId>
-		<ApplicationVersion>4</ApplicationVersion>
-		<ApplicationDisplayVersion>1.10.08</ApplicationDisplayVersion>
+		<ApplicationTitle>Ph.S Inventory</ApplicationTitle>
+		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
+		<ApplicationVersion>6</ApplicationVersion>
+		<ApplicationDisplayVersion>1.10.29</ApplicationDisplayVersion>
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
-		<ApplicationTitle>Pharma Store</ApplicationTitle>
-		<ApplicationId>com.modernsoft.pharmastore4</ApplicationId>
-		<ApplicationVersion>4</ApplicationVersion>
-		<ApplicationDisplayVersion>1.10.08</ApplicationDisplayVersion>
+		<ApplicationTitle>Ph.S Inventory</ApplicationTitle>
+		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
+		<ApplicationVersion>6</ApplicationVersion>
+		<ApplicationDisplayVersion>1.10.29</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
-		<ApplicationTitle>Pharma Store</ApplicationTitle>
-		<ApplicationId>com.modernsoft.pharmastore4</ApplicationId>
-		<ApplicationVersion>4</ApplicationVersion>
-		<ApplicationDisplayVersion>1.10.08</ApplicationDisplayVersion>
+		<ApplicationTitle>Ph.S Inventory</ApplicationTitle>
+		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
+		<ApplicationVersion>6</ApplicationVersion>
+		<ApplicationDisplayVersion>1.10.29</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows10.0.19041.0|AnyCPU'">
-		<ApplicationTitle>Pharma Store</ApplicationTitle>
-		<ApplicationId>com.modernsoft.pharmastore4</ApplicationId>
-		<ApplicationVersion>4</ApplicationVersion>
-		<ApplicationDisplayVersion>1.10.08</ApplicationDisplayVersion>
+		<ApplicationTitle>Ph.S Inventory</ApplicationTitle>
+		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
+		<ApplicationVersion>6</ApplicationVersion>
+		<ApplicationDisplayVersion>1.10.29</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
-		<ApplicationTitle>Pharma Store</ApplicationTitle>
-		<ApplicationId>com.modernsoft.pharmastore4</ApplicationId>
-		<ApplicationVersion>4</ApplicationVersion>
-		<ApplicationDisplayVersion>1.10.08</ApplicationDisplayVersion>
+		<ApplicationTitle>Ph.S Inventory</ApplicationTitle>
+		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
+		<ApplicationVersion>6</ApplicationVersion>
+		<ApplicationDisplayVersion>1.10.29</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">
-		<ApplicationTitle>Pharma Store</ApplicationTitle>
-		<ApplicationId>com.modernsoft.pharmastore4</ApplicationId>
-		<ApplicationVersion>4</ApplicationVersion>
-		<ApplicationDisplayVersion>1.10.08</ApplicationDisplayVersion>
+		<ApplicationTitle>Ph.S Inventory</ApplicationTitle>
+		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
+		<ApplicationVersion>6</ApplicationVersion>
+		<ApplicationDisplayVersion>1.10.29</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows10.0.19041.0|AnyCPU'">
-		<ApplicationTitle>Pharma Store</ApplicationTitle>
-		<ApplicationId>com.modernsoft.pharmastore4</ApplicationId>
-		<ApplicationVersion>4</ApplicationVersion>
-		<ApplicationDisplayVersion>1.10.08</ApplicationDisplayVersion>
+		<ApplicationTitle>Ph.S Inventory</ApplicationTitle>
+		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
+		<ApplicationVersion>6</ApplicationVersion>
+		<ApplicationDisplayVersion>1.10.29</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -123,7 +123,6 @@
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -139,20 +138,13 @@
 		<None Remove="Resources\Fonts\NotoKufiArabic-SemiBold.ttf" />
 		<None Remove="Resources\Fonts\OpenSans-Regular.ttf" />
 		<None Remove="Resources\Fonts\OpenSans-Semibold.ttf" />
-		<None Remove="Resources\Images\logoicon.svg" />
-		<None Remove="Resources\Images\logout.svg" />
 		<None Remove="Resources\Images\msLogo.png" />
 		<None Remove="Resources\Images\noconnection.png" />
 		<None Remove="Resources\Images\nodataicon.png" />
 		<None Remove="Resources\Images\onbord1.jpg" />
 		<None Remove="Resources\Images\Onbord2.jpg" />
-		<None Remove="Resources\Images\pharma1.jpg" />
-		<None Remove="Resources\Images\pharma2.jpg" />
-		<None Remove="Resources\Images\pharma3.jpg" />
 		<None Remove="Resources\Images\pharma_logo.png" />
 		<None Remove="Resources\Images\pharma_logo_blue.png" />
-		<None Remove="Resources\Images\searchscane.svg" />
-		<None Remove="Resources\Images\searchscane1.svg" />
 		<None Remove="Resources\Images\searchscane_bold.svg" />
 		<None Remove="Resources\Raw\branches.json" />
 	</ItemGroup>
@@ -175,12 +167,6 @@
 		<MauiXaml Update="Resources\Styles\FontImageSource.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\Admin\UserDetailsView.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\Admin\UsersView.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
 		<MauiXaml Update="Views\AllStockView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
@@ -193,28 +179,16 @@
 		<MauiXaml Update="Views\Templates\CallUsTemplate.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\Templates\CLInPickingTemplate.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
 		<MauiXaml Update="Views\Templates\NoDataTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Templates\NotificationTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\Templates\PopupWin.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
 		<MauiXaml Update="Views\Templates\UpDownStepper.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Templates\VerificationViewTemplate.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\Trash\AnimateBoxes.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\BarcodeReaderView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\CreateBranchView.xaml">
@@ -229,22 +203,10 @@
 		<MauiXaml Update="Views\OnbordingView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\Trash\GetDataFromDatabase.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\Trash\PharmaTabbedPage.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
 		<MauiXaml Update="Views\PickingView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\RegisterView.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\Trash\StockDetails.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\Trash\StockDetailsView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Templates\AnimatedInput.xaml">
@@ -259,13 +221,7 @@
 		<MauiXaml Update="Views\Templates\StepperField.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\Trash\TextPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
 		<MauiXaml Update="Views\UserView.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\Trash\VerificationView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\WaitingApprovalView.xaml">
@@ -289,7 +245,24 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Views\Popups\" />
+	  <MauiFont Update="Resources\Fonts\materialdesignicons.ttf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </MauiFont>
+	  <MauiFont Update="Resources\Fonts\NotoKufiArabic-ExtraLight.ttf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </MauiFont>
+	  <MauiFont Update="Resources\Fonts\NotoKufiArabic-Regular.ttf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </MauiFont>
+	  <MauiFont Update="Resources\Fonts\NotoKufiArabic-SemiBold.ttf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </MauiFont>
+	  <MauiFont Update="Resources\Fonts\OpenSans-Regular.ttf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </MauiFont>
+	  <MauiFont Update="Resources\Fonts\OpenSans-Semibold.ttf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </MauiFont>
 	</ItemGroup>
 
 </Project>

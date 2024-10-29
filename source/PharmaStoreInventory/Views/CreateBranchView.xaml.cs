@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
 using DataAccess.DomainModel;
-using DataAccess.Dtos;
 using DataAccess.Services;
 using PharmaStoreInventory.Extensions;
 using PharmaStoreInventory.Helpers;
@@ -11,8 +10,8 @@ namespace PharmaStoreInventory.Views;
 public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchViewNotification>
 {
 
-    private readonly XmlFileHandler xFileHanler;
-    private EmployeeDto? employee = null;
+    private readonly XmlFileHandler xFileHandler;
+    //private EmployeeDto? employee = null;
 
     public void Receive(CreateBranchViewNotification message)
     {
@@ -24,7 +23,7 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
     public CreateBranchView()
     {
         InitializeComponent();
-        xFileHanler = new(AppValues.XBranchsFileName);
+        xFileHandler = new(AppValues.XBranchesFileName);
     }
 
     private void ClearFocusFromAllInputsTapped(object sender, TappedEventArgs e)
@@ -44,7 +43,6 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
             {
                 var branch = new BranchModel()
                 {
-                    //Id = Guid.Parse("e3b9f4f0-0e47-46ad-bd68-bf9587b85776"),// Guid.NewGuid(),
                     Id = Guid.NewGuid(),
                     BrachName = brachName.InputText,
                     Telephone = telephone.InputText,
@@ -59,16 +57,13 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
         }
         catch (Exception ex)
         {
-
             notification.ShowMessage("exception in event clicked", ex.Message);
         }
         finally
         {
             activityIndicator.IsRunning = false;
             btnCreateBranch.IsEnabled = true;
-
         }
-
     }
 
     private bool AreEntriesValid()
@@ -112,37 +107,43 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
         return true;
     }
 
-    async Task CreateBranch(BranchModel branch)
+    private async Task CreateBranch(BranchModel branch)
     {
-        // check if this bransh is already exist. if ture? We will not add it.
-        if (await xFileHanler.IsIpAdrressExist(branch.IpAddress))
+        // check if this branch is already exist. if true? We will not add it.
+        if (await xFileHandler.IsIpAdrressExist(branch.IpAddress))
         {
-            notification.ShowMessage("Failure", "Ip Adrress already Exist");
+            notification.ShowMessage("Failure", "Ip Address already Exist");
             return;
         }
 
         var (status, message) = await ApiServices.ApiEmployeeLogin(branch);
         if (status == ConnectionErrorCode.Success)
         {
-            // 1 Save branch data on host
+            // 1 Save branch data on ModernSoft host
             var result = await ApiServices.AddBranche(branch);
-
-            if (result != null && !result.IsSuccess)
+            if (result == null)
             {
-                notification.ShowMessage("حدث خطأ عن اضافة الفرع علي الهوست", result.Message);
+                notification.ShowMessage("حدث خطأ عن اضافة الفرع علي الهوست");
                 return;
             }
 
-            //notification.ShowMessage("Contacted successfully", "The branch has been contacted successfully");
+            if(result != null && !result.IsSuccess)
+            {
+                notification.ShowMessage("لم يتم اضافة الرفع",result.Message);
+                return;
+            }
+
+
+            // 2 Toast Message
             await Alerts.DisplayToast("Contacted successfully");
 
-            // 2 Save branch data locally
-            var t1 = xFileHanler.Add(branch);
+            // 3 Save branch data locally
+            var t1 = xFileHandler.Add(branch);
 
-            // 3 Save Preferences
+            // 4 Save Preferences
             var t2 = SetPreferences(branch);
 
-            // 4 Navigation
+            // 5 Navigation
             var t4 = Navigation.PushAsync(new BranchesView());
             await Task.WhenAll(t1, t2, t4);
         }
@@ -160,68 +161,67 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
         }
     }
 
-    private async Task<ConnectionErrorCode> ApiEmployeeLogin(BranchModel branch)
-    {
-        try
-        {
-            //Strings.IP = AppPreferences.IP = branch.IpAddress;
-            //Strings.Port = AppPreferences.Port = branch.Port;
-            // http://192.168.1.103:5144/api
-            //var repo = new EmployeeRepo();
-
-            var uri = await Configuration.ConfigureBaseUrl(branch.IpAddress, branch.Port);
-
-            var emp = new LoginDto(branch.Username, branch.Password);
-            var result = await ApiServices.EmpLogin(uri, emp);
-
-            // status 1 Unable to connect to server
-            if (result == null)
-            {
-                return ConnectionErrorCode.Fail;
-            }
-            // status 2 Server connection IsSuccess
-            if (result != null && result.IsSuccess)
-            {
-                if (result.Data != null)
-                {
-                    employee = result.Data;
-                }
-                return ConnectionErrorCode.Success;
-            }
-            // status 3 Server connection IsSuccess, but username or password is incorrect
-            else
-                return ConnectionErrorCode.UsernameOrPass;
-        }
-        catch (Exception ex)
-        {
-            notification.ShowMessage("Something went wrong", ex.Message);
-            return ConnectionErrorCode.Exception;
-        }
-    }
-
-    async Task SetPreferences(BranchModel branch)
+    private async Task SetPreferences(BranchModel branch)
     {
         AppPreferences.LocalBaseURI = AppValues.LocalBaseURI = await Configuration.ConfigureBaseUrl(branch.IpAddress, branch.Port);
-        AppPreferences.LocalDbUserId = employee != null ? employee.Id : 0;
         AppPreferences.HasBranchRegistered = true;
+        //AppPreferences.LocalDbUserId = employee != null ? employee.Id : 0;
         //AppPreferences.EmpUsername = branch.Username;
         //AppPreferences.EmpPassword = branch.Password;
     }
 
-    // will deleted
-    private async void SetInputText_Tapped(object sender, TappedEventArgs e)
+    private void SetInputText_Tapped(object sender, TappedEventArgs e)
     {
         if (AppValues.IsDevelopment)
         {
-            brachName.InputText = "اسم الفرع";
-            telephone.InputText = "0402555550";
-            ipAdrress.InputText = "192.168.1.103";
-            port.InputText = "5144";
-            username.InputText = "1";
-            password.InputText = "1";
-            await inputsContainer.PositioningOfPlaceHolder();
+            brachName.SetInputText("اسم الفرع");
+            telephone.SetInputText("0402555550");
+            ipAdrress.SetInputText("192.168.1.103");
+            port.SetInputText("5145");
+            username.SetInputText("admin");
+            password.SetInputText("admin");
         }
     }
+
+    // deleted
+    //private async Task<ConnectionErrorCode> ApiEmployeeLogin(BranchModel branch)
+    //{
+    //    try
+    //    {
+    //        //Strings.IP = AppPreferences.IP = branch.IpAddress;
+    //        //Strings.Port = AppPreferences.Port = branch.Port;
+    //        // http://192.168.1.103:5144/api
+    //        //var repo = new EmployeeRepo();
+
+    //        var uri = await Configuration.ConfigureBaseUrl(branch.IpAddress, branch.Port);
+
+    //        var emp = new LoginDto(branch.Username, branch.Password);
+    //        var result = await ApiServices.EmpLogin(uri, emp);
+
+    //        // status 1 Unable to connect to server
+    //        if (result == null)
+    //        {
+    //            return ConnectionErrorCode.Fail;
+    //        }
+    //        // status 2 Server connection IsSuccess
+    //        if (result != null && result.IsSuccess)
+    //        {
+    //            if (result.Data != null)
+    //            {
+    //                employee = result.Data;
+    //            }
+    //            return ConnectionErrorCode.Success;
+    //        }
+    //        // status 3 Server connection IsSuccess, but username or password is incorrect
+    //        else
+    //            return ConnectionErrorCode.UsernameOrPass;
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        notification.ShowMessage("Something went wrong", ex.Message);
+    //        return ConnectionErrorCode.Exception;
+    //    }
+    //}
 }
 
 

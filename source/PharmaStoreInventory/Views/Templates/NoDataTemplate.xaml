@@ -10,7 +10,7 @@
     IsVisible="False"
     BackgroundColor="{StaticResource White}">
 
-    <Grid>
+    <Grid InputTransparent="False">
         <VerticalStackLayout
             VerticalOptions="Center"
             Spacing="15"
@@ -38,6 +38,9 @@
                 Text="{Binding ButtonText, Source={x:Reference ThisPage}}"
                 Command="{Binding Command, Source={x:Reference ThisPage}}" />
         </VerticalStackLayout>
+        <Grid.GestureRecognizers>
+            <TapGestureRecognizer />
+        </Grid.GestureRecognizers>
     </Grid>
 
 

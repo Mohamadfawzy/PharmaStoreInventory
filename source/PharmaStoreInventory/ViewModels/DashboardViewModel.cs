@@ -55,7 +55,7 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
     }
 
     public NoDataModel NoDataModel =>
-         new("noconnection", "Something went wrong", "We're having issues loading this page", true);
+         new("noconnection", "لقد حدث خطأ ما", "نحن نواجه مشاكل في تحميل هذه الصفحة", true);
 
     public ObservableCollection<SortModel> StoresModelList { get; set; } = [];
     public StatisticsModel? StatisticsModel { get; set; }
@@ -188,7 +188,7 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
         }
         catch (Exception ex)
         {
-            await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
+            await Helpers.Alerts.DisplaySnackBar(ex.Message, 7);
         }
     }
 
@@ -197,14 +197,11 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
         try
         {
             StatisticsModel = await ApiServices.GetProductCountsAsync(storeId);
-            if (StatisticsModel != null)
-            {
-                OnPropertyChanged(nameof(StatisticsModel));
-            }
+            OnPropertyChanged(nameof(StatisticsModel));
         }
         catch (Exception ex)
         {
-            await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
+            await Helpers.Alerts.DisplaySnackBar(ex.Message, 7);
         }
     }
     #endregion
@@ -279,7 +276,7 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
                     var result = await ApiServices.StartNewInventoryAsync(model);
                     if (result != null && result.IsSuccess)
                     {
-                        //await Helpers.Alerts.DisplaySnackbar("Start New Inventory Success", 7);
+                        //await Helpers.Alerts.DisplaySnackBar("Start New Inventory Success", 7);
                         await GetLatestInventoryHistory();
                         CountAllIsInventoryed = 0;
                         OnPropertyChanged(nameof(CountAllIsInventoryed));
@@ -293,7 +290,7 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
         }
         catch (Exception ex)
         {
-            await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
+            await Helpers.Alerts.DisplaySnackBar(ex.Message, 7);
         }
     }
 
@@ -325,7 +322,7 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
         }
         catch (Exception ex)
         {
-            await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
+            await Helpers.Alerts.DisplaySnackBar(ex.Message, 7);
         }
     }
 
@@ -338,7 +335,7 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
         }
         catch (Exception ex)
         {
-            await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
+            await Helpers.Alerts.DisplaySnackBar(ex.Message, 7);
         }
     }
 
@@ -351,7 +348,7 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
         }
         catch (Exception ex)
         {
-            await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
+            await Helpers.Alerts.DisplaySnackBar(ex.Message, 7);
         }
     }
 
@@ -364,7 +361,7 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
         }
         catch (Exception ex)
         {
-            await Helpers.Alerts.DisplaySnackbar(ex.Message, 7);
+            await Helpers.Alerts.DisplaySnackBar(ex.Message, 7);
         }
     }
 

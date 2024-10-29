@@ -8,11 +8,11 @@ public partial class BranchesView : ContentPage
 {
     private readonly XmlFileHandler xFileHanler;
     public NoDataModel NoDataModel =>
-        new("nodataicon.png", "No Data", "There is no data to show you right now", false);
+        new("nodataicon.png", "لايوجد فروع مسجلة", "يجب تسجيل فرع واحد علي الأقل", false);
     public BranchesView(bool hasBackButton = true)
     {
         InitializeComponent();
-        xFileHanler = new(AppValues.XBranchsFileName);
+        xFileHanler = new(AppValues.XBranchesFileName);
         GetAllBranchs();
 
         if (!hasBackButton)
@@ -48,40 +48,49 @@ public partial class BranchesView : ContentPage
         var btn = sender as Button;
         if (btn == null)
             return;
-
-        activityIndicator.IsRunning = true;
-        btn.IsEnabled = false;
-
-        var branch = btn.CommandParameter as BranchModel;
-        if (branch != null)
+        try
         {
-            var (status, message) = await ApiServices.ApiEmployeeLogin(branch);
-            if (status == ConnectionErrorCode.Success)
+
+            activityIndicator.IsRunning = true;
+            btn.IsEnabled = false;
+
+            var branch = btn.CommandParameter as BranchModel;
+            if (branch != null)
             {
-                notification.ShowMessage("Contacted successfully", "The branch has been contacted successfully");
-                AppPreferences.LocalBaseURI = AppValues.LocalBaseURI = await Configuration.ConfigureBaseUrl(branch.IpAddress, branch.Port);
-                AppPreferences.HasBranchRegistered = true;
-                if (App.Current != null)
-                    App.Current.MainPage = new NavigationPage(new DashboardView());
+                var (status, message) = await ApiServices.ApiEmployeeLogin(branch);
+                if (status == ConnectionErrorCode.Success)
+                {
+                    notification.ShowMessage("Contacted successfully", "The branch has been contacted successfully");
+                    AppPreferences.LocalBaseURI = AppValues.LocalBaseURI = await Configuration.ConfigureBaseUrl(branch.IpAddress, branch.Port);
+                    AppPreferences.HasBranchRegistered = true;
+                    if (App.Current != null)
+                        App.Current.MainPage = new NavigationPage(new DashboardView());
+                }
+                else if (status == ConnectionErrorCode.Fail)
+                {
+                    notification.ShowMessage("فشل في الاتصال بالسيرفر", "IP or Port is Incorrect");
+                }
+                else if (status == ConnectionErrorCode.UsernameOrPass)
+                {
+                    notification.ShowMessage("فشل في الاتصال بالنظام", "username or Password is Incorrect");
+                }
+                else
+                {
+                    notification.ShowMessage("Something went wrong", message);
+                }
+                //GetAllBranchs();
             }
-            else if (status == ConnectionErrorCode.Fail)
-            {
-                notification.ShowMessage("فشل في الاتصال بالسيرفر", "IP or Port is Incorrect");
-            }
-            else if (status == ConnectionErrorCode.UsernameOrPass)
-            {
-                notification.ShowMessage("فشل في الاتصال بالنظام", "username or Password is Incorrect");
-            }
-            else
-            {
-                notification.ShowMessage("Something went wrong", message);
-            }
-            //GetAllBranchs();
+        }
+        catch
+        {
+            notification.ShowMessage("Something went wrong", "Exception");
+        }
+        finally
+        {
+            btn.IsEnabled = true;
+            activityIndicator.IsRunning = false;
         }
 
-
-        btn.IsEnabled = true;
-        activityIndicator.IsRunning = false;
     }
 
     private async void GetAllBranchs()

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AdminApp.Views.LoginView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:template="clr-namespace:Shared.MAUI.Templates;assembly=Shared.MAUI"
+    x:Name="ThisPage"
+    Title="LoginView"
+    NavigationPage.HasNavigationBar="False">
+
+    <!--  21:10:2024 7:44 PM  -->
+    <Grid>
+        <template:NotificationTemplate
+            x:Name="notification"
+            Grid.RowSpan="5"
+            ZIndex="1" />
+        <ScrollView>
+            <StackLayout BackgroundColor="{StaticResource Primary800}">
+
+                <VerticalStackLayout Padding="0,15" HorizontalOptions="Center">
+                    <!--  Logo  -->
+                    <Image
+                        Source="mo_ssoft_logo_hd.png"
+                        Aspect="AspectFill"
+                        HeightRequest="130" />
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="SetInputText_Tapped" />
+                    </VerticalStackLayout.GestureRecognizers>
+                </VerticalStackLayout>
+
+                <!--  Form  -->
+                <Border
+                    Margin="0,0,0,0"
+                    Padding="0,0"
+                    StrokeThickness="2"
+                    BackgroundColor="White"
+                    StrokeShape="RoundRectangle 90 0 0 0 ">
+
+                    <Grid RowDefinitions="*,500">
+                        <VerticalStackLayout>
+
+                            <Label
+                                Margin="20"
+                                FontSize="20"
+                                TextColor="{StaticResource Primary600}"
+                                Text="تسجيل الدخول"
+                                FontFamily="{StaticResource KufiSemiBold}"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Center" />
+
+                            <!--  Inputs  -->
+                            <VerticalStackLayout
+                                x:Name="inputsContainer"
+                                Padding="20,0"
+                                MinimumHeightRequest="100">
+                                <template:AnimatedInput
+                                    x:Name="email"
+                                    ErrorMessage="أدخل الايميل أور قم الهاتف بشكل صحيح"
+                                    InputPlaceholder="entrer you email" />
+
+                                <template:AnimatedInput
+                                    x:Name="password"
+                                    IsPassword="True"
+                                    HasEyeIcon="True"
+                                    InputPlaceholder="كلمة المرور" />
+                            </VerticalStackLayout>
+
+                            <!--  Buttons Section  -->
+                            <VerticalStackLayout Padding="20,0">
+
+                                <!--  Login Button  -->
+                                <Button
+                                    x:Name="loginButton"
+                                    Margin="0,30,0,0"
+                                    Text="تسجيل الدخول"
+                                    Clicked="LoginClicked" />
+
+                            </VerticalStackLayout>
+
+                        </VerticalStackLayout>
+
+                    </Grid>
+
+                </Border>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="ClearFocusFromAllInputsTapped" />
+                </StackLayout.GestureRecognizers>
+
+            </StackLayout>
+        </ScrollView>
+
+
+        <!--  ActivityIndicator  -->
+        <ActivityIndicator
+            x:Name="activityIndicator"
+            Grid.Row="0"
+            Grid.RowSpan="4"
+            VerticalOptions="Center"
+            ZIndex="1"
+            IsRunning="False"
+            Color="{StaticResource Primary600}" />
+    </Grid>
+</ContentPage>

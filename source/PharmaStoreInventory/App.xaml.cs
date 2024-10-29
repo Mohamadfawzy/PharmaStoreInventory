@@ -13,26 +13,35 @@ public partial class App : Application
         InitializeComponent();
         SetCulture("ar");
         HandlePreferencesKeys();
+        IsDevelopmentMode();
 
-        //if (AppPreferences.IsFirstTime)
-        //{
-        //    MainPage = new NavigationPage(new OnbordingView());
-        //}
-        //else if (!AppPreferences.IsLoggedIn)
-        //{
-        //    MainPage = new NavigationPage(new LoginView());
-        //}
-        //else if (!AppPreferences.HasBranchRegistered)
-        //{
-        //    //MainPage = new NavigationPage(new CreateBranchView());
-        //    MainPage = new NavigationPage(new BranchesView(false));
-        //}
-        //else
-        //{
-        //    MainPage = new NavigationPage(new DashboardView());
-        //}
 
-        MainPage = new NavigationPage(new OnbordingView ());
+        if (AppPreferences.IsFirstTime)
+        {
+            MainPage = new NavigationPage(new OnbordingView());
+        }
+        else if (!AppPreferences.IsLoggedIn)
+        {
+            MainPage = new NavigationPage(new LoginView());
+        }
+        else if (!AppPreferences.HasBranchRegistered)
+        {
+            MainPage = new NavigationPage(new BranchesView(false));
+        }
+        else
+        {
+            MainPage = new NavigationPage(new DashboardView());
+        }
+
+        //MainPage = new NavigationPage(new OnbordingView ());
+    }
+
+    private void IsDevelopmentMode()
+    {
+#if DEBUG
+        AppValues.HostBaseURI = "http://192.168.1.103:5219/api";
+        AppValues.IsDevelopment = true;
+#endif
     }
 
 #pragma warning disable CA1822

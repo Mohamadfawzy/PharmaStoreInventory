@@ -141,9 +141,10 @@ public partial class UserView : ContentPage
 
     private async void SaveChangePasswordClicked(object sender, EventArgs e)
     {
+        errorLabel.IsVisible = false;
         var model = new ChangePasswordRequest()
         {
-            UserId = Helpers.AppPreferences.HostUserId,
+            UserId = AppPreferences.HostUserId,
             CurrentPassword = oldPassword.InputText,
             NewPassword = newPassword.InputText,
             ConfirmNewPassword = confirmPassword.InputText,
@@ -152,15 +153,21 @@ public partial class UserView : ContentPage
         var res = await ApiServices.UserChangePasswordAsync(model);
         if (res != null && res.IsSuccess)
         {
-            await Helpers.Alerts.DisplaySnackbar(res.Message);
+            await Alerts.DisplayToast("تم التحديث");
+            ClosePopup();
+        }
+        else
+        {
+            errorLabel.IsVisible = true;
+            errorLabel.Text = "لم يتم تحديث الرقم السري";
         }
     }
 
     private void Logout()
     {
-        File.Delete(AppValues.XBranchsFileName);
+        File.Delete(AppValues.XBranchesFileName);
         File.Delete(AppValues.UserFileName);
-        File.Delete(AppValues.BranchsFileName);
+        File.Delete(AppValues.BranchesFileName);
 
 
         AppPreferences.LocalDbUserId = 0;
@@ -180,9 +187,9 @@ public partial class UserView : ContentPage
     
     private async void Reset()
     {
-        File.Delete(AppValues.XBranchsFileName);
+        File.Delete(AppValues.XBranchesFileName);
         File.Delete(AppValues.UserFileName);
-        File.Delete(AppValues.BranchsFileName);
+        File.Delete(AppValues.BranchesFileName);
 
         AppPreferences.HostUserId = 0;
         AppPreferences.LocalDbUserId = 0;

@@ -18,19 +18,25 @@
         <vm:RegisterViewModel />
     </ContentPage.BindingContext>-->
     <Grid>
+        <!--  Notification  -->
         <template:NotificationTemplate
             x:Name="notification"
             Grid.RowSpan="3"
             ZIndex="3" />
+
+        <!--  Content  -->
         <ScrollView x:Name="scroll">
             <StackLayout x:Name="manStack" BackgroundColor="{StaticResource Primary800}">
 
-                <VerticalStackLayout Padding="30" InputTransparent="True">
+                <VerticalStackLayout Padding="0,15" HorizontalOptions="Center">
                     <!--  Logo  -->
                     <Image
                         Source="pharma_logo.png"
                         Aspect="AspectFit"
-                        HeightRequest="100" />
+                        HeightRequest="130" />
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="SetInputText_Tapped" />
+                    </VerticalStackLayout.GestureRecognizers>
                 </VerticalStackLayout>
 
                 <!--  Form  -->
@@ -56,6 +62,7 @@
                                 x:Name="inputsContainer"
                                 Grid.Row="1"
                                 Padding="20,0">
+
                                 <!--  FullName  -->
                                 <template:AnimatedInput
                                     x:Name="fullName"
@@ -113,7 +120,10 @@
                                         VerticalOptions="Center"
                                         FontSize="{StaticResource Small}" />
                                     <!--  login button  -->
-                                    <Button Style="{StaticResource Anchor}" Text="تسجيل دخول">
+                                    <Button
+                                        Style="{StaticResource Anchor}"
+                                        Text="تسجيل دخول"
+                                        Clicked="GoToLoginViewClicked">
                                         <Button.Behaviors>
                                             <toolkit:TouchBehavior
                                                 DefaultAnimationDuration="250"
@@ -135,12 +145,14 @@
             </StackLayout>
         </ScrollView>
 
+        <!--  VerificationView  -->
         <template:VerificationViewTemplate
             x:Name="verificationViewTemplate"
             Grid.RowSpan="3"
             IsVisible="False"
             SubmitClicked="VerificationViewTemplate_SubmitClicked"
             ZIndex="2" />
+
         <!--  ActivityIndicator  -->
         <ActivityIndicator
             x:Name="activityIndicator"

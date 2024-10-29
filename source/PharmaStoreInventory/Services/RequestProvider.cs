@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
+using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Languages;
 using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.Models;
@@ -10,7 +11,6 @@ namespace PharmaStoreInventory.Services;
 
 public static class RequestProvider
 {
-    // request.Headers.Add("DbConnectionString", Helpers.AppValues.ConnectionString);
     private const short timeoutInSeconds = 20;
     public static async Task<List<TResult>?> GetAllAsync3<TResult>(string uri)
     {
@@ -21,6 +21,8 @@ public static class RequestProvider
             var client = new HttpClient();
             client.Timeout = TimeSpan.FromSeconds(timeoutInSeconds);
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
+            request.Headers.Add("Authorization", AppPreferences.Token);
+
             var response = await client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             if (response.StatusCode == HttpStatusCode.NoContent)
@@ -72,6 +74,8 @@ public static class RequestProvider
             var client = new HttpClient();
             client.Timeout = TimeSpan.FromSeconds(timeoutInSeconds);
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
+            request.Headers.Add("Authorization", AppPreferences.Token);
+
             var response = await client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             if (response.StatusCode == HttpStatusCode.NoContent)
@@ -150,6 +154,8 @@ public static class RequestProvider
             var client = new HttpClient();
             client.Timeout = TimeSpan.FromSeconds(timeoutInSeconds);
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
+            request.Headers.Add("Authorization", AppPreferences.Token);
+
             var response = await client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             if (response.StatusCode == HttpStatusCode.NoContent)
@@ -200,6 +206,8 @@ public static class RequestProvider
             var client = new HttpClient();
             client.Timeout = TimeSpan.FromSeconds(timeoutInSeconds);
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
+            request.Headers.Add("Authorization", AppPreferences.Token);
+
             var response = await client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             if (response.StatusCode == HttpStatusCode.NoContent)
@@ -251,6 +259,8 @@ public static class RequestProvider
                 Timeout = TimeSpan.FromSeconds(timeoutInSeconds)
             };
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
+            request.Headers.Add("Authorization", AppPreferences.Token);
+
             var response = await client.SendAsync(request);
 
             if (response.StatusCode == HttpStatusCode.OK)
@@ -267,17 +277,19 @@ public static class RequestProvider
     }
 
 
-    public static async Task<(TResult? content, ErrorMessage? error)> PostSingleAsync<TResult, TTake>(string uri, TTake data,string tokn = "")
+    public static async Task<(TResult? content, ErrorMessage? error)> PostSingleAsync<TResult, TTake>(string uri, TTake data, string tokn = "")
     {
-        ErrorMessage? message = null;
-        using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(timeoutInSeconds) };
-        using var request = new HttpRequestMessage(HttpMethod.Post, uri)
-        {
-            Content = JsonContent.Create(data) // Serialize the data object to JSON and set it as content
-        };
 
+        ErrorMessage? message = null;
         try
         {
+            using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(timeoutInSeconds) };
+            using var request = new HttpRequestMessage(HttpMethod.Post, uri)
+            {
+                Content = JsonContent.Create(data) // Serialize the data object to JSON and set it as content
+            };
+            request.Headers.Add("Authorization", AppPreferences.Token);
+
             // Send the POST request and ensure the response status code indicates success
             using var response = await client.SendAsync(request).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
@@ -320,7 +332,7 @@ public static class RequestProvider
         }
         message.Body = $"{nameof(PostSingleAsync)} {message.Body}";
         //WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
-        return default;
+        return (default, message);
     }
 
     public static async Task<TResult?> PutByQueryParamsAsync<TResult>(string uri)
@@ -331,6 +343,7 @@ public static class RequestProvider
         {
             var client = new HttpClient();
             var request = new HttpRequestMessage(HttpMethod.Put, uri);
+            request.Headers.Add("Authorization", AppPreferences.Token);
             var response = await client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             if (response.StatusCode == HttpStatusCode.NoContent)
@@ -376,15 +389,17 @@ public static class RequestProvider
     {
         ErrorMessage message;
 
-        // Use HttpClient as a static/shared instance for better performance and to avoid socket exhaustion
-        using var client = new HttpClient();
-        using var request = new HttpRequestMessage(HttpMethod.Put, uri)
-        {
-            Content = JsonContent.Create(data)  // Serialize the data object to JSON and set as content
-        };
 
         try
         {
+
+            // Use HttpClient as a static/shared instance for better performance and to avoid socket exhaustion
+            using var client = new HttpClient();
+            using var request = new HttpRequestMessage(HttpMethod.Put, uri)
+            {
+                Content = JsonContent.Create(data)  // Serialize the data object to JSON and set as content
+            };
+            request.Headers.Add("Authorization", AppPreferences.Token);
             // Send the PUT request and ensure the response status code indicates success
             using var response = await client.SendAsync(request).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
@@ -431,12 +446,12 @@ public static class RequestProvider
     public static async Task<TResult?> DeleteAsync<TResult>(string uri)
     {
         ErrorMessage message;
-
-        using var client = new HttpClient();
-        using var request = new HttpRequestMessage(HttpMethod.Delete, uri);
-
         try
         {
+            using var client = new HttpClient();
+            using var request = new HttpRequestMessage(HttpMethod.Delete, uri);
+            request.Headers.Add("Authorization", AppPreferences.Token);
+
             // Send the PUT request and ensure the response status code indicates success
             using var response = await client.SendAsync(request).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();

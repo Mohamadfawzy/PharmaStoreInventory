@@ -70,7 +70,7 @@ public partial class AllStockView : ContentPage
         var checkBox = sender as CheckBox;
         if (checkBox?.ClassId == "CheckBox_1")
         {
-            await Alerts.DisplaySnackbar("1_CheckBox");
+            await Alerts.DisplaySnackBar("1_CheckBox");
         }
     }
 
@@ -89,7 +89,7 @@ public partial class AllStockView : ContentPage
         }
         catch (Exception ex)
         {
-            await Alerts.DisplaySnackbar("TapGestureRecognizer_Tapped" + ex.Message);
+            await Alerts.DisplaySnackBar("TapGestureRecognizer_Tapped" + ex.Message);
         }
     }
 }

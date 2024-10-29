@@ -130,3 +130,11 @@ public class Result
         };
     }
 }
+
+
+public class AuthResult<T>
+{
+    public Result<T>? Result { get; set; }
+    public AuthModel? Auth { get; set; }
+
+}

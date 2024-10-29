@@ -12,7 +12,7 @@ namespace PharmaStoreInventory.Views;
 
 public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotification>
 {
-    private string verificationCodeSended = string.Empty;
+    private string verificationCodeSent = string.Empty;
     bool isEmailVerified = false;
     private UserRegisterDto uRegister = new();
     private readonly MailingService mailingService;
@@ -25,8 +25,7 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
     }
     private async void ThisPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {
-        // when releas remove this
-        await inputsContainer.PositioningOfPlaceHolder();
+
     }
 
     public void Receive(RegisterViewNotification message)
@@ -62,6 +61,7 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
                 Email = email.InputText,
                 PharmcyName = pharmacyName.InputText,
                 PhoneNumber = telephone.InputText,
+                DeviceID = AppPreferences.GetDeviceID()
             };
 
             AppPreferences.UserEmail = uRegister.Email;
@@ -80,7 +80,7 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
                     var res = await mailingService.SendVerificationCodeAsync(uRegister.Email!, null, uRegister.FullName);
                     if (res != null && res.IsSuccess)
                     {
-                        verificationCodeSended = res.Data;
+                        verificationCodeSent = res.Data;
                         notification.ShowMessage("تم ارسال كود تحقق");
                     }
                     else
@@ -147,7 +147,7 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
     {
         try
         {
-            var res = await ApiServices.RegisterUserAcync(user);
+            var res = await ApiServices.RegisterUserAsync(user);
             if (res == null)
             {
                 notification.ShowMessage("تحقق من الاتصال بالانترنت");
@@ -203,7 +203,7 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
 
     private void VerificationViewTemplate_SubmitClicked(object sender, EventArgs e)
     {
-        if (verificationCodeSended == verificationViewTemplate.GetCode())
+        if (verificationCodeSent == verificationViewTemplate.GetCode())
         {
             notification.ShowMessage("تم التحقق من الإيميل");
             mainCreationButton.Text = "تأكيد إنشاء الحساب";
@@ -218,19 +218,24 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
     }
 
     // will deleted
-    private async void SetInputText_Tapped(object sender, TappedEventArgs e)
+    private void SetInputText_Tapped(object sender, TappedEventArgs e)
     {
         if (AppValues.IsDevelopment)
         {
-            if(AppPreferences.HasBranchRegistered)
-            fullName.InputText = "محمد هلال";
-            confirmPassword.InputText = "123456";
-            password.InputText = "123456";
-            email.InputText = "mofawzyhelal@gmail.com";
-            pharmacyName.InputText = "صيدلية 1";
-            telephone.InputText = "01093052427";
-            await inputsContainer.PositioningOfPlaceHolder();
+            //if(AppPreferences.HasBranchRegistered)
+            fullName.SetInputText("محمد هلال");
+            confirmPassword.SetInputText("123456");
+            password.SetInputText("123456");
+            email.SetInputText("mofawzyhelal@gmail.com");
+            pharmacyName.SetInputText("صيدلية 1");
+            telephone.SetInputText("01093052427");
         }
+    }
+
+    private async void GoToLoginViewClicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new LoginView());
+        Navigation.RemovePage(this);
     }
 }
 
@@ -252,7 +257,3 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
 
 
 
-//var stopWatch = new Stopwatch();
-//stopWatch.Start();
-//stopWatch.Stop();
-//timer.Text = stopWatch.Elapsed.Microseconds.ToString();

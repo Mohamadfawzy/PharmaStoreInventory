@@ -23,4 +23,30 @@ public static class ExceptionLogger
             Console.WriteLine($"Failed to log exception: {loggingEx.Message}");
         }
     }
+
+    //[HttpGet("exeption")]
+    //public IActionResult MyExeption()
+    //{
+    //    var list = new List<string>();
+    //    try
+    //    {
+    //        // كود قد يسبب استثناء
+    //        throw new InvalidOperationException("Sample exception");
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Console.WriteLine("Exception Message: " + ex.Message);
+
+    //        // إنشاء StackTrace من الاستثناء
+    //        StackTrace trace = new StackTrace(ex, true);
+
+    //        // الحصول على الإطارات (frames) داخل stack trace
+    //        for (int i = 0; i < trace.FrameCount; i++)
+    //        {
+    //            StackFrame frame = trace.GetFrame(i);
+    //            list.Add($"Method: {frame.GetMethod().Name}, Line: {frame.GetFileLineNumber()}");
+    //        }
+    //    }
+    //    return Ok(list);
+    //}
 }

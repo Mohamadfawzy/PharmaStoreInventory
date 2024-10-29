@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AdminApp.Views.UsersView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:icon="clr-namespace:Shared.MAUI.Fonts;assembly=Shared.MAUI"
+    xmlns:vm="clr-namespace:AdminApp.ViewModels"
+    Title="UsersView">
+
+    <ContentPage.BindingContext>
+        <vm:UsersViewModel />
+    </ContentPage.BindingContext>
+
+
+    <Grid
+        ColumnDefinitions="*,*"
+        RowDefinitions="Auto,Auto,*"
+        RowSpacing="10">
+
+        <!--  Hedear  -->
+        <StackLayout
+            Grid.ColumnSpan="2"
+            Padding="20,7"
+            Orientation="Horizontal"
+            BackgroundColor="{StaticResource PrimaryDark}">
+            <Label Text="ترحيب باسم المستخدم" TextColor="{StaticResource Primary050}" />
+            <Frame
+                Padding="8,8"
+                CornerRadius="70"
+                BackgroundColor="Transparent"
+                HorizontalOptions="EndAndExpand">
+                <Label
+                    Text="{x:Static icon:IconFont.Text}"
+                    TextColor="{StaticResource Primary050}"
+                    FontSize="27"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Fill"
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"
+                    FontFamily="{StaticResource IconFont}" />
+
+                <!--<Frame.Behaviors>
+                    <toolkit:TouchBehavior DefaultAnimationDuration="250"
+                                           DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+                                           PressedBackgroundColor="#30000000"
+                                           PressedOpacity="0.9"
+                                           PressedScale="0.9" />
+                </Frame.Behaviors>-->
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="HamburgerTapped" />
+                </Frame.GestureRecognizers>
+            </Frame>
+        </StackLayout>
+
+        <!--  2 Taps  -->
+        <!--<Button
+            x:Name="newUsersTab"
+            Grid.Row="1"
+            Margin="10,0"
+            Text="طلبات التفعيل"
+            Command="{Binding NewUsersTabCommand}"
+            CommandParameter="1"
+            BorderColor="{StaticResource Primary950}">
+            <Button.Triggers>
+                <DataTrigger
+                    TargetType="Button"
+                    Binding="{Binding EnableNewUsersTab}"
+                    Value="false">
+                    <Setter Property="BackgroundColor" Value="{StaticResource Primary100}" />
+                    <Setter Property="TextColor" Value="{StaticResource Primary300}" />
+                </DataTrigger>
+            </Button.Triggers>
+        </Button>
+
+        <Button
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="10,0"
+            Command="{Binding NewUsersTabCommand}"
+            CommandParameter="2"
+            BackgroundColor="{StaticResource Primary100}"
+            TextColor="{StaticResource Primary300}"
+            Text="الكل"
+            BorderColor="{StaticResource Primary100}">
+            <Button.Triggers>
+                <DataTrigger
+                    TargetType="Button"
+                    Binding="{Binding EnableNewUsersTab}"
+                    Value="false">
+                    <Setter Property="BackgroundColor" Value="{StaticResource Primary900}" />
+                    <Setter Property="TextColor" Value="{StaticResource Primary050}" />
+                </DataTrigger>
+            </Button.Triggers>
+        </Button>-->
+
+        <!--  if colection empty  -->
+        <VerticalStackLayout
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Grid.ColumnSpan="2"
+            IsVisible="{Binding IsPlaceholderVisible}"
+            HorizontalOptions="Center"
+            VerticalOptions="Center">
+            <Label
+                Text="لا يوجد طلبات تفعيل"
+                HorizontalTextAlignment="Center"
+                FontSize="25" />
+        </VerticalStackLayout>
+
+        <!--  FilterOption  -->
+        <CollectionView
+            x:Name="usersFilterOptionCollection"
+            Grid.Row="1"
+            Grid.ColumnSpan="2"
+            SelectionMode="Single"
+            ItemsSource="{Binding UsersFilterOption}"
+            SelectionChangedCommand="{Binding UsersFilterOptionSelectionChangedCommand}"
+            SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference usersFilterOptionCollection}}">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10,0" BackgroundColor="White">
+                        <Border
+                            Padding="5,3"
+                            BackgroundColor="{StaticResource Primary100}"
+                            StrokeShape="RoundRectangle 15">
+                            <StackLayout Orientation="Horizontal">
+                                <!--  Name of the Select  -->
+                                <Label Text="{Binding Name}" FontSize="20" />
+                            </StackLayout>
+                            <Border.Triggers>
+                                <DataTrigger
+                                    TargetType="Border"
+                                    Binding="{Binding IsSelected}"
+                                    Value="True">
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Primary500}" />
+                                </DataTrigger>
+                            </Border.Triggers>
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!--  Collection  -->
+        <RefreshView
+            Grid.Row="2"
+            Grid.ColumnSpan="2"
+            IsRefreshing="{Binding IsRefreshing}"
+            Command="{Binding RefreshCommand}">
+            <CollectionView x:Name="collection" ItemsSource="{Binding Users}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Margin="0,2"
+                            Padding="10"
+                            StrokeShape="RoundRectangle 6"
+                            Stroke="{StaticResource Primary100}">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding FullName}" FontSize="30" />
+                                <Label Text="{Binding PharmcyName}" />
+                                <Label Text="{Binding CreateOn, StringFormat='{}{0:MM-dd-yyyy}'}" />
+                                <Button
+                                    Grid.Column="1"
+                                    Margin="20,0"
+                                    Padding="50,0"
+                                    Text="قبول"
+                                    FontSize="14"
+                                    HeightRequest="40"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:UsersViewModel}}, Path=ActiveAccountCommand}"
+                                    CommandParameter="{Binding .}"
+                                    BackgroundColor="{StaticResource SuccessColor}"
+                                    HorizontalOptions="End">
+                                    <Button.Triggers>
+                                        <DataTrigger
+                                            TargetType="Button"
+                                            Binding="{Binding IsActive}"
+                                            Value="true">
+                                            <Setter Property="IsVisible" Value="False" />
+                                        </DataTrigger>
+                                    </Button.Triggers>
+                                </Button>
+                            </VerticalStackLayout>
+
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="GoToUserDetailsViewTapped" />
+                            </Border.GestureRecognizers>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.Header>
+                    <StackLayout Padding="1" />
+                </CollectionView.Header>
+
+                <CollectionView.Footer>
+                    <StackLayout Padding="20,0" MinimumHeightRequest="50">
+                        <!--  Load More Button  -->
+                        <Button
+                            IsVisible="{Binding IsLoadMoreButtonVisible}"
+                            BackgroundColor="White"
+                            TextColor="Black"
+                            Text="تحميل المزيد"
+                            FontFamily="{StaticResource KufiSemiBold}"
+                            Command="{Binding LoadMoreDataCommand}" />
+                    </StackLayout>
+                </CollectionView.Footer>
+            </CollectionView>
+        </RefreshView>
+
+        <!--<ScrollView
+            Grid.Row="2"
+            Grid.ColumnSpan="2"
+            Margin="10,0"
+            VerticalScrollBarVisibility="Never">
+            <FlexLayout
+                x:Name="flexLayoutItems"
+                Padding="0"
+                BackgroundColor="{StaticResource White}"
+                FlowDirection="LeftToRight"
+                BindableLayout.ItemsSource="{Binding Users}"
+                IsClippedToBounds="True"
+                Direction="Column"
+                HorizontalOptions="Center"
+                Wrap="NoWrap"
+                JustifyContent="Start">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate />
+                </BindableLayout.ItemTemplate>
+            </FlexLayout>
+        </ScrollView>-->
+        <ActivityIndicator
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Grid.ColumnSpan="2"
+            VerticalOptions="Center"
+            ZIndex="1"
+            IsRunning="{Binding ActivityIndicatorRunning}"
+            Color="{StaticResource Primary600}" />
+    </Grid>
+</ContentPage>

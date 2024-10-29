@@ -58,7 +58,10 @@
         </StackLayout>
 
         <!--  SEARCH BOX  -->
-        <StackLayout Grid.Row="1" Orientation="Horizontal" BackgroundColor="{StaticResource Primary800}">
+        <StackLayout
+            Grid.Row="1"
+            Orientation="Horizontal"
+            BackgroundColor="{StaticResource Primary800}">
             <template:SearchBoxTemplate Command="{Binding SearchBoxTypingCommand}" HorizontalOptions="FillAndExpand" />
             <!--  Filter Icon  -->
             <Frame
@@ -82,8 +85,11 @@
             </Frame>
         </StackLayout>
 
-        <ScrollView Grid.Row="2" Margin="10" VerticalScrollBarVisibility="Never">
-
+        <!--  List Of Product  -->
+        <ScrollView
+            Grid.Row="2"
+            Margin="10"
+            VerticalScrollBarVisibility="Never">
             <FlexLayout
                 x:Name="flexLayoutItems"
                 Padding="0"
@@ -97,7 +103,10 @@
                 JustifyContent="Start">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate>
-                        <Border Margin="0,2" StrokeShape="RoundRectangle 6" Stroke="{StaticResource Primary100}">
+                        <Border
+                            Margin="0,2"
+                            StrokeShape="RoundRectangle 6"
+                            Stroke="{StaticResource Primary100}">
                             <StackLayout Orientation="Horizontal">
                                 <BoxView
                                     Margin="0,0"
@@ -119,27 +128,40 @@
                                         FontSize="15" />
 
                                     <!--  Quantity  -->
-                                    <HorizontalStackLayout Grid.Row="2" Spacing="3">
+                                    <HorizontalStackLayout
+                                        Grid.Row="2"
+                                        Padding="0,0,0,5"
+                                        Spacing="3">
                                         <Label
                                             Margin="0"
                                             Padding="0"
                                             FontSize="20"
-                                            Text="{Binding Quantity}"
+                                            Text="{Binding FormattedQuantity}"
+                                            FontFamily="{StaticResource OpenSansRegular}"
                                             TextColor="{StaticResource Primary700}"
                                             VerticalTextAlignment="End" />
-                                        <Label Text="Stock" VerticalTextAlignment="End" FontSize="10" />
+                                        <Label
+                                            Text="Stock"
+                                            VerticalTextAlignment="End"
+                                            FontSize="10" />
                                     </HorizontalStackLayout>
 
                                     <!--  Price Group  -->
-                                    <HorizontalStackLayout Grid.Row="2" Spacing="3" HorizontalOptions="End">
+                                    <HorizontalStackLayout
+                                        Grid.Row="2"
+                                        Padding="0,0,0,5"
+                                        Spacing="3"
+                                        HorizontalOptions="End">
                                         <Label
                                             Margin="0"
                                             Padding="0"
-                                            Text="{Binding SalePrice}"
+                                            Text="{Binding FormattedPrice}"
+                                            FontFamily="{StaticResource OpenSansRegular}"
                                             TextColor="{StaticResource Primary300}"
                                             VerticalTextAlignment="End" />
                                         <Label
                                             Text="L.E"
+                                            FontFamily="{StaticResource OpenSansRegular}"
                                             VerticalTextAlignment="End"
                                             TextColor="{StaticResource Gray300}"
                                             FontSize="10" />
@@ -155,8 +177,6 @@
                 </BindableLayout.ItemTemplate>
             </FlexLayout>
         </ScrollView>
-
-
 
         <!--  Filter  -->
         <Grid
@@ -202,11 +222,17 @@
                         SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference sortCollection}}">
                         <CollectionView.Header>
                             <StackLayout>
-                                <Label Text="ترتيب حسب" HorizontalOptions="Start" FontFamily="{StaticResource KufiSemiBold}" />
+                                <Label
+                                    Text="ترتيب حسب"
+                                    HorizontalOptions="Start"
+                                    FontFamily="{StaticResource KufiSemiBold}" />
                             </StackLayout>
                         </CollectionView.Header>
                         <CollectionView.ItemsLayout>
-                            <GridItemsLayout Span="2" Orientation="Vertical" HorizontalItemSpacing="15" />
+                            <GridItemsLayout
+                                Span="2"
+                                Orientation="Vertical"
+                                HorizontalItemSpacing="15" />
                         </CollectionView.ItemsLayout>
 
                         <CollectionView.ItemTemplate>
@@ -223,7 +249,10 @@
                                         HorizontalOptions="End"
                                         VerticalOptions="Center">
                                         <Label.Triggers>
-                                            <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
+                                            <DataTrigger
+                                                TargetType="Label"
+                                                Binding="{Binding IsSelected}"
+                                                Value="True">
                                                 <Setter Property="Text" Value="{x:Static icon:IconFont.CheckboxMarkedCircle}" />
                                                 <Setter Property="TextColor" Value="{StaticResource Primary700}" />
                                                 <!--  Multiple Setter elements are allowed  -->
@@ -263,11 +292,17 @@
                         <!--  Is there a group option filter?  -->
                         <Label Text="دمج حسب سعر البيع" />
                         <Label Grid.Row="1" Text="لا تعرض الكميات الأقل من صفر" />
-                        <Label Grid.Row="2" Text="عدد الأصناف في الصفحة" VerticalTextAlignment="Center" />
+                        <Label
+                            Grid.Row="2"
+                            Text="عدد الأصناف في الصفحة"
+                            VerticalTextAlignment="Center" />
 
                         <!--  Is there a ... option filter?  -->
 
-                        <CheckBox Grid.Column="1" HorizontalOptions="Center" IsChecked="{Binding FilterIsGroup}" />
+                        <CheckBox
+                            Grid.Column="1"
+                            HorizontalOptions="Center"
+                            IsChecked="{Binding FilterIsGroup}" />
                         <CheckBox
                             Grid.Row="1"
                             Grid.Column="1"
@@ -279,13 +314,22 @@
                             Padding="10,0"
                             HorizontalOptions="Center"
                             StrokeShape="RoundRectangle 8">
-                            <Entry HorizontalTextAlignment="Center" Text="{Binding PageSize}" TextColor="Black" />
+                            <Entry
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding PageSize}"
+                                TextColor="Black" />
                         </Border>
 
                         <!--  عدد الاصناف في الصفحة  -->
-                        <HorizontalStackLayout Grid.Row="2" IsVisible="False" Spacing="10">
+                        <HorizontalStackLayout
+                            Grid.Row="2"
+                            IsVisible="False"
+                            Spacing="10">
                             <Label Text="عدد الأصناف في الصفحة" VerticalTextAlignment="Center" />
-                            <Border Padding="10,0" HorizontalOptions="Start" StrokeShape="RoundRectangle 8">
+                            <Border
+                                Padding="10,0"
+                                HorizontalOptions="Start"
+                                StrokeShape="RoundRectangle 8">
                                 <Entry
                                     Keyboard="Numeric"
                                     HorizontalTextAlignment="Center"
@@ -313,7 +357,10 @@
                             SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference hasExpiryCollection}}">
 
                             <CollectionView.ItemsLayout>
-                                <GridItemsLayout Span="2" Orientation="Vertical" HorizontalItemSpacing="15" />
+                                <GridItemsLayout
+                                    Span="2"
+                                    Orientation="Vertical"
+                                    HorizontalItemSpacing="15" />
                             </CollectionView.ItemsLayout>
 
                             <CollectionView.ItemTemplate>
@@ -330,7 +377,10 @@
                                             HorizontalOptions="End"
                                             VerticalOptions="Center">
                                             <Label.Triggers>
-                                                <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
+                                                <DataTrigger
+                                                    TargetType="Label"
+                                                    Binding="{Binding IsSelected}"
+                                                    Value="True">
                                                     <Setter Property="Text" Value="{x:Static icon:IconFont.CheckboxMarkedCircle}" />
                                                     <Setter Property="TextColor" Value="{StaticResource Primary700}" />
                                                 </DataTrigger>
@@ -354,13 +404,19 @@
             </ScrollView>
 
             <Grid.Triggers>
-                <DataTrigger TargetType="Grid" Binding="{Binding BottomSheet}" Value="true">
+                <DataTrigger
+                    TargetType="Grid"
+                    Binding="{Binding BottomSheet}"
+                    Value="true">
                     <DataTrigger.EnterActions>
                         <trigger:OpenBottomSheetTrigger />
                     </DataTrigger.EnterActions>
                 </DataTrigger>
 
-                <DataTrigger TargetType="Grid" Binding="{Binding BottomSheet}" Value="false">
+                <DataTrigger
+                    TargetType="Grid"
+                    Binding="{Binding BottomSheet}"
+                    Value="false">
                     <DataTrigger.EnterActions>
                         <trigger:CloseBottomSheetTrigger />
                     </DataTrigger.EnterActions>
@@ -369,6 +425,7 @@
             </Grid.Triggers>
         </Grid>
 
+        <!--  No Data Template  -->
         <template:NoDataTemplate
             Grid.Row="2"
             Grid.RowSpan="3"
@@ -387,10 +444,19 @@
             HorizontalOptions="Fill"
             VerticalOptions="Fill">
             <VerticalStackLayout VerticalOptions="Center">
-                <Label Text="قم بالبحث عن صنف معين" HorizontalTextAlignment="Center" FontSize="20" />
-                <Label Text="أو تصفية النتائج" HorizontalTextAlignment="Center" FontSize="20" />
+                <Label
+                    Text="قم بالبحث عن صنف معين"
+                    HorizontalTextAlignment="Center"
+                    FontSize="20" />
+                <Label
+                    Text="أو تصفية النتائج"
+                    HorizontalTextAlignment="Center"
+                    FontSize="20" />
 
-                <Label Text="أو" HorizontalTextAlignment="Center" FontSize="20" />
+                <Label
+                    Text="أو"
+                    HorizontalTextAlignment="Center"
+                    FontSize="20" />
                 <Button
                     Grid.Row="3"
                     Margin="20,30"

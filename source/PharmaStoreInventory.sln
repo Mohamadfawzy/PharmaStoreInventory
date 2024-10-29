@@ -19,9 +19,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiSettingsManager", "..\..
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApp", "AdminApp\AdminApp.csproj", "{85B49002-4F75-4A4D-B9E3-3046AFE6118F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{2B3977AA-B2B9-4AF6-93EF-0E0BFE7DCA03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{2B3977AA-B2B9-4AF6-93EF-0E0BFE7DCA03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.MAUI", "Shared.MAUI\Shared.MAUI.csproj", "{45DE32EF-35EC-4456-BDFF-04D07DDEDFDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.MAUI", "Shared.MAUI\Shared.MAUI.csproj", "{45DE32EF-35EC-4456-BDFF-04D07DDEDFDD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{A36B527A-7C0A-4C8D-B4AF-2B73C82B1E38}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQLQueries", "SQLQueries", "{985BCE98-9142-4FEA-BC1E-A4862298E984}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\Backend\QuerySqlServer\SQLQueries\host-1-ScriptHost.sql = ..\..\..\Backend\QuerySqlServer\SQLQueries\host-1-ScriptHost.sql
+		..\..\..\Backend\QuerySqlServer\SQLQueries\host-2_insert_Emp.sql = ..\..\..\Backend\QuerySqlServer\SQLQueries\host-2_insert_Emp.sql
+		..\..\..\Backend\QuerySqlServer\SQLQueries\host-3_insert_Users.sql = ..\..\..\Backend\QuerySqlServer\SQLQueries\host-3_insert_Users.sql
+		..\..\..\Backend\QuerySqlServer\SQLQueries\host-4_branch.sql = ..\..\..\Backend\QuerySqlServer\SQLQueries\host-4_branch.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +81,10 @@ Global
 		{45DE32EF-35EC-4456-BDFF-04D07DDEDFDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45DE32EF-35EC-4456-BDFF-04D07DDEDFDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45DE32EF-35EC-4456-BDFF-04D07DDEDFDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A36B527A-7C0A-4C8D-B4AF-2B73C82B1E38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A36B527A-7C0A-4C8D-B4AF-2B73C82B1E38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A36B527A-7C0A-4C8D-B4AF-2B73C82B1E38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A36B527A-7C0A-4C8D-B4AF-2B73C82B1E38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

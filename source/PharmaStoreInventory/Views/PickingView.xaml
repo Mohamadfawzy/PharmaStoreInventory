@@ -47,10 +47,6 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <!--<ContentPage.BindingContext>
-        <vm:PickingViewModel />
-    </ContentPage.BindingContext>-->
-
     <!--  Main Contianer  -->
     <Grid x:Name="mainContianer" RowDefinitions="60,1.3*,*,*">
 
@@ -114,8 +110,6 @@
             TorchOn="False"
             PauseScanning="True"
             CameraEnabled="False" />
-
-        <!--  OnDetectionFinishedCommand="{Binding OnCameraDetectionFinishedCommand}"  -->
         <!--  Guides Lines over Camera  -->
         <Grid
             x:Name="guidesLines"
@@ -363,9 +357,10 @@
                                                     <HorizontalStackLayout Spacing="3">
                                                         <Label
                                                             Margin="0"
-                                                            Padding="0"
+                                                            Padding="0,5"
                                                             FontSize="22"
-                                                            Text="{Binding Quantity}"
+                                                            Text="{Binding FormattedQuantity}"
+                                                            FontFamily="{StaticResource OpenSansRegular}"
                                                             VerticalTextAlignment="End" />
                                                         <Label
                                                             Text="Stock"
@@ -396,7 +391,7 @@
                                                         <Label
                                                             Margin="0"
                                                             Padding="0"
-                                                            Text="{Binding SellPrice}"
+                                                            Text="{Binding FormattedPrice}"
                                                             FontSize="18"
                                                             VerticalTextAlignment="End" />
                                                         <Label

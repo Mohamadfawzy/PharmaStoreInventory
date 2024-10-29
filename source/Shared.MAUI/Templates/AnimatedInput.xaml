@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView
-    x:Class="PharmaStoreInventory.Views.Templates.AnimatedInput"
+    x:Class="Shared.MAUI.Templates.AnimatedInput"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:icon="clr-namespace:Shared.MAUI.Fonts"
@@ -30,7 +30,7 @@
             x:Name="border"
             Stroke="{Binding UnFocusColor}"
             StrokeThickness="1"
-            StrokeShape="RoundRectangle 10"
+            StrokeShape="RoundRectangle 90 3 3 3"
             HorizontalOptions="Fill"
             VerticalOptions="Center"
             BackgroundColor="{Binding InputBackgroundColor}"

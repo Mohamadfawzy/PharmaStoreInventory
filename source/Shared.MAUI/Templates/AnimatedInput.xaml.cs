@@ -1,6 +1,7 @@
-﻿namespace PharmaStoreInventory.Views.Templates;
-using Microsoft.Maui.Controls;
+﻿using Shared.MAUI.Fonts;
 using Shared.Utilities;
+
+namespace Shared.MAUI.Templates;
 
 public partial class AnimatedInput : ContentView
 {
@@ -15,6 +16,7 @@ public partial class AnimatedInput : ContentView
         Email,
         Telephone,
         Numeric,
+        IP
     }
     private readonly double height = 25.0;
     private readonly Easing easing = Easing.SinInOut;
@@ -206,12 +208,17 @@ public partial class AnimatedInput : ContentView
         }
     }
 
-
-
     public bool HideKeyBoard()
     {
         entry.Unfocus();
         entry.HideSoftInputAsync(CancellationToken.None);
+        //        if (entry.IsFocused)
+        //        {
+        //#if ANDROID
+        //            entry.Unfocus();
+        //            entry.HideKeyboardAsync(CancellationToken.None);
+        //#endif
+        //        }
         return true;
     }
 
@@ -252,7 +259,10 @@ public partial class AnimatedInput : ContentView
                 IsError = true;
                 ErrorMessage = "رقم هاتف غير صحيح";
             }
-            
+        }
+        if (EntryKeyboard == KeyboardEnum.IP)
+        {
+
         }
     }
 
@@ -286,11 +296,11 @@ public partial class AnimatedInput : ContentView
 
         if (IsPassword)
         {
-            eyeIcon.Text = Shared.MAUI.Fonts.IconFont.EyeOutline; // Set to eye icon
+            eyeIcon.Text =IconFont.EyeOutline; // Set to eye icon
         }
         else
         {
-            eyeIcon.Text = Shared.MAUI.Fonts.IconFont.EyeOffOutline; // Set to eye-off icon
+            eyeIcon.Text = IconFont.EyeOffOutline; // Set to eye-off icon
         }
     }
 
@@ -299,6 +309,11 @@ public partial class AnimatedInput : ContentView
         var scaleTask = placeholder.ScaleTo(scale, (uint)TranslateDuration, easing);
         var translateTask = placeholder.TranslateTo(translationX, translationY, (uint)TranslateDuration, easing);
         await Task.WhenAll(scaleTask, translateTask);
+    }
+    public void SetInputText(string text)
+    {
+        InputText = text;
+        PositioningOfPlaceHolder();
     }
 
     public void PositioningOfPlaceHolder()
@@ -320,28 +335,21 @@ public partial class AnimatedInput : ContentView
     {
         InputText = string.Empty;
         SetUnFocusColors();
-        placeholder.TranslationX = 0; 
-        placeholder.TranslationY = 0; 
+        placeholder.TranslationX = 0;
+        placeholder.TranslationY = 0;
         placeholder.Scale = 1;
     }
     private double CalculateTranslationX()
     {
-        //return container.FlowDirection == FlowDirection.RightToLeft ? 10 : -10;
-
-        //if (AppValues.Language == "ar")
-        //{
-        //    return 10;
-        //}
-        //else return  -10;
-
-
-        if (this.FlowDirection == FlowDirection.RightToLeft)
+        var app = Application.Current;
+        if (app != null && app.MainPage != null)
         {
-            return 10;
+            if (app.MainPage.FlowDirection == FlowDirection.LeftToRight)
+            {
+                return -10;
+            }
         }
-        else return -10;
-
-        //return container.FlowDirection == FlowDirection.RightToLeft ? 10 : -10;
+        return 10;
     }
 
     private double CalculateTranslationY()
@@ -352,6 +360,7 @@ public partial class AnimatedInput : ContentView
     private void SetFocusColors()
     {
         border.Stroke = FocusColor;
+        border.StrokeThickness = 2;
         placeholder.TextColor = FocusColor;
         eyeIcon.TextColor = FocusColor;
     }
@@ -360,6 +369,7 @@ public partial class AnimatedInput : ContentView
     {
         placeholder.TextColor = UnFocusColor;
         border.Stroke = UnFocusColor;
+        border.StrokeThickness = 1;
         eyeIcon.TextColor = UnFocusColor;
     }
 
@@ -380,7 +390,21 @@ public partial class AnimatedInput : ContentView
             KeyboardEnum.Email => Keyboard.Email,
             KeyboardEnum.Telephone => Keyboard.Telephone,
             KeyboardEnum.Numeric => Keyboard.Numeric,
+            KeyboardEnum.IP => Keyboard.Telephone,
             _ => Keyboard.Default,
         };
+
+        // Set the flow direction for email
+        if (EntryKeyboard == KeyboardEnum.Email
+            || EntryKeyboard == KeyboardEnum.Telephone
+            || EntryKeyboard == KeyboardEnum.Numeric
+            || EntryKeyboard == KeyboardEnum.IP)
+        {
+            entry.FlowDirection = FlowDirection.LeftToRight;
+        }
+        else
+        {
+            entry.FlowDirection = FlowDirection.MatchParent;
+        }
     }
 }

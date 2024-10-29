@@ -19,7 +19,10 @@
                 ZIndex="2"
                 IsVisible="True" />
 
-            <VerticalStackLayout Margin="0,0,0,300" Padding="0,0,0,50" Spacing="0">
+            <VerticalStackLayout
+                Margin="0,0,0,300"
+                Padding="0,0,0,50"
+                Spacing="0">
                 <!--  Register Title  -->
                 <Border
                     Margin="0,0,0,30"
@@ -40,8 +43,14 @@
                 </Border>
 
                 <!--  Inputs  -->
-                <VerticalStackLayout x:Name="inputsContainer" Padding="20,0" IsVisible="True">
-                    <template:AnimatedInput x:Name="brachName" InputPlaceholder="اسم الفرع" ErrorMessage="هذا الحقل مطلوب" />
+                <VerticalStackLayout
+                    x:Name="inputsContainer"
+                    Padding="20,0"
+                    IsVisible="True">
+                    <template:AnimatedInput
+                        x:Name="brachName"
+                        InputPlaceholder="اسم الفرع"
+                        ErrorMessage="هذا الحقل مطلوب" />
 
                     <template:AnimatedInput
                         x:Name="telephone"
@@ -49,11 +58,22 @@
                         ErrorMessage="هذا الحقل مطلوب"
                         InputPlaceholder="تليفون الفرع" />
 
-                    <template:AnimatedInput x:Name="ipAdrress" ErrorMessage="هذا الحقل مطلوب" InputPlaceholder="عنوان IP" />
+                    <template:AnimatedInput
+                        x:Name="ipAdrress"
+                        ErrorMessage="هذا الحقل مطلوب"
+                        InputPlaceholder="عنوان IP"
+                        EntryKeyboard="IP" />
 
-                    <template:AnimatedInput x:Name="port" ErrorMessage="هذا الحقل مطلوب" InputPlaceholder="المنفذPort" />
+                    <template:AnimatedInput
+                        x:Name="port"
+                        EntryKeyboard="Numeric"
+                        ErrorMessage="هذا الحقل مطلوب"
+                        InputPlaceholder="المنفذPort" />
 
-                    <template:AnimatedInput x:Name="username" ErrorMessage="هذا الحقل مطلوب" InputPlaceholder="اسم المستخدم علي النظام" />
+                    <template:AnimatedInput
+                        x:Name="username"
+                        ErrorMessage="هذا الحقل مطلوب"
+                        InputPlaceholder="اسم المستخدم علي النظام" />
 
                     <template:AnimatedInput
                         x:Name="password"

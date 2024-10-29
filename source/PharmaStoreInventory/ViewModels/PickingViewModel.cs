@@ -153,7 +153,7 @@ public class PickingViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            await Alerts.DisplaySnackbar(ex.Message, 7);
+            await Alerts.DisplaySnackBar(ex.Message, 7);
         }
         finally
         {
@@ -177,7 +177,7 @@ public class PickingViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            await Alerts.DisplaySnackbar($"ExecuteMakeInventory: {ex.Message}");
+            await Alerts.DisplaySnackBar($"ExecuteMakeInventory: {ex.Message}");
         }
 
     }
@@ -242,7 +242,7 @@ public class PickingViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            await Alerts.DisplaySnackbar(ex.Message);
+            await Alerts.DisplaySnackBar(ex.Message);
         }
     }
 
@@ -268,7 +268,7 @@ public class PickingViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            await Alerts.DisplaySnackbar($"{nameof(ExecuteSaveChanges)}:{ex.Message}");
+            await Alerts.DisplaySnackBar($"{nameof(ExecuteSaveChanges)}:{ex.Message}");
         }
         finally
         {
@@ -372,7 +372,7 @@ public class PickingViewModel : BaseViewModel
             };
 
 
-            var res = await ApiServices.CopyProductAmout(copyPro);
+            var res = await ApiServices.CopyProductAmount(copyPro);
             if (res == null)
             {
                 ShowNotification(new ErrorMessage("حدث خطأ تحقق من الاتصال بالسيرفر", ""));

@@ -28,7 +28,7 @@ public class EmployeeRepo(AppDb context)
             {
                 return Result<EmployeeDto?>.Success(employee);
             }
-            return Result<EmployeeDto?>.Failure("not founeded this username");
+            return Result<EmployeeDto?>.Failure("not founded this username");
 
         }
         catch (Exception ex)
@@ -38,7 +38,7 @@ public class EmployeeRepo(AppDb context)
     }
 
 
-    public async Task<Result<string>> Testonnection()
+    public async Task<Result<string>> TestConnection()
     {
         try
         {
@@ -49,9 +49,9 @@ public class EmployeeRepo(AppDb context)
 
             if (employees != null && employees.Count > 0)
             {
-                return Result<string>.Success("successfuly");
+                return Result<string>.Success("successfully");
             }
-            return Result<string>.Failure("not founeded this username");
+            return Result<string>.Failure("not founded this username");
 
         }
         catch (Exception ex)

@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Maui.Controls;
-
-namespace PharmaStoreInventory.Helpers;
+﻿namespace PharmaStoreInventory.Helpers;
 
 public static class AppPreferences
 {
@@ -11,10 +8,16 @@ public static class AppPreferences
         get => GetValue(nameof(HostUserId), 0);
         set => Preferences.Default.Set(nameof(HostUserId),value);
     }
+    
+    public static string Token
+    {
+        get => GetValue(nameof(Token), "Token");
+        set => Preferences.Default.Set(nameof(Token),value);
+    }
 
     public static string UserFullName
     {
-        get => GetValue(nameof(UserFullName), "مرحبا");
+        get => GetValue(nameof(UserFullName), "بك");
         set => Preferences.Default.Set(nameof(UserFullName), value);
     }
     
@@ -82,21 +85,8 @@ public static class AppPreferences
     {
         get => GetValue(nameof(LocalBaseURI), "http://192.168.1.100:5144/api");
         set => Preferences.Default.Set(nameof(LocalBaseURI), value);
-        
     }
 
-    public static string EmpUsername
-    {
-        get => GetValue("EmpUsername", ".");
-        set => Preferences.Default.Set("EmpUsername", value);
-    }
-    public static string EmpPassword
-    {
-        get => GetValue("EmpPassword", ".");
-        set => Preferences.Default.Set("EmpPassword", value);
-    }
-    
-    
     public static string LocalDeviceId
     {
         get => GetValue("LocalDeviceId", ".");
