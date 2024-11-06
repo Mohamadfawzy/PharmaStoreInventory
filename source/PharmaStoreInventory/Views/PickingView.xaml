@@ -473,7 +473,7 @@
                     <template:StepperField Text="{Binding ModifiedQuantity}" HorizontalOptions="CenterAndExpand" />
 
                     <!--  ExpiryDate Section  -->
-                    <VerticalStackLayout IsVisible="{Binding IsExpiryDateFramInPopupVisible}">
+                    <VerticalStackLayout IsVisible="{Binding IsExpiryDateFrameInPopupVisible}">
 
                         <!--  Title  -->
                         <Label
@@ -501,46 +501,6 @@
                                 MaximumValue="31"
                                 TextPlaceholder="اليوم" />
                         </Grid>
-
-                        <!--  ExpiryDate Label  -->
-                        <!--<Label Margin="5,0" Text="{Binding ExpiaryDateLabel, StringFormat='{}{0:dd-MM-yyyy}', Mode=OneWay}" TextColor="{StaticResource Gray400}" />-->
-
-                        <!--<Border
-                            Padding="10,0"
-                            Stroke="#C49B33"
-                            StrokeThickness="1"
-                            FlowDirection="LeftToRight"
-                            StrokeShape="RoundRectangle 6">
-                            <Grid Padding="20,0">
-                                <Label
-                                    Text="شهر"
-                                    TextColor="{StaticResource Gray400}"
-                                    FontSize="10"
-                                    HorizontalOptions="Start"
-                                    VerticalTextAlignment="Center" />
-                                <Entry
-                                    x:Name="entry"
-                                    HorizontalOptions="FillAndExpand"
-                                    HorizontalTextAlignment="Center"
-                                    Keyboard="Numeric"
-                                    MaxLength="4"
-                                    Text="{Binding ExpiaryDateAsNumber}">
-                                    <Entry.Behaviors>
-                                        <toolkit:UserStoppedTypingBehavior
-                                            x:Name="userStoppedTypingBehavior"
-                                            Command="{Binding ExpiryDateChangedCommand}"
-                                            CommandParameter="{Binding Source={x:Reference entry}, Path=Text}"
-                                            StoppedTypingTimeThreshold="50" />
-                                    </Entry.Behaviors>
-                                </Entry>
-                                <Label
-                                    Text="سنة"
-                                    FontSize="10"
-                                    HorizontalOptions="End"
-                                    TextColor="{StaticResource Gray400}"
-                                    VerticalTextAlignment="Center" />
-                            </Grid>
-                        </Border>-->
                     </VerticalStackLayout>
 
                     <!--  Save Button  -->
@@ -553,7 +513,6 @@
                                 TargetType="Button"
                                 Binding="{Binding PopupType}"
                                 Value="editAndCopy">
-                                <!--<Setter Property="Text" Value="{x:Static icon:IconFont.CheckboxMarkedCircle}" />-->
                                 <Setter Property="Text" Value="حفظ كـنسخة مختلفة" />
                                 <Setter Property="BackgroundColor" Value="{StaticResource Secondary900}" />
                             </DataTrigger>

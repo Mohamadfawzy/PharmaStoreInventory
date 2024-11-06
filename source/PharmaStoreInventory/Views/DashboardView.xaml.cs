@@ -14,16 +14,6 @@ public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotifi
 
     }
 
-    //protected override void OnAppearing()
-    //{
-    //    base.OnAppearing();
-    //    if (string.IsNullOrEmpty(AppValues.LocalBaseURI))
-    //    {
-    //        Navigation.PushAsync(new BranchesView());
-    //        return;
-    //    }
-    //}
-
     protected override bool OnBackButtonPressed()
     {
         if (DashboardViewModel.CanBackButtonPressed())
@@ -54,8 +44,6 @@ public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotifi
 
     private async void GoToScanPage(object sender, TappedEventArgs e)
     {
-        //await Methods.AskForRequiredPermissionAsync();
-
         await Navigation.PushAsync(new PickingView());
     }
 

@@ -6,7 +6,6 @@ using DataAccess.Entities;
 using DataAccess.ExtensionMethods;
 using DataAccess.Services;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace DataAccess.Repository;
 

@@ -5,7 +5,6 @@ using DataAccess.Dtos.UserDtos;
 using DataAccess.Entities;
 using DataAccess.Helper;
 using DataAccess.Repository;
-using System.Data;
 
 namespace DataAccess.Services;
 

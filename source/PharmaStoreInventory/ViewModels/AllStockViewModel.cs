@@ -8,8 +8,7 @@ namespace PharmaStoreInventory.ViewModels;
 
 public class AllStockViewModel : BaseViewModel
 {
-
-    //#########*Fields*############
+    //###########*Fields*###############
     #region Private Fields
     private bool bottomSheet = false;
     private int pageSize;
@@ -41,7 +40,7 @@ public class AllStockViewModel : BaseViewModel
         ProductQueryParam = new() { StoreId = AppPreferences.StoreId.ToString(), PageSize = PageSize };
     }
 
-    //########*Properties*########
+    //###########*Properties*###########
     #region Public Properties
     public ProductQParam ProductQueryParam { get; set; }
     public List<ProductDto>? Products
@@ -87,7 +86,7 @@ public class AllStockViewModel : BaseViewModel
     public ICommand ShowAllProductCommand => new Command(ExecuteShowAllProduct);
     #endregion
 
-    //############*API*##############
+    //##############*API*###############
     #region Fetch Data
     private async Task GetProducts()
     {

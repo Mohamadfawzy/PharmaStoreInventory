@@ -1,8 +1,7 @@
-﻿using DataAccess.Helper;
-using System.Net.Mail;
+﻿using DataAccess.DomainModel;
+using DataAccess.Helper;
 using System.Net;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using DataAccess.DomainModel;
+using System.Net.Mail;
 namespace DataAccess.Services;
 
 public class MailingService

@@ -7,59 +7,39 @@ using PharmaStoreInventory.Models;
 using PharmaStoreInventory.Services;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace PharmaStoreInventory.ViewModels;
 
-public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
+public class DashboardViewModel : BaseViewModel
 {
-
+    //###########*Fields*###############
+    #region Private Fields
+    private bool isStoresPopupVisible = false;
+    private bool confirmNewInventoryVisibility = false;
     private int storeId = 0;
-    private DateOnly latestInventoryDate;
-    private SortModel? currentSelectedStore = null;
-    private bool confirmNewInventoryExecutionVisibility = false;
+    private int LatestInventoryId = 0;
     private string title = "العنوان";
     private string storeName = "غير محدد";
-    private int LatestInventoryId = 0;
-    private bool isStoresPopupVisible = false;
+    private DateOnly latestInventoryDate;
+    private SortModel? currentSelectedStore = null;
+    #endregion
 
-    // #######*Constructor*#########
-    //     ################
+    //#########*Constructor*############
     public DashboardViewModel()
     {
         storeId = AppPreferences.StoreId;
         OnStart();
     }
 
-    public static bool CanBackButtonPressed()
-    {
-        return true;
-    }
-    private async void OnStart()
-    {
-        ActivityIndicatorRunning = true;
-
-        var t0 = TestConnection();
-        var t1 = GetAllStores();
-        var t2 = GetLatestInventoryHistory();
-        var t3 = GetProductCountsAsync();
-        await Task.WhenAll(t0, t1, t2, t3);
-        ActivityIndicatorRunning = false;
-    }
-
-    // ########*Public Properties*########
-    #region Properties
+    //###########*Properties*###########
+    #region Public Properties
     public DateOnly LatestInventoryDate
     {
         get => latestInventoryDate;
         set => SetProperty(ref latestInventoryDate, value);
     }
-
-    public NoDataModel NoDataModel =>
-         new("noconnection", "لقد حدث خطأ ما", "نحن نواجه مشاكل في تحميل هذه الصفحة", true);
-
+    public NoDataModel NoDataModel => new("noconnection", "لقد حدث خطأ ما", "نحن نواجه مشاكل في تحميل هذه الصفحة", true);
     public ObservableCollection<SortModel> StoresModelList { get; set; } = [];
     public StatisticsModel? StatisticsModel { get; set; }
-
     public string StoreName
     {
         get => storeName;
@@ -70,54 +50,35 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
         get => title;
         set => SetProperty(ref title, value);
     }
-    
     public bool ConfirmNewInventoryExecutionVisibility
     {
-        get => confirmNewInventoryExecutionVisibility;
-        set => SetProperty(ref confirmNewInventoryExecutionVisibility, value);
+        get => confirmNewInventoryVisibility;
+        set => SetProperty(ref confirmNewInventoryVisibility, value);
     }
-
     public bool IsStoresPopupVisible
     {
         get => isStoresPopupVisible;
         set => SetProperty(ref isStoresPopupVisible, value);
     }
-
-
     public int CountAllProducts { get; set; }
     public int CountAllExpiredProducts { get; set; }
     public int CountAllProductsWillExpireAfter3Months { get; set; }
     public int CountAllIsInventoryed { get; set; }
     #endregion
 
-
+    //############*Commands*############
+    #region Commands
     public ICommand RefreshCommand => new Command(ExecuteCRefresh);
-    public ICommand GotoBranchesViewCommand => new Command(GotoBranchesView);
-    public ICommand StoreSelectionChangedCommand => new Command<SortModel>(StoreSelectionChanged);
+    public ICommand GotoBranchesViewCommand => new Command(ExecuteGotoBranchesView);
+    public ICommand StoreSelectionChangedCommand => new Command<SortModel>(ExecuteStoreSelectionChanged);
     public ICommand ToggleStoresPopupVisibilityCommand => new Command<string>(ExecuteToggleStoresPopupVisibility);
     public ICommand ToggleConfirmNewInventoryVisibilityCommand => new Command(() => ConfirmNewInventoryExecutionVisibility = !ConfirmNewInventoryExecutionVisibility);
     public ICommand SubmitStoreSelectionChangedCommand => new Command(ExecuteSubmitStoreSelectionChanged);
-    public ICommand StartNewInventoryCommand => new Command<string>(StartNewInventory);
+    public ICommand StartNewInventoryCommand => new Command<string>(ExecuteStartNewInventory);
+    #endregion
 
-
-    #region Get Data
-    //private async Task ApiEmployeeLogin()
-    //{
-    //    var isSuccess = await ApiServices.ApiEmployeeLogin(new LoginDto(AppPreferences.EmpUsername, AppPreferences.EmpPassword));
-
-    //    if (isSuccess == null)
-    //    {
-    //        IsNoDataElementVisible = true;
-    //        IsPlaceholderVisible = false;
-    //        return;
-    //    }
-    //    if(isSuccess.IsSuccess)
-    //    {
-    //        IsPlaceholderVisible = false;
-    //        IsNoDataElementVisible = false;
-    //    }
-    //}
-
+    //##############*API*###############
+    #region Fetch Data
     private async Task<bool> TestConnection()
     {
         var isSuccess = await ApiServices.TestConnection();
@@ -133,7 +94,7 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
             IsNoDataElementVisible = true;
             IsPlaceholderVisible = false;
             WeakReferenceMessenger.Default
-                .Send(new DashboardViewNotification(new ErrorMessage("فشل في الاتصال بالسيرفير","")));
+                .Send(new DashboardViewNotification(new ErrorMessage("فشل في الاتصال بالسيرفير", "")));
             return false;
         }
     }
@@ -206,8 +167,9 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
     }
     #endregion
 
-    // exectued method
-    async void ExecuteCRefresh()
+    //#########*ExecuteMethods*#########
+    #region Exectue Methods
+    private async void ExecuteCRefresh()
     {
         IsRefreshing = true;
         if (await TestConnection())
@@ -216,34 +178,31 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
         }
         IsRefreshing = false;
     }
-    
-    async void GotoBranchesView()
+
+    private async void ExecuteGotoBranchesView()
     {
         IsRefreshing = true;
-        if (Application.Current!=null && Application.Current.MainPage != null)
+        if (Application.Current != null && Application.Current.MainPage != null)
         {
             await Application.Current.MainPage.Navigation.PushAsync(new Views.BranchesView());
         }
         IsRefreshing = false;
     }
 
-    void StoreSelectionChanged(SortModel item)
+    private void ExecuteStoreSelectionChanged(SortModel item)
     {
         var oldItem = StoresModelList.First(c => c.IsSelected);
         oldItem.IsSelected = false;
         item.IsSelected = true;
         currentSelectedStore = item;
-        //AppPreferences.StoreId = storeId = item.Id;
-        //StoreName = item.Name;
     }
 
-    void ExecuteToggleStoresPopupVisibility(string status)
+    private void ExecuteToggleStoresPopupVisibility(string status)
     {
         IsStoresPopupVisible = !IsStoresPopupVisible;
-        //ConfirmNewInventoryExecutionVisibility = !ConfirmNewInventoryExecutionVisibility;
     }
 
-    void ExecuteSubmitStoreSelectionChanged()
+    private void ExecuteSubmitStoreSelectionChanged()
     {
         if (currentSelectedStore != null)
         {
@@ -254,11 +213,11 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
         }
     }
 
-    private async void StartNewInventory(string commandParameter)
+    private async void ExecuteStartNewInventory(string commandParameter)
     {
         try
         {
-            if(commandParameter == "init")
+            if (commandParameter == "init")
             {
                 ConfirmNewInventoryExecutionVisibility = true;
             }
@@ -276,12 +235,11 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
                     var result = await ApiServices.StartNewInventoryAsync(model);
                     if (result != null && result.IsSuccess)
                     {
-                        //await Helpers.Alerts.DisplaySnackBar("Start New Inventory Success", 7);
                         await GetLatestInventoryHistory();
                         CountAllIsInventoryed = 0;
                         OnPropertyChanged(nameof(CountAllIsInventoryed));
                         WeakReferenceMessenger.Default
-                        .Send(new DashboardViewNotification(new ErrorMessage("بدأ جرد جديد","تم بدأ جدرد بتاريخ اليوم")));
+                        .Send(new DashboardViewNotification(new ErrorMessage("بدأ جرد جديد", "تم بدأ جدرد بتاريخ اليوم")));
 
                     }
                 });
@@ -293,79 +251,25 @@ public class DashboardViewModel : BaseViewModel//, IRecipient<DeleteItemMessage>
             await Helpers.Alerts.DisplaySnackBar(ex.Message, 7);
         }
     }
-
-
-
-    public void Receive(NotificationMessage message)
-    {
-        MainThread.BeginInvokeOnMainThread(() =>
-        {
-            //string message = m.Message;
-
-            //if (message.Value == "Message")
-            //{
-            //    StatisticsModel.InventoryedProducts = 47734;
-            //    OnPropertyChanged(nameof(StatisticsModel));
-            //}
-        });
-    }
-
-
-    #region Deleted
-    /*
-    private async Task GetCountAllProducts()
-    {
-        try
-        {
-            //CountAllProducts = await productRepo.GetCountAllProductsAsync(storeId);
-            OnPropertyChanged(nameof(CountAllProducts));
-        }
-        catch (Exception ex)
-        {
-            await Helpers.Alerts.DisplaySnackBar(ex.Message, 7);
-        }
-    }
-
-    private async Task GetCountAllExpiredProducts()
-    {
-        try
-        {
-            //CountAllExpiredProducts = await productRepo.GetCountAllExpiredProducts(storeId);
-            OnPropertyChanged(nameof(CountAllExpiredProducts));
-        }
-        catch (Exception ex)
-        {
-            await Helpers.Alerts.DisplaySnackBar(ex.Message, 7);
-        }
-    }
-
-    private async Task GetCountAllProductsWillExpireAfter3Months()
-    {
-        try
-        {
-            //CountAllProductsWillExpireAfter3Months = await productRepo.GetCountAllProductsWillExpireAfter3Months(storeId);
-            OnPropertyChanged(nameof(CountAllProductsWillExpireAfter3Months));
-        }
-        catch (Exception ex)
-        {
-            await Helpers.Alerts.DisplaySnackBar(ex.Message, 7);
-        }
-    }
-
-    private async Task GetCountAllIsInventoryed()
-    {
-        try
-        {
-            //CountAllIsInventoryed = await productRepo.GetCountAllIsInventoryed(storeId);
-            OnPropertyChanged(nameof(CountAllIsInventoryed));
-        }
-        catch (Exception ex)
-        {
-            await Helpers.Alerts.DisplaySnackBar(ex.Message, 7);
-        }
-    }
-
-    */
     #endregion
 
+    //###########*Processors*###########
+    #region Processors
+    public static bool CanBackButtonPressed()
+    {
+        return true;
+    }
+
+    private async void OnStart()
+    {
+        ActivityIndicatorRunning = true;
+
+        var t0 = TestConnection();
+        var t1 = GetAllStores();
+        var t2 = GetLatestInventoryHistory();
+        var t3 = GetProductCountsAsync();
+        await Task.WhenAll(t0, t1, t2, t3);
+        ActivityIndicatorRunning = false;
+    }
+    #endregion
 }

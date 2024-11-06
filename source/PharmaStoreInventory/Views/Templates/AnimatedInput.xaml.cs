@@ -17,7 +17,8 @@ public partial class AnimatedInput : ContentView
         Email,
         Telephone,
         Numeric,
-        IP
+        IP,
+        Username
     }
     private readonly double height = 25.0;
     private readonly Easing easing = Easing.SinInOut;
@@ -400,7 +401,8 @@ public partial class AnimatedInput : ContentView
         if (EntryKeyboard == KeyboardEnum.Email 
             || EntryKeyboard == KeyboardEnum.Telephone
             ||EntryKeyboard == KeyboardEnum.Numeric
-            ||EntryKeyboard == KeyboardEnum.IP)
+            ||EntryKeyboard == KeyboardEnum.IP
+            || EntryKeyboard == KeyboardEnum.Username)
         {
             entry.FlowDirection = FlowDirection.LeftToRight;
         }

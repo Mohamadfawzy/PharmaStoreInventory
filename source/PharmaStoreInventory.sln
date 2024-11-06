@@ -9,24 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PharmaStoreInventoryApi", "..\..\..\Backend\PharmaStoreInventoryApi\PharmaStoreInventoryApi\PharmaStoreInventoryApi.csproj", "{3E15C039-2292-47B6-9CDB-EE26CFF94893}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModernSoftApi", "..\..\..\Backend\ModernSoftApi\ModernSoftApi.csproj", "{43BFB12F-AC8F-4B56-91EF-67B7EB6EC375}"
-EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PharmaStoreSetup", "..\..\..\Backend\PharmaStoreSetup\PharmaStoreSetup.vdproj", "{24621E5C-E66A-4597-8B15-8D2C38E8DE9F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RunBatchFileApp", "..\..\..\Common\RunBatchFileApp\RunBatchFileApp.csproj", "{1D8B7EF4-184D-4F74-9201-6DAA7A824AA6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiSettingsManager", "..\..\..\Common\ApiSettingsManager\ApiSettingsManager.csproj", "{56835148-28E8-49CE-92B5-181936BFEA32}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApp", "AdminApp\AdminApp.csproj", "{85B49002-4F75-4A4D-B9E3-3046AFE6118F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{2B3977AA-B2B9-4AF6-93EF-0E0BFE7DCA03}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.MAUI", "Shared.MAUI\Shared.MAUI.csproj", "{45DE32EF-35EC-4456-BDFF-04D07DDEDFDD}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{A36B527A-7C0A-4C8D-B4AF-2B73C82B1E38}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQLQueries", "SQLQueries", "{985BCE98-9142-4FEA-BC1E-A4862298E984}"
 	ProjectSection(SolutionItems) = preProject
+		host-0-Insert_all.sql = host-0-Insert_all.sql
 		..\..\..\Backend\QuerySqlServer\SQLQueries\host-1-ScriptHost.sql = ..\..\..\Backend\QuerySqlServer\SQLQueries\host-1-ScriptHost.sql
 		..\..\..\Backend\QuerySqlServer\SQLQueries\host-2_insert_Emp.sql = ..\..\..\Backend\QuerySqlServer\SQLQueries\host-2_insert_Emp.sql
 		..\..\..\Backend\QuerySqlServer\SQLQueries\host-3_insert_Users.sql = ..\..\..\Backend\QuerySqlServer\SQLQueries\host-3_insert_Users.sql
@@ -53,38 +42,12 @@ Global
 		{3E15C039-2292-47B6-9CDB-EE26CFF94893}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E15C039-2292-47B6-9CDB-EE26CFF94893}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E15C039-2292-47B6-9CDB-EE26CFF94893}.Release|Any CPU.Build.0 = Release|Any CPU
-		{43BFB12F-AC8F-4B56-91EF-67B7EB6EC375}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{43BFB12F-AC8F-4B56-91EF-67B7EB6EC375}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{43BFB12F-AC8F-4B56-91EF-67B7EB6EC375}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{43BFB12F-AC8F-4B56-91EF-67B7EB6EC375}.Release|Any CPU.Build.0 = Release|Any CPU
 		{24621E5C-E66A-4597-8B15-8D2C38E8DE9F}.Debug|Any CPU.ActiveCfg = Debug
 		{24621E5C-E66A-4597-8B15-8D2C38E8DE9F}.Release|Any CPU.ActiveCfg = Release
-		{1D8B7EF4-184D-4F74-9201-6DAA7A824AA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1D8B7EF4-184D-4F74-9201-6DAA7A824AA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1D8B7EF4-184D-4F74-9201-6DAA7A824AA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1D8B7EF4-184D-4F74-9201-6DAA7A824AA6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{56835148-28E8-49CE-92B5-181936BFEA32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{56835148-28E8-49CE-92B5-181936BFEA32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56835148-28E8-49CE-92B5-181936BFEA32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56835148-28E8-49CE-92B5-181936BFEA32}.Release|Any CPU.Build.0 = Release|Any CPU
-		{85B49002-4F75-4A4D-B9E3-3046AFE6118F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{85B49002-4F75-4A4D-B9E3-3046AFE6118F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{85B49002-4F75-4A4D-B9E3-3046AFE6118F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{85B49002-4F75-4A4D-B9E3-3046AFE6118F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{85B49002-4F75-4A4D-B9E3-3046AFE6118F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{85B49002-4F75-4A4D-B9E3-3046AFE6118F}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{2B3977AA-B2B9-4AF6-93EF-0E0BFE7DCA03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B3977AA-B2B9-4AF6-93EF-0E0BFE7DCA03}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B3977AA-B2B9-4AF6-93EF-0E0BFE7DCA03}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B3977AA-B2B9-4AF6-93EF-0E0BFE7DCA03}.Release|Any CPU.Build.0 = Release|Any CPU
-		{45DE32EF-35EC-4456-BDFF-04D07DDEDFDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{45DE32EF-35EC-4456-BDFF-04D07DDEDFDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{45DE32EF-35EC-4456-BDFF-04D07DDEDFDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{45DE32EF-35EC-4456-BDFF-04D07DDEDFDD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A36B527A-7C0A-4C8D-B4AF-2B73C82B1E38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A36B527A-7C0A-4C8D-B4AF-2B73C82B1E38}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A36B527A-7C0A-4C8D-B4AF-2B73C82B1E38}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A36B527A-7C0A-4C8D-B4AF-2B73C82B1E38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
