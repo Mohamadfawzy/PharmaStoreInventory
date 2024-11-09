@@ -7,14 +7,14 @@ public class Vendor
     //public string? master_fin_account_id { get; set; }
     //public string? fin_account_id { get; set; }
     //public string? vendor_name_en { get; set; }
-    //public string? tel { get; set; }
-    //public string? mobile { get; set; }
-    //public string? address { get; set; }
-    //public string? company_code { get; set; }
+    //public string? Tel { get; set; }
+    //public string? Mobile { get; set; }
+    //public string? Address { get; set; }
+    //public string? Company_code { get; set; }
     //public decimal? vendor_max_money { get; set; }
     //public decimal? vendor_current_money { get; set; }
     //public string? Deleted { get; set; }
-    //public string? active { get; set; }
+    //public string? Active { get; set; }
     //public decimal? vendor_start_money { get; set; }
     //public DateTime? Insert_date { get; set; }
     //public decimal? Insert_uid { get; set; }

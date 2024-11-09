@@ -217,7 +217,7 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
         }
     }
 
-    // will deleted
+    // will Deleted
     private void SetInputText_Tapped(object sender, TappedEventArgs e)
     {
         if (AppValues.IsDevelopment)

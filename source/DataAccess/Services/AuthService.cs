@@ -258,10 +258,10 @@ public class AuthService
         // Check if phone and password are provided
         if (await repo.IsUserActiveAsync(userId))
         {
-            return Result.Success($"User {userId}: is already active");
+            return Result.Success($"User {userId}: is already Active");
         }
 
-        return Result.Failure(ErrorCode.UserNotActive, "user is not active");
+        return Result.Failure(ErrorCode.UserNotActive, "user is not Active");
     }
 
     /// <summary>
@@ -449,10 +449,10 @@ public class AuthService
     {
         try
         {
-            // Check if account is active
+            // Check if account is Active
             //if (!userAccount.IsActive)
             //{
-            //    return Result<UserLoginResponseDto>.Failure(ErrorCode.UserNotActive, "Your account is not active.");
+            //    return Result<UserLoginResponseDto>.Failure(ErrorCode.UserNotActive, "Your account is not Active.");
             //}
 
             /*
@@ -491,10 +491,10 @@ public class AuthService
                     UserRole = userAccount.UserRole,
                 };
 
-                // Check if account is active
+                // Check if account is Active
                 if (!userAccount.IsActive)
                 {
-                    return Result<UserLoginResponseDto>.Failure(ErrorCode.UserNotActive, loginRes, "Your account is not active.");
+                    return Result<UserLoginResponseDto>.Failure(ErrorCode.UserNotActive, loginRes, "Your account is not Active.");
                 }
 
                 userAccount.IsActive = !isNewDevice;
@@ -504,7 +504,7 @@ public class AuthService
 
                 if (isNewDevice)
                 {
-                    return Result<UserLoginResponseDto>.Failure(ErrorCode.UserNotActive, "you order add a new account and Your account become not active.");
+                    return Result<UserLoginResponseDto>.Failure(ErrorCode.UserNotActive, "you order add a new account and Your account become not Active.");
                 }
                 else
                 {

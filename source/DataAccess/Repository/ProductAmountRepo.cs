@@ -23,9 +23,7 @@ namespace DataAccess.Repository;
 public class ProductAmountRepo(AppDb context)
 {
     private readonly AppDb context = context;
-    const string whereDeletedActiveStatement = " WHERE p.Deleted = 1 AND p.active = 1 ";
-    const string columnsStatement = @" p.product_code AS [ProductCode], p.product_int_code AS [InternationalCode], ISNULL(NULLIF(p.product_name_en, ''), p.product_name_ar) AS [Name], pa.Sell_price AS [SalePrice], pa.Amount AS [Quantity], pa.Store_id AS [StoreId] , p.product_has_expire AS [HasExpire] ";
-
+    const string whereDeletedActiveStatement = " WHERE p.Deleted = 1 AND p.Active = 1 ";
     public async Task<List<ProductDto>> GetAllProducts(ProductQParam qParam)
     {
         string selectClause = await BringSelectAllProductsIncludeJoinQuery(qParam.IsGroup, qParam.PageSize);
@@ -65,8 +63,8 @@ public class ProductAmountRepo(AppDb context)
                     pa.Counter_id AS [ExpiryGroupID],
 	                pa.Product_update AS [IsInventoried],
                     pa.Exp_date AS [ExpDate],
-                    pa.Amount AS [Quantity],
-                    pa.Sell_price AS [SellPrice],
+                    CAST(pa.Amount AS DECIMAL(18, 2)) AS [Quantity],
+                    CAST(pa.Sell_price AS DECIMAL(18, 2)) AS [SellPrice],
                     pa.product_update AS [ProductUpdate],
                     p.product_name_ar AS [ProductNameAr],
                     p.product_name_en AS [ProductNameEn],
@@ -180,19 +178,16 @@ public class ProductAmountRepo(AppDb context)
             product.Product_update = "1";
 
             context.Product_Amount.Add(product);
-            var effectedRow = await context.SaveChangesAsync();
-            if (effectedRow == 0)
-            {
-                return Result.Failure(ErrorCode.OperationFailed, "Can not add this product, effectedRow = 0");
-            }
 
-            var row1 = await InsertProductAmountUpdatesAsync(product, param).ConfigureAwait(false);
-            var row2 = await InsertProductAmountChangesAsync(product, param).ConfigureAwait(false);
-            if (!row1 || !row2)
+            await InsertProductAmountUpdatesAsync(product, param).ConfigureAwait(false);
+            await InsertProductAmountChangesAsync(product, param).ConfigureAwait(false);
+
+            var effectedRow = await context.SaveChangesAsync();
+            if (effectedRow > 0)
             {
-                return Result.Success($"product: {model.ProductId} is added successfuly put not save transaction");
-            }
-            return Result.Success($"{effectedRow} row effected");
+                return Result.Success($"{effectedRow} row effected");
+            };
+            return Result.Failure(ErrorCode.OperationFailed, "Can not add this product, effectedRow = 0");
         }
         catch (Exception ex)
         {
@@ -219,7 +214,6 @@ public class ProductAmountRepo(AppDb context)
                 Product_unit1 = dto.ProductUnit1,
                 EmpId = dto.EmpId,
             };
-
             product.Amount = (dto.NewQuantity - dto.OldQuantity) + product.Amount;
             product.Exp_date = dto.ExpDate;
             product.Insert_uid = dto.EmpId;
@@ -228,18 +222,14 @@ public class ProductAmountRepo(AppDb context)
             product.Update_date = DateTime.Now;
             product.Product_update_date = DateTime.Now;
 
+            await InsertProductAmountUpdatesAsync(product, param).ConfigureAwait(false);
+            await InsertProductAmountChangesAsync(product, param).ConfigureAwait(false);
+
             var effectedRow = await context.SaveChangesAsync();
             if (effectedRow > 0)
             {
-                var row1 = await InsertProductAmountUpdatesAsync(product, param).ConfigureAwait(false);
-                var row2 = await InsertProductAmountChangesAsync(product, param).ConfigureAwait(false);
-                if (!row1|| !row2)
-                {
-                    return Result.Success($"product: {dto.ProductId} is updated successfuly put not save transaction");
-                }
-                return Result.Success($"product: {dto.ProductId} is updated successfuly");
+                return Result.Success($"product: {dto.ProductId} is updated successfully");
             };
-
             return Result.Failure("not updated");
         }
         catch (Exception ex)
@@ -249,89 +239,55 @@ public class ProductAmountRepo(AppDb context)
     }
 
 
-    public async Task<bool> InsertProductAmountUpdatesAsync(Product_Amount pa, ProductUpdateAndChangeQParam param)
+    public async Task InsertProductAmountUpdatesAsync(Product_Amount pa, ProductUpdateAndChangeQParam param)
     {
-        try
+        var pau = new ProductAmountUpdate()
         {
-            
-            var pau = new ProductAmountUpdate()
-            {
-                Product_id = pa.Product_id,
-                Store_id = pa.Store_id,
-                Counter_id = pa.Counter_id,
-                Insert_uid = param.EmpId,
+            Product_id = pa.Product_id,
+            Store_id = pa.Store_id,
+            Counter_id = pa.Counter_id,
+            Insert_uid = param.EmpId,
 
-                Old_amount = param.Old_amount,
-                Old_exp_date = param.OldExp_date,
+            Old_amount = param.Old_amount,
+            Old_exp_date = param.OldExp_date,
 
-                New_amount = pa.Amount,
-                New_exp_date = pa.Exp_date,
-                Notes = param.Notice,
+            New_amount = pa.Amount,
+            New_exp_date = pa.Exp_date,
+            Notes = param.Notice,
 
-                Buy_price = pa.Buy_price,
-                Store_date = pa.Insert_date,
-                Sell_price = pa.Sell_price,
-                Tax_price = pa.Tax_price,
-                Vendor_id = pa.Vendor_id,
-                Product_unit = param.Product_unit1,
-                Insert_date = DateTime.Now,
-            };
-
-
-            await context.ProductAmountUpdates.AddAsync(pau);
-
-            var effectedRow = await context.SaveChangesAsync();
-            if (effectedRow > 0)
-            {
-                return true;
-            };
-            return false;
-        }
-        catch (Exception e)
-        {
-            await Console.Out.WriteLineAsync(e.Message);
-            return false;
-        }
+            Buy_price = pa.Buy_price,
+            Store_date = pa.Insert_date,
+            Sell_price = pa.Sell_price,
+            Tax_price = pa.Tax_price,
+            Vendor_id = pa.Vendor_id,
+            Product_unit = param.Product_unit1,
+            Insert_date = DateTime.Now,
+        };
+        var status = await context.ProductAmountUpdates.AddAsync(pau);
     }
-    
-    public async Task<bool> InsertProductAmountChangesAsync(Product_Amount pa, ProductUpdateAndChangeQParam parm)
+
+    public async Task InsertProductAmountChangesAsync(Product_Amount pa, ProductUpdateAndChangeQParam parm)
     {
-        try
+        var pac = new ProductAmountChange()
         {
-            var pac = new ProductAmountChange()
-            {
-                Product_id = pa.Product_id,
-                Store_id = pa.Store_id,
-                Counter_id = pa.Counter_id,
-                New_amount = pa.Amount,
-                Buy_price = pa.Buy_price,
-                Sell_price = pa.Sell_price,
-                Tax_price = pa.Tax_price,
-                Vendor_id = pa.Vendor_id,
-                Exp_date = pa.Exp_date,
-                Form_type = 26,
-                In_type = "0",
+            Product_id = pa.Product_id,
+            Store_id = pa.Store_id,
+            Counter_id = pa.Counter_id,
+            New_amount = pa.Amount,
+            Buy_price = pa.Buy_price,
+            Sell_price = pa.Sell_price,
+            Tax_price = pa.Tax_price,
+            Vendor_id = pa.Vendor_id,
+            Exp_date = pa.Exp_date,
+            Form_type = 26,
+            In_type = "0",
 
-                Old_amount = parm.Old_amount,
-                Insert_uid = parm.EmpId,
-                Form_notice = parm.Notice,
-                Insert_date = DateTime.Now,
-            };
-
-            await context.ProductAmountChanges.AddAsync(pac);
-
-            var effectedRow = await context.SaveChangesAsync();
-            if (effectedRow > 0)
-            {
-                return true;
-            };
-            return false;
-        }
-        catch (Exception e)
-        {
-            await Console.Out.WriteLineAsync(e.Message);
-            return false;
-        }
+            Old_amount = parm.Old_amount,
+            Insert_uid = parm.EmpId,
+            Form_notice = parm.Notice,
+            Insert_date = DateTime.Now,
+        };
+        await context.ProductAmountChanges.AddAsync(pac);
     }
 
     /// <summary>
@@ -442,15 +398,22 @@ public class ProductAmountRepo(AppDb context)
     // The code that's violating the rule is on this line.
     #region Methods for creating queries
 #pragma warning disable CA1822
-    private Task<string> BringSelectAllProductsIncludeJoinQuery(bool isGroup, int pageSize=50)
+    private Task<string> BringSelectAllProductsIncludeJoinQuery(bool isGroup, int pageSize = 50)
     {
+        const string columnsStatement = @"  p.product_code AS [ProductCode],
+                                        p.product_int_code AS [InternationalCode],
+                                        ISNULL(NULLIF(p.product_name_en, ''),
+                                        p.product_name_ar) AS [Name],
+                                        CAST(pa.Amount AS DECIMAL(18, 2)) AS [Quantity],
+                                        CAST(pa.Sell_price AS DECIMAL(18, 2)) AS [SalePrice],
+                                        pa.Store_id AS [StoreId] ,
+                                        p.product_has_expire AS [HasExpire] ";
         if (isGroup)
         {
             var sql = @$" SELECT top ({pageSize}) {columnsStatement}
-                    FROM (SELECT Store_id, Product_id, SUM(Amount) AS Amount, Sell_price 
-                        FROM Product_Amount GROUP BY Product_id,Sell_price,Store_id) 
-                        AS pa 
-                        INNER JOIN Products p ON pa.Product_id = p.Product_id ";
+                          FROM (SELECT Store_id, Product_id, SUM(Amount) AS Amount, Sell_price 
+                                 FROM Product_Amount GROUP BY Product_id,Sell_price,Store_id) AS pa 
+                          INNER JOIN Products p ON pa.Product_id = p.Product_id ";
             return Task.FromResult(sql);
         }
         else
@@ -460,7 +423,6 @@ public class ProductAmountRepo(AppDb context)
                         INNER JOIN Product_Amount pa ON p.Product_id = pa.Product_id ";
             return Task.FromResult(sql);
         }
-
     }
 
     private string BringOrderByQuery(ProductsOrderBy orderBy)
@@ -550,11 +512,11 @@ public class ProductAmountRepo(AppDb context)
             return default;
         var query = from p in context.Products
                     join pAmount in context.Product_Amount on p.product_id equals pAmount.Product_id
-                    join company in context.Companys on p.company_id equals company.company_id
+                    join company in context.Companys on p.Company_id equals company.Company_id
                     join productUnit in context.Product_units on p.product_unit1 equals productUnit.unit_id
                     join vendor in context.Vendor on pAmount.Vendor_id equals vendor.vendor_id into vendorGroup
                     from vendor in vendorGroup.DefaultIfEmpty()
-                    where p.deleted == "1" && p.active == "1"
+                    where p.Deleted == "1" && p.Active == "1"
                     where (hasOnlyQuantity == false || pAmount.Amount > 0)
                     where (!storeId.HasValue || pAmount.Store_id == storeId)
                     where (p.product_code == barcode
@@ -591,7 +553,7 @@ public class ProductAmountRepo(AppDb context)
                         ProductUnit1 = p.product_unit1,
                         ProductUnit13 = p.product_unit1_3,
                         VendorNameAr = vendor.vendor_name_ar,
-                        CompanyNameAr = company.co_name_ar
+                        CompanyNameAr = company.Co_name_ar
                     };
 
         var result = await query.ToListAsync();
@@ -618,18 +580,18 @@ SELECT
     p.product_unit1 AS [ProductUnit1],
     p.product_unit1_3 AS [ProductUnit13],
     vendor.vendor_name_ar AS [VendorNameAr],
-    companys.co_name_ar AS [CompanyNameAr]
+    companys.Co_name_ar AS [CompanyNameAr]
 
 FROM products as p
 INNER JOIN Product_Amount as pa ON p.Product_id = pa.Product_id 
-INNER JOIN companys ON p.company_id = companys.company_id
+INNER JOIN companys ON p.Company_id = companys.Company_id
 INNER JOIN product_units ON p.product_unit1 = product_units.unit_id
 LEFT OUTER JOIN vendor ON pa.Vendor_id = vendor.Vendor_id
 
 WHERE 
  pa.Store_id=1
  AND p.Deleted=1
- AND p.active=1
+ AND p.Active=1
  AND pa.Amount > -1
     AND (
            p.product_code = @barcode
@@ -717,11 +679,11 @@ WHERE
                     p.product_unit1 AS [ProductUnit1],
                     p.product_unit1_3 AS [ProductUnit13],
                     vendor.vendor_name_ar AS [VendorNameAr],
-                    companys.co_name_ar AS [CompanyNameAr]
+                    companys.Co_name_ar AS [CompanyNameAr]
 
                 FROM products as p
                 INNER JOIN Product_Amount as pa ON p.Product_id = pa.Product_id 
-                INNER JOIN companys ON p.company_id = companys.company_id
+                INNER JOIN companys ON p.Company_id = companys.Company_id
                 INNER JOIN product_units ON p.product_unit1 = product_units.unit_id
                 LEFT OUTER JOIN vendor ON pa.Vendor_id = vendor.Vendor_id
                     {whereDeletedActiveStatement} 
@@ -780,10 +742,10 @@ WHERE
 
                 FROM products as p
                 INNER JOIN Product_Amount as pa ON p.Product_id = pa.Product_id 
-                INNER JOIN companys ON p.company_id = companys.company_id
+                INNER JOIN companys ON p.Company_id = companys.Company_id
                 INNER JOIN product_units ON p.product_unit1 = product_units.unit_id
                 LEFT OUTER JOIN vendor ON pa.Vendor_id = vendor.Vendor_id
-                    WHERE p.Deleted = 1 AND p.active = 1  
+                    WHERE p.Deleted = 1 AND p.Active = 1  
                     AND pa.Store_id = 1
                     
                     AND (

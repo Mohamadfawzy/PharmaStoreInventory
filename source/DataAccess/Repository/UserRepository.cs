@@ -234,7 +234,7 @@ public class UserRepository
 
 
     /// <summary>
-    /// Updates the password for a userDto identified by their email address.
+    /// Updates the password for a userDto identified by their email Address.
     /// </summary>
     /// <param name="email">The email of the userDto whose password is to be updated.</param>
     /// <param name="newPassword">The new password to be set.</param>
@@ -309,7 +309,7 @@ public class UserRepository
     {
         user.IsActive = active;
         await context.SaveChangesAsync();
-        return Result.Success($"active email{user.Email}");
+        return Result.Success($"Active email{user.Email}");
     }
 
     public async Task<Result> UpdateActivationUserAccountAsyncOld(int userId, bool active)
@@ -412,7 +412,7 @@ public class UserRepository
             // Check if the update was successful
             if (rowsAffected > 0)
             {
-                return Result.Success("user is deleted successfully.");
+                return Result.Success("user is Deleted successfully.");
             }
 
             return Result.Failure(ErrorCode.OperationFailed, "not found this user");

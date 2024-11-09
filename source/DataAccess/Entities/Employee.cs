@@ -12,7 +12,7 @@ public class Employee
     //public DateTime? work_date { get; set; }
     public string? Mobile { get; set; }
     //public string? home_tel { get; set; }
-    //public string? address { get; set; }
+    //public string? Address { get; set; }
     //public string? card_id { get; set; }
     //public DateTime? card_date { get; set; }
     //public string? card_place { get; set; }

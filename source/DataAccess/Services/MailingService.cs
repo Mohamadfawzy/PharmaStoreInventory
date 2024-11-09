@@ -13,9 +13,9 @@ public class MailingService
     private readonly string senderPassword = "mbzi wkby cqil vgrv ";
 
     /// <summary>
-    /// Sends a verification code to the specified email address.
+    /// Sends a verification code to the specified email Address.
     /// </summary>
-    /// <param name="mailTo">The email address to send the verification code to.</param>
+    /// <param name="mailTo">The email Address to send the verification code to.</param>
     /// <param name="verificationCode">The verification code to send. If null, a new code will be generated.</param>
     /// <param name="userFullName">The full name of the user. If null, an empty string will be used.</param>
     /// <param name="lang">The language for the email content (optional).</param>
@@ -48,11 +48,11 @@ public class MailingService
                                   <body>
                                       <p>Dear {userFullName},</p>
                                  
-                                      <p>Thank you for registering with our service! To complete your account registration and ensure the security of your account, we require you to verify your email address.</p>
+                                      <p>Thank you for registering with our service! To complete your account registration and ensure the security of your account, we require you to verify your email Address.</p>
                                  
                                       <p><strong>Verification Code: <span class='verification-code'>{verificationCode}</span></strong></p>
                                  
-                                      <p>To verify your email address, please follow these steps{lang}:</p>
+                                      <p>To verify your email Address, please follow these steps{lang}:</p>
                                       <ol>
                                           <li>Open our website/app and log in to your account.</li>
                                           <li>Go to the verification page or click on the verification link provided.</li>
@@ -77,7 +77,7 @@ public class MailingService
     /// <summary>
     /// Sends an email with the specified subject and body to the specified recipient.
     /// </summary>
-    /// <param name="mailTo">The recipient's email address.</param>
+    /// <param name="mailTo">The recipient's email Address.</param>
     /// <param name="subject">The subject of the email.</param>
     /// <param name="body">The body of the email.</param>
     /// <returns>A task representing the asynchronous operation.</returns>

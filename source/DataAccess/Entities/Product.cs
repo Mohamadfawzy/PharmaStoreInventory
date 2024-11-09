@@ -10,7 +10,7 @@ public class Product
     public string? product_name_en { get; set; }
     public string? product_scientific_name { get; set; }
     public int? product_drug { get; set; }
-    public decimal? company_id { get; set; }
+    public decimal? Company_id { get; set; }
     public string? product_has_expire { get; set; }
     public decimal? site_id { get; set; }
     public decimal? product_buy_number { get; set; }
@@ -21,8 +21,8 @@ public class Product
     public decimal? product_disc2 { get; set; }
     public decimal? tax_price { get; set; }
     public decimal? buy_price { get; set; }
-    public string? deleted { get; set; }
-    public string? active { get; set; }
+    public string? Deleted { get; set; }
+    public string? Active { get; set; }
     public decimal? product_unit1 { get; set; }
     public decimal? product_unit2 { get; set; }
     public decimal? product_unit3 { get; set; }
@@ -33,8 +33,8 @@ public class Product
     public int product_print_barcode { get; set; }
     public int? product_allow_disc { get; set; }
     public double? product_max_disc { get; set; }
-    public DateTime? insert_date { get; set; }
-    public string? insert_uid { get; set; }
+    public DateTime? Insert_date { get; set; }
+    public string? Insert_uid { get; set; }
     public DateTime? up_date { get; set; }
     public string? up_uid { get; set; }
     public string? notes { get; set; }

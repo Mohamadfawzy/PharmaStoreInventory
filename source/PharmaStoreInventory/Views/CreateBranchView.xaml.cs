@@ -183,7 +183,7 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
         }
     }
 
-    // deleted
+    // Deleted
     //private async Task<ConnectionErrorCode> ApiEmployeeLogin(BranchModel branch)
     //{
     //    try

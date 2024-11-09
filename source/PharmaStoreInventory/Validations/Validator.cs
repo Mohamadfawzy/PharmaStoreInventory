@@ -8,7 +8,7 @@ internal static class Validator
     {
         if (string.IsNullOrWhiteSpace(email))
             return false;
-        // Define a regular expression pattern for a valid email address
+        // Define a regular expression pattern for a valid email Address
         string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
         Regex regex = new(pattern);
         return regex.IsMatch(email);

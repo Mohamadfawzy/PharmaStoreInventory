@@ -21,7 +21,7 @@ public class XmlFileHandler
             return;
         await Task.Run(() =>
         {
-            XDocument xDocument = new XDocument(new XElement(rootName));
+            XDocument xDocument = new(new XElement(rootName));
             xDocument.Save(path);
         });
     }
@@ -30,9 +30,6 @@ public class XmlFileHandler
     {
         try
         {
-            //if (await IsIpAdrressExist(branch.IpAddress))
-            //    return Result.Failure(ErrorCode.ItemIsExist);
-
             var doc = XDocument.Load(path);
             if (doc != null)
             {
@@ -54,7 +51,7 @@ public class XmlFileHandler
                     root.Save(path);
                 }
             }
-            return Result.Success();
+            return await Task.FromResult( Result.Success());
         }
         catch (Exception ex)
         {
@@ -117,7 +114,5 @@ public class XmlFileHandler
         {
             return null;
         }
-
-
     }
 }

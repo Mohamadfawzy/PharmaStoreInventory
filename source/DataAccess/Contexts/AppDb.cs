@@ -42,7 +42,7 @@ public class AppDb : DbContext
     public DbSet<Product_Amount> Product_Amount { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Vendor> Vendor { get; set; }
-    public DbSet<Companys> Companys { get; set; }
+    //public DbSet<Companys> Companys { get; set; }
     public DbSet<Product_units> Product_units { get; set; }
     public DbSet<Employee> Employee { get; set; }
     public DbSet<Stores> Stores { get; set; }
@@ -64,7 +64,7 @@ public class AppDb : DbContext
              .Entity<ProductAmountUpdate>(entity =>
              {
                  entity.ToTable("Product_amount_update");
-                 entity.HasKey(p => p.Id);
+                 entity.HasNoKey();
                  entity.Property(x => x.Id).ValueGeneratedOnAdd();
                  entity.Property(a => a.Insert_date).HasDefaultValueSql("(getdate())");
              });
@@ -91,6 +91,7 @@ public class AppDb : DbContext
             {
                 entity.HasKey(p => new { p.Product_id, p.Counter_id, p.Store_id });
                 entity.Property(x => x.Pa_id).ValueGeneratedOnAdd();
+                entity.Property(am=>am.Amount).HasPrecision(18, 2);
                 entity.Property(a => a.Update_date).HasDefaultValueSql("(getutcdate())");
             });
 
@@ -102,9 +103,9 @@ public class AppDb : DbContext
             .Entity<Vendor>()
             .HasNoKey();
 
-        modelBuilder
-            .Entity<Companys>()
-            .HasNoKey();
+        //modelBuilder
+        //    .Entity<Companys>()
+        //    .HasNoKey();
 
         modelBuilder
             .Entity<Product_units>()
