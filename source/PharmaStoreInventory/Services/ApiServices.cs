@@ -164,6 +164,7 @@ public static class ApiServices
             var baseUrl = await Configuration.ConfigureBaseUrl(branch.IpAddress, branch.Port);
 
             var emp = new LoginDto(branch.Username, branch.Password);
+            emp.SecretKey = AppConstants.SecretKey;
 
 
             var url = baseUrl + "/Employee/login";
@@ -257,6 +258,20 @@ public static class ApiServices
         return await RequestProvider.PutAsync<Result, ChangePasswordRequest>(url, model);
     }
     #endregion
+
+
+    #region v
+    public static async Task<SystemVersions?> GetCurrentSystemVersionAsync(string url)
+    {
+        return await RequestProvider.GetSingleAsync<SystemVersions>(url + $"/system-version");
+    }
+    public static async Task<PharmaVersion?> GetCurrentPharmaVersionAsync()
+    {
+        return await RequestProvider.GetSingleAsync<PharmaVersion>(AppValues.HostBaseURI + $"/pharma-version");
+    }
+    #endregion
+
+
 
     // BuildQueryString
     private static async Task<string> BuildQueryString(Dictionary<string, string?> queryParams)

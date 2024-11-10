@@ -17,6 +17,11 @@ public class EmployeeController(EmployeeRepo repo) : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto model)
     {
+        if (string.IsNullOrEmpty(model.SecretKey) && model.SecretKey != "2830575c-293c-4261-9139-6d6053263102")
+        {
+            return BadRequest();
+        }
+
         var res = await repo.EmpLogin(model);
         if (res == null)
         {

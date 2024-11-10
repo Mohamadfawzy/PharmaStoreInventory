@@ -49,6 +49,7 @@ public class AppDb : DbContext
     public DbSet<InventoryHistory> InventoryHistory { get; set; }
     public DbSet<ProductAmountUpdate> ProductAmountUpdates { get; set; }
     public DbSet<ProductAmountChange> ProductAmountChanges { get; set; }
+    public DbSet<SystemVersions> Versions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -64,9 +65,9 @@ public class AppDb : DbContext
              .Entity<ProductAmountUpdate>(entity =>
              {
                  entity.ToTable("Product_amount_update");
-                 entity.HasNoKey();
+                 entity.HasKey(p => p.Id);
                  entity.Property(x => x.Id).ValueGeneratedOnAdd();
-                 entity.Property(a => a.Insert_date).HasDefaultValueSql("(getdate())");
+                 entity.Property(a => a.Insert_date).HasDefaultValueSql("GETDATE()");
              });
         
         modelBuilder
@@ -75,7 +76,7 @@ public class AppDb : DbContext
                  entity.ToTable("Product_amount_change");
                  entity.HasKey(p => p.Id);
                  entity.Property(x => x.Id).ValueGeneratedOnAdd();
-                 entity.Property(a => a.Insert_date).HasDefaultValueSql("(getdate())");
+                 entity.Property(a => a.Insert_date).HasDefaultValueSql("GETDATE()");
              });
 
         modelBuilder
@@ -92,7 +93,7 @@ public class AppDb : DbContext
                 entity.HasKey(p => new { p.Product_id, p.Counter_id, p.Store_id });
                 entity.Property(x => x.Pa_id).ValueGeneratedOnAdd();
                 entity.Property(am=>am.Amount).HasPrecision(18, 2);
-                entity.Property(a => a.Update_date).HasDefaultValueSql("(getutcdate())");
+                entity.Property(a => a.Update_date).HasDefaultValueSql("GETUTCDATE()");
             });
 
         modelBuilder
@@ -102,6 +103,12 @@ public class AppDb : DbContext
         modelBuilder
             .Entity<Vendor>()
             .HasNoKey();
+
+        modelBuilder
+            .Entity<SystemVersions>()
+            .ToTable("Versions")
+            .HasNoKey();
+
 
         //modelBuilder
         //    .Entity<Companys>()

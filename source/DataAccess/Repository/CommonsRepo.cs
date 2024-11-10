@@ -15,11 +15,13 @@ public class CommonsRepo(AppDb context)
         return await context.Stores.ToListAsync();
     }
 
-    public async Task<InventoryHistory?> GetLatestInventoryHistoryAsync(int sotreId)
+    public async Task<InventoryHistory?> GetLatestInventoryHistoryAsync(int storeId)
     {
-        var latestInventory = await context.InventoryHistory // أحدث جرد
+        try
+        {
+            var latestInventory = await context.InventoryHistory // أحدث جرد
             .Where(s => s.Start_time != null) // Exclude null dates
-            .Where(s => s.Store_id == sotreId)
+            .Where(s => s.Store_id == storeId)
             .OrderByDescending(o => o.Start_time)
             .Select(history => new InventoryHistory()
             {
@@ -30,7 +32,9 @@ public class CommonsRepo(AppDb context)
                 End_time = history.End_time,
             })
             .FirstOrDefaultAsync();
-        return latestInventory;
+            return latestInventory;
+        }
+        catch {  return null; }
     }
 
     public async Task<Result<InventoryHistory>>  StartNewInventoryAsync(StartNewInventoryHistoryDto model)
@@ -86,4 +90,19 @@ public class CommonsRepo(AppDb context)
             .SetProperty(b => b.Update_uid, empId.ToString()));
         return (query > 0);
     }
+
+    public async Task<SystemVersions?> GetCurrentSystemVersion()
+    {
+        try
+        {
+            var latestInventory = await context.Versions.OrderBy(x=>x.Ver_id).LastOrDefaultAsync();
+            return latestInventory;
+        }
+        catch (Exception ex)
+        {
+            //Console.WriteLine( ex.Message);
+        }
+        return null;
+    }
+
 }

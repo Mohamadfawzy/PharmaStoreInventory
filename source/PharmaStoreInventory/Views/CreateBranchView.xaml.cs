@@ -9,9 +9,17 @@ namespace PharmaStoreInventory.Views;
 
 public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchViewNotification>
 {
+    public CreateBranchView()
+    {
+        InitializeComponent();
+        xFileHandler = new(AppValues.XBranchesFileName);
+    }
 
-    private readonly XmlFileHandler xFileHandler;
-    //private EmployeeDto? employee = null;
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        GetPharmaVersion();
+    }
 
     public void Receive(CreateBranchViewNotification message)
     {
@@ -20,11 +28,8 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
             notification.ShowMessage(message.Value);
         });
     }
-    public CreateBranchView()
-    {
-        InitializeComponent();
-        xFileHandler = new(AppValues.XBranchesFileName);
-    }
+
+    private readonly XmlFileHandler xFileHandler;
 
     private void ClearFocusFromAllInputsTapped(object sender, TappedEventArgs e)
     {
@@ -39,21 +44,23 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
             btnCreateBranch.IsEnabled = false;
             inputsContainer.ClearFocusFromAllInputs();
 
-            if (AreEntriesValid())
+            if (!AreEntriesValid())
             {
-                var branch = new BranchModel()
-                {
-                    Id = Guid.NewGuid(),
-                    BrachName = brachName.InputText,
-                    Telephone = telephone.InputText,
-                    IpAddress = ipAdrress.InputText,
-                    Port = port.InputText,
-                    Username = username.InputText,
-                    Password = password.InputText,
-                    UserId = AppPreferences.HostUserId,
-                };
-                await CreateBranch(branch);
+                return;
             }
+
+            var branch = new BranchModel()
+            {
+                Id = Guid.NewGuid(),
+                BrachName = brachName.InputText,
+                Telephone = telephone.InputText,
+                IpAddress = ipAdrress.InputText,
+                Port = port.InputText,
+                Username = username.InputText,
+                Password = password.InputText,
+                UserId = AppPreferences.HostUserId,
+            };
+            await CreateBranch(branch);
         }
         catch (Exception ex)
         {
@@ -119,31 +126,41 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
         var (status, message) = await ApiServices.ApiEmployeeLogin(branch);
         if (status == ConnectionErrorCode.Success)
         {
-            // 1 Save branch data on ModernSoft host
+            // 1 Check version compatibility
+            await GetSystemVersion(await Configuration.ConfigureBaseUrl(branch.IpAddress, branch.Port));
+            if (AppValues.SystemVersion != AppValues.PharmaVersion)
+            {
+                notification.ShowMessage("خطأ في الإصدار", "من فضلك تحقق من توافق الإصدار");
+                return;
+            }
+
+            // 2 Save branch data on ModernSoft host
             var result = await ApiServices.AddBranche(branch);
-            if (result == null)
+            if (result != null)
             {
-                notification.ShowMessage("حدث خطأ عن اضافة الفرع علي الهوست");
+                if (!result.IsSuccess)
+                {
+                    notification.ShowMessage("خطأ  علي الهوست", result.Message);
+                    return;
+                }
+            }
+            else
+            {
+                notification.ShowMessage("حدث خطأ عن اضافة الفرع علي الهوست","تحقق من الأتصال بالانترنت");
                 return;
             }
+           
 
-            if(result != null && !result.IsSuccess)
-            {
-                notification.ShowMessage("لم يتم اضافة الرفع",result.Message);
-                return;
-            }
-
-
-            // 2 Toast Message
+            // 3 Toast Message
             await Alerts.DisplayToast("Contacted successfully");
 
-            // 3 Save branch data locally
+            // 4 Save branch data locally
             var t1 = xFileHandler.Add(branch);
 
-            // 4 Save Preferences
+            // 5 Save Preferences
             var t2 = SetPreferences(branch);
 
-            // 5 Navigation
+            // 6 Navigation
             var t4 = Navigation.PushAsync(new BranchesView());
             await Task.WhenAll(t1, t2, t4);
         }
@@ -161,6 +178,19 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
         }
     }
 
+    private void SetInputText_Tapped(object sender, TappedEventArgs e)
+    {
+        if (AppValues.IsDevelopment)
+        {
+            brachName.SetInputText("اسم الفرع");
+            telephone.SetInputText("0402555550");
+            ipAdrress.SetInputText("192.168.1.103");
+            port.SetInputText("6555");
+            username.SetInputText("admin");
+            password.SetInputText("admin");
+        }
+    }
+
     private async Task SetPreferences(BranchModel branch)
     {
         AppPreferences.LocalBaseURI = AppValues.LocalBaseURI = await Configuration.ConfigureBaseUrl(branch.IpAddress, branch.Port);
@@ -170,58 +200,25 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
         //AppPreferences.EmpPassword = branch.Password;
     }
 
-    private void SetInputText_Tapped(object sender, TappedEventArgs e)
+    private async void GetPharmaVersion()
     {
-        if (AppValues.IsDevelopment)
+        var pharmaVersion = await ApiServices.GetCurrentPharmaVersionAsync();
+
+        if (pharmaVersion != null && pharmaVersion.VersionName != null)
         {
-            brachName.SetInputText("اسم الفرع");
-            telephone.SetInputText("0402555550");
-            ipAdrress.SetInputText("192.168.1.103");
-            port.SetInputText("5145");
-            username.SetInputText("admin");
-            password.SetInputText("admin");
+            AppValues.PharmaVersion = pharmaVersion.VersionName;
         }
     }
+    
+    private async Task GetSystemVersion(string url)
+    {
+        var systemVersion = await ApiServices.GetCurrentSystemVersionAsync(url);
 
-    // Deleted
-    //private async Task<ConnectionErrorCode> ApiEmployeeLogin(BranchModel branch)
-    //{
-    //    try
-    //    {
-    //        //Strings.IP = AppPreferences.IP = branch.IpAddress;
-    //        //Strings.Port = AppPreferences.Port = branch.Port;
-    //        // http://192.168.1.103:5144/api
-    //        //var repo = new EmployeeRepo();
-
-    //        var uri = await Configuration.ConfigureBaseUrl(branch.IpAddress, branch.Port);
-
-    //        var emp = new LoginDto(branch.Username, branch.Password);
-    //        var result = await ApiServices.EmpLogin(uri, emp);
-
-    //        // status 1 Unable to connect to server
-    //        if (result == null)
-    //        {
-    //            return ConnectionErrorCode.Fail;
-    //        }
-    //        // status 2 Server connection IsSuccess
-    //        if (result != null && result.IsSuccess)
-    //        {
-    //            if (result.Data != null)
-    //            {
-    //                employee = result.Data;
-    //            }
-    //            return ConnectionErrorCode.Success;
-    //        }
-    //        // status 3 Server connection IsSuccess, but username or password is incorrect
-    //        else
-    //            return ConnectionErrorCode.UsernameOrPass;
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        notification.ShowMessage("Something went wrong", ex.Message);
-    //        return ConnectionErrorCode.Exception;
-    //    }
-    //}
+        if (systemVersion != null && systemVersion.Ver_code != null)
+        {
+            AppValues.SystemVersion = systemVersion.Ver_code;
+        }
+    }
 }
 
 
