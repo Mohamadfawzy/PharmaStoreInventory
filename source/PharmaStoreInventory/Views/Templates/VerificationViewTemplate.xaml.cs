@@ -2,10 +2,14 @@ namespace PharmaStoreInventory.Views.Templates;
 
 public partial class VerificationViewTemplate : ContentView
 {
-    public event EventHandler SubmitClicked;
+    public event EventHandler? SubmitClicked;
     public VerificationViewTemplate()
     {
         InitializeComponent();
+    }
+    public void Init()
+    {
+        entry1.Focus();
     }
     private void NavigationPop_Tapped(object sender, TappedEventArgs e)
     {
@@ -24,21 +28,21 @@ public partial class VerificationViewTemplate : ContentView
                     switch (rcp)
                     {
                         case "4":
-                            entry3.IsReadOnly = false;
+                            //entry3.IsReadOnly = false;
                             entry3.Focus();
-                            entry4.IsReadOnly = true;
+                            //entry4.IsReadOnly = true;
                             break;
 
                         case "3":
-                            entry2.IsReadOnly = false;
+                            //entry2.IsReadOnly = false;
                             entry2.Focus();
-                            entry3.IsReadOnly = true;
+                            //entry3.IsReadOnly = true;
                             break;
 
                         case "2":
-                            entry1.IsReadOnly = false;
                             entry1.Focus();
-                            entry2.IsReadOnly = true;
+                            // entry1.IsReadOnly = false;
+                            //entry2.IsReadOnly = true;
                             break;
 
                         case "1":
@@ -52,23 +56,27 @@ public partial class VerificationViewTemplate : ContentView
                     switch (rcp)
                     {
                         case "1":
-                            entry2.IsReadOnly = false;
+                            //entry2.IsReadOnly = false;
                             entry2.Focus();
                             //checkLenth(ref entry1, entry2);
                             break;
 
                         case "2":
-                            entry3.IsReadOnly = false;
+                            //entry3.IsReadOnly = false;
                             entry3.Focus();
                             break;
 
                         case "3":
-                            entry4.IsReadOnly = false;
+                            //entry4.IsReadOnly = false;
                             entry4.Focus();
                             break;
 
                         case "4":
-                            await entry4.HideSoftInputAsync(CancellationToken.None);
+                            if (IsComplete())
+                            {
+                                await entry4.HideSoftInputAsync(CancellationToken.None);
+                                RunEvent();
+                            }
                             break;
                     }
                 }
@@ -81,6 +89,14 @@ public partial class VerificationViewTemplate : ContentView
         return $"{entry1.Text}{entry2.Text}{entry3.Text}{entry4.Text}";
     }
 
+    private bool IsComplete()
+    {
+        if (GetCode().Length >= 4)
+        {
+            return true;
+        }
+        return false;
+    }
     private void Button_Clicked_1(object sender, EventArgs e)
     {
         Navigation.PopAsync();
@@ -122,7 +138,7 @@ public partial class VerificationViewTemplate : ContentView
         ResendCodeButton.IsEnabled = true;
     }
 
-    public void SetSpanEmail(string email)
+    public void SetSpanEmail(string? email)
     {
         spanEmail.Text = email;
     }
@@ -130,5 +146,10 @@ public partial class VerificationViewTemplate : ContentView
     {
         EventHandler handler = SubmitClicked;
         handler?.Invoke(this, new EventArgs());
+    }
+
+    void RunEvent()
+    {
+        SubmitClicked?.Invoke(this, new EventArgs());
     }
 }

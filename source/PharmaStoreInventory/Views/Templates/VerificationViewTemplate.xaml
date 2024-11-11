@@ -20,7 +20,7 @@
                 <Setter Property="HeightRequest" Value="50" />
                 <Setter Property="Keyboard" Value="Numeric" />
                 <Setter Property="MaxLength" Value="1" />
-                <Setter Property="IsReadOnly" Value="True" />
+                <Setter Property="IsReadOnly" Value="False" />
                 <Setter Property="TextColor" Value="{StaticResource Primary500}" />
             </Style>
 

@@ -210,7 +210,11 @@ public partial class AnimatedInput : ContentView
         }
     }
 
-
+    public bool IsValid()
+    {
+        Validation();
+        return IsError;
+    }
 
     public bool HideKeyBoard()
     {
@@ -248,6 +252,11 @@ public partial class AnimatedInput : ContentView
 
     private void Validation()
     {
+        if(string.IsNullOrEmpty(InputText))
+        {
+            IsError = true;
+        }
+
         if (EntryKeyboard == KeyboardEnum.Email)
         {
             if (!Validator.IsValidEmail(InputText))

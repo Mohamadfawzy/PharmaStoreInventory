@@ -9,7 +9,6 @@
     x:Name="ThisPage"
     Title="RegisterView"
     FlowDirection="RightToLeft"
-    NavigatedTo="ThisPage_NavigatedTo"
     NavigationPage.HasNavigationBar="False">
     <ContentPage.Behaviors>
         <toolkit:StatusBarBehavior StatusBarColor="{StaticResource Primary800}" StatusBarStyle="LightContent" />
@@ -140,7 +139,7 @@
                     </Grid>
                 </Border>
                 <StackLayout.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                    <TapGestureRecognizer Tapped="ClearFocusFromAllInputs_Tapped" />
                 </StackLayout.GestureRecognizers>
             </StackLayout>
         </ScrollView>

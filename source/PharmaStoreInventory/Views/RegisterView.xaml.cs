@@ -1,12 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
 using DataAccess.DomainModel;
 using DataAccess.Dtos.UserDtos;
+using DataAccess.Helper;
 using DataAccess.Services;
+using Microsoft.Maui;
 using PharmaStoreInventory.Extensions;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Languages;
 using PharmaStoreInventory.Messages;
+using PharmaStoreInventory.Models;
 using PharmaStoreInventory.Services;
+using PharmaStoreInventory.Views.Templates;
 
 namespace PharmaStoreInventory.Views;
 
@@ -23,10 +27,6 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
         mailingService = new();
         WeakReferenceMessenger.Default.Register<RegisterViewNotification>(this);
     }
-    private async void ThisPage_NavigatedTo(object sender, NavigatedToEventArgs e)
-    {
-
-    }
 
     public void Receive(RegisterViewNotification message)
     {
@@ -36,7 +36,7 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
         });
     }
 
-    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    private void ClearFocusFromAllInputs_Tapped(object sender, TappedEventArgs e)
     {
         inputsContainer.ClearFocusFromAllInputs();
     }
@@ -44,11 +44,9 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
     private async void SubmitClicked(object sender, EventArgs e)
     {
         activityIndicator.IsRunning = true;
-
         try
         {
-            var isError = CheckInputs();
-            if (isError)
+            if (IsAnyInvalidInput())
             {
                 return;
             }
@@ -65,41 +63,89 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
             };
 
             AppPreferences.UserEmail = uRegister.Email;
-            var anyNotFounded = await AreEmailAndPhoneNonExistentAsync(uRegister.Email, uRegister.PhoneNumber);
-
-            if (anyNotFounded)
+            var canRegister = await CanRegisterEmailOrPhone(uRegister.Email, uRegister.PhoneNumber);
+            if (canRegister == false)
             {
-                if (isEmailVerified)
-                {
-                    await CreateAccount(uRegister);
-                }
-                else
-                {
-                    verificationViewTemplate.IsVisible = true;
-                    verificationViewTemplate.SetSpanEmail(uRegister.Email);
-                    var res = await mailingService.SendVerificationCodeAsync(uRegister.Email!, null, uRegister.FullName);
-                    if (res != null && res.IsSuccess)
-                    {
-                        verificationCodeSent = res.Data;
-                        notification.ShowMessage("تم ارسال كود تحقق");
-                    }
-                    else
-                    {
-                        notification.ShowMessage("حدثت مشكلة ولم يتم ارسال الكود");
-                    }
-                }
+                return;
             }
+            ShowVerificationViewTemplate();
+            SaveAndSendVerificationCode();
         }
         catch (Exception ex)
         {
             notification.ShowMessage("exception", ex.Message);
         }
+        finally
+        {
+            activityIndicator.IsRunning = false;
+        }
+    }
+
+    private async void VerificationViewTemplate_SubmitClicked(object sender, EventArgs e)
+    {
+        if (verificationCodeSent == verificationViewTemplate.GetCode())
+        {
+            //notification.ShowMessage("تم التحقق من الإيميل");
+            mainCreationButton.Text = "تأكيد إنشاء الحساب";
+            //verificationViewTemplate.IsVisible = false;
+            email.IsEnabled = false;
+            //isEmailVerified = true;
+            await CreateAccount(uRegister);
+        }
+        else
+        {
+            notification.ShowMessage("الكود خاطئ");
+        }
+    }
+
+    private void ShowVerificationViewTemplate()
+    {
+        verificationViewTemplate.IsVisible = true;
+        verificationViewTemplate.Init();
+        verificationViewTemplate.SetSpanEmail(uRegister.Email);
+    }
+
+    private async void SaveAndSendVerificationCode()
+    {
+        try
+        {
+            //1 save code in database
+            EmailRequestModel emailModel = new()
+            {
+                Recipient = email.InputText,
+                UserFullName = fullName.InputText,
+                VerificationCode = Common.GenerateVerificationCode(),
+            };
+            uRegister.VerificationCode = emailModel.VerificationCode;
+            var saveCodeResponse = await ApiServices.PostEmailVerificationCode(emailModel);
+
+            //2 send email
+            if (saveCodeResponse != null && saveCodeResponse.IsSuccess)
+            {
+                // Result<string>.Success(emailModel.VerificationCode); await Task.Delay(3000); //
+                var res = await mailingService.SendVerificationCodeAsync(emailModel.Recipient, emailModel.VerificationCode, emailModel.UserFullName);
+                if (res != null && res.IsSuccess)
+                {
+
+                    verificationCodeSent = res.Data ?? emailModel.VerificationCode;
+                    notification.ShowMessage("تم ارسال كود تحقق");
+                }
+            }
+            else
+            {
+                notification.ShowMessage("حدثت مشكلة ولم يتم ارسال الكود");
+            }
+        }
+        catch (Exception ex)
+        {
+            notification.ShowMessage(ex.Message);
+        }
         finally { activityIndicator.IsRunning = false; }
     }
 
-    private async Task<bool> AreEmailAndPhoneNonExistentAsync(string uEmail, string uPhone)
+    private async Task<bool> CanRegisterEmailOrPhone(string uEmail, string uPhone)
     {
-        var res = await ApiServices.AreEmailAndPhoneNonExistentAsync(uEmail, uPhone);
+        var res = await ApiServices.CanRegisterEmailOrPhoneAsync(uEmail, uPhone);
 
         if (res == null)
         {
@@ -155,10 +201,14 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
             }
             if (res.IsSuccess)
             {
-                _ = Helpers.Alerts.DisplayToast("welcome " + user.FullName);
+                _ = Alerts.DisplayToast("welcome " + user.FullName);
 
                 await Navigation.PushAsync(new LoginView());
                 Navigation.RemovePage(this);
+            }
+            else
+            {
+                notification.ShowMessage(res.Message);
             }
         }
         catch (Exception ex)
@@ -167,57 +217,6 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
         }
     }
 
-    bool CheckInputs()
-    {
-        bool isError = false;
-        if (string.IsNullOrEmpty(fullName.InputText))
-        {
-            fullName.IsError = true;
-            isError = true;
-        }
-        if (string.IsNullOrEmpty(pharmacyName.InputText))
-        {
-            pharmacyName.IsError = true;
-            isError = true;
-        }
-        if (string.IsNullOrEmpty(email.InputText) || email.IsError)
-        {
-            email.IsError = true;
-            isError = true;
-        }
-        if (string.IsNullOrEmpty(telephone.InputText) || telephone.IsError)
-        {
-            telephone.IsError = true;
-            isError = true;
-        }
-        if (string.IsNullOrEmpty(password.InputText) ||
-            string.IsNullOrEmpty(confirmPassword.InputText) ||
-            password.InputText != confirmPassword.InputText)
-        {
-            password.IsError = true;
-            confirmPassword.IsError = true;
-            isError = true;
-        }
-        return isError;
-    }
-
-    private void VerificationViewTemplate_SubmitClicked(object sender, EventArgs e)
-    {
-        if (verificationCodeSent == verificationViewTemplate.GetCode())
-        {
-            notification.ShowMessage("تم التحقق من الإيميل");
-            mainCreationButton.Text = "تأكيد إنشاء الحساب";
-            verificationViewTemplate.IsVisible = false;
-            email.IsEnabled = false;
-            isEmailVerified = true;
-        }
-        else
-        {
-            notification.ShowMessage("الكود خاطئ");
-        }
-    }
-
-    // will Deleted
     private void SetInputText_Tapped(object sender, TappedEventArgs e)
     {
         if (AppValues.IsDevelopment)
@@ -237,23 +236,58 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
         await Navigation.PushAsync(new LoginView());
         Navigation.RemovePage(this);
     }
+
+    /// <returns> true if one or more inputs are invalid.</returns>
+    bool IsAnyInvalidInput()
+    {
+        var enyErrorFound = false;
+        foreach (var item in inputsContainer.Children)
+        {
+            var inputFiled = (AnimatedInput)item;
+            if (inputFiled.IsValid())
+            {
+                enyErrorFound = true;
+            }
+        }
+
+        if (password.InputText != confirmPassword.InputText)
+        {
+            password.IsError = true;
+            confirmPassword.IsError = true;
+            enyErrorFound = true;
+            password.ErrorMessage = confirmPassword.ErrorMessage = "تحقق من تطابق الرقم السري";
+        }
+        return enyErrorFound;
+
+        //bool isError = false;
+        //if (string.IsNullOrEmpty(fullName.InputText))
+        //{
+        //    fullName.IsError = true;
+        //    isError = true;
+        //}
+        //if (string.IsNullOrEmpty(pharmacyName.InputText))
+        //{
+        //    pharmacyName.IsError = true;
+        //    isError = true;
+        //}
+        //if (string.IsNullOrEmpty(email.InputText) || email.IsError)
+        //{
+        //    email.IsError = true;
+        //    isError = true;
+        //}
+        //if (string.IsNullOrEmpty(telephone.InputText) || telephone.IsError)
+        //{
+        //    telephone.IsError = true;
+        //    isError = true;
+        //}
+        //if (string.IsNullOrEmpty(password.InputText) ||
+        //    string.IsNullOrEmpty(confirmPassword.InputText) ||
+        //    password.InputText != confirmPassword.InputText)
+        //{
+        //    password.IsError = true;
+        //    confirmPassword.IsError = true;
+        //    isError = true;
+        //}
+        //return isError;
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

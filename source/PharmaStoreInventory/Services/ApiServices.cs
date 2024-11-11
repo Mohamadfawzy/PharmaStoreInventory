@@ -181,7 +181,7 @@ public static class ApiServices
             {
                 if (response.Result.IsSuccess)
                 {
-                    if (response.Result.Data != null )
+                    if (response.Result.Data != null)
                     {
                         AppPreferences.LocalDbUserId = response.Result.Data.Id;
                         AppPreferences.Token = "Bearer " + response.Auth?.Token;
@@ -213,7 +213,7 @@ public static class ApiServices
         return content;
     }
 
-    public static async Task<Result?> AreEmailAndPhoneNonExistentAsync(string email, string phone)
+    public static async Task<Result?> CanRegisterEmailOrPhoneAsync(string email, string phone)
     {
         var queryParams = new Dictionary<string, string?>
             {
@@ -259,8 +259,7 @@ public static class ApiServices
     }
     #endregion
 
-
-    #region v
+    #region Version
     public static async Task<SystemVersions?> GetCurrentSystemVersionAsync(string url)
     {
         return await RequestProvider.GetSingleAsync<SystemVersions>(url + $"/system-version");
@@ -271,6 +270,14 @@ public static class ApiServices
     }
     #endregion
 
+    #region Email
+    public static async Task<Result?> PostEmailVerificationCode(EmailRequestModel model)
+    {
+        var url = AppValues.HostBaseURI + "/mail/save";
+        var (content, error) = await RequestProvider.PostSingleAsync<Result, EmailRequestModel>(url, model);
+        return content;
+    }
+    #endregion
 
 
     // BuildQueryString

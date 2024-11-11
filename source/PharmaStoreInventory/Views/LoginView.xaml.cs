@@ -232,7 +232,7 @@ public partial class LoginView : ContentPage
         }
 
         return inputType;
-    }// end CheckInputs
+    }// end IsAnyInvalidInput
 
     private async void GoToRegisterViewClicked(object sender, EventArgs e)
     {
