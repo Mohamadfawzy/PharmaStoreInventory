@@ -7,16 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PharmaStoreInventory", "Pha
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{D453BCD6-F8E9-4A2C-8FDA-1088EA2CA395}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQLQueries", "SQLQueries", "{985BCE98-9142-4FEA-BC1E-A4862298E984}"
-	ProjectSection(SolutionItems) = preProject
-		host-0-Insert_all.sql = host-0-Insert_all.sql
-		..\..\..\Backend\QuerySqlServer\SQLQueries\host-1-ScriptHost.sql = ..\..\..\Backend\QuerySqlServer\SQLQueries\host-1-ScriptHost.sql
-		..\..\..\Backend\QuerySqlServer\SQLQueries\host-2_insert_Emp.sql = ..\..\..\Backend\QuerySqlServer\SQLQueries\host-2_insert_Emp.sql
-		..\..\..\Backend\QuerySqlServer\SQLQueries\host-3_insert_Users.sql = ..\..\..\Backend\QuerySqlServer\SQLQueries\host-3_insert_Users.sql
-		..\..\..\Backend\QuerySqlServer\SQLQueries\host-4_branch.sql = ..\..\..\Backend\QuerySqlServer\SQLQueries\host-4_branch.sql
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PharmaStoreInventoryApi", "PharmaStoreInventoryApi\PharmaStoreInventoryApi.csproj", "{C6A5942B-3A68-427E-8B2D-D4368FE0699D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PharmaStoreInventoryApi", "PharmaStoreInventoryApi\PharmaStoreInventoryApi.csproj", "{C6A5942B-3A68-427E-8B2D-D4368FE0699D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

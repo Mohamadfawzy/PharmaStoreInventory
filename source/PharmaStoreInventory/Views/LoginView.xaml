@@ -63,17 +63,33 @@
                                     x:Name="inputsContainer"
                                     Padding="20,0"
                                     MinimumHeightRequest="100">
-                                    <!--<template:AnimatedInput
-                                    x:Name="email"
-                                    ErrorMessage="أدخل الايميل أور قم الهاتف بشكل صحيح"
-                                    InputPlaceholder="entrer you email" />
+                                    <template:AnimatedInput
+                                        x:Name="email"
+                                        ErrorMessage="أدخل الايميل أور قم الهاتف بشكل صحيح"
+                                        InputPlaceholder="البريد أو رقم الهاتف" />
 
-                                <template:AnimatedInput
-                                    x:Name="password"
-                                    IsPassword="True"
-                                    HasEyeIcon="True"
-                                    InputPlaceholder="{x:Static res:AppResources.Login_Password}" />-->
+                                    <template:AnimatedInput
+                                        x:Name="password"
+                                        IsPassword="True"
+                                        HasEyeIcon="True"
+                                        InputPlaceholder="{x:Static res:AppResources.Login_Password}" />
                                 </VerticalStackLayout>
+                                <Label
+                                    Padding="20,0"
+                                    Text="هل نسيت كلمة المرور؟"
+                                    TextColor="{StaticResource Primary}"
+                                    FontSize="11">
+                                    <Label.Behaviors>
+                                        <toolkit:TouchBehavior
+                                            DefaultAnimationDuration="250"
+                                            DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+                                            PressedOpacity="0.6"
+                                            PressedScale="0.98" />
+                                    </Label.Behaviors>
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="GoToResetPasswordView_Tapped" />
+                                    </Label.GestureRecognizers>
+                                </Label>
 
                                 <!--  Buttons Section  -->
                                 <VerticalStackLayout Padding="20,0">
@@ -119,7 +135,7 @@
                                                     DefaultAnimationDuration="250"
                                                     DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
                                                     PressedOpacity="0.6"
-                                                    PressedScale="0.8" />
+                                                    PressedScale="0.98" />
                                             </Button.Behaviors>
                                         </Button>
                                     </HorizontalStackLayout>

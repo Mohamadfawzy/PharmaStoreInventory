@@ -145,6 +145,15 @@
         <Setter Property="FontSize" Value="20" />
     </Style>
 
+    <Style x:Key="ParagrapherLabel" TargetType="Label">
+        <Setter Property="Margin" Value="30,0" />
+        <Setter Property="TextColor" Value="{StaticResource Secondary100}" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+        <Setter Property="VerticalTextAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+
     <Style TargetType="Label">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Primary}}" />
         <Setter Property="BackgroundColor" Value="Transparent" />

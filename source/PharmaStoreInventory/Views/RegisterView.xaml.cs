@@ -3,14 +3,13 @@ using DataAccess.DomainModel;
 using DataAccess.Dtos.UserDtos;
 using DataAccess.Helper;
 using DataAccess.Services;
-using Microsoft.Maui;
 using PharmaStoreInventory.Extensions;
 using PharmaStoreInventory.Helpers;
-using PharmaStoreInventory.Languages;
 using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.Models;
 using PharmaStoreInventory.Services;
 using PharmaStoreInventory.Views.Templates;
+using System.Diagnostics;
 
 namespace PharmaStoreInventory.Views;
 
@@ -83,19 +82,8 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
 
     private async void VerificationViewTemplate_SubmitClicked(object sender, EventArgs e)
     {
-        if (verificationCodeSent == verificationViewTemplate.GetCode())
-        {
-            //notification.ShowMessage("تم التحقق من الإيميل");
-            mainCreationButton.Text = "تأكيد إنشاء الحساب";
-            //verificationViewTemplate.IsVisible = false;
-            email.IsEnabled = false;
-            //isEmailVerified = true;
-            await CreateAccount(uRegister);
-        }
-        else
-        {
-            notification.ShowMessage("الكود خاطئ");
-        }
+        //Debug.WriteLine($"\n\n\n Guid:{uRegister.EVCID}");
+        await CreateAccount(uRegister);
     }
 
     private void ShowVerificationViewTemplate()
@@ -115,8 +103,10 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
                 Recipient = email.InputText,
                 UserFullName = fullName.InputText,
                 VerificationCode = Common.GenerateVerificationCode(),
+                EVCID = Guid.NewGuid()
             };
             uRegister.VerificationCode = emailModel.VerificationCode;
+            uRegister.EVCID = emailModel.EVCID;
             var saveCodeResponse = await ApiServices.PostEmailVerificationCode(emailModel);
 
             //2 send email
@@ -127,7 +117,7 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
                 if (res != null && res.IsSuccess)
                 {
 
-                    verificationCodeSent = res.Data ?? emailModel.VerificationCode;
+                    //verificationCodeSent = res.Data ?? emailModel.VerificationCode;
                     notification.ShowMessage("تم ارسال كود تحقق");
                 }
             }
@@ -244,7 +234,7 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
         foreach (var item in inputsContainer.Children)
         {
             var inputFiled = (AnimatedInput)item;
-            if (inputFiled.IsValid())
+            if (inputFiled.IsAnyError())
             {
                 enyErrorFound = true;
             }

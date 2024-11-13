@@ -12,7 +12,7 @@ public class UserRegisterDto
     public string ConfirmNewPassword { get; set; } = null!;
     public string? DeviceID { get; set; } = "emptyFromDto";
     public string? VerificationCode { get; set; }
-
+    public Guid EVCID { get; set; }
 
     public static implicit operator UserAccount(UserRegisterDto dto)
     {

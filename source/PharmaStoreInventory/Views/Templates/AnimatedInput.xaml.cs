@@ -210,7 +210,7 @@ public partial class AnimatedInput : ContentView
         }
     }
 
-    public bool IsValid()
+    public bool IsAnyError()
     {
         Validation();
         return IsError;
@@ -231,7 +231,11 @@ public partial class AnimatedInput : ContentView
     }
 
     public bool EntryIsFocused() => entry.IsFocused;
-
+    public void SetError(string message)
+    {
+        IsError = true;
+        ErrorMessage = message;
+    }
 
 
     private async void Entry_Focused(object sender, FocusEventArgs e)

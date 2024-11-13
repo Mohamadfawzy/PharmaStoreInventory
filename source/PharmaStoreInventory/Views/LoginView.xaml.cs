@@ -3,9 +3,7 @@ using DataAccess.Dtos.UserDtos;
 using DataAccess.Services;
 using PharmaStoreInventory.Extensions;
 using PharmaStoreInventory.Helpers;
-using PharmaStoreInventory.Languages;
 using PharmaStoreInventory.Services;
-using PharmaStoreInventory.Views.Templates;
 
 namespace PharmaStoreInventory.Views;
 
@@ -13,7 +11,7 @@ public partial class LoginView : ContentPage
 {
     private readonly JsonFileHanler jsonFileHanler;
     private readonly XmlFileHandler xFileHanler;
-    AnimatedInput email, password;
+    //AnimatedInput email, password;
     public LoginView()
     {
         InitializeComponent();
@@ -24,22 +22,22 @@ public partial class LoginView : ContentPage
 
     private async void ThisPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {
-        await Task.Delay(1);
-        email = new()
-        {
-            ErrorMessage = "أدخل الايميل أور قم الهاتف بشكل صحيح",
-            InputPlaceholder = "البريد أو رقم الهاتف"
-        };
-        inputsContainer.Add(email);
-        await Task.Delay(1);
+        //await Task.Delay(1);
+        //email = new()
+        //{
+        //    ErrorMessage = "أدخل الايميل أور قم الهاتف بشكل صحيح",
+        //    InputPlaceholder = "البريد أو رقم الهاتف"
+        //};
+        //inputsContainer.Add(email);
+        //await Task.Delay(1);
 
-        password = new()
-        {
-            IsPassword = true,
-            HasEyeIcon = true,
-            InputPlaceholder = AppResources.Login_Password
-        };
-        inputsContainer.Add(password);
+        //password = new()
+        //{
+        //    IsPassword = true,
+        //    HasEyeIcon = true,
+        //    InputPlaceholder = AppResources.Login_Password
+        //};
+        //inputsContainer.Add(password);
 
         AppPreferences.SetDeviceID();
         if (Validations.Validator.IsNetworkAccess())
@@ -257,6 +255,11 @@ public partial class LoginView : ContentPage
     private void NewDviceStack_Tapped(object sender, TappedEventArgs e)
     {
         newDeviceCheckBox.IsChecked = !newDeviceCheckBox.IsChecked;
+    }
+
+    private async void GoToResetPasswordView_Tapped(object sender, TappedEventArgs e)
+    {
+        await Navigation.PushAsync(new ResetPasswordView());
     }
 
     private void SetInputText_Tapped(object sender, TappedEventArgs e)

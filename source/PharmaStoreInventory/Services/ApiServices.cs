@@ -4,6 +4,8 @@ using DataAccess.DomainModel.QueryParams;
 using DataAccess.Dtos;
 using DataAccess.Dtos.UserDtos;
 using DataAccess.Entities;
+using DataAccess.Helper;
+using DataAccess.Services;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.Models;
@@ -213,6 +215,12 @@ public static class ApiServices
         return content;
     }
 
+    public static async Task<Result?> IsEmailExistAsync(string email)
+    {
+        var url = AppValues.HostBaseURI + $"/userAuth/is-email-exist/{email}";
+        return await RequestProvider.GetSingleAsync<Result>(url);
+    }
+
     public static async Task<Result?> CanRegisterEmailOrPhoneAsync(string email, string phone)
     {
         var queryParams = new Dictionary<string, string?>
@@ -257,6 +265,12 @@ public static class ApiServices
         var url = AppValues.HostBaseURI + "/userAuth/change-password";
         return await RequestProvider.PutAsync<Result, ChangePasswordRequest>(url, model);
     }
+    
+    public static async Task<Result?> ResetPasswordAsync(ResetPasswordRequest model)
+    {
+        var url = AppValues.HostBaseURI + "/userAuth/reset-forgotten-password";
+        return await RequestProvider.PutAsync<Result, ResetPasswordRequest>(url, model);
+    }
     #endregion
 
     #region Version
@@ -277,8 +291,40 @@ public static class ApiServices
         var (content, error) = await RequestProvider.PostSingleAsync<Result, EmailRequestModel>(url, model);
         return content;
     }
-    #endregion
 
+    public static async Task<Result?> PostAndSendEmail(EmailRequestModel emailModel)
+    {
+        MailingService mailingService = new();
+        try
+        {
+            //1 save code in database
+            var saveCodeResponse = await PostEmailVerificationCode(emailModel);
+
+            //2 send email
+            if (saveCodeResponse != null && saveCodeResponse.IsSuccess)
+            {
+                var res = await mailingService.SendVerificationCodeAsync(emailModel);
+                if (res != null && res.IsSuccess)
+                {
+                    return Result.Success();
+                }
+            }
+            return Result.Failure("حدثت مشكلة ولم يتم ارسال الكود");
+
+        }
+        catch (Exception ex)
+        {
+            return Result.Failure(ErrorCode.ExceptionError, ex.Message);
+        }
+    }
+
+    public static async Task<Result?> IsVerificationCodeValidAsync(Guid evcId, string code)
+    {
+        var url = AppValues.HostBaseURI + $"/mail/find";
+        var model = new EmailVerificationParameters(evcId, code);
+        return await RequestProvider.PutAsync<Result, EmailVerificationParameters>(url,model);
+    }
+    #endregion
 
     // BuildQueryString
     private static async Task<string> BuildQueryString(Dictionary<string, string?> queryParams)

@@ -172,6 +172,9 @@
 		<MauiXaml Update="Views\BranchesView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\ResetPasswordView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\SettingView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
