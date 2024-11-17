@@ -17,7 +17,7 @@
         <ResourceDictionary>
             <Style x:Key="MenuItemBorderStyle" TargetType="Border">
                 <Setter Property="Padding" Value="25,5" />
-                <Setter Property="StrokeShape" Value="RoundRectangle 20" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 10" />
                 <Setter Property="Margin" Value="0,0,0,10" />
             </Style>
 
@@ -27,12 +27,14 @@
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
+    <!--#region  Fixed Content ==============================-->
 
-    <Grid RowDefinitions="Auto,*">
+    <!--#endregion-->
+    <Grid Padding="0" RowDefinitions="Auto,*">
 
         <!--  BackButton  -->
         <Button
-            Margin="15"
+            Margin="20"
             Padding="0"
             HeightRequest="30"
             WidthRequest="30"
@@ -43,193 +45,76 @@
             FontFamily="{StaticResource IconFont}"
             Text="{x:Static help:IconFontManager.ArrowIcon}" />
 
-        <Button
-            x:Name="saveButton"
-            Margin="15"
-            Padding="0"
-            Text="حفظ"
-            IsVisible="False"
-            MaximumHeightRequest="30"
-            VerticalOptions="Center"
-            FontSize="10"
-            HorizontalOptions="End"
-            Clicked="saveButton_Clicked" />
+        <StackLayout Grid.Row="1">
 
-        <ScrollView Grid.Row="1" VerticalOptions="FillAndExpand">
-            <StackLayout
-                x:Name="container"
-                Padding="20,30"
-                VerticalOptions="FillAndExpand"
-                Background="White">
-
-
-                <!--  Acount Icon  -->
+            <!--  Email  -->
+            <HorizontalStackLayout Padding="20,0">
+                <Label Text="البريد الالكتروني: " FontSize="{StaticResource Body}" />
                 <Label
-                    HorizontalOptions="Center"
-                    Text="{x:Static icon:IconFont.AccountCircle}"
-                    FontSize="100"
-                    FontFamily="{StaticResource IconFont}" />
+                    x:Name="email"
+                    VerticalOptions="Center"
+                    TextColor="{StaticResource Primary}"
+                    FontFamily="{StaticResource OpenSansSemibold}" />
+            </HorizontalStackLayout>
 
-                <!--  Name Group  -->
-                <HorizontalStackLayout
-                    x:Name="nameStack"
-                    Padding="10,0"
-                    HorizontalOptions="Center">
-                    <Label
-                        x:Name="editIcon"
-                        Padding="3,0"
-                        Text="{x:Static icon:IconFont.SquareEditOutline}"
-                        FontFamily="{StaticResource IconFont}"
-                        VerticalTextAlignment="Center">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="AllowNameEditingTapped" />
-                        </Label.GestureRecognizers>
-                    </Label>
-                    <Entry
-                        x:Name="nameEntry"
-                        Text="اسم غير معروف"
-                        IsReadOnly="True" />
-                </HorizontalStackLayout>
-
-                <!--  Email Group  -->
-                <Label Text="البريد الالكتروني" FontSize="{StaticResource Body}" />
-                <Entry x:Name="email" IsReadOnly="True" />
+            <!--  user data for edite  -->
+            <VerticalStackLayout Margin="0,20,0,0" Padding="20,0">
+                <Label
+                    Text="تعديل البيانات الشخصية"
+                    FontFamily="{StaticResource KufiSemiBold}"
+                    HorizontalOptions="Center" />
+                <!--  Nmae Group  -->
+                <Label Text="الاسم كاملا" FontSize="{StaticResource Body}" />
+                <Entry
+                    x:Name="nameEntry"
+                    Text="اسم غير معروف"
+                    TextChanged="AnyEntry_TextChanged" />
                 <BoxView Style="{StaticResource SeparatorStyle}" />
 
                 <!--  PharmaName Group  -->
                 <Label Text="اسم الصيدلية" FontSize="{StaticResource Body}" />
-                <Entry x:Name="pharmaName" IsReadOnly="True" />
+                <Entry x:Name="pharmaName" TextChanged="AnyEntry_TextChanged" />
                 <BoxView Style="{StaticResource SeparatorStyle}" />
 
                 <!--  Phone Group  -->
                 <Label Text="رقم الهاتف" FontSize="{StaticResource Body}" />
-                <Entry x:Name="phone" IsReadOnly="True" />
+                <Entry x:Name="phone" TextChanged="AnyEntry_TextChanged" />
                 <BoxView Style="{StaticResource SeparatorStyle}" />
 
-                <!--  =============================================================================================  -->
+                <Button Text="حفظ التغيرات" Clicked="Button_Clicked" />
+            </VerticalStackLayout>
 
-                <!--  Branches  -->
-                <Border Style="{StaticResource MenuItemBorderStyle}">
-                    <StackLayout Orientation="Horizontal">
-                        <Label Text="الفروع" Style="{StaticResource MenuItemTestStyle}" />
-                        <Label
-                            VerticalTextAlignment="Center"
-                            Text="{x:Static icon:IconFont.SourceBranch}"
-                            FontFamily="{StaticResource IconFont}" />
-                    </StackLayout>
-                    <Border.Behaviors>
-                        <toolkit:TouchBehavior
-                            DefaultAnimationDuration="250"
-                            DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
-                            PressedOpacity="0.9"
-                            PressedBackgroundColor="#300056a9"
-                            CommandParameter="Branches"
-                            TouchGestureCompleted="TouchBehavior_TouchGestureCompleted" />
-                    </Border.Behaviors>
-                </Border>
+            <BoxView
+                Margin="0,20,0,0"
+                HeightRequest="1"
+                Color="Gray" />
 
-                <!--  Add Branch  -->
-                <Border Style="{StaticResource MenuItemBorderStyle}">
-                    <StackLayout Orientation="Horizontal">
-                        <Label Text="إضافة فرع" Style="{StaticResource MenuItemTestStyle}" />
-                        <Label
-                            VerticalTextAlignment="Center"
-                            Text="{x:Static icon:IconFont.SourceBranch}"
-                            FontFamily="{StaticResource IconFont}" />
-                    </StackLayout>
-                    <Border.Behaviors>
-                        <toolkit:TouchBehavior
-                            DefaultAnimationDuration="250"
-                            DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
-                            PressedOpacity="0.9"
-                            PressedBackgroundColor="#300056a9"
-                            CommandParameter="AddBranch"
-                            TouchGestureCompleted="TouchBehavior_TouchGestureCompleted" />
-                    </Border.Behaviors>
-                </Border>
+            <!--  reset password  -->
+            <Border Margin="20" Style="{StaticResource MenuItemBorderStyle}">
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="تغيير_الرقم_السري" Style="{StaticResource MenuItemTestStyle}" />
+                    <Label
+                        VerticalTextAlignment="Center"
+                        FontSize="18"
+                        Text="{x:Static icon:IconFont.LockReset}"
+                        FontFamily="{StaticResource IconFont}" />
+                </StackLayout>
+                <Border.Behaviors>
+                    <toolkit:TouchBehavior
+                        DefaultAnimationDuration="250"
+                        DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+                        PressedOpacity="0.9"
+                        PressedBackgroundColor="#300056a9"
+                        CommandParameter="ResetPassword"
+                        TouchGestureCompleted="TouchBehavior_TouchGestureCompleted" />
+                </Border.Behaviors>
+            </Border>
 
-                <!--  reset password  -->
-                <Border Style="{StaticResource MenuItemBorderStyle}">
-                    <StackLayout Orientation="Horizontal">
-                        <Label Text="تغيير_الرقم_السري" Style="{StaticResource MenuItemTestStyle}" />
-                        <Label
-                            VerticalTextAlignment="Center"
-                            Text="{x:Static icon:IconFont.LockReset}"
-                            FontFamily="{StaticResource IconFont}" />
-                    </StackLayout>
-                    <Border.Behaviors>
-                        <toolkit:TouchBehavior
-                            DefaultAnimationDuration="250"
-                            DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
-                            PressedOpacity="0.9"
-                            PressedBackgroundColor="#300056a9"
-                            CommandParameter="ResetPassword"
-                            TouchGestureCompleted="TouchBehavior_TouchGestureCompleted" />
-                    </Border.Behaviors>
-                </Border>
+        </StackLayout>
 
-                <!--  Logout  -->
-                <Border Style="{StaticResource MenuItemBorderStyle}">
-                    <StackLayout Orientation="Horizontal">
-                        <Label Style="{StaticResource MenuItemTestStyle}" Text="الاعدادات" />
-                        <Label
-                            VerticalTextAlignment="Center"
-                            Text="{x:Static icon:IconFont.Cog}"
-                            FontFamily="{StaticResource IconFont}" />
-                    </StackLayout>
-                    <Border.Behaviors>
-                        <toolkit:TouchBehavior
-                            DefaultAnimationDuration="250"
-                            DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
-                            PressedOpacity="0.9"
-                            PressedBackgroundColor="#300056a9"
-                            CommandParameter="Cog"
-                            TouchGestureCompleted="TouchBehavior_TouchGestureCompleted" />
-                    </Border.Behaviors>
-                </Border>
 
-                <!--  Logout  -->
-                <Border Style="{StaticResource MenuItemBorderStyle}">
-                    <StackLayout Orientation="Horizontal">
-                        <Label Style="{StaticResource MenuItemTestStyle}" Text="تسجيل خروج" />
-                        <Label
-                            VerticalTextAlignment="Center"
-                            Text="{x:Static icon:IconFont.Logout}"
-                            FontFamily="{StaticResource IconFont}" />
-                    </StackLayout>
-                    <Border.Behaviors>
-                        <toolkit:TouchBehavior
-                            DefaultAnimationDuration="250"
-                            DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
-                            PressedOpacity="0.9"
-                            PressedBackgroundColor="#300056a9"
-                            CommandParameter="Logout"
-                            TouchGestureCompleted="TouchBehavior_TouchGestureCompleted" />
-                    </Border.Behaviors>
-                </Border>
-
-                <!--  Reset  -->
-                <!--<Border Style="{StaticResource MenuItemBorderStyle}" BackgroundColor="{StaticResource ErrorDarkColor}">
-                    <StackLayout Orientation="Horizontal">
-                        <Label Style="{StaticResource MenuItemTestStyle}" Text="إعادة تهئية" />
-                        <Label
-                            VerticalTextAlignment="Center"
-                            Text="{x:Static icon:IconFont.RotateRight}"
-                            FontFamily="{StaticResource IconFont}" />
-                    </StackLayout>
-                    <Border.Behaviors>
-                        <toolkit:TouchBehavior
-                            DefaultAnimationDuration="250"
-                            DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
-                            PressedOpacity="0.9"
-                            PressedBackgroundColor="#300056a9"
-                            CommandParameter="Reset"
-                            TouchGestureCompleted="TouchBehavior_TouchGestureCompleted" />
-                    </Border.Behaviors>
-                </Border>-->
-
-            </StackLayout>
-        </ScrollView>
+        <!--#region Absolute Content ==============================-->
+        <!--#endregion-->
 
         <!--  Popup  -->
         <Grid
@@ -318,5 +203,9 @@
         </Grid>
         <!--  End Popup  -->
 
+        <template:NotificationTemplate
+            x:Name="notification"
+            Grid.RowSpan="5"
+            ZIndex="2" />
     </Grid>
 </ContentPage>

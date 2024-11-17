@@ -125,7 +125,7 @@ public class DashboardViewModel : BaseViewModel
                 }
             }
 
-            // if the first time registr storeId
+            // if the first time register storeId
             if (currentSelectedStore == null)
             {
                 currentSelectedStore = StoresModelList[0];
@@ -255,8 +255,13 @@ public class DashboardViewModel : BaseViewModel
 
     //###########*Processors*###########
     #region Processors
-    public static bool CanBackButtonPressed()
+    public bool CanBackButtonPressed()
     {
+        if (IsStoresPopupVisible)
+        {
+            IsStoresPopupVisible = false;
+            return false;
+        }
         return true;
     }
 

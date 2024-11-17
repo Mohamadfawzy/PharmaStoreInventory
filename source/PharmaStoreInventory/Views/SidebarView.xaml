@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PharmaStoreInventory.Views.SidebarView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates"
+    xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
+    xmlns:help="clr-namespace:PharmaStoreInventory.Helpers"
+    x:Name="ThisPage"
+    Title="SidebarView"
+    NavigationPage.HasNavigationBar="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="MenuItemBorderStyle" TargetType="Border">
+                <Setter Property="Padding" Value="25,10" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 20" />
+                <Setter Property="Margin" Value="0,0,0,0" />
+            </Style>
+
+            <Style x:Key="MenuItemTestStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="HorizontalOptions" Value="StartAndExpand" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*">
+        <!--#region  Fixed Content ==============================-->
+
+        <!--  header  -->
+        <HorizontalStackLayout>
+            <!--  back button  -->
+            <Button
+                Margin="15"
+                Padding="0"
+                HeightRequest="30"
+                WidthRequest="30"
+                HorizontalOptions="Start"
+                VerticalOptions="Start"
+                CornerRadius="20"
+                Clicked="BackButtonClicked"
+                FontFamily="{StaticResource IconFont}"
+                Text="{x:Static help:IconFontManager.ArrowIcon}" />
+        </HorizontalStackLayout>
+
+        <ScrollView Grid.Row="1" VerticalOptions="FillAndExpand">
+            <StackLayout
+                x:Name="container"
+                Padding="20,0"
+                Spacing="10"
+                Background="White">
+
+                <!--  profile section  -->
+                <StackLayout Margin="0,0,0,30" Orientation="Horizontal">
+
+                    <!--  Image  -->
+                    <Label
+                        HorizontalOptions="Center"
+                        Text="{x:Static icon:IconFont.AccountCircle}"
+                        FontSize="70"
+                        FontFamily="{StaticResource IconFont}" />
+                    <!--  Name & Email  -->
+                    <VerticalStackLayout>
+                        <Label x:Name="userName" FontFamily="{StaticResource KufiSemiBold}" />
+                        <Label x:Name="userEmail" />
+                    </VerticalStackLayout>
+                    <!--  Edit icon  -->
+                    <Label
+                        Text="{x:Static icon:IconFont.SquareEditOutline}"
+                        FontFamily="{StaticResource IconFont}"
+                        FontSize="25"
+                        HorizontalOptions="EndAndExpand"
+                        VerticalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </StackLayout>
+
+                <!--  Branches  -->
+                <Border Style="{StaticResource MenuItemBorderStyle}">
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="الفروع" Style="{StaticResource MenuItemTestStyle}" />
+                        <Label
+                            VerticalTextAlignment="Center"
+                            Text="{x:Static icon:IconFont.SourceBranch}"
+                            FontFamily="{StaticResource IconFont}" />
+                    </StackLayout>
+                    <Border.Behaviors>
+                        <toolkit:TouchBehavior
+                            DefaultAnimationDuration="250"
+                            DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+                            PressedOpacity="0.9"
+                            PressedBackgroundColor="#300056a9"
+                            CommandParameter="Branches"
+                            TouchGestureCompleted="TouchBehavior_TouchGestureCompleted" />
+                    </Border.Behaviors>
+                </Border>
+
+                <!--  Add Branch  -->
+                <Border Style="{StaticResource MenuItemBorderStyle}">
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="إضافة فرع" Style="{StaticResource MenuItemTestStyle}" />
+                        <Label
+                            VerticalTextAlignment="Center"
+                            Text="{x:Static icon:IconFont.SourceBranch}"
+                            FontFamily="{StaticResource IconFont}" />
+                    </StackLayout>
+                    <Border.Behaviors>
+                        <toolkit:TouchBehavior
+                            DefaultAnimationDuration="250"
+                            DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+                            PressedOpacity="0.9"
+                            PressedBackgroundColor="#300056a9"
+                            CommandParameter="AddBranch"
+                            TouchGestureCompleted="TouchBehavior_TouchGestureCompleted" />
+                    </Border.Behaviors>
+                </Border>
+
+                <!--  Settings  -->
+                <Border Style="{StaticResource MenuItemBorderStyle}">
+                    <StackLayout Orientation="Horizontal">
+                        <Label Style="{StaticResource MenuItemTestStyle}" Text="الاعدادات" />
+                        <Label
+                            VerticalTextAlignment="Center"
+                            Text="{x:Static icon:IconFont.Cog}"
+                            FontFamily="{StaticResource IconFont}" />
+                    </StackLayout>
+                    <Border.Behaviors>
+                        <toolkit:TouchBehavior
+                            DefaultAnimationDuration="250"
+                            DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+                            PressedOpacity="0.9"
+                            PressedBackgroundColor="#300056a9"
+                            CommandParameter="Cog"
+                            TouchGestureCompleted="TouchBehavior_TouchGestureCompleted" />
+                    </Border.Behaviors>
+                </Border>
+
+                <!--  Logout  -->
+                <Border Style="{StaticResource MenuItemBorderStyle}">
+                    <StackLayout Orientation="Horizontal">
+                        <Label
+                            Style="{StaticResource MenuItemTestStyle}"
+                            Text="تسجيل خروج"
+                            TextColor="{StaticResource ErrorColor}" />
+                        <Label
+                            VerticalTextAlignment="Center"
+                            TextColor="{StaticResource ErrorColor}"
+                            Text="{x:Static icon:IconFont.Logout}"
+                            FontFamily="{StaticResource IconFont}" />
+                    </StackLayout>
+                    <Border.Behaviors>
+                        <toolkit:TouchBehavior
+                            DefaultAnimationDuration="250"
+                            DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+                            PressedOpacity="0.9"
+                            PressedBackgroundColor="#300056a9"
+                            CommandParameter="Logout"
+                            TouchGestureCompleted="TouchBehavior_TouchGestureCompleted" />
+                    </Border.Behaviors>
+                </Border>
+
+                <!--  Call Us  -->
+                <template:CallUsTemplate Margin="0,20" VerticalOptions="EndAndExpand" />
+            </StackLayout>
+        </ScrollView>
+        <!--#endregion-->
+    </Grid>
+</ContentPage>

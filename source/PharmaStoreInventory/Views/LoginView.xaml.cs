@@ -9,36 +9,16 @@ namespace PharmaStoreInventory.Views;
 
 public partial class LoginView : ContentPage
 {
-    private readonly JsonFileHanler jsonFileHanler;
-    private readonly XmlFileHandler xFileHanler;
+    private readonly JsonFileHanler jsonFileHandler;
     //AnimatedInput email, password;
     public LoginView()
     {
         InitializeComponent();
-        jsonFileHanler = new JsonFileHanler(AppValues.UserFileName);
-        xFileHanler = new(AppValues.XBranchesFileName);
-
+        jsonFileHandler = new JsonFileHanler(AppValues.UserFileName);
     }
 
-    private async void ThisPage_NavigatedTo(object sender, NavigatedToEventArgs e)
+    private void ThisPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {
-        //await Task.Delay(1);
-        //email = new()
-        //{
-        //    ErrorMessage = "أدخل الايميل أور قم الهاتف بشكل صحيح",
-        //    InputPlaceholder = "البريد أو رقم الهاتف"
-        //};
-        //inputsContainer.Add(email);
-        //await Task.Delay(1);
-
-        //password = new()
-        //{
-        //    IsPassword = true,
-        //    HasEyeIcon = true,
-        //    InputPlaceholder = AppResources.Login_Password
-        //};
-        //inputsContainer.Add(password);
-
         AppPreferences.SetDeviceID();
         if (Validations.Validator.IsNetworkAccess())
         {
@@ -77,7 +57,7 @@ public partial class LoginView : ContentPage
             Result<UserLoginResponseDto>? res = null;
             InputType check = CheckInputs();
 
-            // if No Enternet
+            // if No Internet
             if (Validations.Validator.IsNetworkAccess())
             {
                 NetworkNotAccessAlert();
@@ -132,7 +112,7 @@ public partial class LoginView : ContentPage
                 AppPreferences.UserEmail = userModel.EmailOrPhone;
                 AppPreferences.UserFullName = res.Data.FullName;
 
-                _ = jsonFileHanler.WriteToFile(res.Data);
+                _ = jsonFileHandler.WriteToFile(res.Data);
                 _ = Alerts.DisplayToast("Welcome: " + res.Data.FullName);
 
                 // Navigation
@@ -252,7 +232,7 @@ public partial class LoginView : ContentPage
         notification.ShowMessage(new Models.ErrorMessage("No NetworkAccess", "please check your WiFi"));
     }
 
-    private void NewDviceStack_Tapped(object sender, TappedEventArgs e)
+    private void NewDeviceStack_Tapped(object sender, TappedEventArgs e)
     {
         newDeviceCheckBox.IsChecked = !newDeviceCheckBox.IsChecked;
     }

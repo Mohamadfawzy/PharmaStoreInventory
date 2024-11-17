@@ -4,7 +4,6 @@ using DataAccess.DomainModel.QueryParams;
 using DataAccess.Dtos;
 using DataAccess.Dtos.UserDtos;
 using DataAccess.Entities;
-using DataAccess.Helper;
 using DataAccess.Services;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Messages;
@@ -249,6 +248,7 @@ public static class ApiServices
         }
         return content;
     }
+
     public static async Task<Result<UserLoginResponseDto>?> UserLoginByPhoneAsync(UserLoginRequestDto model)
     {
         var url = AppValues.HostBaseURI + "/userAuth/login-phone";
@@ -260,6 +260,12 @@ public static class ApiServices
         return content;
     }
 
+    public static async Task<Result?> EditUserDataAsync(UserEditDataDto model)
+    {
+        var url = AppValues.HostBaseURI + "/userAuth/edit_user_info";
+        return await RequestProvider.PutAsync<Result, UserEditDataDto>(url, model);
+    }
+    
     public static async Task<Result?> UserChangePasswordAsync(ChangePasswordRequest model)
     {
         var url = AppValues.HostBaseURI + "/userAuth/change-password";

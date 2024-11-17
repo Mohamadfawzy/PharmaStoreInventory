@@ -7,16 +7,20 @@ namespace PharmaStoreInventory.Views;
 
 public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotification>
 {
+    private readonly DashboardViewModel vm;
     public DashboardView()
     {
         InitializeComponent();
+        vm = (DashboardViewModel)BindingContext;
         WeakReferenceMessenger.Default.Register<DashboardViewNotification>(this);
-
+        double statusBarHeight = Application.Current?.MainPage?.Padding.Top ?? 0;
+        double screenHeight = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
+        popup.HeightRequest = this.Height;
     }
 
     protected override bool OnBackButtonPressed()
     {
-        if (DashboardViewModel.CanBackButtonPressed())
+        if (vm.CanBackButtonPressed())
         {
             return base.OnBackButtonPressed();
         }
@@ -39,7 +43,7 @@ public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotifi
 
     private async void HamburgerTapped(object sender, TappedEventArgs e)
     {
-        await Navigation.PushAsync(new UserView());
+        await Navigation.PushAsync(new SidebarView());
     }
 
     private async void GoToScanPage(object sender, TappedEventArgs e)

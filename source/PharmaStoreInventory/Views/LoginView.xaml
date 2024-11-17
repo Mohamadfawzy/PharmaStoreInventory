@@ -109,7 +109,7 @@
                                             IsChecked="False"
                                             Color="{StaticResource Primary700}" />
                                         <HorizontalStackLayout.GestureRecognizers>
-                                            <TapGestureRecognizer Tapped="NewDviceStack_Tapped" />
+                                            <TapGestureRecognizer Tapped="NewDeviceStack_Tapped" />
                                         </HorizontalStackLayout.GestureRecognizers>
                                     </HorizontalStackLayout>
 

@@ -1,68 +1,64 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
-using DataAccess.DomainModel;
+﻿using DataAccess.DomainModel;
 using DataAccess.Dtos.UserDtos;
 using DataAccess.Services;
 using PharmaStoreInventory.Extensions;
 using PharmaStoreInventory.Helpers;
-using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.Services;
 
 namespace PharmaStoreInventory.Views;
 
 public partial class UserView : ContentPage
 {
-    //private JsonFileHanler jsonFileHanler;
+    private JsonFileHanler jsonFileHandler;
+    private string userEmail= string.Empty;
     public UserView()
     {
         InitializeComponent();
-
+        jsonFileHandler = new JsonFileHanler(AppValues.UserFileName);
     }
 
-    protected override void OnAppearing()
-    {
-        base.OnAppearing();
-
-    }
     private async void ThisPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {
-        var jsonFileHanler = new JsonFileHanler(AppValues.UserFileName);
+        jsonFileHandler = new JsonFileHanler(AppValues.UserFileName);
 
-        var user = await jsonFileHanler.SingleObject<UserLoginResponseDto>();
+        var user = await jsonFileHandler.SingleObject<UserLoginResponseDto>();
         if (user != null)
         {
+            userEmail = user.Email?? "";
             nameEntry.Text = user.FullName;
             pharmaName.Text = user.PharmcyName;
             phone.Text = user.PhoneNumber;
             email.Text = user.Email;
         }
-    }
-
-    private void AllowNameEditingTapped(object sender, TappedEventArgs e)
-    {
-        saveButton.IsVisible = true;
-        editIcon.IsVisible = false;
-        nameStack.BackgroundColor = Color.FromArgb("#f0f7ff");
-
-        nameEntry.IsReadOnly = false;
-        // email.IsReadOnly = false;
-        pharmaName.IsReadOnly = false;
-        // phone.IsReadOnly = false;
-
         nameEntry.Focus();
-
     }
 
-    private void saveButton_Clicked(object sender, EventArgs e)
-    {
-        saveButton.IsVisible = false;
-        editIcon.IsVisible = true;
-        nameStack.BackgroundColor = Colors.Transparent;
-        nameEntry.Unfocus();
-        nameEntry.IsReadOnly = true;
-        pharmaName.IsReadOnly = true;
-        //email.IsReadOnly = true;
-        //phone.IsReadOnly = true;
-    }
+    //private void AllowNameEditingTapped(object sender, TappedEventArgs e)
+    //{
+    //    saveButton.IsVisible = true;
+    //    //editIcon.IsVisible = false;
+    //    //nameStack.BackgroundColor = Color.FromArgb("#f0f7ff");
+
+    //    nameEntry.IsReadOnly = false;
+    //    // email.IsReadOnly = false;
+    //    pharmaName.IsReadOnly = false;
+    //    // phone.IsReadOnly = false;
+
+    //    nameEntry.Focus();
+
+    //}
+
+    //private void saveButton_Clicked(object sender, EventArgs e)
+    //{
+    //    saveButton.IsVisible = false;
+    //    //editIcon.IsVisible = true;
+    //    //nameStack.BackgroundColor = Colors.Transparent;
+    //    nameEntry.Unfocus();
+    //    nameEntry.IsReadOnly = true;
+    //    pharmaName.IsReadOnly = true;
+    //    //email.IsReadOnly = true;
+    //    //phone.IsReadOnly = true;
+    //}
 
     private void ClosePopupClicked(object sender, EventArgs e)
     {
@@ -90,42 +86,6 @@ public partial class UserView : ContentPage
         newPassword.ClearText();
         confirmPassword.ClearText();
     }
-
-    private async void MenuItemTapped(object sender, TappedEventArgs e)
-    {
-        var border = (Border)sender;
-        if (e.Parameter == null)
-            return;
-        string parameter = (string)e.Parameter;
-
-        if (parameter == "Branches")
-        {
-            border.BackgroundColor = Color.FromArgb("#400056a9");
-            await Navigation.PushAsync(new BranchesView());
-        }
-        else if (parameter == "AddBranch")
-        {
-            await Navigation.PushAsync(new CreateBranchView());
-        }
-        else if (parameter == "Cog")
-        {
-            await Navigation.PushAsync(new SettingView());
-        }
-        else if (parameter == "ResetPassword")
-        {
-            OpenPopup();
-        }
-        else if (parameter == "Logout")
-        {
-            Logout();
-        }
-        else
-        {
-            Reset();
-        }
-
-    }
-
 
     void OpenPopup()
     {
@@ -180,11 +140,11 @@ public partial class UserView : ContentPage
             Application.Current.MainPage = new NavigationPage(new LoginView());
         AppPreferences.IsLoggedIn = false;
         AppPreferences.HostUserId = 0;
-        
+
         // delete all be low
         AppPreferences.StoreId = 0;
     }
-    
+
     private async void Reset()
     {
         File.Delete(AppValues.XBranchesFileName);
@@ -204,37 +164,51 @@ public partial class UserView : ContentPage
             Application.Current.MainPage = new NavigationPage(new OnbordingView());
     }
 
-    private async void TouchBehavior_TouchGestureCompleted(object sender, CommunityToolkit.Maui.Core.TouchGestureCompletedEventArgs e)
-    {
-        var border = (Border)sender;
-        if (e.TouchCommandParameter == null)
-            return;
-        string parameter = (string)e.TouchCommandParameter;
 
-        if (parameter == "Branches")
+    private void TouchBehavior_TouchGestureCompleted(object sender, CommunityToolkit.Maui.Core.TouchGestureCompletedEventArgs e)
+    {
+        OpenPopup();
+    }
+
+    private async void Button_Clicked(object sender, EventArgs e)
+    {
+        var userDataDto = new UserEditDataDto()
         {
-            border.BackgroundColor = Color.FromArgb("#400056a9");
-            await Navigation.PushAsync(new BranchesView());
-        }
-        else if (parameter == "AddBranch")
+            FullName = nameEntry.Text,
+            PharmacyName = pharmaName.Text,
+            PhoneNumber = phone.Text,
+            Id = AppPreferences.HostUserId,
+        };
+        var res = await ApiServices.EditUserDataAsync(userDataDto);
+        if (res == null)
         {
-            await Navigation.PushAsync(new CreateBranchView());
+            return;
         }
-        else if (parameter == "Cog")
+
+        if (res.IsSuccess)
         {
-            await Navigation.PushAsync(new SettingView());
+            var model = new UserLoginResponseDto()
+            {
+                Id = userDataDto.Id,
+                PharmcyName = userDataDto.PharmacyName,
+                PhoneNumber = userDataDto.PhoneNumber,
+                FullName = userEmail,
+            };
+            await jsonFileHandler.WriteToFile(model);
+            notification.ShowMessage("تم حفظ التغيرات");
+
         }
-        else if (parameter == "ResetPassword")
+        else if (res.ErrorCode == ErrorCode.PhoneNumberAlreadyExists)
         {
-            OpenPopup();
+            notification.ShowMessage("رقم الهاتف مستخدم");
         }
-        else if (parameter == "Logout")
-        {
-            Logout();
-        }
-        else
-        {
-            Reset();
-        }
+
+
+
+    }
+
+    private void AnyEntry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+
     }
 }

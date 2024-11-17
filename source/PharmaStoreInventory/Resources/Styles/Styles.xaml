@@ -27,7 +27,10 @@
                                 Dark=White}" />
 
     <Style TargetType="ActivityIndicator">
-        <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
+        <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary600}, Dark={StaticResource White}}" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="IsRunning" Value="{Binding ActivityIndicatorRunning}" />
+        <Setter Property="ZIndex" Value="4" />
     </Style>
 
     <Style TargetType="IndicatorView">

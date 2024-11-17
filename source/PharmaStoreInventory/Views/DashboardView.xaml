@@ -11,8 +11,6 @@
     xmlns:help="clr-namespace:PharmaStoreInventory.Helpers"
     x:Name="ThisPage"
     Title="DashboardView"
-    BackgroundColor="{AppThemeBinding Light={StaticResource White},
-                                      Dark={StaticResource Primary900}}"
     NavigatedTo="ThisPage_NavigatedTo"
     NavigationPage.HasNavigationBar="False">
 
@@ -57,57 +55,63 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
-        <ScrollView>
-            <Grid x:Name="MainGrid" RowDefinitions="Auto,*">
-                <!--  Hedear  -->
-                <StackLayout
-                    x:Name="hedear"
-                    Padding="20,7"
-                    Orientation="Horizontal"
-                    BackgroundColor="{StaticResource PrimaryDark}">
-                    <Label
-                        x:Name="userFullName"
-                        Text="مرحبا"
-                        TextColor="{StaticResource Primary050}" />
-                    <!--  MenuIcon  -->
-                    <Frame
-                        Padding="8,8"
-                        CornerRadius="70"
-                        BackgroundColor="Transparent"
-                        HorizontalOptions="EndAndExpand">
-                        <Label
-                            Text="{x:Static icon:IconFont.Text}"
-                            TextColor="{StaticResource Primary050}"
-                            FontSize="27"
-                            HorizontalOptions="Fill"
-                            VerticalOptions="Fill"
-                            HorizontalTextAlignment="Center"
-                            VerticalTextAlignment="Center"
-                            Style="{StaticResource IconLabelMediumStyle}" />
+    <Grid RowDefinitions="Auto,*">
+        <!--#region  Fixed Content ==============================-->
 
-                        <Frame.Behaviors>
-                            <toolkit:TouchBehavior
-                                DefaultAnimationDuration="250"
-                                DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
-                                PressedBackgroundColor="#30000000"
-                                PressedOpacity="0.9"
-                                PressedScale="0.9" />
-                        </Frame.Behaviors>
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="HamburgerTapped" />
-                        </Frame.GestureRecognizers>
-                    </Frame>
-                </StackLayout>
+        <!--  Hedear  -->
+        <StackLayout
+            x:Name="hedear"
+            Padding="20,7"
+            Orientation="Horizontal"
+            BackgroundColor="{StaticResource PrimaryDark}">
+            <Label
+                x:Name="userFullName"
+                Text="مرحبا"
+                TextColor="{StaticResource Primary050}" />
+            <!--  MenuIcon  -->
+            <Frame
+                Padding="8,8"
+                CornerRadius="70"
+                BackgroundColor="Transparent"
+                HorizontalOptions="EndAndExpand">
+                <Label
+                    Text="{x:Static icon:IconFont.Text}"
+                    TextColor="{StaticResource Primary050}"
+                    FontSize="27"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Fill"
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"
+                    Style="{StaticResource IconLabelMediumStyle}" />
 
-                <!--  Container  -->
-                <VerticalStackLayout
-                    Grid.Row="1"
-                    Padding="20,0"
-                    Spacing="20">
+                <Frame.Behaviors>
+                    <toolkit:TouchBehavior
+                        DefaultAnimationDuration="250"
+                        DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+                        PressedBackgroundColor="#30000000"
+                        PressedOpacity="0.9"
+                        PressedScale="0.9" />
+                </Frame.Behaviors>
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="HamburgerTapped" />
+                </Frame.GestureRecognizers>
+            </Frame>
+        </StackLayout>
 
-                    <!--  last  inventory and  ChevronDown icon  -->
-                    <!--<Label
+        <!--  body  -->
+        <RefreshView
+            Grid.Row="1"
+            IsRefreshing="{Binding IsRefreshing}"
+            Command="{Binding RefreshCommand}">
+            <ScrollView>
+                <Grid x:Name="MainGrid" RowDefinitions="Auto,*">
+                    <VerticalStackLayout
+                        Grid.Row="1"
+                        Padding="20,0"
+                        Spacing="20">
+
+                        <!--  last  inventory and  ChevronDown icon  -->
+                        <!--<Label
                         VerticalTextAlignment="Center"
                         IsVisible="False"
                         HorizontalOptions="Center"
@@ -119,348 +123,356 @@
                             </FormattedString>
                         </Label.FormattedText>
                     </Label>
-                    -->
-                    <!--  the date of Latest Inventory  -->
-                    <!--
+                        -->
+                        <!--  the date of Latest Inventory  -->
+                        <!--
                     <Label
                         Margin="0,-20,0,0"
                         IsVisible="False"
                         Text="{Binding LatestInventoryDate}"
                         HorizontalOptions="Center" />-->
 
-                    <Border
-                        Margin="0,10"
-                        Padding="20,0"
-                        Style="{StaticResource BorderToAction}"
-                        HorizontalOptions="Center">
-                        <HorizontalStackLayout Spacing="10">
-                            <Label Text="تاريخ آخر جرد" TextColor="{StaticResource Primary500}" />
-                            <Label
-                                Margin="0,0,0,0"
-                                Text="{Binding LatestInventoryDate}"
-                                FontAttributes="Bold"
-                                HorizontalOptions="Center" />
-                        </HorizontalStackLayout>
-                    </Border>
+                        <Border
+                            Margin="0,10"
+                            Padding="20,0"
+                            Style="{StaticResource BorderToAction}"
+                            HorizontalOptions="Center">
+                            <HorizontalStackLayout Spacing="10">
+                                <Label Text="تاريخ آخر جرد" TextColor="{StaticResource Primary500}" />
+                                <Label
+                                    Margin="0,0,0,0"
+                                    Text="{Binding LatestInventoryDate}"
+                                    FontAttributes="Bold"
+                                    HorizontalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Border>
 
+                        <!--  The Stores Border  -->
+                        <Border Style="{StaticResource BorderToAction}">
+                            <StackLayout Orientation="Horizontal" Spacing="8">
+                                <Label
+                                    Padding="10,0"
+                                    Text="المخزن"
+                                    FontSize="14"
+                                    VerticalOptions="Fill"
+                                    BackgroundColor="{StaticResource Primary100}"
+                                    VerticalTextAlignment="Center" />
+                                <Label
+                                    Text="{Binding StoreName}"
+                                    TextColor="{StaticResource Primary}"
+                                    VerticalTextAlignment="Center" />
+                                <Label
+                                    Margin="20,0"
+                                    FontSize="22"
+                                    Style="{StaticResource IconLabelMediumStyle}"
+                                    Text="{x:Static icon:IconFont.ChevronLeft}"
+                                    HorizontalOptions="EndAndExpand" />
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ToggleStoresPopupVisibilityCommand}" CommandParameter="show" />
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                            <Border.Shadow>
+                                <Shadow
+                                    Brush="{StaticResource Primary300}"
+                                    Radius="11"
+                                    Opacity="1"
+                                    Offset="1,1" />
+                            </Border.Shadow>
+                            <Border.Behaviors>
+                                <toolkit:TouchBehavior
+                                    DefaultAnimationDuration="250"
+                                    DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+                                    PressedBackgroundColor="{StaticResource Primary500}"
+                                    PressedOpacity="0.9"
+                                    PressedScale="0.8" />
+                            </Border.Behaviors>
+                        </Border>
 
-                    <!--  The Stores Border  -->
-                    <Border Style="{StaticResource BorderToAction}">
-                        <StackLayout Orientation="Horizontal" Spacing="8">
-                            <Label
-                                Padding="10,0"
-                                Text="المخزن"
-                                FontSize="14"
-                                VerticalOptions="Fill"
-                                BackgroundColor="{StaticResource Primary100}"
-                                VerticalTextAlignment="Center" />
-                            <Label
-                                Text="{Binding StoreName}"
-                                TextColor="{StaticResource Primary}"
-                                VerticalTextAlignment="Center" />
-                            <Label
-                                Margin="20,0"
-                                FontSize="22"
-                                Style="{StaticResource IconLabelMediumStyle}"
-                                Text="{x:Static icon:IconFont.ChevronLeft}"
-                                HorizontalOptions="EndAndExpand" />
-                            <StackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding ToggleStoresPopupVisibilityCommand}" CommandParameter="show" />
-                            </StackLayout.GestureRecognizers>
-                        </StackLayout>
-                        <Border.Shadow>
-                            <Shadow
-                                Brush="{StaticResource Primary300}"
-                                Radius="11"
-                                Opacity="1"
-                                Offset="1,1" />
-                        </Border.Shadow>
-                        <Border.Behaviors>
-                            <toolkit:TouchBehavior
-                                DefaultAnimationDuration="250"
-                                DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
-                                PressedBackgroundColor="{StaticResource Primary500}"
-                                PressedOpacity="0.9"
-                                PressedScale="0.8" />
-                        </Border.Behaviors>
-                    </Border>
+                        <!--  4 Statistic Box  -->
+                        <Grid
+                            RowDefinitions="*,*"
+                            ColumnDefinitions="*,*"
+                            RowSpacing="20"
+                            ColumnSpacing="20">
+                            <template:DashboardNumberTemplate Title="كل الأصناف" Number="{Binding StatisticsModel.TotalProducts}" />
 
-                    <!--  4 Statistic Box  -->
-                    <Grid
-                        RowDefinitions="*,*"
-                        ColumnDefinitions="*,*"
-                        RowSpacing="20"
-                        ColumnSpacing="20">
-                        <template:DashboardNumberTemplate Title="كل الأصناف" Number="{Binding StatisticsModel.TotalProducts}" />
+                            <template:DashboardNumberTemplate
+                                Title="الأصناف منتهية الصلاحية"
+                                Grid.Column="1"
+                                Number="{Binding StatisticsModel.ExpiredProducts}" />
 
-                        <template:DashboardNumberTemplate
-                            Title="الأصناف منتهية الصلاحية"
-                            Grid.Column="1"
-                            Number="{Binding StatisticsModel.ExpiredProducts}" />
+                            <template:DashboardNumberTemplate
+                                Title="أصناف تنتهي صلاحيتها بعد ثلاثة أشهر"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Number="{Binding StatisticsModel.WillExpireIn3Months}" />
 
-                        <template:DashboardNumberTemplate
-                            Title="أصناف تنتهي صلاحيتها بعد ثلاثة أشهر"
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Number="{Binding StatisticsModel.WillExpireIn3Months}" />
+                            <template:DashboardNumberTemplate
+                                Title=" أصناف تم جردها"
+                                Grid.Row="1"
+                                Number="{Binding StatisticsModel.InventoryedProducts}" />
 
-                        <template:DashboardNumberTemplate
-                            Title=" أصناف تم جردها"
-                            Grid.Row="1"
-                            Number="{Binding StatisticsModel.InventoryedProducts}" />
+                        </Grid>
 
-                    </Grid>
-
-                    <!--  Resume inventory  -->
-                    <!--<Frame Style="{StaticResource FrameTextIconCenter}">
+                        <!--  Resume inventory  -->
+                        <!--<Frame Style="{StaticResource FrameTextIconCenter}">
                 <HorizontalStackLayout Style="{StaticResource HSLinFrame}">
                     <Label Style="{StaticResource IconLabelMediumStyle}" Text="{x:Static icon:IconFont.Autorenew}" />
                     <Label Text="إستئناف الجرد" />
                 </HorizontalStackLayout>
             </Frame>-->
 
-                    <!--  New inventory  -->
-                    <Frame Style="{StaticResource FrameTextIconCenter}">
-                        <HorizontalStackLayout Style="{StaticResource HSLinFrame}">
-                            <Label Style="{StaticResource IconLabelMediumStyle}" Text="{x:Static icon:IconFont.ShapeSquarePlus}" />
-                            <Label Text="جرد جديد" />
-                        </HorizontalStackLayout>
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding StartNewInventoryCommand}" CommandParameter="init" />
-                        </Frame.GestureRecognizers>
-                    </Frame>
+                        <!--  New inventory  -->
+                        <Frame Style="{StaticResource FrameTextIconCenter}">
+                            <HorizontalStackLayout Style="{StaticResource HSLinFrame}">
+                                <Label Style="{StaticResource IconLabelMediumStyle}" Text="{x:Static icon:IconFont.ShapeSquarePlus}" />
+                                <Label Text="جرد جديد" />
+                            </HorizontalStackLayout>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding StartNewInventoryCommand}" CommandParameter="init" />
+                            </Frame.GestureRecognizers>
+                        </Frame>
 
-                    <Frame Style="{StaticResource FrameTextIconCenter}">
-                        <HorizontalStackLayout Style="{StaticResource HSLinFrame}">
-                            <Label Style="{StaticResource IconLabelMediumStyle}" Text="{x:Static icon:IconFont.Magnify}" />
-                            <Label Text="البحث في الأصناف" />
-                        </HorizontalStackLayout>
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="GoToAllProductsPage" />
-                        </Frame.GestureRecognizers>
-                    </Frame>
+                        <Frame Style="{StaticResource FrameTextIconCenter}">
+                            <HorizontalStackLayout Style="{StaticResource HSLinFrame}">
+                                <Label Style="{StaticResource IconLabelMediumStyle}" Text="{x:Static icon:IconFont.Magnify}" />
+                                <Label Text="البحث في الأصناف" />
+                            </HorizontalStackLayout>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="GoToAllProductsPage" />
+                            </Frame.GestureRecognizers>
+                        </Frame>
 
-                    <!--  Search About Item  -->
-                    <Frame
-                        Padding="20,10"
-                        Style="{StaticResource FrameTextIconCenter}"
-                        BackgroundColor="{StaticResource Primary700}">
-                        <HorizontalStackLayout
-                            Style="{StaticResource HSLinFrame}"
-                            Spacing="20"
-                            VerticalOptions="Center">
-                            <Label Text="البحث عن صنف" TextColor="{StaticResource Primary050}" />
-                            <Image Source="searchscane_bold.svg" VerticalOptions="Center" />
-                        </HorizontalStackLayout>
-                        <Frame.Behaviors>
-                            <toolkit:TouchBehavior
-                                DefaultAnimationDuration="250"
-                                DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
-                                PressedBackgroundColor="{StaticResource Primary500}"
-                                PressedOpacity="0.9"
-                                PressedScale="0.98" />
-                        </Frame.Behaviors>
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="GoToScanPage" />
-                        </Frame.GestureRecognizers>
-                    </Frame>
-                </VerticalStackLayout>
-
-                <!--  New inventory execution confirmation Popup  -->
-                <Grid
-                    Grid.RowSpan="2"
-                    IsVisible="Collapse"
-                    ZIndex="2"
-                    BackgroundColor="{StaticResource BackgroundTransparence}">
-                    <Border
-                        Margin="10,0"
-                        VerticalOptions="Center"
-                        Stroke="#00C49B33"
-                        StrokeThickness="1"
-                        FlowDirection="RightToLeft"
-                        StrokeShape="RoundRectangle 6"
-                        InputTransparent="False"
-                        BackgroundColor="{AppThemeBinding Light={StaticResource Primary050},
-                                                          Dark={StaticResource Primary950}}">
-                        <StackLayout Padding="30" Spacing="30">
-                            <Label Text="تحذير ستقوم بتحديد كافة الأصناف علي أنها تم جردها" />
-                            <Button
-                                Text="تأكيد الجرد "
-                                BackgroundColor="{StaticResource Secondary900}"
-                                Command="{Binding StartNewInventoryCommand}" />
-
-                        </StackLayout>
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer />
-                        </Border.GestureRecognizers>
-                    </Border>
-                    <Grid.Triggers>
-                        <DataTrigger
-                            TargetType="Grid"
-                            Binding="{Binding ConfirmNewInventoryExecutionVisibility}"
-                            Value="true">
-                            <Setter Property="IsVisible" Value="Visible" />
-                        </DataTrigger>
-                    </Grid.Triggers>
-                    <Grid.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding ToggleConfirmNewInventoryVisibilityCommand}" />
-                    </Grid.GestureRecognizers>
+                        <!--  Search About Item  -->
+                        <Frame
+                            Padding="20,10"
+                            Style="{StaticResource FrameTextIconCenter}"
+                            BackgroundColor="{StaticResource Primary700}">
+                            <HorizontalStackLayout
+                                Style="{StaticResource HSLinFrame}"
+                                Spacing="20"
+                                VerticalOptions="Center">
+                                <Label Text="البحث عن صنف" TextColor="{StaticResource Primary050}" />
+                                <Image Source="searchscane_bold.svg" VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                            <Frame.Behaviors>
+                                <toolkit:TouchBehavior
+                                    DefaultAnimationDuration="250"
+                                    DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+                                    PressedBackgroundColor="{StaticResource Primary500}"
+                                    PressedOpacity="0.9"
+                                    PressedScale="0.98" />
+                            </Frame.Behaviors>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="GoToScanPage" />
+                            </Frame.GestureRecognizers>
+                        </Frame>
+                    </VerticalStackLayout>
                 </Grid>
+            </ScrollView>
+        </RefreshView>
+        <!--#endregion-->
 
+        <!--#region Absolute Content ==============================-->
 
-                <!--  Start Popup  -->
-                <Grid
-                    x:Name="popup"
-                    Grid.RowSpan="2"
-                    IsVisible="{Binding IsStoresPopupVisible}"
-                    ZIndex="2"
-                    BackgroundColor="{StaticResource BackgroundTransparence}">
+        <!--  Warehouses Popup  -->
+        <Grid
+            x:Name="popup"
+            Grid.RowSpan="2"
+            Padding="0,0,0,15"
+            IsVisible="{Binding IsStoresPopupVisible}"
+            ZIndex="2"
+            BackgroundColor="{StaticResource BackgroundTransparence}">
 
-                    <Border
-                        Margin="10,0"
-                        VerticalOptions="Center"
-                        MinimumHeightRequest="350"
-                        Stroke="#00C49B33"
-                        StrokeThickness="1"
-                        FlowDirection="RightToLeft"
-                        StrokeShape="RoundRectangle 6"
-                        InputTransparent="False"
-                        BackgroundColor="{AppThemeBinding Light={StaticResource Primary050},
-                                                          Dark={StaticResource Primary950}}">
-                        <Grid Padding="0,20" RowDefinitions="Auto,*,80">
-                            <Label Text="المخازن" HorizontalOptions="Center" />
-                            <CollectionView
-                                x:Name="storesCollection"
-                                Grid.Row="1"
-                                ItemsSource="{Binding StoresModelList}"
-                                SelectionMode="Single"
-                                SelectionChangedCommand="{Binding StoreSelectionChangedCommand}"
-                                SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference storesCollection}}">
-                                <CollectionView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid>
-                                            <Label Padding="20,10" Text="{Binding Name}" />
-                                            <!--  icon  -->
-                                            <Label
-                                                Padding="20,10"
-                                                Text="{x:Static icon:IconFont.CheckboxBlankCircle}"
-                                                Style="{StaticResource Iconline}"
-                                                TextColor="{StaticResource Primary200}"
-                                                HorizontalOptions="End"
-                                                VerticalOptions="Center">
-                                                <Label.Triggers>
-                                                    <DataTrigger
-                                                        TargetType="Label"
-                                                        Binding="{Binding IsSelected}"
-                                                        Value="True">
-                                                        <Setter Property="Text" Value="{x:Static icon:IconFont.CheckboxMarkedCircle}" />
-                                                        <Setter Property="TextColor" Value="{StaticResource Primary700}" />
-                                                        <!--  Multiple Setter elements are allowed  -->
-                                                    </DataTrigger>
-                                                </Label.Triggers>
-                                            </Label>
-                                            <BoxView
-                                                HeightRequest="1"
-                                                BackgroundColor="{StaticResource Primary200}"
-                                                HorizontalOptions="Fill"
-                                                VerticalOptions="End" />
-                                            <!--  Trigger for switch selected store  -->
-                                            <Grid.Triggers>
-                                                <DataTrigger
-                                                    TargetType="Grid"
-                                                    Binding="{Binding IsSelected}"
-                                                    Value="True">
-                                                    <Setter Property="BackgroundColor" Value="{StaticResource Primary200}" />
+            <Border
+                Margin="10,0"
+                VerticalOptions="Center"
+                MinimumHeightRequest="350"
+                Stroke="#00C49B33"
+                StrokeThickness="1"
+                FlowDirection="RightToLeft"
+                StrokeShape="RoundRectangle 6"
+                InputTransparent="False"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Primary050},
+                                                  Dark={StaticResource Primary950}}">
+                <Grid Padding="0,20" RowDefinitions="Auto,*,Auto">
+                    <Label Text="المخازن" HorizontalOptions="Center" />
+                    <Label
+                        Padding="20,0"
+                        Text="{x:Static icon:IconFont.Close}"
+                        FontFamily="{StaticResource IconFont}"
+                        FontSize="25"
+                        HorizontalOptions="End">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ToggleStoresPopupVisibilityCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <CollectionView
+                        x:Name="storesCollection"
+                        Grid.Row="1"
+                        ItemsSource="{Binding StoresModelList}"
+                        SelectionMode="Single"
+                        SelectionChangedCommand="{Binding StoreSelectionChangedCommand}"
+                        SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference storesCollection}}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Label Padding="20,10" Text="{Binding Name}" />
+                                    <!--  icon  -->
+                                    <Label
+                                        Padding="20,10"
+                                        Text="{x:Static icon:IconFont.CheckboxBlankCircle}"
+                                        Style="{StaticResource Iconline}"
+                                        TextColor="{StaticResource Primary200}"
+                                        HorizontalOptions="End"
+                                        VerticalOptions="Center">
+                                        <Label.Triggers>
+                                            <DataTrigger
+                                                TargetType="Label"
+                                                Binding="{Binding IsSelected}"
+                                                Value="True">
+                                                <Setter Property="Text" Value="{x:Static icon:IconFont.CheckboxMarkedCircle}" />
+                                                <Setter Property="TextColor" Value="{StaticResource Primary700}" />
+                                                <!--  Multiple Setter elements are allowed  -->
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                    <BoxView
+                                        HeightRequest="1"
+                                        BackgroundColor="{StaticResource Primary200}"
+                                        HorizontalOptions="Fill"
+                                        VerticalOptions="End" />
+                                    <!--  Trigger for switch selected store  -->
+                                    <Grid.Triggers>
+                                        <DataTrigger
+                                            TargetType="Grid"
+                                            Binding="{Binding IsSelected}"
+                                            Value="True">
+                                            <Setter Property="BackgroundColor" Value="{StaticResource Primary200}" />
 
-                                                </DataTrigger>
-                                            </Grid.Triggers>
-                                        </Grid>
-                                    </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                            </CollectionView>
-                            <!--  Submit button  -->
-                            <Button
-                                Grid.Row="2"
-                                Margin="30,10"
-                                Text="اختيار"
-                                VerticalOptions="Center"
-                                Command="{Binding SubmitStoreSelectionChangedCommand}" />
-                        </Grid>
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer />
-                        </Border.GestureRecognizers>
-                    </Border>
-
-                    <Grid.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding ToggleStoresPopupVisibilityCommand}" CommandParameter="hide" />
-                    </Grid.GestureRecognizers>
+                                        </DataTrigger>
+                                    </Grid.Triggers>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <!--  Submit button  -->
+                    <Button
+                        Grid.Row="2"
+                        Margin="30,5"
+                        Text="اختيار"
+                        VerticalOptions="End"
+                        Command="{Binding SubmitStoreSelectionChangedCommand}" />
                 </Grid>
-                <!--  End Popup  -->
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer />
+                </Border.GestureRecognizers>
+            </Border>
 
-                <!--  Empty Placeholder Element  -->
-                <VerticalStackLayout
-                    x:Name="placeholderElement"
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding ToggleStoresPopupVisibilityCommand}" CommandParameter="hide" />
+            </Grid.GestureRecognizers>
+        </Grid>
+
+        <!--  Confirm New inventory Popup  -->
+        <Grid
+            Grid.RowSpan="2"
+            IsVisible="Collapse"
+            ZIndex="2"
+            BackgroundColor="{StaticResource BackgroundTransparence}">
+            <Border
+                Margin="10,0"
+                VerticalOptions="Center"
+                Stroke="#00C49B33"
+                StrokeThickness="1"
+                FlowDirection="RightToLeft"
+                StrokeShape="RoundRectangle 6"
+                InputTransparent="False"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Primary050},
+                                                  Dark={StaticResource Primary950}}">
+                <StackLayout Padding="30" Spacing="30">
+                    <Label Text="تحذير ستقوم بتحديد كافة الأصناف علي أنها تم جردها" />
+                    <Button
+                        Text="تأكيد الجرد "
+                        BackgroundColor="{StaticResource Secondary900}"
+                        Command="{Binding StartNewInventoryCommand}" />
+
+                </StackLayout>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer />
+                </Border.GestureRecognizers>
+            </Border>
+            <Grid.Triggers>
+                <DataTrigger
+                    TargetType="Grid"
+                    Binding="{Binding ConfirmNewInventoryExecutionVisibility}"
+                    Value="true">
+                    <Setter Property="IsVisible" Value="Visible" />
+                </DataTrigger>
+            </Grid.Triggers>
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding ToggleConfirmNewInventoryVisibilityCommand}" />
+            </Grid.GestureRecognizers>
+        </Grid>
+
+        <!--  Empty Placeholder Element  -->
+        <VerticalStackLayout
+            x:Name="placeholderElement"
+            Grid.Row="1"
+            Padding="15"
+            BackgroundColor="{StaticResource Primary100}"
+            IsVisible="{Binding IsPlaceholderVisible}"
+            Spacing="20">
+            <BoxView Style="{StaticResource PlaceholderBox}" Loaded="BoxView_Loaded" />
+            <BoxView Style="{StaticResource PlaceholderBox}" Loaded="BoxView_Loaded" />
+            <BoxView Style="{StaticResource PlaceholderBox}" Loaded="BoxView_Loaded" />
+            <Grid
+                ColumnDefinitions="*,*"
+                RowDefinitions="*,*"
+                ColumnSpacing="10"
+                RowSpacing="10">
+                <BoxView
+                    Style="{StaticResource PlaceholderBox}"
+                    HeightRequest="150"
+                    Loaded="BoxView_Loaded" />
+                <BoxView
+                    Grid.Column="1"
+                    Loaded="BoxView_Loaded"
+                    Style="{StaticResource PlaceholderBox}"
+                    HeightRequest="150" />
+                <BoxView
                     Grid.Row="1"
-                    Padding="15"
-                    BackgroundColor="{StaticResource Primary100}"
-                    IsVisible="{Binding IsPlaceholderVisible}"
-                    Spacing="20">
-                    <BoxView Style="{StaticResource PlaceholderBox}" Loaded="BoxView_Loaded" />
-                    <BoxView Style="{StaticResource PlaceholderBox}" Loaded="BoxView_Loaded" />
-                    <BoxView Style="{StaticResource PlaceholderBox}" Loaded="BoxView_Loaded" />
-                    <Grid
-                        ColumnDefinitions="*,*"
-                        RowDefinitions="*,*"
-                        ColumnSpacing="10"
-                        RowSpacing="10">
-                        <BoxView
-                            Style="{StaticResource PlaceholderBox}"
-                            HeightRequest="150"
-                            Loaded="BoxView_Loaded" />
-                        <BoxView
-                            Grid.Column="1"
-                            Loaded="BoxView_Loaded"
-                            Style="{StaticResource PlaceholderBox}"
-                            HeightRequest="150" />
-                        <BoxView
-                            Grid.Row="1"
-                            Loaded="BoxView_Loaded"
-                            Style="{StaticResource PlaceholderBox}"
-                            HeightRequest="150" />
-                        <BoxView
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Loaded="BoxView_Loaded"
-                            Style="{StaticResource PlaceholderBox}"
-                            HeightRequest="150" />
-                    </Grid>
-                    <BoxView HeightRequest="50" Style="{StaticResource PlaceholderBox}" />
-                    <BoxView HeightRequest="35" Style="{StaticResource PlaceholderBox}" />
-                    <BoxView
-                        HeightRequest="35"
-                        Style="{StaticResource PlaceholderBox}"
-                        Loaded="BoxView_Loaded" />
-                    <VerticalStackLayout.GestureRecognizers>
-                        <TapGestureRecognizer />
-                    </VerticalStackLayout.GestureRecognizers>
-                </VerticalStackLayout>
-
-                <!--  No Data Template : Something went wrong  -->
-                <template:NoDataTemplate
-                    IsVisible="{Binding IsNoDataElementVisible}"
-                    Data="{Binding NoDataModel}"
-                    ButtonText="تعديل الفرع"
-                    Command="{Binding GotoBranchesViewCommand}" />
-
-                <ActivityIndicator
-                    Grid.Row="0"
-                    Grid.RowSpan="4"
-                    VerticalOptions="Center"
-                    ZIndex="4"
-                    IsRunning="{Binding ActivityIndicatorRunning}"
-                    Color="{StaticResource Primary600}" />
-                <template:NotificationTemplate x:Name="notification" Grid.RowSpan="5" />
+                    Loaded="BoxView_Loaded"
+                    Style="{StaticResource PlaceholderBox}"
+                    HeightRequest="150" />
+                <BoxView
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Loaded="BoxView_Loaded"
+                    Style="{StaticResource PlaceholderBox}"
+                    HeightRequest="150" />
             </Grid>
-        </ScrollView>
-    </RefreshView>
+            <BoxView HeightRequest="50" Style="{StaticResource PlaceholderBox}" />
+            <BoxView HeightRequest="35" Style="{StaticResource PlaceholderBox}" />
+            <BoxView
+                HeightRequest="35"
+                Style="{StaticResource PlaceholderBox}"
+                Loaded="BoxView_Loaded" />
+            <VerticalStackLayout.GestureRecognizers>
+                <TapGestureRecognizer />
+            </VerticalStackLayout.GestureRecognizers>
+        </VerticalStackLayout>
+
+        <!--  No Data Template : Something went wrong  -->
+        <template:NoDataTemplate
+            IsVisible="{Binding IsNoDataElementVisible}"
+            Data="{Binding NoDataModel}"
+            ButtonText="تعديل الفرع"
+            Command="{Binding GotoBranchesViewCommand}" />
+
+        <template:NotificationTemplate x:Name="notification" Grid.RowSpan="5" />
+
+        <ActivityIndicator Grid.RowSpan="4" ZIndex="4" />
+        <!--#endregion-->
+    </Grid>
 </ContentPage>

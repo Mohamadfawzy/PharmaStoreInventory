@@ -431,7 +431,7 @@ public class AuthService
         // Update the password and return the result
     }
 
-    public async Task<Result> EditUserInfoAsync(UserEditNameDto dto)
+    public async Task<Result> EditUserInfoAsync(UserEditDataDto dto)
     {
         return await repo.UpdateUserInfoAsync(dto).ConfigureAwait(false);
     }

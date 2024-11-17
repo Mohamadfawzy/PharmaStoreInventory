@@ -277,7 +277,7 @@ public class UserRepository
     }
 
 
-    public async Task<Result> UpdateUserInfoAsync(UserEditNameDto dto)
+    public async Task<Result> UpdateUserInfoAsync(UserEditDataDto dto)
     {
         try
         {
@@ -286,7 +286,7 @@ public class UserRepository
                 .Where(p => p.Id == dto.Id)
                 .ExecuteUpdateAsync(setters => setters
                     .SetProperty(b => b.FullName, dto.FullName)
-                    .SetProperty(b => b.PharmacyName, dto.PharmcyName)
+                    .SetProperty(b => b.PharmacyName, dto.PharmacyName)
                     );
 
             // Check if the update was successful

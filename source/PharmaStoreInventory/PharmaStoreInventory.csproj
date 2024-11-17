@@ -178,6 +178,9 @@
 		<MauiXaml Update="Views\SettingView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\SidebarView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\Templates\CallUsTemplate.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
