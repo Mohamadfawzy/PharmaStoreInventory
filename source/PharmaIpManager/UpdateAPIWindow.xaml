@@ -1,0 +1,230 @@
+﻿<Window
+    x:Class="ApiSettingsManager.UpdateAPIWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:ApiSettingsManager"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    Title="Hosting Settings"
+    Width="850"
+    Height="600"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    ResizeMode="CanMinimize"
+    AllowsTransparency="True"
+    Background="Transparent"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <sys:String x:Key="HostIp">Host IP Address</sys:String>
+        <sys:String x:Key="ServierIP">Server IP Address</sys:String>
+        <sys:String x:Key="ApiPort">Listening Port</sys:String>
+        <sys:String x:Key="DatabasePort">DB Port</sys:String>
+    </Window.Resources>
+    <Border
+        Padding="10"
+        Background="#101214"
+        CornerRadius="10"
+        MouseDown="Border_MouseDown">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <!--  App Close Icon  -->
+            <Image
+                Grid.Row="0"
+                Panel.ZIndex="1"
+                Source="/images/closeicon.png"
+                MouseDown="Image_MouseDown"
+                Style="{StaticResource imgClose}" />
+
+            <!--  Setting Heading  -->
+            <TextBlock
+                Grid.Row="0"
+                Margin="0,30,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Panel.ZIndex="1"
+                Text="Hosting Settings"
+                Style="{StaticResource titleText}"
+                Foreground="{StaticResource Primary}" />
+
+            <!--  IP of PC  -->
+            <DockPanel Grid.Row="1" Margin="70,0">
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Text="Your PC IP is: "
+                    Style="{StaticResource labelHint}" />
+                <TextBox
+                    x:Name="textBoxThisPcIp"
+                    Margin="10,0"
+                    VerticalContentAlignment="Center"
+                    Text="000:000:000:000"
+                    IsReadOnly="True"
+                    BorderThickness="0"
+                    Foreground="White"
+                    Background="Transparent"
+                    IsReadOnlyCaretVisible="False" />
+                <TextBlock
+                    x:Name="textBlockCopy"
+                    VerticalAlignment="Center"
+                    Text="Copy"
+                    Style="{StaticResource labelHint}"
+                    MouseLeftButtonDown="TextBlock_MouseRightButtonDown" />
+                <Border
+                    x:Name="statusBorder"
+                    Padding="10"
+                    HorizontalAlignment="Right"
+                    Background="#dc3545"
+                    CornerRadius="10">
+                    <TextBlock
+                        x:Name="statusTextBlock"
+                        Foreground="Black"
+                        Text="Status: Is Runing"
+                        Style="{StaticResource labelHint}" />
+
+                </Border>
+            </DockPanel>
+
+            <Grid
+                Grid.Row="2"
+                Margin="70,0"
+                VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!--  Section 1  -->
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.ColumnSpan="3"
+                    Margin="0,20,0,10"
+                    HorizontalAlignment="Left"
+                    FontSize="20"
+                    Style="{StaticResource titleText}"
+                    Text="Host Connection" />
+
+                <!--  IP Fields  -->
+                <StackPanel Grid.Row="1">
+                    <!--  Label  -->
+                    <TextBlock Text="{StaticResource HostIp}" Style="{StaticResource labelHint}" />
+                    <!--  Entry Field  -->
+                    <Border Style="{StaticResource entryBorder}">
+                        <TextBox
+                            x:Name="apiIpTextBox"
+                            Margin="7,9"
+                            CaretBrush="White"
+                            Style="{StaticResource textbox}" />
+                    </Border>
+                </StackPanel>
+
+                <!--  Port Fields  -->
+                <StackPanel Grid.Row="1" Grid.Column="2">
+                    <!--  Label  -->
+                    <TextBlock Text="{StaticResource ApiPort}" Style="{StaticResource labelHint}" />
+                    <!--  Entry Field  -->
+                    <Border Style="{StaticResource entryBorder}">
+                        <TextBox
+                            x:Name="apiPortTextBox"
+                            Margin="7,9"
+                            FontSize="10"
+                            CaretBrush="White"
+                            Style="{StaticResource textbox}" />
+                    </Border>
+                </StackPanel>
+
+
+                <!--  Section 2  -->
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.ColumnSpan="3"
+                    Margin="0,20,0,10"
+                    HorizontalAlignment="Left"
+                    FontSize="20"
+                    Style="{StaticResource titleText}"
+                    Text="Database Connection" />
+
+                <!--  PC ip Fields  IP where the database is located  -->
+                <StackPanel Grid.Row="3">
+                    <!--  Label  -->
+                    <TextBlock Text="{StaticResource ServierIP}" Style="{StaticResource labelHint}" />
+                    <!--  Entry Field  -->
+                    <Border Style="{StaticResource entryBorder}">
+                        <TextBox
+                            x:Name="databaseIpTextBox"
+                            Margin="7,9"
+                            CaretBrush="White"
+                            Style="{StaticResource textbox}" />
+                    </Border>
+                </StackPanel>
+
+                <!--  Port Fields  -->
+                <StackPanel Grid.Row="3" Grid.Column="2">
+                    <!--  Label  -->
+                    <TextBlock Text="{StaticResource DatabasePort}" Style="{StaticResource labelHint}" />
+                    <!--  Entry Field  -->
+                    <Border Style="{StaticResource entryBorder}">
+                        <TextBox
+                            x:Name="databasePortTextBox"
+                            Margin="7,9"
+                            CaretBrush="White"
+                            FontSize="10"
+                            Style="{StaticResource textbox}" />
+                    </Border>
+                </StackPanel>
+            </Grid>
+
+
+
+            <!--  Buttons  -->
+            <StackPanel
+                Grid.Row="3"
+                Margin="0,40"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom">
+                <!--  SignIn Button  -->
+                <Button
+                    Margin="0,20"
+                    HorizontalAlignment="Stretch"
+                    Content="Save settings"
+                    Click="SaveButton_Click"
+                    Style="{StaticResource saveButton}" />
+
+                <StackPanel Orientation="Horizontal">
+                    <Button
+                        x:Name="runApiButton"
+                        Width="200"
+                        Content="Start Host"
+                        Click="RunApiButton_Click"
+                        Style="{StaticResource settingButton}" />
+                    <Button
+                        x:Name="testApiButton"
+                        Width="200"
+                        Content="Test Host"
+                        Click="TestApiClick"
+                        Style="{StaticResource settingButton}" />
+                    <Button
+                        x:Name="closeApiButton"
+                        Width="200"
+                        Content="Stop Host"
+                        Click="StopApiButton_Click"
+                        Style="{StaticResource settingButton}" />
+                </StackPanel>
+
+            </StackPanel>
+        </Grid>
+    </Border>
+
+</Window>

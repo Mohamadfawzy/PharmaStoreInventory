@@ -92,7 +92,7 @@ public partial class LoginView : ContentPage
             // server in not running
             if (res == null)
             {
-                notification.ShowMessage("تحقق من الاتصال بالسيرفر");
+                notification.Display("تحقق من الاتصال بالسيرفر");
                 LoginEnded();
                 return;
             }
@@ -103,7 +103,7 @@ public partial class LoginView : ContentPage
                 if (res.Data == null)
                 {
                     LoginEnded();
-                    notification.ShowMessage("حدث خطأ غير معروف");
+                    notification.Display("حدث خطأ غير معروف");
                     return;
                 }
                 AppPreferences.HostUserId = res.Data.Id;
@@ -136,25 +136,25 @@ public partial class LoginView : ContentPage
                 }
                 else if (res.ErrorCode == ErrorCode.AccessLimitation)
                 {
-                    notification.ShowMessage("تقيد الوصول", "يرجي الخروج من الهاتف القديم،او يمكنك طلب تسجيل جهاز جديد");
+                    notification.Display("تقيد الوصول", "يرجي الخروج من الهاتف القديم،او يمكنك طلب تسجيل جهاز جديد");
                     newDviceStack.IsVisible = true;
                     AppPreferences.UserEmail = userModel.EmailOrPhone;
                 }
                 else if (res.ErrorCode == ErrorCode.EmailNotExist)
                 {
-                    notification.ShowMessage("هذا الايميل غير موجود");
+                    notification.Display("هذا الايميل غير موجود");
                 }
                 else if (res.ErrorCode == ErrorCode.PhoneNumberNotExist)
                 {
-                    notification.ShowMessage("رقم الهاتف غير موجود");
+                    notification.Display("رقم الهاتف غير موجود");
                 }
                 else if (res.ErrorCode == ErrorCode.PasswordIsIncorrect)
                 {
-                    notification.ShowMessage("الرقم السري غير صحيح");
+                    notification.Display("الرقم السري غير صحيح");
                 }
                 else if (res.ErrorCode == ErrorCode.ExceptionError)
                 {
-                    notification.ShowMessage("حدث خطأ ما  من جهة السيرفر");
+                    notification.Display("حدث خطأ ما  من جهة السيرفر");
                 }
             }
 
@@ -229,7 +229,7 @@ public partial class LoginView : ContentPage
 
     private void NetworkNotAccessAlert()
     {
-        notification.ShowMessage(new Models.ErrorMessage("No NetworkAccess", "please check your WiFi"));
+        notification.Display(new Models.ErrorMessage("No NetworkAccess", "please check your WiFi"));
     }
 
     private void NewDeviceStack_Tapped(object sender, TappedEventArgs e)

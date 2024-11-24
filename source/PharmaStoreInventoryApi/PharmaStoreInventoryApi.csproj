@@ -8,8 +8,10 @@
     <ApplicationIcon>Resources\appicon.ico</ApplicationIcon>
     <Title>PharmaInventoryHost</Title>
     <Authors>MoFawzyHelal</Authors>
-    <Company>ModernSoft</Company>
+    <Company>Modern Soft for Programming</Company>
     <PackageIcon>icon.png</PackageIcon>
+    <Version>24.11.24</Version>
+    <OutputType>WinExe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>

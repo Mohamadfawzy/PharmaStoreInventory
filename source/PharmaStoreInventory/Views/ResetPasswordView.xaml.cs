@@ -27,7 +27,7 @@ public partial class ResetPasswordView : ContentPage
 
     private void NetworkNotAccessAlert()
     {
-        notification.ShowMessage(new Models.ErrorMessage("No NetworkAccess", "please check your WiFi"));
+        notification.Display(new Models.ErrorMessage("No NetworkAccess", "please check your WiFi"));
     }
 
     void SetValues()
@@ -67,7 +67,7 @@ public partial class ResetPasswordView : ContentPage
         }
         catch (Exception ex)
         {
-            notification.ShowMessage(ex.Message);
+            notification.Display(ex.Message);
         }
     }
 
@@ -82,7 +82,7 @@ public partial class ResetPasswordView : ContentPage
         }
         //if (verificationCodeSent == verificationViewTemplate.GetCode())
         //{
-        //    //notification.ShowMessage("تم التحقق من الإيميل");
+        //    //notification.Display("تم التحقق من الإيميل");
         //    mainCreationButton.Text = "تأكيد إنشاء الحساب";
         //    //verificationViewTemplate.IsVisible = false;
         //    email.IsEnabled = false;
@@ -91,7 +91,7 @@ public partial class ResetPasswordView : ContentPage
         //}
         else
         {
-            notification.ShowMessage("الكود خاطئ");
+            notification.Display("الكود خاطئ");
         }
     }
 
@@ -159,11 +159,11 @@ public partial class ResetPasswordView : ContentPage
         if (!res.IsSuccess)
         {
             email.SetError("البريد الإلكتروني غير صالح");
-            notification.ShowMessage("تحقق من البريد الإلكتروني");
+            notification.Display("تحقق من البريد الإلكتروني");
         }
         //else
         //{
-        //    notification.ShowMessage("البريد الإلكتروني صالح!");
+        //    notification.Display("البريد الإلكتروني صالح!");
         //}
     }
 
@@ -183,10 +183,10 @@ public partial class ResetPasswordView : ContentPage
         var res = await ApiServices.PostAndSendEmail(emailModel);
         if (res != null && res.IsSuccess)
         {
-            notification.ShowMessage("تم ارسال الكود");
+            notification.Display("تم ارسال الكود");
         }
         else
-            notification.ShowMessage("لم يتم ارسال الكود");
+            notification.Display("لم يتم ارسال الكود");
     }
 
     bool IsAnyInvalidInput()

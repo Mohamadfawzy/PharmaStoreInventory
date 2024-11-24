@@ -81,15 +81,20 @@
                 <Entry x:Name="phone" TextChanged="AnyEntry_TextChanged" />
                 <BoxView Style="{StaticResource SeparatorStyle}" />
 
-                <Button Text="حفظ التغيرات" Clicked="Button_Clicked" />
+                <!--  Save Button  -->
+                <Button
+                    x:Name="saveButton"
+                    Text="حفظ التغيرات"
+                    Clicked="SaveButton_Clicked" />
             </VerticalStackLayout>
 
+            <!--  Separating line  -->
             <BoxView
                 Margin="0,20,0,0"
                 HeightRequest="1"
                 Color="Gray" />
 
-            <!--  reset password  -->
+            <!--  Reset password  -->
             <Border Margin="20" Style="{StaticResource MenuItemBorderStyle}">
                 <StackLayout Orientation="Horizontal">
                     <Label Text="تغيير_الرقم_السري" Style="{StaticResource MenuItemTestStyle}" />
@@ -114,9 +119,6 @@
 
 
         <!--#region Absolute Content ==============================-->
-        <!--#endregion-->
-
-        <!--  Popup  -->
         <Grid
             x:Name="backgroundTransparence"
             Grid.RowSpan="2"
@@ -201,11 +203,11 @@
                 <TapGestureRecognizer Tapped="ClosePopupTapped" />
             </Grid.GestureRecognizers>
         </Grid>
-        <!--  End Popup  -->
 
         <template:NotificationTemplate
             x:Name="notification"
             Grid.RowSpan="5"
             ZIndex="2" />
+        <!--#endregion-->
     </Grid>
 </ContentPage>

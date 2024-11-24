@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <Version>24.11.24</Version>
+    <Title>Pharma Ip Manager</Title>
+    <Authors>Mohamed Fawzy</Authors>
+    <Company>Modern Soft for Programming</Company>
+    <ApplicationIcon>images\pharma_manager.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="images\closeicon.png" />
+    <None Remove="images\emailicon.png" />
+    <None Remove="images\lockicon.png" />
+    <None Remove="images\splash.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="images\pharma_manager.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="images\closeicon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\emailicon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\lockicon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\splash.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+</Project>

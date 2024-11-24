@@ -474,5 +474,7 @@
 
         <ActivityIndicator Grid.RowSpan="4" ZIndex="4" />
         <!--#endregion-->
+
+
     </Grid>
 </ContentPage>

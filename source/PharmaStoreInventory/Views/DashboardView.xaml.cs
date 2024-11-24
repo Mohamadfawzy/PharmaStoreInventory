@@ -31,7 +31,7 @@ public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotifi
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            notification.ShowMessage(message.Value);
+            notification.Display(message.Value);
         });
     }
 
@@ -72,4 +72,6 @@ public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotifi
             box.Scale = 1;
         }
     }
+
+
 }

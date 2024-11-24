@@ -57,25 +57,25 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android34.0|AnyCPU'">
-		<ApplicationTitle>Ph.S Inventory</ApplicationTitle>
+		<ApplicationTitle>Pharma Store Inventory</ApplicationTitle>
 		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
-		<ApplicationVersion>6</ApplicationVersion>
-		<ApplicationDisplayVersion>1.10.29</ApplicationDisplayVersion>
+		<ApplicationVersion>7</ApplicationVersion>
+		<ApplicationDisplayVersion>24.11.24</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android34.0|AnyCPU'">
-		<ApplicationTitle>Ph.S Inventory</ApplicationTitle>
+		<ApplicationTitle>Pharma Store Inventory</ApplicationTitle>
 		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
-		<ApplicationVersion>6</ApplicationVersion>
-		<ApplicationDisplayVersion>1.10.29</ApplicationDisplayVersion>
+		<ApplicationVersion>7</ApplicationVersion>
+		<ApplicationDisplayVersion>24.11.24</ApplicationDisplayVersion>
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
-		<ApplicationTitle>Ph.S Inventory</ApplicationTitle>
+		<ApplicationTitle>Pharma Store Inventory</ApplicationTitle>
 		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
-		<ApplicationVersion>6</ApplicationVersion>
-		<ApplicationDisplayVersion>1.10.29</ApplicationDisplayVersion>
+		<ApplicationVersion>7</ApplicationVersion>
+		<ApplicationDisplayVersion>24.11.24</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
@@ -93,10 +93,10 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
-		<ApplicationTitle>Ph.S Inventory</ApplicationTitle>
+		<ApplicationTitle>Pharma Store Inventory</ApplicationTitle>
 		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
-		<ApplicationVersion>6</ApplicationVersion>
-		<ApplicationDisplayVersion>1.10.29</ApplicationDisplayVersion>
+		<ApplicationVersion>7</ApplicationVersion>
+		<ApplicationDisplayVersion>24.11.24</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">

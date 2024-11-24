@@ -31,7 +31,7 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            notification.ShowMessage(message.Value);
+            notification.Display(message.Value);
         });
     }
 
@@ -72,7 +72,7 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
         }
         catch (Exception ex)
         {
-            notification.ShowMessage("exception", ex.Message);
+            notification.Display("exception", ex.Message);
         }
         finally
         {
@@ -118,17 +118,17 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
                 {
 
                     //verificationCodeSent = res.Data ?? emailModel.VerificationCode;
-                    notification.ShowMessage("تم ارسال كود تحقق");
+                    notification.Display("تم ارسال كود تحقق");
                 }
             }
             else
             {
-                notification.ShowMessage("حدثت مشكلة ولم يتم ارسال الكود");
+                notification.Display("حدثت مشكلة ولم يتم ارسال الكود");
             }
         }
         catch (Exception ex)
         {
-            notification.ShowMessage(ex.Message);
+            notification.Display(ex.Message);
         }
         finally { activityIndicator.IsRunning = false; }
     }
@@ -139,7 +139,7 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
 
         if (res == null)
         {
-            notification.ShowMessage("تحقق من الاتصال الانترنت");
+            notification.Display("تحقق من الاتصال الانترنت");
             return false;
         }
 
@@ -164,17 +164,17 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
                 }
                 else if (err == ErrorCode.NullValue)
                 {
-                    notification.ShowMessage("تحقق من إدخال كل الحقول");
+                    notification.Display("تحقق من إدخال كل الحقول");
                 }
                 else
                 {
-                    notification.ShowMessage("حدث خطأ ما داخل الهوست", res.Message);
+                    notification.Display("حدث خطأ ما داخل الهوست", res.Message);
                 }
             }
         }
         else
         {
-            notification.ShowMessage(res.Message);
+            notification.Display(res.Message);
         }
         return false;
     }
@@ -186,7 +186,7 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
             var res = await ApiServices.RegisterUserAsync(user);
             if (res == null)
             {
-                notification.ShowMessage("تحقق من الاتصال بالانترنت");
+                notification.Display("تحقق من الاتصال بالانترنت");
                 return;
             }
             if (res.IsSuccess)
@@ -198,13 +198,19 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
             }
             else
             {
-                notification.ShowMessage(res.Message);
+                notification.Display(res.Message);
             }
         }
         catch (Exception ex)
         {
-            notification.ShowMessage("Exception Error", $"Message: {ex.Message}\nInnerException: {ex.InnerException?.Message}");
+            notification.Display("Exception Error", $"Message: {ex.Message}\nInnerException: {ex.InnerException?.Message}");
         }
+    }
+
+    private async void GoToLoginViewClicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new LoginView());
+        Navigation.RemovePage(this);
     }
 
     private void SetInputText_Tapped(object sender, TappedEventArgs e)
@@ -221,11 +227,7 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
         }
     }
 
-    private async void GoToLoginViewClicked(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new LoginView());
-        Navigation.RemovePage(this);
-    }
+
 
     /// <returns> true if one or more inputs are invalid.</returns>
     bool IsAnyInvalidInput()
@@ -248,36 +250,5 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
             password.ErrorMessage = confirmPassword.ErrorMessage = "تحقق من تطابق الرقم السري";
         }
         return enyErrorFound;
-
-        //bool isError = false;
-        //if (string.IsNullOrEmpty(fullName.InputText))
-        //{
-        //    fullName.IsError = true;
-        //    isError = true;
-        //}
-        //if (string.IsNullOrEmpty(pharmacyName.InputText))
-        //{
-        //    pharmacyName.IsError = true;
-        //    isError = true;
-        //}
-        //if (string.IsNullOrEmpty(email.InputText) || email.IsError)
-        //{
-        //    email.IsError = true;
-        //    isError = true;
-        //}
-        //if (string.IsNullOrEmpty(telephone.InputText) || telephone.IsError)
-        //{
-        //    telephone.IsError = true;
-        //    isError = true;
-        //}
-        //if (string.IsNullOrEmpty(password.InputText) ||
-        //    string.IsNullOrEmpty(confirmPassword.InputText) ||
-        //    password.InputText != confirmPassword.InputText)
-        //{
-        //    password.IsError = true;
-        //    confirmPassword.IsError = true;
-        //    isError = true;
-        //}
-        //return isError;
     }
 }

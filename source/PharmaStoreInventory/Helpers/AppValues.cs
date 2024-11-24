@@ -7,7 +7,7 @@ internal static class AppValues
     public static string XBranchesFileName = FileSystem.AppDataDirectory + "/XBarchs.xml";
 
     public static string Language { get; set; } = "ar";
-    public static string HostBaseURI = "http://estock.somee.com/api";
+    public static string HostBaseURI = "http://usersapi.modern-soft.com:5252/api";
     public static string LocalBaseURI = "http://000.000.000.000:5144/api";
     public static string SystemVersion = "system";
     public static string PharmaVersion = "pharma";

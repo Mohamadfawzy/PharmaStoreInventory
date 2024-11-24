@@ -42,7 +42,7 @@ public partial class PickingView : ContentPage, IRecipient<PickingViewNotificati
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            notification.ShowMessage(message.Value);
+            notification.Display(message.Value);
         });
     }
 
@@ -61,6 +61,7 @@ public partial class PickingView : ContentPage, IRecipient<PickingViewNotificati
         {
             gridData.IsVisible = true;
         }
+        DeviceDisplay.Current.KeepScreenOn = true;
     }
 
     protected async override void OnAppearing()
@@ -78,6 +79,12 @@ public partial class PickingView : ContentPage, IRecipient<PickingViewNotificati
             await Alerts.DisplaySnackBar("OnAppearing" + ex.Message);
         }
 
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        DeviceDisplay.Current.KeepScreenOn = false;
     }
 
     private async void CameraOnDetectionFinished(object sender, OnDetectionFinishedEventArg e)

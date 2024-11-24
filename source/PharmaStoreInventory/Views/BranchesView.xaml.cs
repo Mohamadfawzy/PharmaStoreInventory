@@ -60,7 +60,7 @@ public partial class BranchesView : ContentPage
                 var (status, message) = await ApiServices.ApiEmployeeLogin(branch);
                 if (status == ConnectionErrorCode.Success)
                 {
-                    notification.ShowMessage("Contacted successfully", "The branch has been contacted successfully");
+                    notification.Display("Contacted successfully", "The branch has been contacted successfully");
                     AppPreferences.LocalBaseURI = AppValues.LocalBaseURI = await Configuration.ConfigureBaseUrl(branch.IpAddress, branch.Port);
                     AppPreferences.HasBranchRegistered = true;
                     if (App.Current != null)
@@ -68,22 +68,22 @@ public partial class BranchesView : ContentPage
                 }
                 else if (status == ConnectionErrorCode.Fail)
                 {
-                    notification.ShowMessage("فشل في الاتصال بالسيرفر", "IP or Port is Incorrect");
+                    notification.Display("فشل في الاتصال بالسيرفر", "IP or Port is Incorrect");
                 }
                 else if (status == ConnectionErrorCode.UsernameOrPass)
                 {
-                    notification.ShowMessage("فشل في الاتصال بالنظام", "username or Password is Incorrect");
+                    notification.Display("فشل في الاتصال بالنظام", "username or Password is Incorrect");
                 }
                 else
                 {
-                    notification.ShowMessage("Something went wrong", message);
+                    notification.Display("Something went wrong", message);
                 }
                 //GetAllBranchs();
             }
         }
         catch
         {
-            notification.ShowMessage("Something went wrong", "Exception");
+            notification.Display("Something went wrong", "Exception");
         }
         finally
         {

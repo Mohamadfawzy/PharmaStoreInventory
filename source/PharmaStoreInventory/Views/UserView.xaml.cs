@@ -9,8 +9,10 @@ namespace PharmaStoreInventory.Views;
 
 public partial class UserView : ContentPage
 {
+    private string userEmail = string.Empty;
     private JsonFileHanler jsonFileHandler;
-    private string userEmail= string.Empty;
+    UserLoginResponseDto? CurrentUserData;
+
     public UserView()
     {
         InitializeComponent();
@@ -21,44 +23,18 @@ public partial class UserView : ContentPage
     {
         jsonFileHandler = new JsonFileHanler(AppValues.UserFileName);
 
-        var user = await jsonFileHandler.SingleObject<UserLoginResponseDto>();
-        if (user != null)
+        CurrentUserData = await jsonFileHandler.SingleObject<UserLoginResponseDto>();
+        if (CurrentUserData != null)
         {
-            userEmail = user.Email?? "";
-            nameEntry.Text = user.FullName;
-            pharmaName.Text = user.PharmcyName;
-            phone.Text = user.PhoneNumber;
-            email.Text = user.Email;
+            userEmail = CurrentUserData.Email ?? "";
+            nameEntry.Text = CurrentUserData.FullName;
+            pharmaName.Text = CurrentUserData.PharmcyName;
+            phone.Text = CurrentUserData.PhoneNumber;
+            email.Text = CurrentUserData.Email;
         }
         nameEntry.Focus();
+        saveButton.IsEnabled = false;
     }
-
-    //private void AllowNameEditingTapped(object sender, TappedEventArgs e)
-    //{
-    //    saveButton.IsVisible = true;
-    //    //editIcon.IsVisible = false;
-    //    //nameStack.BackgroundColor = Color.FromArgb("#f0f7ff");
-
-    //    nameEntry.IsReadOnly = false;
-    //    // email.IsReadOnly = false;
-    //    pharmaName.IsReadOnly = false;
-    //    // phone.IsReadOnly = false;
-
-    //    nameEntry.Focus();
-
-    //}
-
-    //private void saveButton_Clicked(object sender, EventArgs e)
-    //{
-    //    saveButton.IsVisible = false;
-    //    //editIcon.IsVisible = true;
-    //    //nameStack.BackgroundColor = Colors.Transparent;
-    //    nameEntry.Unfocus();
-    //    nameEntry.IsReadOnly = true;
-    //    pharmaName.IsReadOnly = true;
-    //    //email.IsReadOnly = true;
-    //    //phone.IsReadOnly = true;
-    //}
 
     private void ClosePopupClicked(object sender, EventArgs e)
     {
@@ -67,9 +43,7 @@ public partial class UserView : ContentPage
 
     private void Popup_HideSoftInput_Tapped(object sender, TappedEventArgs e)
     {
-        //confirmPassword.HideKeyBoard();
         inputsContainer.ClearFocusFromAllInputs();
-
     }
 
     private void ClosePopupTapped(object sender, TappedEventArgs e)
@@ -145,7 +119,7 @@ public partial class UserView : ContentPage
         AppPreferences.StoreId = 0;
     }
 
-    private async void Reset()
+    private void Reset()
     {
         File.Delete(AppValues.XBranchesFileName);
         File.Delete(AppValues.UserFileName);
@@ -170,7 +144,7 @@ public partial class UserView : ContentPage
         OpenPopup();
     }
 
-    private async void Button_Clicked(object sender, EventArgs e)
+    private async void SaveButton_Clicked(object sender, EventArgs e)
     {
         var userDataDto = new UserEditDataDto()
         {
@@ -179,6 +153,7 @@ public partial class UserView : ContentPage
             PhoneNumber = phone.Text,
             Id = AppPreferences.HostUserId,
         };
+
         var res = await ApiServices.EditUserDataAsync(userDataDto);
         if (res == null)
         {
@@ -192,23 +167,50 @@ public partial class UserView : ContentPage
                 Id = userDataDto.Id,
                 PharmcyName = userDataDto.PharmacyName,
                 PhoneNumber = userDataDto.PhoneNumber,
-                FullName = userEmail,
+                FullName = userDataDto.FullName,
+                Email = userEmail,
             };
             await jsonFileHandler.WriteToFile(model);
-            notification.ShowMessage("تم حفظ التغيرات");
+            saveButton.IsEnabled = false;
+            notification.Display("تم حفظ التغيرات");
+            await nameEntry.HideSoftInputAsync(CancellationToken.None);
 
         }
         else if (res.ErrorCode == ErrorCode.PhoneNumberAlreadyExists)
         {
-            notification.ShowMessage("رقم الهاتف مستخدم");
+            notification.Display("رقم الهاتف مستخدم");
         }
-
-
-
     }
 
-    private void AnyEntry_TextChanged(object sender, TextChangedEventArgs e)
+    private async void AnyEntry_TextChanged(object sender, TextChangedEventArgs e)
     {
+        if (await AnyEntryChanges())
+            saveButton.IsEnabled = true;
+        else
+            saveButton.IsEnabled = false;
+    }
 
+
+    private Task<bool> AnyEntryChanges()
+    {
+        var flag = false;
+        if (CurrentUserData == null)
+            return Task.FromResult(flag);
+
+        if (CurrentUserData.FullName != nameEntry.Text)
+        {
+            flag = true;
+        }
+
+        if (CurrentUserData.PharmcyName != pharmaName.Text)
+        {
+            flag = true;
+        }
+
+        if (CurrentUserData.PhoneNumber != phone.Text)
+        {
+            flag = true;
+        }
+        return Task.FromResult(flag);
     }
 }

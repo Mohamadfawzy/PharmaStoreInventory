@@ -1,5 +1,4 @@
-﻿using BarcodeScanning;
-using PharmaStoreInventory.Helpers;
+﻿using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Views;
 using System.Globalization;
 
@@ -14,7 +13,6 @@ public partial class App : Application
         SetCulture("ar");
         HandlePreferencesKeys();
         IsDevelopmentMode();
-
 
         if (AppPreferences.IsFirstTime)
         {
@@ -39,7 +37,7 @@ public partial class App : Application
     private void IsDevelopmentMode()
     {
 #if DEBUG
-        AppValues.HostBaseURI = "http://192.168.1.103:5219/api";
+        AppValues.HostBaseURI = "http://usersapi.modern-soft.com:5252/api";
         AppValues.IsDevelopment = true;
 #endif
     }

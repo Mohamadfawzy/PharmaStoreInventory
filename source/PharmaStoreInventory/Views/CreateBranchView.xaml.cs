@@ -25,7 +25,7 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            notification.ShowMessage(message.Value);
+            notification.Display(message.Value);
         });
     }
 
@@ -64,7 +64,7 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
         }
         catch (Exception ex)
         {
-            notification.ShowMessage("exception in event clicked", ex.Message);
+            notification.Display("exception in event clicked", ex.Message);
         }
         finally
         {
@@ -119,7 +119,7 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
         // check if this branch is already exist. if true? We will not add it.
         if (await xFileHandler.IsIpAdrressExist(branch.IpAddress))
         {
-            notification.ShowMessage("Failure", "Ip Address already Exist");
+            notification.Display("Failure", "Ip Address already Exist");
             return;
         }
 
@@ -130,7 +130,7 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
             await GetSystemVersion(await Configuration.ConfigureBaseUrl(branch.IpAddress, branch.Port));
             if (AppValues.SystemVersion != AppValues.PharmaVersion)
             {
-                notification.ShowMessage("خطأ في الإصدار", "من فضلك تحقق من توافق الإصدار");
+                notification.Display("خطأ في الإصدار", "من فضلك تحقق من توافق الإصدار");
                 return;
             }
 
@@ -140,13 +140,13 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
             {
                 if (!result.IsSuccess)
                 {
-                    notification.ShowMessage("خطأ  علي الهوست", result.Message);
+                    notification.Display("خطأ  علي الهوست", result.Message);
                     return;
                 }
             }
             else
             {
-                notification.ShowMessage("حدث خطأ عن اضافة الفرع علي الهوست","تحقق من الأتصال بالانترنت");
+                notification.Display("حدث خطأ عن اضافة الفرع علي الهوست","تحقق من الأتصال بالانترنت");
                 return;
             }
            
@@ -166,15 +166,15 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
         }
         else if (status == ConnectionErrorCode.Fail)
         {
-            notification.ShowMessage("فشل في الاتصال بالسيرفر", "IP or Port is Incorrect");
+            notification.Display("فشل في الاتصال بالسيرفر", "IP or Port is Incorrect");
         }
         else if (status == ConnectionErrorCode.UsernameOrPass)
         {
-            notification.ShowMessage("فشل في الاتصال بالنظام", "username or Password is Incorrect");
+            notification.Display("فشل في الاتصال بالنظام", "username or Password is Incorrect");
         }
         else
         {
-            notification.ShowMessage("Something went wrong", message);
+            notification.Display("Something went wrong", message);
         }
     }
 

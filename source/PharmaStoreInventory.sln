@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PharmaStoreInventoryApi", "PharmaStoreInventoryApi\PharmaStoreInventoryApi.csproj", "{C6A5942B-3A68-427E-8B2D-D4368FE0699D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PharmaIpManager", "PharmaIpManager\PharmaIpManager.csproj", "{3AA22AD7-0AC9-4FBC-B5DE-CFBC97C8CD1E}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PharmaStoreSetup", "PharmaStoreSetup\PharmaStoreSetup.vdproj", "{90098B0F-CEC8-4C13-A83C-D97B18544888}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +33,14 @@ Global
 		{C6A5942B-3A68-427E-8B2D-D4368FE0699D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6A5942B-3A68-427E-8B2D-D4368FE0699D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6A5942B-3A68-427E-8B2D-D4368FE0699D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AA22AD7-0AC9-4FBC-B5DE-CFBC97C8CD1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AA22AD7-0AC9-4FBC-B5DE-CFBC97C8CD1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AA22AD7-0AC9-4FBC-B5DE-CFBC97C8CD1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AA22AD7-0AC9-4FBC-B5DE-CFBC97C8CD1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90098B0F-CEC8-4C13-A83C-D97B18544888}.Debug|Any CPU.ActiveCfg = Debug
+		{90098B0F-CEC8-4C13-A83C-D97B18544888}.Debug|Any CPU.Build.0 = Debug
+		{90098B0F-CEC8-4C13-A83C-D97B18544888}.Release|Any CPU.ActiveCfg = Release
+		{90098B0F-CEC8-4C13-A83C-D97B18544888}.Release|Any CPU.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
