@@ -2,9 +2,11 @@
 
 namespace PharmaStoreInventory.Views;
 
-public partial class OnbordingView : ContentPage
+public partial class OnboardingView : ContentPage
 {
-    public OnbordingView()
+    short position = 1;
+    #region OnStart
+    public OnboardingView()
     {
         InitializeComponent();
         AppPreferences.LocalDeviceId = Guid.NewGuid().ToString();
@@ -14,7 +16,9 @@ public partial class OnbordingView : ContentPage
         base.OnAppearing();
         await Permissions.RequestAsync<Permissions.Camera>();
     }
+    #endregion
 
+    #region OnClicked
     private void GoToLogin(object sender, EventArgs e)
     {
         Navigation.PushAsync(new LoginView());
@@ -25,7 +29,6 @@ public partial class OnbordingView : ContentPage
         Navigation.PushAsync(new RegisterView());
     }
 
-    short position = 1;
     private async void Button_Clicked_1(object sender, EventArgs e)
     {
         try
@@ -50,7 +53,9 @@ public partial class OnbordingView : ContentPage
         {
         }
     }
+    #endregion
 
+    #region On process
     private async Task Move(View currentView, View nextView)
     {
         nextView.IsVisible = true;
@@ -62,11 +67,12 @@ public partial class OnbordingView : ContentPage
 
     private Task ChangeIndicatorBoxColor(BoxView currentBox, BoxView nextBox)
     {
-        if(Application.Current!= null)
+        if (Application.Current != null)
         {
             currentBox.Color = (Color)Application.Current.Resources["Primary700"];
             nextBox.Color = (Color)Application.Current.Resources["White"];
         }
         return Task.CompletedTask;
     }
+    #endregion
 }

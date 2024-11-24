@@ -11,11 +11,7 @@
     xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
     x:Name="ThisPage"
     NavigationPage.HasNavigationBar="False">
-    <Grid
-        Padding="0"
-        RowDefinitions="Auto,*"
-        BackgroundColor="Transparent"
-        RowSpacing="10">
+    <Grid RowDefinitions="Auto,*" RowSpacing="10">
 
         <!--  Notification  -->
         <template:NotificationTemplate
@@ -87,8 +83,6 @@
             </Border>
         </StackLayout>
 
-
-
         <!--  Collection  -->
         <CollectionView
             x:Name="clBranches"
@@ -113,7 +107,7 @@
                                 <SwipeItemView BackgroundColor="{StaticResource Primary950}">
                                     <Button
                                         Margin="20,0"
-                                        Clicked="Button_Clicked_3"
+                                        Clicked="DeleteBranche_Clicked"
                                         CommandParameter="{Binding .}"
                                         Text="Delete"
                                         VerticalOptions="Center" />

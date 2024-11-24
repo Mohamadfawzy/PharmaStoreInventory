@@ -20,6 +20,7 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
     private UserRegisterDto uRegister = new();
     private readonly MailingService mailingService;
 
+    #region OnStart
     public RegisterView()
     {
         InitializeComponent();
@@ -34,7 +35,9 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
             notification.Display(message.Value);
         });
     }
+    #endregion
 
+    #region OnClicked
     private void ClearFocusFromAllInputs_Tapped(object sender, TappedEventArgs e)
     {
         inputsContainer.ClearFocusFromAllInputs();
@@ -83,16 +86,32 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
     private async void VerificationViewTemplate_SubmitClicked(object sender, EventArgs e)
     {
         //Debug.WriteLine($"\n\n\n Guid:{uRegister.EVCID}");
+        uRegister.VerificationCode = verificationViewTemplate.GetCode();
         await CreateAccount(uRegister);
     }
 
-    private void ShowVerificationViewTemplate()
+    private async void GoToLoginViewClicked(object sender, EventArgs e)
     {
-        verificationViewTemplate.IsVisible = true;
-        verificationViewTemplate.Init();
-        verificationViewTemplate.SetSpanEmail(uRegister.Email);
+        await Navigation.PushAsync(new LoginView());
+        Navigation.RemovePage(this);
     }
 
+    private void SetInputText_Tapped(object sender, TappedEventArgs e)
+    {
+        if (AppValues.IsDevelopment)
+        {
+            //if(AppPreferences.HasBranchRegistered)
+            fullName.SetInputText("محمد هلال");
+            confirmPassword.SetInputText("123456");
+            password.SetInputText("123456");
+            email.SetInputText("mofawzyhelal@gmail.com");
+            pharmacyName.SetInputText("صيدلية 1");
+            telephone.SetInputText("01093052427");
+        }
+    }
+    #endregion
+
+    #region On Call API
     private async void SaveAndSendVerificationCode()
     {
         try
@@ -100,26 +119,18 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
             //1 save code in database
             EmailRequestModel emailModel = new()
             {
-                Recipient = email.InputText,
+                EVCID = Guid.NewGuid(),
                 UserFullName = fullName.InputText,
-                VerificationCode = Common.GenerateVerificationCode(),
-                EVCID = Guid.NewGuid()
+                Recipient = email.InputText,
             };
-            uRegister.VerificationCode = emailModel.VerificationCode;
+            //uRegister.VerificationCode = emailModel.VerificationCode;
             uRegister.EVCID = emailModel.EVCID;
-            var saveCodeResponse = await ApiServices.PostEmailVerificationCode(emailModel);
+            var saveCodeResponse = await ApiServices.PostAndSendEmail(emailModel);
 
             //2 send email
             if (saveCodeResponse != null && saveCodeResponse.IsSuccess)
             {
-                // Result<string>.Success(emailModel.VerificationCode); await Task.Delay(3000); //
-                var res = await mailingService.SendVerificationCodeAsync(emailModel.Recipient, emailModel.VerificationCode, emailModel.UserFullName);
-                if (res != null && res.IsSuccess)
-                {
-
-                    //verificationCodeSent = res.Data ?? emailModel.VerificationCode;
-                    notification.Display("تم ارسال كود تحقق");
-                }
+                notification.Display("تم ارسال كود التحقق");
             }
             else
             {
@@ -183,6 +194,7 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
     {
         try
         {
+
             var res = await ApiServices.RegisterUserAsync(user);
             if (res == null)
             {
@@ -206,28 +218,15 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
             notification.Display("Exception Error", $"Message: {ex.Message}\nInnerException: {ex.InnerException?.Message}");
         }
     }
+    #endregion
 
-    private async void GoToLoginViewClicked(object sender, EventArgs e)
+    #region On process
+    private void ShowVerificationViewTemplate()
     {
-        await Navigation.PushAsync(new LoginView());
-        Navigation.RemovePage(this);
+        verificationViewTemplate.IsVisible = true;
+        verificationViewTemplate.Init();
+        verificationViewTemplate.SetSpanEmail(uRegister.Email);
     }
-
-    private void SetInputText_Tapped(object sender, TappedEventArgs e)
-    {
-        if (AppValues.IsDevelopment)
-        {
-            //if(AppPreferences.HasBranchRegistered)
-            fullName.SetInputText("محمد هلال");
-            confirmPassword.SetInputText("123456");
-            password.SetInputText("123456");
-            email.SetInputText("mofawzyhelal@gmail.com");
-            pharmacyName.SetInputText("صيدلية 1");
-            telephone.SetInputText("01093052427");
-        }
-    }
-
-
 
     /// <returns> true if one or more inputs are invalid.</returns>
     bool IsAnyInvalidInput()
@@ -251,4 +250,5 @@ public partial class RegisterView : ContentPage, IRecipient<RegisterViewNotifica
         }
         return enyErrorFound;
     }
+    #endregion
 }

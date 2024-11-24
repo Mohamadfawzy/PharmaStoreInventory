@@ -62,7 +62,7 @@ public partial class SidebarView : ContentPage
         AppPreferences.LeftScanIcon = false;
 
         if (Application.Current != null)
-            Application.Current.MainPage = new NavigationPage(new OnbordingView());
+            Application.Current.MainPage = new NavigationPage(new OnboardingView());
     }
 
     private async void TouchBehavior_TouchGestureCompleted(object sender, CommunityToolkit.Maui.Core.TouchGestureCompletedEventArgs e)

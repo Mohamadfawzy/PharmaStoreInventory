@@ -13,6 +13,7 @@ public partial class UserView : ContentPage
     private JsonFileHanler jsonFileHandler;
     UserLoginResponseDto? CurrentUserData;
 
+    #region OnStart
     public UserView()
     {
         InitializeComponent();
@@ -35,7 +36,9 @@ public partial class UserView : ContentPage
         nameEntry.Focus();
         saveButton.IsEnabled = false;
     }
+    #endregion
 
+    #region OnClicked
     private void ClosePopupClicked(object sender, EventArgs e)
     {
         ClosePopup();
@@ -50,24 +53,6 @@ public partial class UserView : ContentPage
     {
         ClosePopup();
     }
-
-    void ClosePopup()
-    {
-        confirmPassword.HideKeyBoard();
-        backgroundTransparence.IsVisible = false;
-        popup.IsVisible = false;
-        oldPassword.ClearText();
-        newPassword.ClearText();
-        confirmPassword.ClearText();
-    }
-
-    void OpenPopup()
-    {
-        backgroundTransparence.IsVisible = true;
-        popup.IsVisible = true;
-    }
-
-
     private async void BackButtonClicked(object sender, EventArgs e)
     {
         await Navigation.PopAsync();
@@ -96,48 +81,6 @@ public partial class UserView : ContentPage
             errorLabel.Text = "لم يتم تحديث الرقم السري";
         }
     }
-
-    private void Logout()
-    {
-        File.Delete(AppValues.XBranchesFileName);
-        File.Delete(AppValues.UserFileName);
-        File.Delete(AppValues.BranchesFileName);
-
-
-        AppPreferences.LocalDbUserId = 0;
-        AppPreferences.StoreId = 1;
-        AppPreferences.HasBranchRegistered = false;
-        AppPreferences.LeftScanIcon = false;
-
-
-        if (Application.Current != null)
-            Application.Current.MainPage = new NavigationPage(new LoginView());
-        AppPreferences.IsLoggedIn = false;
-        AppPreferences.HostUserId = 0;
-
-        // delete all be low
-        AppPreferences.StoreId = 0;
-    }
-
-    private void Reset()
-    {
-        File.Delete(AppValues.XBranchesFileName);
-        File.Delete(AppValues.UserFileName);
-        File.Delete(AppValues.BranchesFileName);
-
-        AppPreferences.HostUserId = 0;
-        AppPreferences.LocalDbUserId = 0;
-        AppPreferences.StoreId = 1;
-        AppPreferences.IsLoggedIn = false;
-        AppPreferences.IsFirstTime = true;
-        AppPreferences.IsUserActivated = false;
-        AppPreferences.HasBranchRegistered = false;
-        AppPreferences.LeftScanIcon = false;
-
-        if (Application.Current != null)
-            Application.Current.MainPage = new NavigationPage(new OnbordingView());
-    }
-
 
     private void TouchBehavior_TouchGestureCompleted(object sender, CommunityToolkit.Maui.Core.TouchGestureCompletedEventArgs e)
     {
@@ -189,7 +132,28 @@ public partial class UserView : ContentPage
         else
             saveButton.IsEnabled = false;
     }
+    #endregion
 
+    #region On Call API
+    #endregion
+
+    #region On process
+
+    void ClosePopup()
+    {
+        confirmPassword.HideKeyBoard();
+        backgroundTransparence.IsVisible = false;
+        popup.IsVisible = false;
+        oldPassword.ClearText();
+        newPassword.ClearText();
+        confirmPassword.ClearText();
+    }
+
+    void OpenPopup()
+    {
+        backgroundTransparence.IsVisible = true;
+        popup.IsVisible = true;
+    }
 
     private Task<bool> AnyEntryChanges()
     {
@@ -213,4 +177,6 @@ public partial class UserView : ContentPage
         }
         return Task.FromResult(flag);
     }
+
+    #endregion
 }

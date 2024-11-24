@@ -16,7 +16,7 @@ public partial class App : Application
 
         if (AppPreferences.IsFirstTime)
         {
-            MainPage = new NavigationPage(new OnbordingView());
+            MainPage = new NavigationPage(new OnboardingView());
         }
         else if (!AppPreferences.IsLoggedIn)
         {

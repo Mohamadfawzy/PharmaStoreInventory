@@ -10,7 +10,8 @@ namespace PharmaStoreInventory.Views;
 public partial class LoginView : ContentPage
 {
     private readonly JsonFileHanler jsonFileHandler;
-    //AnimatedInput email, password;
+
+    #region OnStart
     public LoginView()
     {
         InitializeComponent();
@@ -27,24 +28,18 @@ public partial class LoginView : ContentPage
         SetValues();
     }
 
-    void SetValues()
-    {
-        if (!string.IsNullOrEmpty(AppPreferences.UserEmail))
-        {
-            email.SetInputText(AppPreferences.UserEmail);
-        }
-
-    }
-    private void ClearFocusFromAllInputsTapped(object sender, TappedEventArgs e)
-    {
-        inputsContainer.ClearFocusFromAllInputs();
-    }
-
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
         Helpers.AppPreferences.SetDeviceID();
         password.InputText = string.Empty;
+    }
+    #endregion
+
+    #region OnClicked
+    private void ClearFocusFromAllInputsTapped(object sender, TappedEventArgs e)
+    {
+        inputsContainer.ClearFocusFromAllInputs();
     }
 
     private async void LoginClicked(object sender, EventArgs e)
@@ -167,13 +162,59 @@ public partial class LoginView : ContentPage
         }
     }
 
+    private async void GoToRegisterViewClicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new RegisterView());
+        Navigation.RemovePage(this);
+    }
+
+    private void RefreshView_Refreshing(object sender, EventArgs e)
+    {
+        if (Validations.Validator.IsNetworkAccess())
+        {
+            NetworkNotAccessAlert();
+        }
+        refreshView.IsRefreshing = false;
+    }
+
+    private void NewDeviceStack_Tapped(object sender, TappedEventArgs e)
+    {
+        newDeviceCheckBox.IsChecked = !newDeviceCheckBox.IsChecked;
+    }
+
+    private async void GoToResetPasswordView_Tapped(object sender, TappedEventArgs e)
+    {
+        await Navigation.PushAsync(new ResetPasswordView());
+    }
+
+    private void SetInputText_Tapped(object sender, TappedEventArgs e)
+    {
+        if (AppValues.IsDevelopment)
+        {
+            email.SetInputText("mofawzyhelal@gmail.com");
+            password.SetInputText("123");
+        }
+    }
+    #endregion
+
+    #region On Call API
+    #endregion
+
+    #region On process
+    void SetValues()
+    {
+        if (!string.IsNullOrEmpty(AppPreferences.UserEmail))
+        {
+            email.SetInputText(AppPreferences.UserEmail);
+        }
+
+    }
     void LoginEnded()
     {
         loginButton.IsEnabled = true;
         activityIndicator.IsRunning = false;
         refreshView.IsRefreshing = false;
     }
-
     private InputType CheckInputs()
     {
         InputType inputType = InputType.Empty;
@@ -197,10 +238,6 @@ public partial class LoginView : ContentPage
                 email.IsError = true;
                 email.ErrorMessage = "تحقق من المدخلات";
             }
-            //else if (email.InputText == "admin")
-            //{
-            //    inputType = InputType.Admin;
-            //}
         }
 
         if (string.IsNullOrEmpty(password.InputText))
@@ -211,43 +248,9 @@ public partial class LoginView : ContentPage
 
         return inputType;
     }// end IsAnyInvalidInput
-
-    private async void GoToRegisterViewClicked(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new RegisterView());
-        Navigation.RemovePage(this);
-    }
-
-    private void RefreshView_Refreshing(object sender, EventArgs e)
-    {
-        if (Validations.Validator.IsNetworkAccess())
-        {
-            NetworkNotAccessAlert();
-        }
-        refreshView.IsRefreshing = false;
-    }
-
     private void NetworkNotAccessAlert()
     {
         notification.Display(new Models.ErrorMessage("No NetworkAccess", "please check your WiFi"));
     }
-
-    private void NewDeviceStack_Tapped(object sender, TappedEventArgs e)
-    {
-        newDeviceCheckBox.IsChecked = !newDeviceCheckBox.IsChecked;
-    }
-
-    private async void GoToResetPasswordView_Tapped(object sender, TappedEventArgs e)
-    {
-        await Navigation.PushAsync(new ResetPasswordView());
-    }
-
-    private void SetInputText_Tapped(object sender, TappedEventArgs e)
-    {
-        if (AppValues.IsDevelopment)
-        {
-            email.SetInputText("mofawzyhelal@gmail.com");
-            password.SetInputText("123");
-        }
-    }
+    #endregion
 }

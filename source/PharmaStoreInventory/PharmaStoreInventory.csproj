@@ -205,7 +205,7 @@
 		<MauiXaml Update="Views\LoginView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\OnbordingView.xaml">
+		<MauiXaml Update="Views\OnboardingView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\PickingView.xaml">
@@ -239,6 +239,9 @@
 			<DesignTime>True</DesignTime>
 			<AutoGen>True</AutoGen>
 			<DependentUpon>AppResources.resx</DependentUpon>
+		</Compile>
+		<Compile Update="Views\OnboardingView.xaml.cs">
+		  <DependentUpon>OnboardingView.xaml</DependentUpon>
 		</Compile>
 	</ItemGroup>
 

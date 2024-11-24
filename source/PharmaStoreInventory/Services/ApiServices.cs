@@ -300,29 +300,36 @@ public static class ApiServices
 
     public static async Task<Result?> PostAndSendEmail(EmailRequestModel emailModel)
     {
-        MailingService mailingService = new();
-        try
-        {
-            //1 save code in database
-            var saveCodeResponse = await PostEmailVerificationCode(emailModel);
-
-            //2 send email
-            if (saveCodeResponse != null && saveCodeResponse.IsSuccess)
-            {
-                var res = await mailingService.SendVerificationCodeAsync(emailModel);
-                if (res != null && res.IsSuccess)
-                {
-                    return Result.Success();
-                }
-            }
-            return Result.Failure("حدثت مشكلة ولم يتم ارسال الكود");
-
-        }
-        catch (Exception ex)
-        {
-            return Result.Failure(ErrorCode.ExceptionError, ex.Message);
-        }
+        var url = AppValues.HostBaseURI + "/mail/send";
+        var (content, error) = await RequestProvider.PostSingleAsync<Result, EmailRequestModel>(url, emailModel);
+        return content;
     }
+    
+    //public static async Task<Result?> PostAndSendEmail(EmailRequestModel emailModel)
+    //{
+    //    MailingService mailingService = new();
+    //    try
+    //    {
+    //        //1 save code in database
+    //        var saveCodeResponse = await PostEmailVerificationCode(emailModel);
+
+    //        //2 send email
+    //        if (saveCodeResponse != null && saveCodeResponse.IsSuccess)
+    //        {
+    //            var res = await mailingService.SendVerificationCodeAsync(emailModel);
+    //            if (res != null && res.IsSuccess)
+    //            {
+    //                return Result.Success();
+    //            }
+    //        }
+    //        return Result.Failure("حدثت مشكلة ولم يتم ارسال الكود");
+
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return Result.Failure(ErrorCode.ExceptionError, ex.Message);
+    //    }
+    //}
 
     public static async Task<Result?> IsVerificationCodeValidAsync(Guid evcId, string code)
     {

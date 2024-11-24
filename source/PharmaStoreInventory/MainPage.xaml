@@ -16,7 +16,7 @@
     </ContentPage.Resources>
     <ScrollView>
         <VerticalStackLayout Padding="30,0" Spacing="15">
-            <Button Text="Obbording" CommandParameter="{x:Type views:OnbordingView}" />
+            <Button Text="Obbording" CommandParameter="{x:Type views:OnboardingView}" />
             <Button Text="Login" CommandParameter="{x:Type views:LoginView}" />
             <Button Text="Register" CommandParameter="{x:Type views:RegisterView}" />
             <Button Text="WaitingApprovalView" CommandParameter="{x:Type views:WaitingApprovalView}" />

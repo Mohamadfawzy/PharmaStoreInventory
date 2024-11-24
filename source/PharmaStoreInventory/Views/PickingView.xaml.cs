@@ -11,6 +11,8 @@ public partial class PickingView : ContentPage, IRecipient<PickingViewNotificati
 {
     readonly PickingViewModel viewModel;
     readonly bool IsScanMode = false;
+
+    #region OnStart
     public PickingView()
     {
         Methods.AskForRequiredPermissionAsync();
@@ -86,6 +88,9 @@ public partial class PickingView : ContentPage, IRecipient<PickingViewNotificati
         base.OnDisappearing();
         DeviceDisplay.Current.KeepScreenOn = false;
     }
+    #endregion
+
+    #region OnClicked
 
     private async void CameraOnDetectionFinished(object sender, OnDetectionFinishedEventArg e)
     {
@@ -98,9 +103,6 @@ public partial class PickingView : ContentPage, IRecipient<PickingViewNotificati
             nativeBarcode.PauseScanning = true;
             nativeBarcode.CameraEnabled = false;
             Task.Run(() => { viewModel.FetchStockDetails(e.BarcodeResults[0].DisplayValue); });
-            //viewModel.FetchStockDetails(e.BarcodeResults[0].DisplayValue);
-            // Dispatcher.DispatchAsync(() => { });
-
         });
     }
 
@@ -125,18 +127,12 @@ public partial class PickingView : ContentPage, IRecipient<PickingViewNotificati
         nativeBarcode.TorchOn = !nativeBarcode.TorchOn;
     }
 
-    private void OnDoneSwipeItemInvoked(object sender, EventArgs e)
-    {
-
-    }
-
     private async void SwipeView_SwipeStarted(object sender, SwipeStartedEventArgs e)
     {
         if (e.SwipeDirection == SwipeDirection.Right)
         {
-            var swip = sender as SwipeView;
-            //var first = swip?.LeftItems.First() as SwipeItemView;
-            if (swip?.FindByName("checkIcon") is Label checkIcon)
+            var swap = sender as SwipeView;
+            if (swap?.FindByName("checkIcon") is Label checkIcon)
             {
                 await checkIcon.TranslateTo(0, 10);
                 await checkIcon.ScaleTo(1.2, 400);
@@ -153,16 +149,9 @@ public partial class PickingView : ContentPage, IRecipient<PickingViewNotificati
         ClosePopup();
     }
 
-    void ClosePopup()
-    {
-        viewModel.IsEditPopupVisible = false;
-        //entry.HideSoftInputAsync(CancellationToken.None);
-    }
-
     private void Popup_HideSoftInput_Tapped(object sender, TappedEventArgs e)
     {
         //entry.HideSoftInputAsync(CancellationToken.None);
-        //yearMonthDayStack.
     }
 
     private void ExecuteSelectionChanged_Tapped(object sender, TappedEventArgs e)
@@ -177,44 +166,12 @@ public partial class PickingView : ContentPage, IRecipient<PickingViewNotificati
             }
         }
     }
+    #endregion
 
-    //Deleted
-
-    //private void TapToScan(object sender, TappedEventArgs e)
-    //{
-    //    //nativeBarcode.PauseScanning = false;
-    //    //nativeBarcode.TapToFocusEnabled = true;
-    //}
-
-
-    //private void Collection_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    //{
-    //    if (collection.SelectedItem == null) return;
-    //    if (collection.SelectedItem != null)
-    //    {
-    //        //popup.IsVisible = true;
-    //        //backgroundTransparence.IsVisible = true;
-    //    }
-    //    collection.SelectedItem = null;
-    //}
-
-    //private void Save_Clicked(object sender, EventArgs e)
-    //{
-    //    ClosePopup();
-    //}
-
-
-    //private void OpenPopupTapped(object sender, TappedEventArgs e)
-    //{
-    //    OpenPopup();
-    //}
-
-
-    //void OpenPopup()
-    //{
-    //    popup.IsVisible = true;
-    //    backgroundTransparence.IsVisible = true;
-    //    nativeBarcode.PauseScanning = true;
-    //}
-
+    #region On process
+    void ClosePopup()
+    {
+        viewModel.IsEditPopupVisible = false;
+    }
+    #endregion
 }

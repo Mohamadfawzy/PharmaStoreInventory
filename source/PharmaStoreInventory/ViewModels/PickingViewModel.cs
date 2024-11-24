@@ -270,7 +270,6 @@ public class PickingViewModel : BaseViewModel
     }
     #endregion
 
-
     //#########*Handlers*#########
     #region Handlers
     async void SaveEditProduct()

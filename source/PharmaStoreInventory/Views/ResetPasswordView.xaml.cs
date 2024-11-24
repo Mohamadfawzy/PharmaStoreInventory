@@ -42,26 +42,21 @@ public partial class ResetPasswordView : ContentPage
     #region OnClicked
     private async void MainButton_Clicked(object sender, EventArgs e)
     {
-
-        // validate inputs
-        // fined the email in dada base
-        // show verification view
-        // send email
         try
         {
-            // 1
+            // 1 validate inputs
             if (!ValidateInputs())
             {
                 return;
             }
 
-            // 2
+            // 2 fined the email in dada base
             await IsEmailExistAsync();
 
-            // 3
+            // 3 show verification view
             ShowVerificationViewTemplate();
 
-            //4
+            //4 send email
             await IsSuccessSendEmailAsync();
 
         }
@@ -109,7 +104,7 @@ public partial class ResetPasswordView : ContentPage
             {
                 EVCID = emailModel.EVCID,
                 Email = emailModel.Recipient,
-                Code = emailModel.VerificationCode,
+                Code = verificationViewTemplate.GetCode(),
                 Password = password.InputText,
             };
             var res = await ApiServices.ResetPasswordAsync(model);
@@ -118,16 +113,15 @@ public partial class ResetPasswordView : ContentPage
                 body.InputTransparent = false;
                 await Navigation.PopToRootAsync();
             }
+            else
+            {
+                notification.Display("لم يتم التحديث الكود خاطئ");
+            }
 
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-
-            throw;
-        }
-        finally
-        {
-
+            notification.Display(ex.Message);
         }
     }
 
@@ -137,16 +131,7 @@ public partial class ResetPasswordView : ContentPage
     }
     #endregion
 
-    bool ValidateInputs()
-    {
-        if (email.IsAnyError())
-        {
-            email.SetError("تحقق من صحة البيانات المدخلة");
-            return false;
-        }
-        return true;
-    }
-
+    #region On Call API
     async Task IsEmailExistAsync()
     {
         var res = await ApiServices.IsEmailExistAsync(email.InputText);
@@ -161,25 +146,11 @@ public partial class ResetPasswordView : ContentPage
             email.SetError("البريد الإلكتروني غير صالح");
             notification.Display("تحقق من البريد الإلكتروني");
         }
-        //else
-        //{
-        //    notification.Display("البريد الإلكتروني صالح!");
-        //}
     }
-
-    private void ShowVerificationViewTemplate()
-    {
-        verificationViewTemplate.IsVisible = true;
-        verificationViewTemplate.Init();
-        verificationViewTemplate.SetSpanEmail(email.InputText);
-    }
-
     async Task IsSuccessSendEmailAsync()
     {
         emailModel.Recipient = email.InputText;
-        emailModel.VerificationCode = Common.GenerateVerificationCode();
         emailModel.EVCID = Guid.NewGuid();
-        //Debug.WriteLine("\n\n\n\n\n\n\n Guid: "+emailModel.EVCID);
         var res = await ApiServices.PostAndSendEmail(emailModel);
         if (res != null && res.IsSuccess)
         {
@@ -187,6 +158,25 @@ public partial class ResetPasswordView : ContentPage
         }
         else
             notification.Display("لم يتم ارسال الكود");
+    }
+    #endregion
+
+    #region On process
+    bool ValidateInputs()
+    {
+        if (email.IsAnyError())
+        {
+            email.SetError("تحقق من صحة البيانات المدخلة");
+            return false;
+        }
+        return true;
+    }
+
+    private void ShowVerificationViewTemplate()
+    {
+        verificationViewTemplate.IsVisible = true;
+        verificationViewTemplate.Init();
+        verificationViewTemplate.SetSpanEmail(email.InputText);
     }
 
     bool IsAnyInvalidInput()
@@ -206,6 +196,5 @@ public partial class ResetPasswordView : ContentPage
         }
         return enyErrorFound;
     }
-
-
+    #endregion
 }

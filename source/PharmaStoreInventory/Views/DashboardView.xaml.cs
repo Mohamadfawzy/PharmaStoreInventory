@@ -8,6 +8,8 @@ namespace PharmaStoreInventory.Views;
 public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotification>
 {
     private readonly DashboardViewModel vm;
+
+    #region OnStart
     public DashboardView()
     {
         InitializeComponent();
@@ -40,7 +42,9 @@ public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotifi
         var prefix = "مرحباً";
         userFullName.Text = $"{prefix} {AppPreferences.UserFullName}";
     }
+    #endregion
 
+    #region OnClicked
     private async void HamburgerTapped(object sender, TappedEventArgs e)
     {
         await Navigation.PushAsync(new SidebarView());
@@ -72,6 +76,5 @@ public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotifi
             box.Scale = 1;
         }
     }
-
-
+    #endregion
 }

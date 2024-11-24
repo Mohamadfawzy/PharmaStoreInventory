@@ -7,36 +7,23 @@ namespace PharmaStoreInventory.Views;
 public partial class BranchesView : ContentPage
 {
     private readonly XmlFileHandler xFileHanler;
-    public NoDataModel NoDataModel =>
-        new("nodataicon.png", "لايوجد فروع مسجلة", "يجب تسجيل فرع واحد علي الأقل", false);
+    public NoDataModel NoDataModel => new("nodataicon.png", "لايوجد فروع مسجلة", "يجب تسجيل فرع واحد علي الأقل", false);
+
+    #region OnStart
     public BranchesView(bool hasBackButton = true)
     {
         InitializeComponent();
         xFileHanler = new(AppValues.XBranchesFileName);
-        GetAllBranchs();
+        GetAllBranches();
 
         if (!hasBackButton)
         {
             backArrowIcon.IsVisible = false;
         }
     }
+    #endregion
 
-    //protected override bool OnBackButtonPressed()
-    //{
-    //    Navigation.PushAsync(new DashboardView());
-    //    return true;
-
-    //}
-
-    //protected override void OnAppearing()
-    //{
-    //    base.OnAppearing();
-    //    var count = Navigation.NavigationStack.Count;
-    //    if (count == 1)
-    //    {
-    //        backArrowIcon.IsVisible = false;
-    //    }
-    //}
+    #region OnClicked
 
     private async void BackButtonClicked(object sender, EventArgs e)
     {
@@ -93,7 +80,47 @@ public partial class BranchesView : ContentPage
 
     }
 
-    private async void GetAllBranchs()
+    private async void DeleteBranche_Clicked(object sender, EventArgs e)
+    {
+        var btn = sender as Button;
+        if (btn != null)
+        {
+            var item = btn.CommandParameter as BranchModel;
+            if (item != null)
+            {
+                await xFileHanler.RemoveById(item.Id.ToString());
+                await ApiServices.DeleteBranche(item.Id);
+                GetAllBranches();
+
+                var url = await Configuration.ConfigureBaseUrl(item.IpAddress, item.Port);
+                if (url == AppValues.LocalBaseURI)
+                {
+                    AppPreferences.LocalBaseURI = AppValues.LocalBaseURI = string.Empty;
+                    AppPreferences.HasBranchRegistered = false;
+                    await Alerts.DisplayToast("قمت بحذف الفرع الحالي");
+                    if (Application.Current != null)
+                        Application.Current.MainPage = new NavigationPage(new BranchesView(false));
+                }
+            }
+        }
+    }
+
+    private async void GotoCreateBranchTapped(object sender, TappedEventArgs e)
+    {
+        activityIndicator.IsRunning = true;
+        await Navigation.PushAsync(new CreateBranchView());
+        activityIndicator.IsRunning = false;
+
+    }
+
+    private async void NavigationPop_Tapped(object sender, TappedEventArgs e)
+    {
+        await Navigation.PopAsync();
+    }
+    #endregion
+
+    #region On Call API
+    private async void GetAllBranches()
     {
         activityIndicator.IsRunning = true;
 
@@ -123,42 +150,12 @@ public partial class BranchesView : ContentPage
         }
         activityIndicator.IsRunning = false;
     }
+    #endregion
 
-    private async void Button_Clicked_3(object sender, EventArgs e)
-    {
-        var btn = sender as Button;
-        if (btn != null)
-        {
-            var item = btn.CommandParameter as BranchModel;
-            if (item != null)
-            {
-                await xFileHanler.RemoveById(item.Id.ToString());
-                await ApiServices.DeleteBranche(item.Id);
-                GetAllBranchs();
+    #region On process
+    #endregion
 
-                var url = await Configuration.ConfigureBaseUrl(item.IpAddress, item.Port);
-                if (url == AppValues.LocalBaseURI)
-                {
-                    AppPreferences.LocalBaseURI = AppValues.LocalBaseURI = string.Empty;
-                    AppPreferences.HasBranchRegistered = false;
-                    await Alerts.DisplayToast("قمت بحذف الفرع الحالي");
-                    if (Application.Current != null)
-                        Application.Current.MainPage = new NavigationPage(new BranchesView(false));
-                }
-            }
-        }
-    }
 
-    private async void GotoCreateBranchTapped(object sender, TappedEventArgs e)
-    {
-        activityIndicator.IsRunning = true;
-        await Navigation.PushAsync(new CreateBranchView());
-        activityIndicator.IsRunning = false;
 
-    }
 
-    private async void NavigationPop_Tapped(object sender, TappedEventArgs e)
-    {
-        await Navigation.PopAsync();
-    }
 }

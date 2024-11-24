@@ -15,25 +15,37 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_07396C189BEA47DBBF1B5F017E4EA7B0"
+        "MsmKey" = "8:_02227DF55E4244368E6AEC9FB5D7C6C3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_0EAC2DC5FB414C999FBD90E979CE2780"
+        "MsmKey" = "8:_0DEFC73F97854C88BF3D83AD28EB09B3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_0F5948201F85462DB5A031EF59ECC0B4"
+        "MsmKey" = "8:_31609BB8FDB945EAAB5280046A0C0D79"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_1999F460F0B644E78CF8EDB5F246C341"
+        "MsmKey" = "8:_34F6A19C9FEF4867A20CC531C0429414"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_40190D9B87554C8F9627908DD209442E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4BE8E428291748DDBE5CFB8821FE4356"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -45,13 +57,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_66DD7F6801B44154AB67B47463454DF4"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_68AF43BD84014472BFEC4B9603D59990"
+        "MsmKey" = "8:_5CB35182EA4A4532BADE8CCA9EF34AB3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -63,25 +69,37 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7BD5A6077D2A40A9A66BCDFB7CB9FDC2"
+        "MsmKey" = "8:_7B4E4C4890484835BE3FB8980332D583"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_8C5C030D51BF44628EFEFC1E713339A9"
+        "MsmKey" = "8:_917255FA65404070A85C11DCDAC77ACE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_B7CEAD0987A74156A6CC154A8290E86C"
+        "MsmKey" = "8:_935F7445BAAE446EA1DE911D9BE15A39"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_BB0F44B518EA4AE9BA457B3DFCCDF801"
+        "MsmKey" = "8:_9CBB85F23D174F74AFDEF2862425B203"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C6A2247059164DF09536B092180E80CD"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C8D519C9B19749BC975B662A8E4C4BE4"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -93,26 +111,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_E0C810B182044C13A419CB7B63AFABC7"
+        "MsmKey" = "8:_F271FD4C52A74DD0AA80282023A5124A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_E9333FD243E54E88B6F7E3AD09C31652"
+        "MsmKey" = "8:_F6B9B001A1D546B68CD1034DF1E96112"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_FBEF3A64A46B4085A754A9EB3E0B8FE8"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_FBEF3A64A46B4085A754A9EB3E0B8FE8"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -210,10 +216,10 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_07396C189BEA47DBBF1B5F017E4EA7B0"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_02227DF55E4244368E6AEC9FB5D7C6C3"
             {
-            "SourcePath" = "8:..\\..\\..\\Publish\\DataAccess.pdb"
-            "TargetName" = "8:DataAccess.pdb"
+            "SourcePath" = "8:..\\..\\..\\Publish\\Microsoft.Data.SqlClient.SNI.dll"
+            "TargetName" = "8:Microsoft.Data.SqlClient.SNI.dll"
             "Tag" = "8:"
             "Folder" = "8:_0EEA45E5B9AB441BA2DFADFB4D8BB67B"
             "Condition" = "8:"
@@ -230,10 +236,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0EAC2DC5FB414C999FBD90E979CE2780"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0DEFC73F97854C88BF3D83AD28EB09B3"
             {
-            "SourcePath" = "8:..\\..\\..\\Publish\\PharmaIpManager.pdb"
-            "TargetName" = "8:PharmaIpManager.pdb"
+            "SourcePath" = "8:..\\..\\..\\Publish\\web.config"
+            "TargetName" = "8:web.config"
             "Tag" = "8:"
             "Folder" = "8:_0EEA45E5B9AB441BA2DFADFB4D8BB67B"
             "Condition" = "8:"
@@ -250,7 +256,27 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0F5948201F85462DB5A031EF59ECC0B4"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_31609BB8FDB945EAAB5280046A0C0D79"
+            {
+            "SourcePath" = "8:..\\..\\..\\Publish\\wpfgfx_cor3.dll"
+            "TargetName" = "8:wpfgfx_cor3.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_0EEA45E5B9AB441BA2DFADFB4D8BB67B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_34F6A19C9FEF4867A20CC531C0429414"
             {
             "SourcePath" = "8:..\\..\\..\\Publish\\PharmaInventoryAPI.exe"
             "TargetName" = "8:PharmaInventoryAPI.exe"
@@ -270,7 +296,27 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1999F460F0B644E78CF8EDB5F246C341"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_40190D9B87554C8F9627908DD209442E"
+            {
+            "SourcePath" = "8:..\\..\\..\\Publish\\appsettings.Development.json"
+            "TargetName" = "8:appsettings.Development.json"
+            "Tag" = "8:"
+            "Folder" = "8:_0EEA45E5B9AB441BA2DFADFB4D8BB67B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4BE8E428291748DDBE5CFB8821FE4356"
             {
             "SourcePath" = "8:..\\..\\..\\Publish\\aspnetcorev2_inprocess.dll"
             "TargetName" = "8:aspnetcorev2_inprocess.dll"
@@ -310,30 +356,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_66DD7F6801B44154AB67B47463454DF4"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5CB35182EA4A4532BADE8CCA9EF34AB3"
             {
-            "SourcePath" = "8:..\\..\\..\\Publish\\PharmaInventoryAPI.pdb"
-            "TargetName" = "8:PharmaInventoryAPI.pdb"
-            "Tag" = "8:"
-            "Folder" = "8:_0EEA45E5B9AB441BA2DFADFB4D8BB67B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_68AF43BD84014472BFEC4B9603D59990"
-            {
-            "SourcePath" = "8:..\\..\\..\\Publish\\PharmaIpManager.runtimeconfig.json"
-            "TargetName" = "8:PharmaIpManager.runtimeconfig.json"
+            "SourcePath" = "8:..\\..\\..\\Publish\\PresentationNative_cor3.dll"
+            "TargetName" = "8:PresentationNative_cor3.dll"
             "Tag" = "8:"
             "Folder" = "8:_0EEA45E5B9AB441BA2DFADFB4D8BB67B"
             "Condition" = "8:"
@@ -370,10 +396,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7BD5A6077D2A40A9A66BCDFB7CB9FDC2"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7B4E4C4890484835BE3FB8980332D583"
             {
-            "SourcePath" = "8:..\\..\\..\\Publish\\PharmaIpManager.deps.json"
-            "TargetName" = "8:PharmaIpManager.deps.json"
+            "SourcePath" = "8:..\\..\\..\\Publish\\appsettings.json"
+            "TargetName" = "8:appsettings.json"
             "Tag" = "8:"
             "Folder" = "8:_0EEA45E5B9AB441BA2DFADFB4D8BB67B"
             "Condition" = "8:"
@@ -390,10 +416,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8C5C030D51BF44628EFEFC1E713339A9"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_917255FA65404070A85C11DCDAC77ACE"
             {
-            "SourcePath" = "8:..\\..\\..\\Publish\\Microsoft.Data.SqlClient.SNI.dll"
-            "TargetName" = "8:Microsoft.Data.SqlClient.SNI.dll"
+            "SourcePath" = "8:..\\..\\..\\Publish\\vcruntime140_cor3.dll"
+            "TargetName" = "8:vcruntime140_cor3.dll"
             "Tag" = "8:"
             "Folder" = "8:_0EEA45E5B9AB441BA2DFADFB4D8BB67B"
             "Condition" = "8:"
@@ -410,10 +436,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B7CEAD0987A74156A6CC154A8290E86C"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_935F7445BAAE446EA1DE911D9BE15A39"
             {
-            "SourcePath" = "8:..\\..\\..\\Publish\\appsettings.Development.json"
-            "TargetName" = "8:appsettings.Development.json"
+            "SourcePath" = "8:..\\..\\..\\Publish\\PharmaInventoryAPI.pdb"
+            "TargetName" = "8:PharmaInventoryAPI.pdb"
             "Tag" = "8:"
             "Folder" = "8:_0EEA45E5B9AB441BA2DFADFB4D8BB67B"
             "Condition" = "8:"
@@ -430,10 +456,50 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BB0F44B518EA4AE9BA457B3DFCCDF801"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9CBB85F23D174F74AFDEF2862425B203"
             {
             "SourcePath" = "8:..\\..\\..\\Publish\\PharmaIpManager.exe"
             "TargetName" = "8:PharmaIpManager.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_0EEA45E5B9AB441BA2DFADFB4D8BB67B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C6A2247059164DF09536B092180E80CD"
+            {
+            "SourcePath" = "8:..\\..\\..\\Publish\\PharmaIpManager.pdb"
+            "TargetName" = "8:PharmaIpManager.pdb"
+            "Tag" = "8:"
+            "Folder" = "8:_0EEA45E5B9AB441BA2DFADFB4D8BB67B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C8D519C9B19749BC975B662A8E4C4BE4"
+            {
+            "SourcePath" = "8:..\\..\\..\\Publish\\DataAccess.pdb"
+            "TargetName" = "8:DataAccess.pdb"
             "Tag" = "8:"
             "Folder" = "8:_0EEA45E5B9AB441BA2DFADFB4D8BB67B"
             "Condition" = "8:"
@@ -470,10 +536,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E0C810B182044C13A419CB7B63AFABC7"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F271FD4C52A74DD0AA80282023A5124A"
             {
-            "SourcePath" = "8:..\\..\\..\\Publish\\web.config"
-            "TargetName" = "8:web.config"
+            "SourcePath" = "8:..\\..\\..\\Publish\\D3DCompiler_47_cor3.dll"
+            "TargetName" = "8:D3DCompiler_47_cor3.dll"
             "Tag" = "8:"
             "Folder" = "8:_0EEA45E5B9AB441BA2DFADFB4D8BB67B"
             "Condition" = "8:"
@@ -490,41 +556,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E9333FD243E54E88B6F7E3AD09C31652"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F6B9B001A1D546B68CD1034DF1E96112"
             {
-            "SourcePath" = "8:..\\..\\..\\Publish\\appsettings.json"
-            "TargetName" = "8:appsettings.json"
-            "Tag" = "8:"
-            "Folder" = "8:_0EEA45E5B9AB441BA2DFADFB4D8BB67B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_FBEF3A64A46B4085A754A9EB3E0B8FE8"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:PharmaIpManager, Version=2024.11.24.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_FBEF3A64A46B4085A754A9EB3E0B8FE8"
-                    {
-                    "Name" = "8:PharmaIpManager.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\..\\..\\Publish\\PharmaIpManager.dll"
-            "TargetName" = "8:"
+            "SourcePath" = "8:..\\..\\..\\Publish\\PenImc_cor3.dll"
+            "TargetName" = "8:PenImc_cor3.dll"
             "Tag" = "8:"
             "Folder" = "8:_0EEA45E5B9AB441BA2DFADFB4D8BB67B"
             "Condition" = "8:"
@@ -620,7 +655,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Pharma IP Manager"
         "ProductCode" = "8:{3904E9FA-1693-4FB2-83FB-DE1623F245F0}"
-        "PackageCode" = "8:{44FA0CD6-211B-425A-B94E-E09ECADEA004}"
+        "PackageCode" = "8:{A09B7CD3-9C7F-4F88-AB34-576D41F5B317}"
         "UpgradeCode" = "8:{E213AAFC-36B4-42EA-8EFA-A723F0997FDC}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -740,7 +775,7 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_15801F7513E8424987C9161B1F16D9F0"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_15A76D2A654F489CAD0FA4ACE21DFEED"
             {
             "Name" = "8:Pharma Host"
             "Arguments" = "8:"
@@ -748,13 +783,13 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_0F5948201F85462DB5A031EF59ECC0B4"
+            "Target" = "8:_34F6A19C9FEF4867A20CC531C0429414"
             "Folder" = "8:_E043B35BADA34A43AF8B30DB346E8EF8"
             "WorkingFolder" = "8:_0EEA45E5B9AB441BA2DFADFB4D8BB67B"
             "Icon" = "8:_70B7C1C73E2C4077A1735A60CC8CA215"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_CA740D07B0B94324AAD8F9490F86D1B2"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_92C40670D712446780051771A85D908F"
             {
             "Name" = "8:Pharma IP Manager"
             "Arguments" = "8:"
@@ -762,7 +797,7 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_BB0F44B518EA4AE9BA457B3DFCCDF801"
+            "Target" = "8:_9CBB85F23D174F74AFDEF2862425B203"
             "Folder" = "8:_992A504B701549C69B43163FB3AA2BF9"
             "WorkingFolder" = "8:_0EEA45E5B9AB441BA2DFADFB4D8BB67B"
             "Icon" = "8:_D973B8C28E7C472DB4FB6341B44F7365"

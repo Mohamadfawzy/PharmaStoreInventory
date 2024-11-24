@@ -170,7 +170,7 @@
                                 </Grid>
                             </StackLayout>
                             <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" CommandParameter="{Binding .}" />
+                                <TapGestureRecognizer Tapped="GoToPickingViewTapped" CommandParameter="{Binding .}" />
                             </Border.GestureRecognizers>
                         </Border>
                     </DataTemplate>
