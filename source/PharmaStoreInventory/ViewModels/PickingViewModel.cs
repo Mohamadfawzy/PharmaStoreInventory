@@ -5,7 +5,9 @@ using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.Models;
 using PharmaStoreInventory.Services;
+using System.Globalization;
 using System.Windows.Input;
+using static System.Net.Mime.MediaTypeNames;
 using Product = PharmaStoreInventory.Models.ProductDetailsModel;
 namespace PharmaStoreInventory.ViewModels;
 
@@ -22,7 +24,7 @@ public class PickingViewModel : BaseViewModel
     private string popupType = "edit"; // or "editAndCopy"
     private string barcode = "0000";
     private string microUnitQuantity = "0";
-    private decimal modifiedQuantity = 0;
+    private string modifiedQuantity = "0";
     private DateTime? expiryDateLabel;
     private Product SelectedProduct = new();
     public List<Product> listOfStoc = [];
@@ -56,7 +58,7 @@ public class PickingViewModel : BaseViewModel
         get => microUnitQuantity;
         set => SetProperty(ref microUnitQuantity, value);
     }
-    public decimal ModifiedQuantity
+    public string ModifiedQuantity
     {
         get => modifiedQuantity;
         set => SetProperty(ref modifiedQuantity, value);
@@ -80,10 +82,6 @@ public class PickingViewModel : BaseViewModel
         set => SetProperty(ref day, value);
     }
     private DateTime? ExpiryDateLabel;
-    //{
-    //    get => expiryDateLabel;
-    //    set => SetProperty(ref expiryDateLabel, value);
-    //}
     public bool IsEditPopupVisible
     {
         get => isEditPopupVisible;
@@ -101,7 +99,6 @@ public class PickingViewModel : BaseViewModel
     public ICommand CopyProductCommand => new Command<Product>(ExecuteCopyProduct);
     public ICommand MakeInventoryCommand => new Command<Product>(ExecuteMakeInventory);
     public ICommand SelectionChangedCommand => new Command<Product>(ExecuteSelectionChanged);
-
     public ICommand SaveChangesCommand => new Command(ExecuteSaveChanges);
     #endregion
 
@@ -166,11 +163,14 @@ public class PickingViewModel : BaseViewModel
     }
     private void ExecuteCopyProduct(Product stock)
     {
-
+        
         if (stock == null)
         {
             return;
         }
+
+        SelectedProduct.IsSelected = false;
+        stock.IsSelected = true;
 
         if (stock.ProductHasExpire == "0")
         {
@@ -191,18 +191,21 @@ public class PickingViewModel : BaseViewModel
             Month = stock.ExpDate.Value.Month;
             Day = stock.ExpDate.Value.Day;
         }
-        ModifiedQuantity = stock.Quantity ?? 0;
+        ModifiedQuantity = (stock.Quantity ?? 0).ToString("F2", CultureInfo.InvariantCulture);
         this.SelectedProduct = stock;
     }
     public async void ExecuteSelectionChanged(Product pro)
     {
         try
         {
-
             if (pro == null)
             {
                 return;
             }
+
+            SelectedProduct.IsSelected = false;
+            pro.IsSelected = true;
+
             IsExpiryDateFrameInPopupVisible = pro.ProductHasExpire == "1" ? true : false;
 
             PopupType = "edit";
@@ -215,7 +218,7 @@ public class PickingViewModel : BaseViewModel
                 Month = pro.ExpDate.Value.Month;
                 Day = pro.ExpDate.Value.Day;
             }
-            ModifiedQuantity = pro.Quantity ?? 0;
+            ModifiedQuantity = (pro.Quantity ?? 0).ToString("F2", CultureInfo.InvariantCulture);
             this.SelectedProduct = pro;
         }
         catch (Exception ex)
@@ -274,6 +277,11 @@ public class PickingViewModel : BaseViewModel
     #region Handlers
     async void SaveEditProduct()
     {
+        var t = ModifiedQuantity;
+        var m = MicroUnitQuantity;
+
+        decimal.TryParse(ModifiedQuantity, NumberStyles.Any, CultureInfo.InvariantCulture, out var quantityParsed);
+
         try
         {
             if (SelectedProduct.Quantity == null)
@@ -286,7 +294,7 @@ public class PickingViewModel : BaseViewModel
                 Id = SelectedProduct.Id,
                 ProductId = (int)SelectedProduct.ProductId,
                 OldQuantity = SelectedProduct.Quantity.Value,
-                NewQuantity = ModifiedQuantity,
+                NewQuantity = quantityParsed,
                 ExpDate = ExpiryDateLabel,
                 ProductUnit1 = SelectedProduct.ProductUnit1,
                 EmpId = AppPreferences.LocalDbUserId.ToString()
@@ -325,21 +333,20 @@ public class PickingViewModel : BaseViewModel
 
             if (res != null && res.IsSuccess)
             {
-                SelectedProduct.Quantity = ModifiedQuantity;
+                SelectedProduct.Quantity = quantityParsed;
                 SelectedProduct.ExpDate = ExpiryDateLabel;
                 SelectedProduct.IsInventoried = "1";
                 IsEditPopupVisible = false;
-
             }
             else
             {
                 SendNotification(new ErrorMessage("تاريخ صلاحية موجود بالفعل", ""));
             }
         }
-        catch
+        catch(Exception ex)
         {
+            SendNotification(new ErrorMessage("خطأ عام", ex.Message));
         }
-
     }
 
     async void SaveCopyProduct()
@@ -348,12 +355,13 @@ public class PickingViewModel : BaseViewModel
         {
             if (ExpiryDateLabel == null)
                 return;
+            decimal.TryParse(ModifiedQuantity, NumberStyles.Any, CultureInfo.InvariantCulture, out var quantityParsed);
 
             CopyProductAmoutDto copyPro = new()
             {
                 Id = SelectedProduct.Id,
                 ProductId = SelectedProduct.ProductId,
-                Quantity = ModifiedQuantity,
+                Quantity = quantityParsed,
                 ExpDate = ExpiryDateLabel.Value,
                 ProductUnit1 = SelectedProduct.ProductUnit1,
                 EmpId = AppPreferences.LocalDbUserId.ToString()

@@ -20,6 +20,15 @@ public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotifi
         popup.HeightRequest = this.Height;
     }
 
+    protected async override void OnAppearing()
+    {
+        base.OnAppearing();
+        var active = await vm.IsUserActive();
+        if (!active)
+        {
+            Logout();
+        }
+    }
     protected override bool OnBackButtonPressed()
     {
         if (vm.CanBackButtonPressed())
@@ -77,4 +86,25 @@ public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotifi
         }
     }
     #endregion
+
+    private void Logout()
+    {
+        File.Delete(AppValues.XBranchesFileName);
+        File.Delete(AppValues.UserFileName);
+        File.Delete(AppValues.BranchesFileName);
+
+
+        AppPreferences.LocalDbUserId = 0;
+        AppPreferences.StoreId = 1;
+        AppPreferences.HasBranchRegistered = false;
+        AppPreferences.LeftScanIcon = false; 
+
+        if (Application.Current != null)
+            Application.Current.MainPage = new NavigationPage(new LoginView());
+        AppPreferences.IsLoggedIn = false;
+        AppPreferences.HostUserId = 0;
+
+        // delete all be low
+        AppPreferences.StoreId = 0;
+    }
 }

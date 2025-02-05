@@ -91,8 +91,8 @@
                         PressedScale="0.8" />
                 </Label.Behaviors>
                 <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="NewScanTapped" />
-                    <TapGestureRecognizer Tapped="CloseCameraTapped" NumberOfTapsRequired="2" />
+                    <TapGestureRecognizer Tapped="ToggleCameraVisibilityTapped" />
+                    <!--<TapGestureRecognizer Tapped="CloseCameraTapped" NumberOfTapsRequired="2" />-->
                 </Label.GestureRecognizers>
             </Label>
 
@@ -115,7 +115,7 @@
             x:Name="guidesLines"
             Grid.Row="1"
             Padding="0,30,40,30"
-            IsVisible="False"
+            IsVisible="True"
             InputTransparent="True"
             BackgroundColor="Transparent"
             FlowDirection="LeftToRight"
@@ -195,7 +195,7 @@
             x:Name="gridData"
             Grid.Row="1"
             Grid.RowSpan="4"
-            IsVisible="False"
+            IsVisible="True"
             ZIndex="1"
             BackgroundColor="White"
             RowDefinitions="Auto,*">
@@ -408,6 +408,7 @@
                                             InputTransparent="True"
                                             Text="{x:Static icon:IconFont.SquareEditOutline}"
                                             FontFamily="{StaticResource IconFont}"
+                                            FontSize="18"
                                             VerticalTextAlignment="Center"
                                             HorizontalOptions="Start" />
                                         <!--  line separator  -->
@@ -417,6 +418,16 @@
                                             InputTransparent="True"
                                             HeightRequest="0.5"
                                             Color="{StaticResource Primary300}" />
+                                        <!--  Trigger for switch selected store  -->
+                                        <Grid.Triggers>
+                                            <DataTrigger
+                                                TargetType="Grid"
+                                                Binding="{Binding IsSelected}"
+                                                Value="True">
+                                                <Setter Property="BackgroundColor" Value="{StaticResource Primary200}" />
+
+                                            </DataTrigger>
+                                        </Grid.Triggers>
                                         <!--  Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PickingViewModel}}, Path=SelectionChangedCommand}" CommandParameter="{Binding .}"  -->
                                         <Grid.GestureRecognizers>
                                             <TapGestureRecognizer Tapped="ExecuteSelectionChanged_Tapped" CommandParameter="{Binding .}" />

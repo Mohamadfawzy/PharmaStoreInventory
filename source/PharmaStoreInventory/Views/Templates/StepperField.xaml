@@ -31,9 +31,12 @@
                                      Dark={StaticResource Primary950}}">
         <StackLayout Orientation="Horizontal">
             <!--  Plus  -->
-            <Button Style="{StaticResource StepperButton}" Text="{x:Static icon:IconFont.Plus}" Clicked="Plus_Clicked">
+            <Button
+                Style="{StaticResource StepperButton}"
+                Text="{x:Static icon:IconFont.Plus}"
+                Clicked="Plus_Clicked">
                 <Button.Behaviors>
-                    <toolkit:TouchBehavior DefaultBackgroundColor="Transparent" PressedBackgroundColor="{StaticResource Primary200}" LongPressDuration="750" />
+                    <toolkit:TouchBehavior DefaultBackgroundColor="Transparent" PressedBackgroundColor="{StaticResource Primary200}" />
                 </Button.Behaviors>
             </Button>
             <!--  Entry  -->
@@ -43,17 +46,17 @@
                 BindingContext="{x:Reference ThisView}"
                 Text="{Binding Text}"
                 FontSize="18"
+                FontFamily="OpenSansSemibold"
                 HorizontalTextAlignment="Center"
                 HorizontalOptions="FillAndExpand"
-                Keyboard="Numeric" />
+                Keyboard="Telephone" />
             <!--  Minus  -->
-            <Button Style="{StaticResource StepperButton}" Text="{x:Static icon:IconFont.Minus}" Clicked="Minus_Clicked">
+            <Button
+                Style="{StaticResource StepperButton}"
+                Text="{x:Static icon:IconFont.Minus}"
+                Clicked="Minus_Clicked">
                 <Button.Behaviors>
-                    <toolkit:TouchBehavior
-                        DefaultBackgroundColor="Transparent"
-                        PressedBackgroundColor="{StaticResource Primary200}"
-                        LongPressDuration="750"
-                        LongPressCommand="{Binding Source={x:Reference ThisView}, Path=LongPressCommand}" />
+                    <toolkit:TouchBehavior DefaultBackgroundColor="Transparent" PressedBackgroundColor="{StaticResource Primary200}" />
                 </Button.Behaviors>
             </Button>
         </StackLayout>

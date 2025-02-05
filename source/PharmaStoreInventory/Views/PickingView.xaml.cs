@@ -10,7 +10,7 @@ namespace PharmaStoreInventory.Views;
 public partial class PickingView : ContentPage, IRecipient<PickingViewNotification>
 {
     readonly PickingViewModel viewModel;
-    readonly bool IsScanMode = false;
+    private bool IsScanMode = false;
 
     #region OnStart
     public PickingView()
@@ -98,28 +98,23 @@ public partial class PickingView : ContentPage, IRecipient<PickingViewNotificati
         {
             if (e.BarcodeResults.Length <= 0)
                 return;
-            gridData.IsVisible = true;
-            mainContianer.SetRow(gridData, 1);
-            nativeBarcode.PauseScanning = true;
-            nativeBarcode.CameraEnabled = false;
+            ToggleCameraVisibility();
             Task.Run(() => { viewModel.FetchStockDetails(e.BarcodeResults[0].DisplayValue); });
         });
     }
 
-    private void NewScanTapped(object sender, TappedEventArgs e)
+    private void ToggleCameraVisibilityTapped(object sender, TappedEventArgs e)
     {
-        nativeBarcode.IsVisible = true;
-        nativeBarcode.PauseScanning = false;
-        nativeBarcode.CameraEnabled = true;
-        mainContianer.SetRow(gridData, 2);
+        ToggleCameraVisibility();
     }
 
-    private void CloseCameraTapped(object sender, TappedEventArgs e)
+    private void ToggleCameraVisibility()
     {
-        nativeBarcode.IsVisible = false;
-        nativeBarcode.PauseScanning = true;
-        nativeBarcode.CameraEnabled = false;
-        mainContianer.SetRow(gridData, 1);
+        IsScanMode = !IsScanMode;
+        nativeBarcode.IsVisible = !nativeBarcode.IsVisible;
+        nativeBarcode.PauseScanning = !nativeBarcode.PauseScanning;
+        nativeBarcode.CameraEnabled = !nativeBarcode.CameraEnabled;
+        mainContianer.SetRow(gridData, IsScanMode ? 2 : 1);
     }
 
     private void ToggleFlashLight(object sender, TappedEventArgs e)
@@ -175,3 +170,20 @@ public partial class PickingView : ContentPage, IRecipient<PickingViewNotificati
     }
     #endregion
 }
+
+
+
+//private void NewScanTapped(object sender, TappedEventArgs e)
+//{
+//    nativeBarcode.IsVisible = true;
+//    nativeBarcode.PauseScanning = false;
+//    nativeBarcode.CameraEnabled = true;
+//    mainContianer.SetRow(gridData, 2);
+//}
+//private void CloseCameraTapped(object sender, TappedEventArgs e)
+//{
+//    nativeBarcode.IsVisible = false;
+//    nativeBarcode.PauseScanning = true;
+//    nativeBarcode.CameraEnabled = false;
+//    mainContianer.SetRow(gridData, 1);
+//}

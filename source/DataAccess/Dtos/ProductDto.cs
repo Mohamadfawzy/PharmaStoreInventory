@@ -15,5 +15,5 @@ public class ProductDto
     public string? HasExpire { get; set; }
 
     public string? FormattedPrice =>  SalePrice?.ToString("F2", CultureInfo.InvariantCulture);
-    public string? FormattedQuantity => Quantity?.ToString("F3", CultureInfo.InvariantCulture);
+    public string? FormattedQuantity => Quantity?.ToString("F2", CultureInfo.InvariantCulture);
 }

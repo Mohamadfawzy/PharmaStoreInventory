@@ -2,8 +2,6 @@
 using Android.Content.PM;
 using Android.OS;
 using AndroidX.AppCompat.App;
-using PharmaStoreInventory.Helpers;
-using System.Globalization;
 
 namespace PharmaStoreInventory
 {

@@ -1,6 +1,7 @@
 ﻿using BarcodeScanning;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using System.Globalization;
 
 namespace PharmaStoreInventory
 {
@@ -22,17 +23,8 @@ namespace PharmaStoreInventory
                     fonts.AddFont("NotoKufiArabic-SemiBold.ttf", "KufiSemiBold");
                 }).UseBarcodeScanning();
 
-
-            //builder.Services.AddSingleton<AppHost>();
-            //builder.Services.AddSingleton<UserRepository>();
-            //builder.Services.AddSingleton<AuthService>();
-
-            //builder.Services.AddSingleton<AppDb>();
-            //builder.Services.AddSingleton<EmployeeRepo>();
-            //builder.Services.AddSingleton<CommonsRepo>();
-            //builder.Services.AddSingleton<ProductAmountRepo>();
-
-
+            //CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+            //CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

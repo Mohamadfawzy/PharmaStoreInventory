@@ -275,7 +275,7 @@
 
         <!--#region Absolute Content ==============================-->
 
-        <!--  Warehouses Popup  -->
+        <!--  Stors Popup  -->
         <Grid
             x:Name="popup"
             Grid.RowSpan="2"

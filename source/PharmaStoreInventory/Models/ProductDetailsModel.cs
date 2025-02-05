@@ -22,7 +22,7 @@ public class ProductDetailsModel : ObservableObject
         set
         {
             SetProperty(ref quantity, value);
-            FormattedQuantity = value?.ToString("F3", CultureInfo.InvariantCulture);
+            FormattedQuantity = value?.ToString("F2", CultureInfo.InvariantCulture);
         }
     }
 
@@ -36,4 +36,11 @@ public class ProductDetailsModel : ObservableObject
 
     public string? FormattedPrice => SellPrice?.ToString("F2", CultureInfo.InvariantCulture);
     public string? FormattedQuantity { get => formattedQuantity; set => SetProperty(ref formattedQuantity, value); }
+
+    private bool isSelected;
+    public bool IsSelected
+    {
+        get => isSelected;
+        set => SetProperty(ref isSelected, value);
+    }
 }

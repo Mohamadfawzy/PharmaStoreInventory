@@ -136,6 +136,15 @@ public class DashboardViewModel : BaseViewModel
         }
     }
 
+    public async Task<bool> IsUserActive()
+    {
+        var res = await ApiServices.IsUserActiveAsync(AppPreferences.HostUserId);
+        if(res!= null && res.IsSuccess)
+        {
+            return true;
+        }
+        return false;
+    }
     private async Task GetLatestInventoryHistory()
     {
         try
