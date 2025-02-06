@@ -42,9 +42,14 @@ public partial class PickingView : ContentPage, IRecipient<PickingViewNotificati
     }
     public void Receive(PickingViewNotification message)
     {
-        MainThread.BeginInvokeOnMainThread(() =>
+        MainThread.BeginInvokeOnMainThread(async () =>
         {
-            notification.Display(message.Value);
+            if (message.Value.Code == 1)
+            {
+                await stepper.HideSoftInputAsync();
+            }
+            else
+                notification.Display(message.Value);
         });
     }
 

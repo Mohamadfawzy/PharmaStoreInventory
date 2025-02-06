@@ -49,7 +49,7 @@
                 FontFamily="OpenSansSemibold"
                 HorizontalTextAlignment="Center"
                 HorizontalOptions="FillAndExpand"
-                Keyboard="Telephone" />
+                Keyboard="Numeric" />
             <!--  Minus  -->
             <Button
                 Style="{StaticResource StepperButton}"

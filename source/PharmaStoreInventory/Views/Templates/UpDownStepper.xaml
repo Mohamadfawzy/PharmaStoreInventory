@@ -43,7 +43,10 @@
     </ContentView.Resources>
 
     <StackLayout HorizontalOptions="Fill">
-        <Button Style="{StaticResource btnStyle}" Text="{x:Static icon:IconFont.ChevronUp}" Clicked="Up_Clicked">
+        <Button
+            Style="{StaticResource btnStyle}"
+            Text="{x:Static icon:IconFont.ChevronUp}"
+            Clicked="Up_Clicked">
             <Button.Behaviors>
                 <toolkit:TouchBehavior
                     DefaultBackgroundColor="Transparent"
@@ -62,7 +65,10 @@
                 Unfocused="Entry_Unfocused"
                 HorizontalTextAlignment="Center" />
         </Border>
-        <Button Style="{StaticResource btnStyle}" Text="{x:Static icon:IconFont.ChevronDown}" Clicked="Down_Clicked">
+        <Button
+            Style="{StaticResource btnStyle}"
+            Text="{x:Static icon:IconFont.ChevronDown}"
+            Clicked="Down_Clicked">
             <Button.Behaviors>
                 <toolkit:TouchBehavior
                     DefaultBackgroundColor="Transparent"

@@ -17,6 +17,11 @@ public class CreateBranchViewNotification(ErrorMessage value) : ValueChangedMess
 public class PickingViewNotification(ErrorMessage value) : ValueChangedMessage<ErrorMessage>(value)
 {
 }
+
 public class RegisterViewNotification(ErrorMessage value) : ValueChangedMessage<ErrorMessage>(value)
+{
+}
+
+public class StepperFieldNotification(int value) : ValueChangedMessage<int>(value)
 {
 }

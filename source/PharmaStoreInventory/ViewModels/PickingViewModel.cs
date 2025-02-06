@@ -7,7 +7,6 @@ using PharmaStoreInventory.Models;
 using PharmaStoreInventory.Services;
 using System.Globalization;
 using System.Windows.Input;
-using static System.Net.Mime.MediaTypeNames;
 using Product = PharmaStoreInventory.Models.ProductDetailsModel;
 namespace PharmaStoreInventory.ViewModels;
 
@@ -271,6 +270,13 @@ public class PickingViewModel : BaseViewModel
         WeakReferenceMessenger.Default
             .Send(new PickingViewNotification(error));
     }
+    
+    void SendNotificationToHideKeyBoard()
+    {
+        ErrorMessage error = new() { Code = 1 };
+        WeakReferenceMessenger.Default
+            .Send(new PickingViewNotification(error));
+    }
     #endregion
 
     //#########*Handlers*#########
@@ -342,6 +348,7 @@ public class PickingViewModel : BaseViewModel
             {
                 SendNotification(new ErrorMessage("تاريخ صلاحية موجود بالفعل", ""));
             }
+            SendNotificationToHideKeyBoard();
         }
         catch(Exception ex)
         {
@@ -385,7 +392,7 @@ public class PickingViewModel : BaseViewModel
             }
             else if (res.ErrorCode == ErrorCode.NotFoundById)
             {
-                SendNotification(new ErrorMessage("لم يتم العثور علي هذا الصنف", "ربما قام أحد بحذفه من قليل"));
+                SendNotification(new ErrorMessage("لم يتم العثور علي هذا الصنف", "ربما قام أحد بحذفه منذ قليل"));
             }
             else if (res.ErrorCode == ErrorCode.OperationFailed)
             {
@@ -395,6 +402,7 @@ public class PickingViewModel : BaseViewModel
             {
                 SendNotification(new ErrorMessage("حدث خطأ داخل السيرفر", ""));
             }
+            SendNotificationToHideKeyBoard();
         }
         catch (Exception ex)
         {

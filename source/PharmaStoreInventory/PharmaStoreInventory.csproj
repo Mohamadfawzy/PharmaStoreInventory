@@ -59,8 +59,8 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android34.0|AnyCPU'">
 		<ApplicationTitle>Pharma Store Inventory</ApplicationTitle>
 		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
-		<ApplicationVersion>9</ApplicationVersion>
-		<ApplicationDisplayVersion>24.12.24</ApplicationDisplayVersion>
+		<ApplicationVersion>10</ApplicationVersion>
+		<ApplicationDisplayVersion>25.02.06</ApplicationDisplayVersion>
 		<AndroidUseAapt2>True</AndroidUseAapt2>
 		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
@@ -69,8 +69,8 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android34.0|AnyCPU'">
 		<ApplicationTitle>Pharma Store Inventory</ApplicationTitle>
 		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
-		<ApplicationVersion>9</ApplicationVersion>
-		<ApplicationDisplayVersion>24.12.24</ApplicationDisplayVersion>
+		<ApplicationVersion>10</ApplicationVersion>
+		<ApplicationDisplayVersion>25.02.06</ApplicationDisplayVersion>
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
 		<AndroidUseAapt2>True</AndroidUseAapt2>
 		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
@@ -79,8 +79,8 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
 		<ApplicationTitle>Pharma Store Inventory</ApplicationTitle>
 		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
-		<ApplicationVersion>9</ApplicationVersion>
-		<ApplicationDisplayVersion>24.12.24</ApplicationDisplayVersion>
+		<ApplicationVersion>10</ApplicationVersion>
+		<ApplicationDisplayVersion>25.02.06</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
@@ -100,8 +100,8 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
 		<ApplicationTitle>Pharma Store Inventory</ApplicationTitle>
 		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
-		<ApplicationVersion>9</ApplicationVersion>
-		<ApplicationDisplayVersion>24.12.24</ApplicationDisplayVersion>
+		<ApplicationVersion>10</ApplicationVersion>
+		<ApplicationDisplayVersion>25.02.06</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">
@@ -136,12 +136,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove="Resources\Fonts\materialdesignicons.ttf" />
-		<None Remove="Resources\Fonts\NotoKufiArabic-ExtraLight.ttf" />
-		<None Remove="Resources\Fonts\NotoKufiArabic-Regular.ttf" />
-		<None Remove="Resources\Fonts\NotoKufiArabic-SemiBold.ttf" />
-		<None Remove="Resources\Fonts\OpenSans-Regular.ttf" />
-		<None Remove="Resources\Fonts\OpenSans-Semibold.ttf" />
 		<None Remove="Resources\Images\msLogo.png" />
 		<None Remove="Resources\Images\noconnection.png" />
 		<None Remove="Resources\Images\nodataicon.png" />

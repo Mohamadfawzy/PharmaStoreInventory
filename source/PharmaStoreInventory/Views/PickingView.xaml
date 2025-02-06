@@ -36,8 +36,8 @@
             </Style>
 
             <Style TargetType="Line">
-                <Setter Property="StrokeThickness" Value="2" />
-                <Setter Property="Stroke" Value="{StaticResource Secondary700}" />
+                <Setter Property="StrokeThickness" Value="3" />
+                <Setter Property="Stroke" Value="Black" />
             </Style>
 
             <Style x:Key="CentralLabel" TargetType="Label">
@@ -110,6 +110,7 @@
             TorchOn="False"
             PauseScanning="True"
             CameraEnabled="False" />
+
         <!--  Guides Lines over Camera  -->
         <Grid
             x:Name="guidesLines"
@@ -121,72 +122,77 @@
             FlowDirection="LeftToRight"
             VerticalOptions="FillAndExpand">
 
-            <StackLayout>
+            <Grid>
+                <!--  top left  -->
                 <Line
-                    X1="40"
+                    X1="37"
                     Y1="0"
                     X2="70"
                     Y2="0" />
-                <Line
-                    Margin="0,-3,0,0"
-                    X1="40"
-                    Y1="0"
-                    X2="40"
-                    Y2="30" />
 
                 <Line
                     Margin="0,0,0,0"
                     X1="40"
-                    Y1="0"
+                    X2="40"
+                    Y1="3"
+                    Y2="30" />
+
+                <!--  bottom left  -->
+                <Line
+                    Margin="0,0,0,0"
+                    X1="40"
+                    Y1="3"
                     X2="40"
                     Y2="30"
                     VerticalOptions="EndAndExpand" />
                 <Line
-                    Margin="0,-1,0,0"
-                    X1="39"
+                    Margin="0,0,0,0"
+                    X1="37"
                     Y1="0"
                     X2="70"
-                    Y2="0" />
-            </StackLayout>
+                    Y2="0"
+                    VerticalOptions="EndAndExpand" />
 
-            <StackLayout Spacing="0">
-                <!--  Right  -->
+            </Grid>
+
+            <Grid HorizontalOptions="End">
+
+                <!--  top right  -->
                 <!--  Top  X  -->
                 <Line
-                    X1="40"
+                    X1="37"
                     Y1="0"
                     X2="70"
                     Y2="0"
                     HorizontalOptions="End" />
                 <!--  Top Y  -->
                 <Line
-                    Margin="0,-3,0,3"
+                    Margin="0,0,0,0"
                     X1="70"
-                    Y1="0"
+                    Y1="3"
                     X2="70"
                     Y2="30"
                     HorizontalOptions="End" />
-                <!--  Y  -->
+
+                <!--  bottom right  -->
                 <Line
-                    Margin="0,3,0,-3"
+                    Margin="0"
                     X1="70"
-                    Y1="0"
+                    Y1="5"
                     X2="70"
                     Y2="30"
                     HorizontalOptions="End"
                     VerticalOptions="EndAndExpand" />
                 <!--  X  -->
                 <Line
-                    Margin="0,0,-1,0"
+                    Margin="0"
                     X1="40"
                     Y1="0"
                     X2="70"
                     Y2="0"
-                    HorizontalOptions="End" />
-            </StackLayout>
-            <!--<Grid.GestureRecognizers>
-                <TapGestureRecognizer Tapped="TapToScan" />
-            </Grid.GestureRecognizers>-->
+                    HorizontalOptions="End"
+                    VerticalOptions="EndAndExpand" />
+            </Grid>
         </Grid>
 
         <!--  ===================================================================================================================  -->
@@ -418,6 +424,7 @@
                                             InputTransparent="True"
                                             HeightRequest="0.5"
                                             Color="{StaticResource Primary300}" />
+
                                         <!--  Trigger for switch selected store  -->
                                         <Grid.Triggers>
                                             <DataTrigger
@@ -447,7 +454,7 @@
                 IsVisible="{Binding IsEmptyViewVisible}"
                 HorizontalOptions="Center"
                 VerticalOptions="Center">
-                <Label Text="لا يوجد كميات لهذه النصف" FontSize="20" />
+                <Label Text="لا يوجد كميات لعرضها" FontSize="20" />
             </StackLayout>
         </Grid>
 
@@ -480,7 +487,10 @@
                     <!--  Quantity Section  -->
                     <Label Text="الكمية" Style="{StaticResource CentralLabel}" />
                     <!--  StepperS  -->
-                    <template:StepperField Text="{Binding ModifiedQuantity}" HorizontalOptions="CenterAndExpand" />
+                    <template:StepperField
+                        x:Name="stepper"
+                        Text="{Binding ModifiedQuantity}"
+                        HorizontalOptions="CenterAndExpand" />
 
                     <!--  ExpiryDate Section  -->
                     <VerticalStackLayout IsVisible="{Binding IsExpiryDateFrameInPopupVisible}">

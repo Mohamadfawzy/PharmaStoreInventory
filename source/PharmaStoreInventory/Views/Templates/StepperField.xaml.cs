@@ -1,4 +1,6 @@
+using CommunityToolkit.Mvvm.Messaging;
 using PharmaStoreInventory.Helpers;
+using PharmaStoreInventory.Messages;
 using System.Globalization;
 using System.Windows.Input;
 
@@ -89,6 +91,11 @@ public partial class StepperField : ContentView
             Text = defaultText;
             Alerts.DisplaySnackBar(ex.Message);
         }
+    }
+
+    public async Task HideSoftInputAsync()
+    {
+        await entry.HideSoftInputAsync(CancellationToken.None);
     }
 
 
