@@ -5,7 +5,6 @@ using DataAccess.Dtos;
 using DataAccess.Entities;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using System.Data;
 
 namespace DataAccess.Repository;
@@ -237,7 +236,6 @@ public class ProductAmountRepo(AppDb context)
             return Result.Failure("An error occurred while checking the expiration date." + ex.Message + ex.InnerException?.Message);
         }
     }
-
 
     public async Task InsertProductAmountUpdatesAsync(Product_Amount pa, ProductUpdateAndChangeQParam param)
     {

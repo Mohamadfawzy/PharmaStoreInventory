@@ -283,9 +283,6 @@ public class PickingViewModel : BaseViewModel
     #region Handlers
     async void SaveEditProduct()
     {
-        var t = ModifiedQuantity;
-        var m = MicroUnitQuantity;
-
         decimal.TryParse(ModifiedQuantity, NumberStyles.Any, CultureInfo.InvariantCulture, out var quantityParsed);
 
         try

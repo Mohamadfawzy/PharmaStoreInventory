@@ -3,7 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:ApiSettingsManager"
-    StartupUri="MainWindow.xaml">
+             StartupUri="UpdateAPIWindow.xaml">
+    
     <Application.Resources>
 
         <!--  Shades of #0056a9 from 50 to 950  -->
@@ -204,4 +205,5 @@
             </Style.Triggers>
         </Style>
     </Application.Resources>
+    
 </Application>
