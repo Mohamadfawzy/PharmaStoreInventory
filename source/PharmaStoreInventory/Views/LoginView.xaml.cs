@@ -106,6 +106,7 @@ public partial class LoginView : ContentPage
                 AppPreferences.IsUserActivated = true;
                 AppPreferences.UserEmail = userModel.EmailOrPhone;
                 AppPreferences.UserFullName = res.Data.FullName;
+                AppPreferences.UserPassword = userModel.Password;
 
                 _ = jsonFileHandler.WriteToFile(res.Data);
                 _ = Alerts.DisplayToast("Welcome: " + res.Data.FullName);

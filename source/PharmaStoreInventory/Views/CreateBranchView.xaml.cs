@@ -81,10 +81,10 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
         {
             brachName.SetInputText("اسم الفرع");
             telephone.SetInputText("0402555550");
-            ipAdrress.SetInputText("192.168.1.103");
-            port.SetInputText("6100");
-            username.SetInputText("admin");
-            password.SetInputText("admin");
+            ipAdrress.SetInputText("192.168.200.72");
+            port.SetInputText("6000");
+            username.SetInputText("1");
+            password.SetInputText("1");
         }
     }
     #endregion
@@ -99,7 +99,8 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
             return;
         }
 
-        var (status, message) = await ApiServices.ApiEmployeeLogin(branch);
+        var (status, message) = await ApiServices.ApiEmployeeLogin
+            (branch, AppPreferences.UserEmail, AppPreferences.UserPassword);
         if (status == ConnectionErrorCode.Success)
         {
             // 1 Check version compatibility

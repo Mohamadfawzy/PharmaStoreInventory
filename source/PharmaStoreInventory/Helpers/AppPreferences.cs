@@ -8,23 +8,29 @@ public static class AppPreferences
         get => GetValue(nameof(HostUserId), 0);
         set => Preferences.Default.Set(nameof(HostUserId),value);
     }
-    
-    public static string Token
-    {
-        get => GetValue(nameof(Token), "Token");
-        set => Preferences.Default.Set(nameof(Token),value);
-    }
 
     public static string UserFullName
     {
         get => GetValue(nameof(UserFullName), "بك");
         set => Preferences.Default.Set(nameof(UserFullName), value);
     }
+
+    public static string Token
+    {
+        get => GetValue(nameof(Token), "Token");
+        set => Preferences.Default.Set(nameof(Token),value);
+    }
     
     public static string UserEmail
     {
         get => GetValue(nameof(UserEmail), string.Empty);
         set => Preferences.Default.Set(nameof(UserEmail), value);
+    }
+    
+    public static string UserPassword
+    {
+        get => GetValue(nameof(UserPassword), string.Empty);
+        set => Preferences.Default.Set(nameof(UserPassword), value);
     }
 
     public static int LocalDbUserId

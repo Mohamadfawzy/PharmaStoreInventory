@@ -11,7 +11,7 @@ namespace PharmaStoreInventory.Services;
 
 public static class RequestProvider
 {
-    private const short timeoutInSeconds = 20;
+    private const short timeoutInSeconds = 30;
     public static async Task<List<TResult>?> GetAllAsync3<TResult>(string uri)
     {
         ErrorMessage message;
@@ -277,9 +277,9 @@ public static class RequestProvider
     }
 
 
-    public static async Task<(TResult? content, ErrorMessage? error)> PostSingleAsync<TResult, TTake>(string uri, TTake data, string tokn = "")
+    public static async Task<(TResult? content, ErrorMessage? error)> PostSingleAsync<TResult, TTake>
+        (string uri, TTake data, string token = "")
     {
-
         ErrorMessage? message = null;
         try
         {
@@ -288,6 +288,8 @@ public static class RequestProvider
             {
                 Content = JsonContent.Create(data) // Serialize the data object to JSON and set it as content
             };
+
+            //request.Headers.Add("Authorization", AppPreferences.Token);
             request.Headers.Add("Authorization", AppPreferences.Token);
 
             // Send the POST request and ensure the response status code indicates success

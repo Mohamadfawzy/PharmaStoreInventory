@@ -10,8 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 #if DEBUG
-builder.WebHost.UseUrls("http://192.168.1.103:6555");
-var connectionString = "Server=192.168.1.103,1433; Database=stock;User Id=sa;Password=Ph@store;Persist Security Info=True;Encrypt=True; TrustServerCertificate=True";
+//builder.WebHost.UseUrls("http://192.168.1.103:6555");
+var connectionString = "Server=.; Database=stock;User Id=sa;Password=Ph@store;Persist Security Info=True;Encrypt=True; TrustServerCertificate=True";
 builder.Services.AddDbContext<AppDb>(opts => opts.UseSqlServer(connectionString));
 #endif
 

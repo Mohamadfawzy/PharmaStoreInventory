@@ -97,7 +97,7 @@
                     <TapGestureRecognizer Tapped="ClearFocusFromAllInputsTapped" />
                 </VerticalStackLayout.GestureRecognizers>
             </VerticalStackLayout>
-
+            
             <ActivityIndicator
                 x:Name="activityIndicator"
                 Grid.Row="0"

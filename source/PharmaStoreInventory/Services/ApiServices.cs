@@ -8,6 +8,7 @@ using DataAccess.Services;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.Models;
+using PharmaStoreInventory.Models.User;
 
 namespace PharmaStoreInventory.Services;
 
@@ -17,6 +18,11 @@ public static class ApiServices
     public static async Task<bool> TestConnection()
     {
         return await RequestProvider.GetBooleanValueAsync(AppValues.LocalBaseURI + "/connection");
+    }
+    
+    public static async Task<object> TestConnection(string url)
+    {
+        return await RequestProvider.GetSingleAsync<object>(url);
     }
 
     public static async Task<StatisticsModel?> GetProductCountsAsync(int storeId)
@@ -158,18 +164,24 @@ public static class ApiServices
     #endregion
 
     #region Employee
-    public static async Task<(ConnectionErrorCode err, string message)> ApiEmployeeLogin(BranchModel branch)
+    public static async Task<(ConnectionErrorCode err, string? message)> ApiEmployeeLogin
+        (BranchModel branch, string accountUsername,  string accountPassword )
     {
         try
         {
             var baseUrl = await Configuration.ConfigureBaseUrl(branch.IpAddress, branch.Port);
 
-            var emp = new LoginDto(branch.Username, branch.Password);
-            emp.SecretKey = AppConstants.SecretKey;
+            var emp = new LoginBothSidesDTO
+            {
+                AccountUsername = accountUsername,
+                AccountPassword = accountPassword,
+                EmpPassword = branch.Password,
+                EmpUsername = branch.Username,
+                SecretKey = AppConstants.SecretKey
+            };
 
-
-            var url = baseUrl + "/Employee/login";
-            var (response, error) = await RequestProvider.PostSingleAsync<AuthResult<EmployeeDto?>, LoginDto>(url, emp);
+            var url = baseUrl + "/Auth/local-login";
+            var (response, error) = await RequestProvider.PostSingleAsync<UserLoginResponseDTO, LoginBothSidesDTO>(url, emp);
 
 
             // status 1 Unable to connect to server
@@ -178,20 +190,20 @@ public static class ApiServices
                 return (ConnectionErrorCode.Fail, string.Empty);
             }
             // status 2 Server connection IsSuccess
-            if (response != null && response.Result != null)
+            if (response != null)
             {
-                if (response.Result.IsSuccess)
+                if (response.IsSuccess)
                 {
-                    if (response.Result.Data != null)
+                    if (response.User != null)
                     {
-                        AppPreferences.LocalDbUserId = response.Result.Data.Id;
-                        AppPreferences.Token = "Bearer " + response.Auth?.Token;
+                        AppPreferences.LocalDbUserId = response.User.Id;
+                        AppPreferences.Token = "Bearer " + response.AccessToken;
                         return (ConnectionErrorCode.Success, string.Empty);
                     }
                     return (ConnectionErrorCode.Fail, "data or token in null");
                 }
                 // status 3 Server connection IsSuccess, but username or password is incorrect
-                return (ConnectionErrorCode.UsernameOrPass, response.Result.Message);
+                return (ConnectionErrorCode.UsernameOrPass, response.Message);
             }
             return (ConnectionErrorCode.Fail, "response or result or auth in null");
         }
