@@ -17,6 +17,7 @@
         HorizontalOptions="Fill"
         Background="{AppThemeBinding Light={StaticResource Primary050},
                                      Dark={StaticResource Primary950}}">
+        
         <StackLayout Orientation="Horizontal" BindingContext="{x:Reference ThisView}">
             <BoxView
                 WidthRequest="8"
@@ -25,7 +26,7 @@
             <VerticalStackLayout Padding="10,5" HorizontalOptions="FillAndExpand">
                 <Label
                     Margin="0,0,10,0"
-                    FontSize="12"
+                    FontSize="14"
                     Text="{Binding Title}" />
                 <Label
                     Text="{Binding Number}"
