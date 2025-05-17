@@ -81,10 +81,10 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
         {
             brachName.SetInputText("اسم الفرع");
             telephone.SetInputText("0402555550");
-            ipAdrress.SetInputText("192.168.200.72");
-            port.SetInputText("6000");
-            username.SetInputText("1");
-            password.SetInputText("1");
+            ipAdrress.SetInputText("192.168.1.103");
+            port.SetInputText("6003");
+            username.SetInputText("111");
+            password.SetInputText("111");
         }
     }
     #endregion
@@ -107,7 +107,7 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
             await GetSystemVersion(await Configuration.ConfigureBaseUrl(branch.IpAddress, branch.Port));
             if (AppValues.SystemVersion != AppValues.PharmaVersion)
             {
-                notification.Display("خطأ في الإصدار", "من فضلك تحقق من توافق الإصدار");
+                notification.Display("خطأ في الإصدار أو الصلاحية", "من فضلك تحقق من توافق الإصدار ومن صلاحية المستخدم");
                 return;
             }
 
@@ -173,6 +173,7 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
         {
             AppValues.SystemVersion = systemVersion.Ver_code;
         }
+
     }
     #endregion
 
