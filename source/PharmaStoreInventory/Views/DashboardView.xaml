@@ -148,7 +148,7 @@
                         </Border>
 
                         <!--  The Stores Border  -->
-                        <Border Style="{StaticResource BorderToAction}"  HeightRequest="50">
+                        <Border Style="{StaticResource BorderToAction}" HeightRequest="50">
                             <StackLayout Orientation="Horizontal" Spacing="8">
                                 <Label
                                     Padding="10,0"
@@ -196,7 +196,7 @@
                             ColumnDefinitions="*,*"
                             RowSpacing="20"
                             ColumnSpacing="20">
-                            
+
                             <template:DashboardNumberTemplate Title="كل الأصناف" Number="{Binding StatisticsModel.TotalProducts}" />
 
                             <template:DashboardNumberTemplate
@@ -226,7 +226,7 @@
             </Frame>-->
 
                         <!--  New inventory  -->
-                        <Frame Style="{StaticResource FrameTextIconCenter}" Padding="10">
+                        <Frame Padding="10" Style="{StaticResource FrameTextIconCenter}">
                             <HorizontalStackLayout Style="{StaticResource HSLinFrame}">
                                 <Label Style="{StaticResource IconLabelMediumStyle}" Text="{x:Static icon:IconFont.ShapeSquarePlus}" />
                                 <Label Text="جرد جديد" />
@@ -236,7 +236,7 @@
                             </Frame.GestureRecognizers>
                         </Frame>
 
-                        <Frame Style="{StaticResource FrameTextIconCenter}" Padding="10">
+                        <Frame Padding="10" Style="{StaticResource FrameTextIconCenter}">
                             <HorizontalStackLayout Style="{StaticResource HSLinFrame}">
                                 <Label Style="{StaticResource IconLabelMediumStyle}" Text="{x:Static icon:IconFont.Magnify}" />
                                 <Label Text="البحث في الأصناف" />
