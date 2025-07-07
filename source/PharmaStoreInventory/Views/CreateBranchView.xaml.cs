@@ -99,8 +99,7 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
             return;
         }
 
-        var (status, message) = await ApiServices.ApiEmployeeLogin
-            (branch, AppPreferences.UserEmail, AppPreferences.UserPassword);
+        var (status, message) = await ApiServices.ApiEmployeeLogin(branch, AppPreferences.UserEmail, AppPreferences.UserPassword);
         if (status == ConnectionErrorCode.Success)
         {
             // 1 Check version compatibility

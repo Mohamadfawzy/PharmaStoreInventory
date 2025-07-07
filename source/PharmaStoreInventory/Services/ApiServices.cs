@@ -164,8 +164,7 @@ public static class ApiServices
     #endregion
 
     #region Employee
-    public static async Task<(ConnectionErrorCode err, string? message)> ApiEmployeeLogin
-        (BranchModel branch, string accountUsername,  string accountPassword )
+    public static async Task<(ConnectionErrorCode err, string? message)> ApiEmployeeLogin(BranchModel branch, string accountUsername,  string accountPassword )
     {
         try
         {
