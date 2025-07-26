@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
 using DataAccess.DomainModel;
 using DataAccess.Services;
+using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
 using PharmaStoreInventory.Extensions;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Messages;
@@ -21,6 +22,11 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
     protected override void OnAppearing()
     {
         base.OnAppearing();
+
+#if ANDROID
+        Microsoft.Maui.Controls.Application.Current.On<Microsoft.Maui.Controls.PlatformConfiguration.Android>()
+                 .UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
+#endif
         GetPharmaVersion();
     }
 

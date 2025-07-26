@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
@@ -243,7 +244,7 @@ public partial class UpdateAPIWindow : Window
     }
 
 
-    static string GetLocalIPAddress()
+    static string GetLocalIPAddressOld()
     {
         try
         {
@@ -264,6 +265,32 @@ public partial class UpdateAPIWindow : Window
             MessageBox.Show("لم يتم العثور علي ip");
             return "";
         }
+    }
+
+
+    static string GetLocalIPv4Address()
+    {
+        foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
+        {
+            // تأكد من أن الكارت مفعل ويعمل
+            if (ni.OperationalStatus == OperationalStatus.Up &&
+                (ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet ||
+                 ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211))
+            {
+                var ipProps = ni.GetIPProperties();
+
+                foreach (UnicastIPAddressInformation ip in ipProps.UnicastAddresses)
+                {
+                    if (ip.Address.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        return ip.Address.ToString();
+                    }
+                }
+            }
+        }
+
+        MessageBox.Show("لم يتم العثور على عنوان IPv4 صالح.");
+        return "";
     }
 
     private void Border_MouseDown(object sender, MouseButtonEventArgs e)

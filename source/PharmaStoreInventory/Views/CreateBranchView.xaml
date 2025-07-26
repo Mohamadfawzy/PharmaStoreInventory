@@ -11,18 +11,14 @@
     FlowDirection="RightToLeft"
     NavigationPage.HasNavigationBar="False">
 
-    <ScrollView>
-        <Grid>
-            <template:NotificationTemplate
+    <Grid>
+        <template:NotificationTemplate
                 x:Name="notification"
                 Grid.RowSpan="5"
                 ZIndex="2"
                 IsVisible="True" />
-
-            <VerticalStackLayout
-                Margin="0,0,0,300"
-                Padding="0,0,0,50"
-                Spacing="0">
+        <ScrollView VerticalScrollBarVisibility="Never">
+            <VerticalStackLayout>
                 <!--  Register Title  -->
                 <Border
                     Margin="0,0,0,30"
@@ -84,11 +80,11 @@
 
                 </VerticalStackLayout>
 
-                <VerticalStackLayout Padding="20,0">
+                <VerticalStackLayout Padding="20">
                     <!--  submit Create Branch  -->
                     <Button
                         x:Name="btnCreateBranch"
-                        Margin="0,30,0,0"
+                        Margin="0,0,0,0"
                         Text="إضافة فرع"
                         Clicked="CreateBranchClicked" />
                 </VerticalStackLayout>
@@ -97,14 +93,13 @@
                     <TapGestureRecognizer Tapped="ClearFocusFromAllInputsTapped" />
                 </VerticalStackLayout.GestureRecognizers>
             </VerticalStackLayout>
-            
-            <ActivityIndicator
+        </ScrollView>
+        <ActivityIndicator
                 x:Name="activityIndicator"
                 Grid.Row="0"
                 VerticalOptions="Center"
                 ZIndex="3"
                 IsRunning="False"
                 Color="{StaticResource Primary600}" />
-        </Grid>
-    </ScrollView>
+    </Grid>
 </ContentPage>

@@ -162,7 +162,7 @@ public class PickingViewModel : BaseViewModel
     }
     private void ExecuteCopyProduct(Product stock)
     {
-        
+
         if (stock == null)
         {
             return;
@@ -270,7 +270,7 @@ public class PickingViewModel : BaseViewModel
         WeakReferenceMessenger.Default
             .Send(new PickingViewNotification(error));
     }
-    
+
     void SendNotificationToHideKeyBoard()
     {
         ErrorMessage error = new() { Code = 1 };
@@ -329,25 +329,38 @@ public class PickingViewModel : BaseViewModel
 
             var res = await ApiServices.UpdateQuantity(model);
 
-            if (res == null)
+            if (res != null)
             {
-                SendNotification(new ErrorMessage("حدثت مشكلة أثناء التعديل", ""));
-            }
+                if (res.IsSuccess)
+                {
+                    SelectedProduct.Quantity = quantityParsed;
+                    SelectedProduct.ExpDate = ExpiryDateLabel;
+                    SelectedProduct.IsInventoried = "1";
+                    IsEditPopupVisible = false;
+                }
+                else
+                {
+                    if (res.ErrorCode == ErrorCode.ExceptionError)
+                        SendNotification(new ErrorMessage("Exception error", res.Message));
 
-            if (res != null && res.IsSuccess)
-            {
-                SelectedProduct.Quantity = quantityParsed;
-                SelectedProduct.ExpDate = ExpiryDateLabel;
-                SelectedProduct.IsInventoried = "1";
-                IsEditPopupVisible = false;
+                    else if (res.ErrorCode == ErrorCode.ItemIsExist)
+                        SendNotification(new ErrorMessage("تاريخ صلاحية موجود بالفعل", "يوجد منتج آخر له نفس تاريخ الصلاحية"));
+
+                    else if (res.ErrorCode == ErrorCode.NotFoundById)
+                        SendNotification(new ErrorMessage("", ""));
+
+                    else
+                        SendNotification(new ErrorMessage("حدث  خطأ غير معروف", res.Message));
+                }
             }
             else
             {
-                SendNotification(new ErrorMessage("تاريخ صلاحية موجود بالفعل", ""));
+                SendNotification(new ErrorMessage("حدثت مشكلة أثناء التعديل", "لا يوجد محتوى لعرضه"));
             }
+
             SendNotificationToHideKeyBoard();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             SendNotification(new ErrorMessage("خطأ عام", ex.Message));
         }

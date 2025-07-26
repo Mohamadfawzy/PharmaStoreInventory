@@ -17,6 +17,18 @@ public partial class NoDataTemplate : ContentView
         get => (ICommand)GetValue(CommandProperty);
         set => SetValue(CommandProperty, value);
     }
+    
+    public static readonly BindableProperty Command2Property =
+        BindableProperty.Create(
+        nameof(Command2),
+        typeof(ICommand),
+        typeof(NoDataTemplate));
+
+    public ICommand Command2
+    {
+        get => (ICommand)GetValue(Command2Property);
+        set => SetValue(Command2Property, value);
+    }
 
 
     public static readonly BindableProperty DataProperty =
@@ -44,8 +56,23 @@ public partial class NoDataTemplate : ContentView
         set => SetValue(stringProperty, value);
     }
 
+    public static readonly BindableProperty ButtonText2Property =
+       BindableProperty.Create(
+       nameof(ButtonText2),
+       typeof(string),
+       typeof(NoDataTemplate),
+       " ");
+
+    public string ButtonText2
+    {
+        get => (string)GetValue(ButtonText2Property);
+        set => SetValue(ButtonText2Property, value);
+    }
+
     public NoDataTemplate()
     {
         InitializeComponent();
     }
+
+
 }

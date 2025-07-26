@@ -96,11 +96,6 @@ public partial class NotificationTemplate : ContentView
     }
 
 
-
-
-
-
-
     public void Display(string title)
     {
         Show(title, "");

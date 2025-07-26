@@ -19,7 +19,7 @@ public static class ApiServices
     {
         return await RequestProvider.GetBooleanValueAsync(AppValues.LocalBaseURI + "/connection");
     }
-    
+
     public static async Task<object> TestConnection(string url)
     {
         return await RequestProvider.GetSingleAsync<object>(url);
@@ -164,7 +164,7 @@ public static class ApiServices
     #endregion
 
     #region Employee
-    public static async Task<(ConnectionErrorCode err, string? message)> ApiEmployeeLogin(BranchModel branch, string accountUsername,  string accountPassword )
+    public static async Task<(ConnectionErrorCode err, string? message)> ApiEmployeeLogin(BranchModel branch, string accountUsername, string accountPassword)
     {
         try
         {
@@ -189,8 +189,15 @@ public static class ApiServices
                 return (ConnectionErrorCode.Fail, string.Empty);
             }
             // status 2 Server connection IsSuccess
-            if (response != null)
+            else
             {
+                string targetRole = "InventoryAgent";
+
+                if (response.Roles != null && !response.Roles.Contains(targetRole))
+                {
+                    return (ConnectionErrorCode.UnauthorizedRole, $"ليس لديك صلاحية استخدام تطبيق الجرد، راجع خدمة العملاء، ثم أعد الاتصال بالفرع");
+                }
+
                 if (response.IsSuccess)
                 {
                     if (response.User != null)
@@ -204,7 +211,7 @@ public static class ApiServices
                 // status 3 Server connection IsSuccess, but username or password is incorrect
                 return (ConnectionErrorCode.UsernameOrPass, response.Message);
             }
-            return (ConnectionErrorCode.Fail, "response or result or auth in null");
+            //return (ConnectionErrorCode.Fail, "response or result or auth in null");
         }
         catch (Exception ex)
         {
@@ -276,13 +283,13 @@ public static class ApiServices
         var url = AppValues.HostBaseURI + "/userAuth/edit_user_info";
         return await RequestProvider.PutAsync<Result, UserEditDataDto>(url, model);
     }
-    
+
     public static async Task<Result?> UserChangePasswordAsync(ChangePasswordRequest model)
     {
         var url = AppValues.HostBaseURI + "/userAuth/change-password";
         return await RequestProvider.PutAsync<Result, ChangePasswordRequest>(url, model);
     }
-    
+
     public static async Task<Result?> ResetPasswordAsync(ResetPasswordRequest model)
     {
         var url = AppValues.HostBaseURI + "/userAuth/reset-forgotten-password";
@@ -315,7 +322,7 @@ public static class ApiServices
         var (content, error) = await RequestProvider.PostSingleAsync<Result, EmailRequestModel>(url, emailModel);
         return content;
     }
-    
+
     //public static async Task<Result?> PostAndSendEmail(EmailRequestModel emailModel)
     //{
     //    MailingService mailingService = new();
@@ -346,7 +353,7 @@ public static class ApiServices
     {
         var url = AppValues.HostBaseURI + $"/mail/find";
         var model = new EmailVerificationParameters(evcId, code);
-        return await RequestProvider.PutAsync<Result, EmailVerificationParameters>(url,model);
+        return await RequestProvider.PutAsync<Result, EmailVerificationParameters>(url, model);
     }
     #endregion
 

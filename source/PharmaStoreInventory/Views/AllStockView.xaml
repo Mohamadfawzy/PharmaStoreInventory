@@ -105,6 +105,7 @@
                     <DataTemplate>
                         <Border
                             Margin="0,2"
+                            
                             StrokeShape="RoundRectangle 6"
                             Stroke="{StaticResource Primary100}">
                             <StackLayout Orientation="Horizontal">
@@ -115,7 +116,7 @@
                                     Color="{StaticResource Primary}" />
 
                                 <Grid
-                                    Padding="10,0"
+                                    Padding="10,5"
                                     HorizontalOptions="FillAndExpand"
                                     BackgroundColor="{StaticResource White}"
                                     RowDefinitions="Auto,Auto,*">

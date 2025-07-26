@@ -44,8 +44,7 @@ public partial class BranchesView : ContentPage
             var branch = btn.CommandParameter as BranchModel;
             if (branch != null)
             {
-                var (status, message) = await ApiServices.ApiEmployeeLogin
-                    (branch, AppPreferences.UserEmail, AppPreferences.UserPassword);
+                var (status, message) = await ApiServices.ApiEmployeeLogin(branch, AppPreferences.UserEmail, AppPreferences.UserPassword);
                 if (status == ConnectionErrorCode.Success)
                 {
                     notification.Display("Contacted successfully", "The branch has been contacted successfully");

@@ -471,11 +471,13 @@
             IsVisible="{Binding IsNoDataElementVisible}"
             Data="{Binding NoDataModel}"
             ButtonText="تعديل الفرع"
-            Command="{Binding GotoBranchesViewCommand}" />
+            Command="{Binding GotoBranchesViewCommand}"
+            ButtonText2="تحديث الصفحة"
+            Command2="{Binding TryToRefreshCommand}"/>
 
         <template:NotificationTemplate x:Name="notification" Grid.RowSpan="5" />
 
-        <ActivityIndicator Grid.RowSpan="4" ZIndex="4" />
+        <ActivityIndicator IsRunning="{Binding ActivityIndicatorRunning}" Grid.RowSpan="4" ZIndex="6" />
         <!--#endregion-->
 
 

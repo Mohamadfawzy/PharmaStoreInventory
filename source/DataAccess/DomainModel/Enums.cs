@@ -83,5 +83,6 @@ public enum ConnectionErrorCode
     Username,
     Password,
     UsernameOrPass,
-    ConnectionString
+    ConnectionString,
+    UnauthorizedRole
 }

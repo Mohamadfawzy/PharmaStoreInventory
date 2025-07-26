@@ -27,7 +27,7 @@ public class DashboardViewModel : BaseViewModel
     public DashboardViewModel()
     {
         storeId = AppPreferences.StoreId;
-        OnStart();
+        Task.Run(OnStart);
     }
 
     //###########*Properties*###########
@@ -37,7 +37,7 @@ public class DashboardViewModel : BaseViewModel
         get => latestInventoryDate;
         set => SetProperty(ref latestInventoryDate, value);
     }
-    public NoDataModel NoDataModel => new("noconnection", "لقد حدث خطأ ما", "نحن نواجه مشاكل في تحميل هذه الصفحة", true);
+    public NoDataModel NoDataModel => new("noconnection", "لقد حدث خطأ ما", "نحن نواجه مشاكل في تحميل هذه الصفحة", true, true);
     public ObservableCollection<SortModel> StoresModelList { get; set; } = [];
     public StatisticsModel? StatisticsModel { get; set; }
     public string StoreName
@@ -75,6 +75,7 @@ public class DashboardViewModel : BaseViewModel
     public ICommand ToggleConfirmNewInventoryVisibilityCommand => new Command(() => ConfirmNewInventoryExecutionVisibility = !ConfirmNewInventoryExecutionVisibility);
     public ICommand SubmitStoreSelectionChangedCommand => new Command(ExecuteSubmitStoreSelectionChanged);
     public ICommand StartNewInventoryCommand => new Command<string>(ExecuteStartNewInventory);
+    public ICommand TryToRefreshCommand => new Command(ExecuteTryToRefresh);
     #endregion
 
     //##############*API*###############
@@ -139,7 +140,7 @@ public class DashboardViewModel : BaseViewModel
     public async Task<bool> IsUserActive()
     {
         var res = await ApiServices.IsUserActiveAsync(AppPreferences.HostUserId);
-        if(res!= null && res.IsSuccess)
+        if (res != null && res.IsSuccess)
         {
             return true;
         }
@@ -181,11 +182,21 @@ public class DashboardViewModel : BaseViewModel
     private async void ExecuteCRefresh()
     {
         IsRefreshing = true;
+
         if (await TestConnection())
         {
-            OnStart();
+            await OnStart();
         }
         IsRefreshing = false;
+    }
+
+    private async void ExecuteTryToRefresh()
+    {
+        ActivityIndicatorRunning = true;
+
+        await OnStart();
+
+        ActivityIndicatorRunning = false;
     }
 
     private async void ExecuteGotoBranchesView()
@@ -274,16 +285,15 @@ public class DashboardViewModel : BaseViewModel
         return true;
     }
 
-    private async void OnStart()
+    private async Task OnStart()
     {
-        ActivityIndicatorRunning = true;
-
+        //ActivityIndicatorRunning = true;
         var t0 = TestConnection();
         var t1 = GetAllStores();
         var t2 = GetLatestInventoryHistory();
         var t3 = GetProductCountsAsync();
         await Task.WhenAll(t0, t1, t2, t3);
-        ActivityIndicatorRunning = false;
+        //ActivityIndicatorRunning = false;
     }
     #endregion
 }

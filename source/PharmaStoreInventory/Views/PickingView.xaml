@@ -564,6 +564,7 @@
             ZIndex="4"
             IsRunning="{Binding ActivityIndicatorRunning}"
             Color="{StaticResource Primary600}" />
+        
         <!--#endregion-->
         <template:NotificationTemplate
             x:Name="notification"

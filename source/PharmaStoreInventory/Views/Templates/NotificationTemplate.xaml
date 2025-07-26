@@ -12,6 +12,7 @@
     BackgroundColor="Transparent"
     VerticalOptions="Start"
     IsVisible="False">
+    
     <Border
         x:Name="container"
         Margin="10,0,10,10"
@@ -26,20 +27,23 @@
             x:Name="gridContent"
             Padding="10"
             ColumnDefinitions="Auto,*,Auto"
-            RowDefinitions="*,*"
+            RowDefinitions="Auto,*"
             BackgroundColor="{StaticResource Primary300}">
+            
             <!--  Info Icon  -->
             <Label
                 Margin="10"
                 Text="{x:Static icon:IconFont.InformationOutline}"
                 FontFamily="{StaticResource IconFont}"
                 VerticalOptions="Start" />
+            
             <!--  Title Message  -->
             <Label
                 Grid.Column="1"
                 BindingContext="{x:Reference ThisView}"
                 Text="{Binding Message}"
                 VerticalTextAlignment="Start" />
+            
             <!--  Body Message  -->
             <Label
                 x:Name="bodyMessage"
@@ -48,7 +52,8 @@
                 FontSize="13"
                 BindingContext="{x:Reference ThisView}"
                 Text="{Binding Message}"
-                VerticalTextAlignment="Start" />
+                VerticalTextAlignment="Start"/>
+            
             <!--  Close Icon  -->
             <Label
                 Grid.Column="2"

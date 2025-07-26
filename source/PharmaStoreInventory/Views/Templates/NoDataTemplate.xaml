@@ -25,6 +25,8 @@
                 Text="{Binding Data.Description}"
                 HorizontalOptions="Center"
                 FontSize="14" />
+            
+            <!-- Button 1 -->
             <Button
                 Padding="20,0"
                 IsVisible="{Binding Data.IsTryVisibl}"
@@ -37,6 +39,22 @@
                 BorderWidth="2"
                 Text="{Binding ButtonText, Source={x:Reference ThisPage}}"
                 Command="{Binding Command, Source={x:Reference ThisPage}}" />
+            
+            <!-- Button 2 -->
+            <Button
+                Padding="20,0"
+                IsVisible="{Binding Data.Button2Visibl}"
+                TextColor="{StaticResource Primary700}"
+                HorizontalOptions="Center"
+                CornerRadius="40"
+                VerticalOptions="Center"
+                BackgroundColor="Transparent"
+                BorderWidth="0"
+                FontSize="13"
+                Text="{Binding ButtonText2, Source={x:Reference ThisPage}}"
+                Command="{Binding Command2, Source={x:Reference ThisPage}}" />
+
+
         </VerticalStackLayout>
         <Grid.GestureRecognizers>
             <TapGestureRecognizer />

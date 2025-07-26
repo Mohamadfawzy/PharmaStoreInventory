@@ -43,7 +43,7 @@
 		<iOSLinkMode>SdkOnly</iOSLinkMode>
 		<!-- For iOS -->
 	</PropertyGroup>
-	
+
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
 		<AndroidPackageFormat>aab</AndroidPackageFormat>
 		<AndroidUseAapt2>True</AndroidUseAapt2>
@@ -59,8 +59,8 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android34.0|AnyCPU'">
 		<ApplicationTitle>Pharma Store Inventory</ApplicationTitle>
 		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
-		<ApplicationVersion>11</ApplicationVersion>
-		<ApplicationDisplayVersion>3.0.0</ApplicationDisplayVersion>
+		<ApplicationVersion>12</ApplicationVersion>
+		<ApplicationDisplayVersion>3.0.3</ApplicationDisplayVersion>
 		<AndroidUseAapt2>True</AndroidUseAapt2>
 		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
@@ -69,8 +69,8 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android34.0|AnyCPU'">
 		<ApplicationTitle>Pharma Store Inventory</ApplicationTitle>
 		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
-		<ApplicationVersion>11</ApplicationVersion>
-		<ApplicationDisplayVersion>3.0.0</ApplicationDisplayVersion>
+		<ApplicationVersion>12</ApplicationVersion>
+		<ApplicationDisplayVersion>3.0.3</ApplicationDisplayVersion>
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
 		<AndroidUseAapt2>True</AndroidUseAapt2>
 		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
@@ -79,8 +79,8 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
 		<ApplicationTitle>Pharma Store Inventory</ApplicationTitle>
 		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
-		<ApplicationVersion>11</ApplicationVersion>
-		<ApplicationDisplayVersion>3.0.0</ApplicationDisplayVersion>
+		<ApplicationVersion>12</ApplicationVersion>
+		<ApplicationDisplayVersion>3.0.3</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
@@ -100,8 +100,8 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
 		<ApplicationTitle>Pharma Store Inventory</ApplicationTitle>
 		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
-		<ApplicationVersion>11</ApplicationVersion>
-		<ApplicationDisplayVersion>3.0.0</ApplicationDisplayVersion>
+		<ApplicationVersion>12</ApplicationVersion>
+		<ApplicationDisplayVersion>3.0.3</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">
@@ -171,16 +171,16 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\ResetPasswordView.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\SettingView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\SidebarView.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Templates\CallUsTemplate.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Templates\NoDataTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -239,7 +239,7 @@
 			<DependentUpon>AppResources.resx</DependentUpon>
 		</Compile>
 		<Compile Update="Views\OnboardingView.xaml.cs">
-		  <DependentUpon>OnboardingView.xaml</DependentUpon>
+			<DependentUpon>OnboardingView.xaml</DependentUpon>
 		</Compile>
 	</ItemGroup>
 
