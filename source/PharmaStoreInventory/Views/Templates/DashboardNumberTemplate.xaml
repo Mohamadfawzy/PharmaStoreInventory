@@ -1,43 +1,44 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView
-    x:Class="PharmaStoreInventory.Views.Templates.DashboardNumberTemplate"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
-    xmlns:help="clr-namespace:PharmaStoreInventory.Helpers"
-    x:Name="ThisView">
+<ContentView x:Class="PharmaStoreInventory.Views.Templates.DashboardNumberTemplate"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:help="clr-namespace:PharmaStoreInventory.Helpers" xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
+             x:Name="ThisView">
 
     <!--  StrokeShape="RoundRectangle 50 6 6 6"  -->
-    <Border
-        x:Name="border"
-        Margin="0,0"
-        Padding="0"
-        Stroke="{StaticResource Primary100}"
-        StrokeThickness="1"
-        HorizontalOptions="Fill"
-        Background="{AppThemeBinding Light={StaticResource Primary050},
-                                     Dark={StaticResource Primary950}}">
-        
-        <StackLayout Orientation="Horizontal" BindingContext="{x:Reference ThisView}">
-            <BoxView
-                WidthRequest="8"
-                HorizontalOptions="Start"
-                VerticalOptions="Fill" />
-            <VerticalStackLayout Padding="10,5" HorizontalOptions="FillAndExpand">
-                <Label
-                    Margin="0,0,10,0"
-                    FontSize="14"
-                    Text="{Binding Title}" />
-                <Label
-                    Text="{Binding Number}"
-                    TextColor="{StaticResource Primary800}"
-                    FontSize="20" />
+    <Border x:Name="border"
+            Margin="0,0" Padding="0"
+            Background="{Binding BorderColor}"
+            BindingContext="{x:Reference ThisView}"
+            HorizontalOptions="Fill" Stroke="Transparent"
+            StrokeShape="RoundRectangle 16" StrokeThickness="0">
+
+        <Border Margin="4,0,0,0"
+                Background="{AppThemeBinding Light={StaticResource White},
+                                             Dark={StaticResource Primary950}}"
+                StrokeShape="RoundRectangle 16" StrokeThickness="0">
+            <Grid Padding="10,10" RowDefinitions="*,*">
+                <Label Margin="0,0,10,0"
+                       FontSize="14" MaxLines="3"
+                       Text="{Binding Title}"
+                       TextColor="Black" />
+                <Label Grid.Row="2"
+                       FontSize="20"
+                       Text="{Binding Number}"
+                       TextColor="{StaticResource Primary950}"
+                       VerticalOptions="End" />
                 <!--<Label
                     FontSize="22"
                     HorizontalOptions="End"
                     FontFamily="{StaticResource IconFont}"
                     Text="{x:Static icon:IconFont.ChevronLeft}" />-->
-            </VerticalStackLayout>
-        </StackLayout>
+
+            </Grid>
+
+        </Border>
+        <Border.Shadow>
+            <Shadow Brush="{StaticResource Primary200}"
+                    Opacity="1" Radius="5"
+                    Offset="1,1" />
+        </Border.Shadow>
     </Border>
 </ContentView>

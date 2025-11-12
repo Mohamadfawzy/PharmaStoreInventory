@@ -87,10 +87,10 @@ public partial class CreateBranchView : ContentPage, IRecipient<CreateBranchView
         {
             brachName.SetInputText("اسم الفرع");
             telephone.SetInputText("0402555550");
-            ipAdrress.SetInputText("192.168.1.103");
-            port.SetInputText("6003");
-            username.SetInputText("111");
-            password.SetInputText("111");
+            ipAdrress.SetInputText("192.168.1.30");
+            port.SetInputText("6200");
+            username.SetInputText("123");
+            password.SetInputText("123");
         }
     }
     #endregion

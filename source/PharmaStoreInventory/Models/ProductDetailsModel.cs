@@ -22,7 +22,7 @@ public class ProductDetailsModel : ObservableObject
         set
         {
             SetProperty(ref quantity, value);
-            FormattedQuantity = value?.ToString("F2", CultureInfo.InvariantCulture);
+            FormattedQuantity = value?.ToString("F3", CultureInfo.InvariantCulture);
         }
     }
 
@@ -32,6 +32,15 @@ public class ProductDetailsModel : ObservableObject
     public decimal? ProductUnit1 { get; set; }
     public string? VendorNameAr { get; set; }
     public string? ProductHasExpire { get; set; }
+
+
+    // 
+    public decimal? LargeUnitId { get; set; }          // product_unit1 - العلبة
+    public string? LargeUnitName { get; set; }         // product_unit1 - العلبة
+    public decimal? MediumUnitId { get; set; }         // product_unit2 - الشريط
+    public string? MediumUnitName { get; set; }        // product_unit2 - الشريط
+    public decimal? MediumUnitPrice { get; set; }
+    public decimal? MediumUnitsPerLarge { get; set; }  // product_unit1_2 - عدد الشرائط في العلبة
 
 
     public string? FormattedPrice => SellPrice?.ToString("F2", CultureInfo.InvariantCulture);

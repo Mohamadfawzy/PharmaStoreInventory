@@ -11,7 +11,7 @@ public class ProductDetailsDto
     public string? IsInventoried { get; set; }
     //public decimal? VendorId { get; set; }
     public DateTime? ExpDate { get; set; }
-    public decimal? Quantity{ get; set; } // Amount
+    public decimal Quantity{ get; set; } // Amount
     public decimal? SellPrice { get; set; }
     public string? ProductNameAr { get; set; }
     public string? ProductNameEn { get; set; }
@@ -21,48 +21,31 @@ public class ProductDetailsDto
     //public string? CompanyNameAr { get; set; }
     public string? ProductHasExpire { get; set; }
 
-    //public event NotifyCollectionChangedEventHandler? CollectionChanged;
+    public decimal? LargeUnitId { get; set; }          // product_unit1 - العلبة
+    public string? LargeUnitName { get; set; }         // product_unit1 - العلبة
+    public decimal? MediumUnitId { get; set; }         // product_unit2 - الشريط
+    public string? MediumUnitName { get; set; }        // product_unit2 - الشريط
+    public decimal? MediumUnitPrice { get; set; }
+    public decimal? MediumUnitsPerLarge { get; set; }  // product_unit1_2 - عدد الشرائط في العلبة
 
-    //public event PropertyChangedEventHandler PropertyChanged;
-    //protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+    //public static implicit operator ProductDetailsDto?(Product_Amount? item)
     //{
-    //    var changed = PropertyChanged;
-    //    if (changed == null)
-    //        return;
-
-    //    changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    //    if (item == null) 
+    //        return null;
+    //    return new ProductDetailsDto
+    //    {
+    //        Id = item.Pa_id,
+    //        ProductId = item.Product_id,
+    //        StoreId = item.Store_id,
+    //        ExpiryGroupID = item.Counter_id,
+    //        //VendorId = item.Vendor_id,
+    //        ExpDate = item.Exp_date,
+    //        Quantity = item.Amount,
+    //        SellPrice = item.Sell_price,
+    //        IsInventoried = item.Product_update,
+    //        // Map other properties as needed
+    //    };
     //}
-    //protected bool SetProperty<T>(ref T backingStore, T value,
-    //                                [CallerMemberName] string propertyName = "",
-    //                                Action onChanged = null)
-    //{
-    //    if (EqualityComparer<T>.Default.Equals(backingStore, value))
-    //        return false;
-
-    //    backingStore = value;
-    //    onChanged?.Invoke();
-    //    OnPropertyChanged(propertyName);
-    //    return true;
-    //}
-
-    public static implicit operator ProductDetailsDto?(Product_Amount? item)
-    {
-        if (item == null) 
-            return null;
-        return new ProductDetailsDto
-        {
-            Id = item.Pa_id,
-            ProductId = item.Product_id,
-            StoreId = item.Store_id,
-            ExpiryGroupID = item.Counter_id,
-            //VendorId = item.Vendor_id,
-            ExpDate = item.Exp_date,
-            Quantity = item.Amount,
-            SellPrice = item.Sell_price,
-            IsInventoried = item.Product_update,
-            // Map other properties as needed
-        };
-    }
 }
 
 

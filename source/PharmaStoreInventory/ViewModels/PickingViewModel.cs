@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using DataAccess.DomainModel;
 using DataAccess.Dtos;
 using PharmaStoreInventory.Helpers;
@@ -10,7 +11,7 @@ using System.Windows.Input;
 using Product = PharmaStoreInventory.Models.ProductDetailsModel;
 namespace PharmaStoreInventory.ViewModels;
 
-public class PickingViewModel : BaseViewModel
+public partial class PickingViewModel : BaseViewModel
 {
     //#########*PrivateFields*############
     private bool isEditPopupVisible = false;
@@ -91,6 +92,16 @@ public class PickingViewModel : BaseViewModel
         get => isDateSectionInPopupVisible;
         set => SetProperty(ref isDateSectionInPopupVisible, value);
     }
+
+    [ObservableProperty]
+    private int mediumUnitQuantity;
+    [ObservableProperty]
+    private int largUnitQuantity;
+    [ObservableProperty]
+    private string descriptionUnit;
+    [ObservableProperty]
+    private bool mediumUnitQuantityIsVisible = true;
+
     #endregion
 
     //############*Commands*############
@@ -158,8 +169,8 @@ public class PickingViewModel : BaseViewModel
         {
             await Alerts.DisplaySnackBar($"ExecuteMakeInventory: {ex.Message}");
         }
-
     }
+    
     private void ExecuteCopyProduct(Product stock)
     {
 
@@ -193,6 +204,7 @@ public class PickingViewModel : BaseViewModel
         ModifiedQuantity = (stock.Quantity ?? 0).ToString("F2", CultureInfo.InvariantCulture);
         this.SelectedProduct = stock;
     }
+
     public async void ExecuteSelectionChanged(Product pro)
     {
         try
@@ -217,7 +229,17 @@ public class PickingViewModel : BaseViewModel
                 Month = pro.ExpDate.Value.Month;
                 Day = pro.ExpDate.Value.Day;
             }
-            ModifiedQuantity = (pro.Quantity ?? 0).ToString("F2", CultureInfo.InvariantCulture);
+
+            // var tempModifiedQuantity = PriceConverter.ToDecimalQuantity(LargUnitQuantity, MediumUnitQuantity, (int)SelectedProduct.MediumUnitsPerLarge.Value);
+            var tempQuantity = PriceConverter.FromDecimalQuantity(pro.Quantity.Value ,(int)pro.MediumUnitsPerLarge.Value);
+            
+            MediumUnitQuantityIsVisible = pro.MediumUnitsPerLarge == 1 ? false : true;
+
+            LargUnitQuantity =  (int)tempQuantity.Boxes;
+            MediumUnitQuantity =  (int)tempQuantity.Strips;
+            DescriptionUnit = $"{pro.MediumUnitName} ({pro.MediumUnitsPerLarge})";
+
+            //ModifiedQuantity = (pro.Quantity ?? 0).ToString("F2", CultureInfo.InvariantCulture);
             this.SelectedProduct = pro;
         }
         catch (Exception ex)
@@ -232,6 +254,9 @@ public class PickingViewModel : BaseViewModel
         {
             ActivityIndicatorRunning = true;
             AggregationExpiryDate();
+            ModifiedQuantity = PriceConverter
+                .ToDecimalQuantity(largUnitQuantity, MediumUnitQuantity,(int)SelectedProduct.MediumUnitsPerLarge.Value)
+                .ToString("F3", CultureInfo.InvariantCulture);
             if (PopupType == "edit")
             {
                 SaveEditProduct();
@@ -420,6 +445,4 @@ public class PickingViewModel : BaseViewModel
         }
     }
     #endregion
-
-
 }

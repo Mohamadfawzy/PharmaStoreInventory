@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:scanner="clr-namespace:BarcodeScanning;assembly=BarcodeScanning.Native.Maui"
+             x:Class="PharmaStoreInventory.Views.PickingProductsView"
+             xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
+             NavigationPage.HasNavigationBar="False"
+             xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates"
+             Title="PickingProductsView"
+             BackgroundColor="Transparent"
+             x:DataType="vm:PickingProductsViewModel">
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="BoxView">
+                <Setter Property="Color" Value="#20000000"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <Grid BackgroundColor="Transparent">
+
+        <!--#region Camera -->
+
+        <!--  CameraView  -->
+        <scanner:CameraView
+            x:Name="nativeBarcode"
+            Grid.Row="1"
+            TapToFocusEnabled="True"
+            IsVisible="True"
+            TorchOn="False"
+            PauseScanning="True"
+            CameraEnabled="False"
+            OnDetectionFinished="CameraOnDetectionFinished"
+            />
+
+        <!-- Polyline Corners -->
+        <Grid BackgroundColor="Transparent" FlowDirection="LeftToRight" WidthRequest="300" HeightRequest="350" RowDefinitions="Auto,*,Auto" ColumnDefinitions="Auto,*,Auto" >
+
+            <!-- الزاوية العليا اليسرى -->
+            <Polyline Grid.Row="0" Grid.Column="0" Stroke="{StaticResource Primary}" StrokeThickness="3" Points="0,20 0,0 20,0" />
+
+            <!-- الزاوية العليا اليمنى -->
+            <Polyline Grid.Row="0" Grid.Column="2" Stroke="{StaticResource Primary}" StrokeThickness="3" Points="0,0 20,0 20,20"/>
+
+            <!-- الزاوية السفلى اليسرى -->
+            <Polyline Grid.Row="2" Grid.Column="0" Stroke="{StaticResource Primary}" StrokeThickness="3" Points="0,0 0,20 20,20" />
+
+            <!-- الزاوية السفلى اليمنى -->
+            <Polyline Grid.Row="2" Grid.Column="2" Stroke="{StaticResource Primary}" StrokeThickness="3" Points="0,20 20,20 20,0" />
+
+
+        </Grid>
+
+        <!-- Bacgound around Corners -->
+        <Grid RowDefinitions="*,350,*" ColumnDefinitions="*,300,*" FlowDirection="LeftToRight"  BackgroundColor="Transparent">
+            <BoxView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"/>
+            <BoxView Grid.Row="1" Grid.Column="0" />
+            <BoxView Grid.Row="1" Grid.Column="2"/>
+            <BoxView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"/>
+        </Grid>
+
+        <!-- search buttom -->
+        <ImageButton BackgroundColor="WhiteSmoke" Source="search_medicine_blue.svg" Aspect="Center"
+                     HeightRequest="40" WidthRequest="40" CornerRadius="40"
+                     Padding="0" Margin="20" 
+             VerticalOptions="Start" HorizontalOptions="Start"
+             Clicked="ImageButton_Clicked"/>
+
+        <!-- close icon -->
+        <ImageButton BackgroundColor="WhiteSmoke" Source="close_red.svg" Aspect="Center"
+                     HeightRequest="40" WidthRequest="40" CornerRadius="40"
+                     Padding="0" Margin="20" 
+             VerticalOptions="Start" HorizontalOptions="End"
+             Clicked="OnCloseClicked"/>
+
+        
+        <!-- Barcode lable-->
+        <Label Text="{Binding Barcode}" VerticalOptions="End" FontSize="20" HorizontalTextAlignment="Center" Margin="0,0,0,100" BackgroundColor="#15ffffff"/>
+
+        
+        
+        <!-- flash light-->
+        <ImageButton x:Name="btnFlashLight" BackgroundColor="WhiteSmoke" Source="flashlight_on.png" Aspect="Center"
+                     HeightRequest="50" WidthRequest="50" CornerRadius="40"
+                     Padding="0" Margin="20" 
+                     IsVisible="True"
+                     VerticalOptions="End" HorizontalOptions="Center"
+                     Clicked="ToggleFlashLight_Clicked"/>
+        
+        <!-- BarcodeScan -->
+        <ImageButton x:Name="btnBarcodeScan" BackgroundColor="WhiteSmoke" Source="barcode_scan.png" Aspect="Center"
+                     IsVisible="False"
+                     HeightRequest="50" WidthRequest="50" CornerRadius="40"
+                     Padding="0" Margin="20" 
+                     VerticalOptions="End" HorizontalOptions="Center"
+                     Clicked="btnBarcodeScan_Clicked"/>
+        <!--#endregion-->
+
+        <ActivityIndicator x:Name="activityIndicator" IsRunning="{Binding ActivityIndicatorRunning}" HeightRequest="70"/>
+
+
+        <Label Text="لم يتم العثور علي اي منتج"  BackgroundColor="IndianRed" 
+               Padding="20,0"
+               IsVisible="{Binding NotFoundVisible}"
+               VerticalOptions="Center" HorizontalOptions="Center"/>
+
+
+
+
+    </Grid>
+</ContentPage>

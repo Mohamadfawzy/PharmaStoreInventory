@@ -14,6 +14,7 @@ public static class Alerts
             BackgroundColor = Colors.DarkBlue,
             TextColor = Colors.White,
             CornerRadius = new CornerRadius(10),
+            
         };
         TimeSpan timeSpan = TimeSpan.FromSeconds(duration);
 

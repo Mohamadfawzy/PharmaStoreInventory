@@ -1,13 +1,16 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
+﻿using CommunityToolkit.Maui.Behaviors;
+using CommunityToolkit.Mvvm.Messaging;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.ViewModels;
+using System.Threading.Tasks;
 
 namespace PharmaStoreInventory.Views;
 
 public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotification>
 {
     private readonly DashboardViewModel vm;
+    private static string mode = "inventory";
 
     #region OnStart
     public DashboardView()
@@ -28,6 +31,31 @@ public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotifi
         {
             Logout();
         }
+
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            //if (AppPreferences.StartStockId < 1)
+            //{
+            //    btnLastStartStock.IsVisible = false;
+            //}
+            //else
+            //{
+            //    btnLastStartStock.IsVisible = true;
+            //}
+
+            if (mode == "sidebar")
+            {
+                mode = "inventory";
+                ResetAllStyles();
+                HighlightSelected(imgInventory, lblInventory);
+                SwetchBetwwen2Tabps();
+
+            }
+        });
+            //mode = "inventory";
+            //SwetchBetwwen2Tabps();
+            //ResetAllStyles();
+            //HighlightSelected(imgInventory, lblInventory);
     }
     protected override bool OnBackButtonPressed()
     {
@@ -69,6 +97,17 @@ public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotifi
         await Navigation.PushAsync(new AllStockView());
     }
 
+    private async void GoToProductSearchPage_Tapped(object sender, TappedEventArgs e)
+    {
+        await Navigation.PushAsync(new ProductSearchView());
+    }
+
+
+    //private async void GoToStartStockPage(object sender, TappedEventArgs e)
+    //{
+    //    await Navigation.PushAsync(new PickingProductsView());
+    //}
+
     private async void BoxView_Loaded(object sender, EventArgs e)
     {
         var box = (BoxView)sender;
@@ -93,7 +132,6 @@ public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotifi
         File.Delete(AppValues.UserFileName);
         File.Delete(AppValues.BranchesFileName);
 
-
         AppPreferences.LocalDbUserId = 0;
         AppPreferences.StoreId = 1;
         AppPreferences.HasBranchRegistered = false;
@@ -107,4 +145,81 @@ public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotifi
         // delete all be low
         AppPreferences.StoreId = 0;
     }
+
+    // =============================================
+    private async void Button_Clicked(object sender, EventArgs e)
+    {
+        if (sender is Button button && button.CommandParameter is string parameter)
+        {
+            ResetAllStyles();
+            mode = parameter;
+            SwetchBetwwen2Tabps();
+            switch (parameter)
+            {
+                case "inventory":
+                    HighlightSelected(imgInventory, lblInventory);
+                    break;
+
+                case "startstock":
+                    HighlightSelected(imgStartStock, lblStartStock);
+                    break;
+
+                case "sidebar":
+                    HighlightSelected(imgMenu, lblMenu);
+                    await Navigation.PushAsync(new SidebarView());
+                    break;
+            }
+        }
+    }
+
+    private void HighlightSelected(Image image, Label label)
+    {
+        var behavior = new IconTintColorBehavior
+        {
+            TintColor = Color.FromArgb("#0a88ed")
+        };
+        image.Behaviors.Add(behavior);
+        label.FontSize = 12;
+        label.TextColor = Color.FromArgb("#0a88ed");
+    }
+
+    private void ResetAllStyles()
+    {
+        var images = new[] { imgInventory, imgStartStock, imgMenu };
+        var labels = new[] { lblInventory, lblStartStock, lblMenu };
+
+        foreach (var img in images)
+        {
+            var behavior = new IconTintColorBehavior
+            {
+                TintColor = Color.FromArgb("#999999")
+            };
+            img.Behaviors.Add(behavior);
+        }
+
+        foreach (var lbl in labels)
+        {
+            lbl.FontSize = 12;
+            lbl.TextColor = Colors.Gray;
+        }
+    }
+
+    private void SwetchBetwwen2Tabps()
+    {
+        if(mode == "inventory")
+        {
+            grdInventoty.IsVisible = true;
+            grdStartStock.IsVisible = false;
+            //brdLastInverotyDate.IsVisible = true;
+        }
+        else if (mode == "startstock")
+        {
+
+            grdInventoty.IsVisible = false;
+            grdStartStock.IsVisible = true;
+            //brdLastInverotyDate.IsVisible = false;
+        }
+    }
+
+   
 }

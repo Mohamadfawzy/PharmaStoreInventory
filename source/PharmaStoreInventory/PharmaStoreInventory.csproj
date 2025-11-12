@@ -59,8 +59,8 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android34.0|AnyCPU'">
 		<ApplicationTitle>Pharma Store Inventory</ApplicationTitle>
 		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
-		<ApplicationVersion>12</ApplicationVersion>
-		<ApplicationDisplayVersion>3.0.3</ApplicationDisplayVersion>
+		<ApplicationVersion>14</ApplicationVersion>
+		<ApplicationDisplayVersion>3.2.0</ApplicationDisplayVersion>
 		<AndroidUseAapt2>True</AndroidUseAapt2>
 		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
@@ -69,8 +69,8 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android34.0|AnyCPU'">
 		<ApplicationTitle>Pharma Store Inventory</ApplicationTitle>
 		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
-		<ApplicationVersion>12</ApplicationVersion>
-		<ApplicationDisplayVersion>3.0.3</ApplicationDisplayVersion>
+		<ApplicationVersion>14</ApplicationVersion>
+		<ApplicationDisplayVersion>3.2.0</ApplicationDisplayVersion>
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
 		<AndroidUseAapt2>True</AndroidUseAapt2>
 		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
@@ -79,8 +79,8 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
 		<ApplicationTitle>Pharma Store Inventory</ApplicationTitle>
 		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
-		<ApplicationVersion>12</ApplicationVersion>
-		<ApplicationDisplayVersion>3.0.3</ApplicationDisplayVersion>
+		<ApplicationVersion>14</ApplicationVersion>
+		<ApplicationDisplayVersion>3.2.0</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
@@ -100,8 +100,8 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
 		<ApplicationTitle>Pharma Store Inventory</ApplicationTitle>
 		<ApplicationId>com.modernsoft.pharma.inventory</ApplicationId>
-		<ApplicationVersion>12</ApplicationVersion>
-		<ApplicationDisplayVersion>3.0.3</ApplicationDisplayVersion>
+		<ApplicationVersion>14</ApplicationVersion>
+		<ApplicationDisplayVersion>3.2.0</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">
@@ -170,6 +170,12 @@
 		<MauiXaml Update="Views\BranchesView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\EditProAmountView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\ProductSearchView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\ResetPasswordView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
@@ -178,6 +184,9 @@
 		</MauiXaml>
 		<MauiXaml Update="Views\SidebarView.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\PickingProductsView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Templates\CallUsTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -190,6 +199,12 @@
 		</MauiXaml>
 		<MauiXaml Update="Views\Templates\UpDownStepper.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Templates\V2\StepperField.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Templates\V2\DateSpinner.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Templates\VerificationViewTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -241,6 +256,12 @@
 		<Compile Update="Views\OnboardingView.xaml.cs">
 			<DependentUpon>OnboardingView.xaml</DependentUpon>
 		</Compile>
+		<Compile Update="Views\PickingProductsView.xaml.cs">
+		  <DependentUpon>PickingProductsView.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Views\Templates\V2\DateSpinner.xaml.cs">
+		  <DependentUpon>DateSpinner.xaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -252,22 +273,22 @@
 
 	<ItemGroup>
 	  <MauiFont Update="Resources\Fonts\materialdesignicons.ttf">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </MauiFont>
 	  <MauiFont Update="Resources\Fonts\NotoKufiArabic-ExtraLight.ttf">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </MauiFont>
 	  <MauiFont Update="Resources\Fonts\NotoKufiArabic-Regular.ttf">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </MauiFont>
 	  <MauiFont Update="Resources\Fonts\NotoKufiArabic-SemiBold.ttf">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </MauiFont>
 	  <MauiFont Update="Resources\Fonts\OpenSans-Regular.ttf">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </MauiFont>
 	  <MauiFont Update="Resources\Fonts\OpenSans-Semibold.ttf">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </MauiFont>
 	</ItemGroup>
 

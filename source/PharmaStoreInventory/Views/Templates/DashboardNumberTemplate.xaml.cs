@@ -31,22 +31,36 @@ public partial class DashboardNumberTemplate : ContentView
         set => SetValue(TitleProperty, value);
     }
 
+
+    public static readonly BindableProperty BorderColorProperty =
+        BindableProperty.Create(
+            nameof(BorderColor),
+            typeof(Color),
+            typeof(DashboardNumberTemplate),
+            Colors.Transparent);
+
+    public Color BorderColor
+    {
+        get => (Color)GetValue(BorderColorProperty);
+        set => SetValue(BorderColorProperty, value);
+    }
+
     public DashboardNumberTemplate()
 	{
 		InitializeComponent();
-        if (AppValues.Language == "ar")
-        {
-            border.StrokeShape = new RoundRectangle
-            {
-                CornerRadius = new CornerRadius(50, 6, 6, 6)
-            };
-        }
-        else
-        {
-            border.StrokeShape = new RoundRectangle
-            {
-                CornerRadius = new CornerRadius(6, 50, 6, 6)
-            };
-        }
+        //if (AppValues.Language == "ar")
+        //{
+        //    border.StrokeShape = new RoundRectangle
+        //    {
+        //        CornerRadius = new CornerRadius(50, 6, 6, 6)
+        //    };
+        //}
+        //else
+        //{
+        //    border.StrokeShape = new RoundRectangle
+        //    {
+        //        CornerRadius = new CornerRadius(6, 50, 6, 6)
+        //    };
+        //}
     }
 }

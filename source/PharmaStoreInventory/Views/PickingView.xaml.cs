@@ -156,7 +156,6 @@ public partial class PickingView : ContentPage, IRecipient<PickingViewNotificati
 
     private void ExecuteSelectionChanged_Tapped(object sender, TappedEventArgs e)
     {
-
         if (e.Parameter != null)
         {
             var param = e.Parameter as ProductDetailsModel;
@@ -166,6 +165,13 @@ public partial class PickingView : ContentPage, IRecipient<PickingViewNotificati
             }
         }
     }
+
+    private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        await Clipboard.SetTextAsync(lblBarcodeNumber.Text);
+        await Alerts.DisplayToast("Copied");
+    }
+
     #endregion
 
     #region On process
@@ -174,6 +180,8 @@ public partial class PickingView : ContentPage, IRecipient<PickingViewNotificati
         viewModel.IsEditPopupVisible = false;
     }
     #endregion
+
+
 }
 
 

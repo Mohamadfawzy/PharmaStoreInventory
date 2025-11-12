@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="PharmaStoreInventory.Views.Templates.V2.DateSpinner"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Name="ThisView">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <Style x:Key="btnStyle" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource Primary100}" />
+                <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
+                <Setter Property="TextColor" Value="{StaticResource Primary}" />
+                <Setter Property="FontSize" Value="25" />
+                <Setter Property="CornerRadius" Value="20" />
+                <!--<Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup>
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="Transparent" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Pressed">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Primary200}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>-->
+            </Style>
+            <Style TargetType="Border">
+                <Setter Property="Padding" Value="10,0" />
+                <Setter Property="Stroke" Value="#C49B33" />
+                <Setter Property="HorizontalOptions" Value="Start" />
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 6" />
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <StackLayout HorizontalOptions="Fill">
+        <Button
+            Style="{StaticResource btnStyle}"
+            Text="{x:Static icon:IconFont.ChevronUp}"
+            Clicked="Up_Clicked">
+            <Button.Behaviors>
+                <toolkit:TouchBehavior
+                    DefaultBackgroundColor="Transparent"
+                    PressedBackgroundColor="{StaticResource Primary200}"
+                    LongPressDuration="1500"
+                    LongPressCommand="{Binding Source={x:Reference ThisView}, Path=UpLongPressCommand}" />
+            </Button.Behaviors>
+        </Button>
+        <Border BindingContext="{x:Reference ThisView}" HorizontalOptions="Fill">
+            <Entry
+                x:Name="entry"
+                Keyboard="Numeric"
+                FontSize="18"
+                Text="{Binding Text}"
+                Placeholder="{Binding TextPlaceholder}"
+                Unfocused="Entry_Unfocused"
+                HorizontalTextAlignment="Center" />
+        </Border>
+        <Button
+            Style="{StaticResource btnStyle}"
+            Text="{x:Static icon:IconFont.ChevronDown}"
+            Clicked="Down_Clicked">
+            <Button.Behaviors>
+                <toolkit:TouchBehavior
+                    DefaultBackgroundColor="Transparent"
+                    PressedBackgroundColor="{StaticResource Primary200}"
+                    LongPressDuration="1500"
+                    LongPressCommand="{Binding Source={x:Reference ThisView}, Path=DownLongPressCommand}" />
+            </Button.Behaviors>
+        </Button>
+    </StackLayout>
+</ContentView>

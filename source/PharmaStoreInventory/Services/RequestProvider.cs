@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
+using DataAccess.DomainModel;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Languages;
 using PharmaStoreInventory.Messages;
@@ -145,6 +146,52 @@ public static class RequestProvider
         message.Body = $"{nameof(GetAllAsync)} {message.Body}";
         return (default, message);
     }
+
+    public static async Task<PagedResult<TResult>> GetAllAsync<TResult>(string uri, string token)
+    {
+        try
+        {
+            var client = new HttpClient();
+            client.Timeout = TimeSpan.FromSeconds(timeoutInSeconds);
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
+            request.Headers.Add("Authorization", AppPreferences.Token);
+
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+                return PagedResult<TResult>.Failure("not found");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorMsg = await response.Content.ReadAsStringAsync();
+                return PagedResult<TResult>.Failure($"Request failed: {response.StatusCode} - {errorMsg}");
+            }
+
+            var result = await response.Content.ReadFromJsonAsync<PagedResult<TResult>>();
+
+            // If the server returns null for any reason
+            if (result == null)
+                return PagedResult<TResult>.Failure("Empty response received from server.");
+
+            result.IsSuccess ??= true; // تأكيد القيمة الافتراضية
+
+            return result;
+        }
+        catch (TaskCanceledException)
+        {
+            return PagedResult<TResult>.Failure("Request timed out.");
+        }
+        catch (HttpRequestException ex)
+        {
+            return PagedResult<TResult>.Failure($"Network error: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return PagedResult<TResult>.Failure($"Unexpected error: {ex.Message}");
+        }
+    }
+
 
     public static async Task<IEnumerable<TResult>?> GetAllIEnumerableAsync<TResult>(string uri)
     {

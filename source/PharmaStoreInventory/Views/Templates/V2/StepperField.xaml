@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="PharmaStoreInventory.Views.Templates.V2.StepperField"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates"
+    xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
+    x:Name="ThisView">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <Style x:Key="StepperButton" TargetType="Button">
+                <Setter Property="Margin" Value="1" />
+                <Setter Property="Padding" Value="7,0" />
+                <Setter Property="CornerRadius" Value="0" />
+                <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
+                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Primary950}, Dark={StaticResource Primary050}}" />
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary100}, Dark={StaticResource Primary900}}" />
+                <Setter Property="FontSize" Value="18" />
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <!--  Stepper  -->
+    <VerticalStackLayout Grid.Row="1">
+
+        <Grid>
+            <!-- Title -->
+            <Label Text="{Binding Title}" HorizontalTextAlignment="Center" FontSize="18" 
+                   BindingContext="{x:Reference ThisView}"/>
+
+            <Label Text="{Binding Description}" HorizontalTextAlignment="End" FontSize="18" 
+                   BindingContext="{x:Reference ThisView}"/>
+        </Grid>
+        
+        <Border StrokeShape="RoundRectangle 16"
+                Stroke="{StaticResource Gray100}"
+                StrokeThickness="0" 
+                Background="{StaticResource Primary}"
+                HorizontalOptions="Fill">
+            <Border.Shadow>
+                <Shadow Brush="LightGray"
+                    Offset="5,5"
+                    Radius="5"
+                    Opacity="0.8" />
+            </Border.Shadow>
+            <Grid HorizontalOptions="Fill" ColumnDefinitions="*,100,*" >
+
+                <!-- plus -->
+                <Button ImageSource="plus_white" BackgroundColor="Transparent" Grid.Column="0" CornerRadius="0" 
+                     Clicked="Plus_Clicked"/>
+
+                <!-- box as bacgounrd-->
+                <BoxView Grid.Column="1" VerticalOptions="Fill" Color="White"/>
+
+                <!-- Entry-->
+                <Entry x:Name="entry"
+                       Text="{Binding Text }"
+                       BindingContext="{x:Reference ThisView}" Grid.Column="1"
+                     FontSize="18" 
+                    VerticalOptions="Center"
+                         FontFamily="OpenSansSemibold"
+                         VerticalTextAlignment="Center"
+                         HorizontalTextAlignment="Center"
+                         Keyboard="Numeric" />
+                <!-- Minus -->
+                <Button ImageSource="minus_white" BackgroundColor="Transparent" Grid.Column="2" CornerRadius="0"
+                     Clicked="Minus_Clicked"/>
+            </Grid>
+        </Border>
+    </VerticalStackLayout>
+
+</ContentView>

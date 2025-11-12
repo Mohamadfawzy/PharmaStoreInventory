@@ -3,6 +3,24 @@
 public static class AppPreferences
 {
 
+    public static int StartStockId
+    {
+        get => GetValue(nameof(StartStockId), 0);
+        set => Preferences.Default.Set(nameof(StartStockId),value);
+    }
+
+    public static int StartStockDetailsId
+    {
+        get => GetValue(nameof(StartStockDetailsId), 0);
+        set => Preferences.Default.Set(nameof(StartStockDetailsId),value);
+    }
+
+    public static string LatestStartStockDate
+    {
+        get => GetValue(nameof(LatestStartStockDate), string.Empty);
+        set => Preferences.Default.Set(nameof(LatestStartStockDate),value);
+    }
+
     public static int HostUserId
     {
         get => GetValue(nameof(HostUserId), 0);

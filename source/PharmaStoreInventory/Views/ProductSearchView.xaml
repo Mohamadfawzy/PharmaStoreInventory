@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="PharmaStoreInventory.Views.ProductSearchView"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates"
+             xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
+             NavigationPage.HasNavigationBar="False">
+
+    <ContentPage.BindingContext>
+        <vm:ProductSearchViewModel />
+    </ContentPage.BindingContext>
+    <!--#region Search results-->
+
+    <Grid RowDefinitions="Auto,Auto,*">
+
+        <!--  back button  -->
+        <HorizontalStackLayout Padding="10" Spacing="5" BackgroundColor="{StaticResource PrimaryDark}">
+            <ImageButton Source="arrow_right_white.png"
+                         WidthRequest="50"
+                         Aspect="Center"
+                         Clicked="OnBackButton_Clicked" />
+            <Label Text="البحث" TextColor="White" />
+        </HorizontalStackLayout>
+
+        <!--  SEARCH section  -->
+        <Grid Grid.Row="1"
+              Padding="5"
+              ColumnDefinitions="*,Auto"
+              BackgroundColor="{StaticResource Primary800}"
+              ColumnSpacing="5">
+            <!--  SEARCH BOX  -->
+            <template:SearchBoxTemplate Margin="0" Command="{Binding SearchBoxTypingCommand}" HorizontalOptions="Fill" />
+
+            <!--  Filter Icon  -->
+            <ImageButton Grid.Column="1" IsVisible="False" Source="filter_solid.svg" />
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <CollectionView ItemsSource="{Binding Products}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Border Grid.Row="2"
+                                    Margin="20,10"
+                                    StrokeShape="RoundRectangle 16"
+                                    Stroke="{StaticResource Gray100}"
+                                    StrokeThickness="1"
+                                    Background="{StaticResource White}"
+                                    HorizontalOptions="Fill">
+
+                                <Grid RowDefinitions="Auto,Auto,*" RowSpacing="10">
+                                    <BoxView Grid.Row="0" HorizontalOptions="Fill" Color="{StaticResource Primary300}" />
+                                    <Label Margin="20,0" Text="{Binding VendorName}" />
+                                    <HorizontalStackLayout Margin="20,0" HorizontalOptions="End">
+                                        <Label Text=" LE" />
+                                        <Label Text="{Binding Price, StringFormat='{0:F2}'}" />
+                                    </HorizontalStackLayout>
+                                    <Label Grid.Row="1" Margin="20,0" Text="{Binding NameAr}" />
+
+                                    <Button Grid.Row="2"
+                                            Margin="20,5"
+                                            Text="اضافة"
+                                            VerticalOptions="Start"
+                                            ImageSource="plus_white.svg"
+                                            CornerRadius="30"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ProductSearchViewModel}}, Path=AddProductCommand}"
+                                            CommandParameter="{Binding .}" />
+                                </Grid>
+
+                            </Border>
+
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+
+        <Grid Grid.Row="2" VerticalOptions="Center">
+            <template:NoDataTemplate BackgroundColor="{StaticResource White}" Data="{Binding NoDataModel}" IsVisible="{Binding IsNoDataElementVisible}" />
+        </Grid>
+
+        <!--#endregion-->
+    </Grid>
+</ContentPage>

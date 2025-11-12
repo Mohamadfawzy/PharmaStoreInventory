@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    x:Class="PharmaStoreInventory.Views.PickingView"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:scanner="clr-namespace:BarcodeScanning;assembly=BarcodeScanning.Native.Maui"
-    xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates"
-    xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
-    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-    xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
-    x:Name="ThisPage"
-    Title="PickingView"
-    NavigationPage.HasNavigationBar="False"
-    FlowDirection="LeftToRight"
-    BackgroundColor="White"
-    NavigatedTo="ThisPage_NavigatedTo">
+<ContentPage x:Class="PharmaStoreInventory.Views.PickingView"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:scanner="clr-namespace:BarcodeScanning;assembly=BarcodeScanning.Native.Maui"
+             xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates"
+             xmlns:templateV2="clr-namespace:PharmaStoreInventory.Views.Templates.V2"
+             xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
+             x:Name="ThisPage"
+             Title="PickingView"
+             NavigationPage.HasNavigationBar="False"
+             FlowDirection="LeftToRight"
+             BackgroundColor="White"
+             NavigatedTo="ThisPage_NavigatedTo">
 
     <!--  Resources  -->
     <ContentPage.Resources>
@@ -54,41 +54,37 @@
         <Grid x:Name="header" BackgroundColor="{StaticResource Primary800}">
 
             <!--  Flash Icon  -->
-            <Label
-                Padding="30,10"
-                HorizontalOptions="Start"
-                Text="{x:Static icon:IconFont.Flashlight}"
-                BackgroundColor="Transparent"
-                Style="{StaticResource TouchLabelStyle}">
+            <Label Padding="30,10"
+                   HorizontalOptions="Start"
+                   Text="{x:Static icon:IconFont.Flashlight}"
+                   BackgroundColor="Transparent"
+                   Style="{StaticResource TouchLabelStyle}">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Tapped="ToggleFlashLight" />
                 </Label.GestureRecognizers>
                 <Label.Behaviors>
-                    <toolkit:TouchBehavior
-                        DefaultAnimationDuration="250"
-                        DefaultAnimationEasing="{x:Static Easing.SpringOut}"
-                        PressedOpacity="0.6"
-                        PressedScale="0.8" />
+                    <toolkit:TouchBehavior DefaultAnimationDuration="250"
+                                           DefaultAnimationEasing="{x:Static Easing.SpringOut}"
+                                           PressedOpacity="0.6"
+                                           PressedScale="0.8" />
                 </Label.Behaviors>
             </Label>
 
             <!--  barcod Icon  -->
-            <Label
-                Padding="30,10"
-                Background="Transparent"
-                HorizontalOptions="EndAndExpand"
-                Text="{x:Static icon:IconFont.BarcodeScan}"
-                FontFamily="{StaticResource IconFont}"
-                TextColor="{StaticResource Primary050}"
-                VerticalTextAlignment="Center"
-                VerticalOptions="Fill"
-                FontSize="30">
+            <Label Padding="30,10"
+                   Background="Transparent"
+                   HorizontalOptions="EndAndExpand"
+                   Text="{x:Static icon:IconFont.BarcodeScan}"
+                   FontFamily="{StaticResource IconFont}"
+                   TextColor="{StaticResource Primary050}"
+                   VerticalTextAlignment="Center"
+                   VerticalOptions="Fill"
+                   FontSize="30">
                 <Label.Behaviors>
-                    <toolkit:TouchBehavior
-                        DefaultAnimationDuration="250"
-                        DefaultAnimationEasing="{x:Static Easing.SpringOut}"
-                        PressedOpacity="0.6"
-                        PressedScale="0.8" />
+                    <toolkit:TouchBehavior DefaultAnimationDuration="250"
+                                           DefaultAnimationEasing="{x:Static Easing.SpringOut}"
+                                           PressedOpacity="0.6"
+                                           PressedScale="0.8" />
                 </Label.Behaviors>
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Tapped="ToggleCameraVisibilityTapped" />
@@ -99,59 +95,53 @@
         </Grid>
 
         <!--  The Camera  -->
-        <scanner:CameraView
-            x:Name="nativeBarcode"
-            Grid.Row="1"
-            TapToFocusEnabled="True"
-            IsVisible="False"
-            VerticalOptions="FillAndExpand"
-            HorizontalOptions="FillAndExpand"
-            OnDetectionFinished="CameraOnDetectionFinished"
-            TorchOn="False"
-            PauseScanning="True"
-            CameraEnabled="False" />
+        <scanner:CameraView x:Name="nativeBarcode"
+                            Grid.Row="1"
+                            TapToFocusEnabled="True"
+                            IsVisible="False"
+                            VerticalOptions="FillAndExpand"
+                            HorizontalOptions="FillAndExpand"
+                            OnDetectionFinished="CameraOnDetectionFinished"
+                            TorchOn="False"
+                            PauseScanning="True"
+                            CameraEnabled="False" />
 
         <!--  Guides Lines over Camera  -->
-        <Grid
-            x:Name="guidesLines"
-            Grid.Row="1"
-            Padding="0,30,40,30"
-            IsVisible="True"
-            InputTransparent="True"
-            BackgroundColor="Transparent"
-            FlowDirection="LeftToRight"
-            VerticalOptions="FillAndExpand">
+        <Grid x:Name="guidesLines"
+              Grid.Row="1"
+              Padding="0,30,40,30"
+              IsVisible="True"
+              InputTransparent="True"
+              BackgroundColor="Transparent"
+              FlowDirection="LeftToRight"
+              VerticalOptions="FillAndExpand">
 
             <Grid>
                 <!--  top left  -->
-                <Line
-                    X1="37"
-                    Y1="0"
-                    X2="70"
-                    Y2="0" />
+                <Line X1="37"
+                      Y1="0"
+                      X2="70"
+                      Y2="0" />
 
-                <Line
-                    Margin="0,0,0,0"
-                    X1="40"
-                    X2="40"
-                    Y1="3"
-                    Y2="30" />
+                <Line Margin="0,0,0,0"
+                      X1="40"
+                      X2="40"
+                      Y1="3"
+                      Y2="30" />
 
                 <!--  bottom left  -->
-                <Line
-                    Margin="0,0,0,0"
-                    X1="40"
-                    Y1="3"
-                    X2="40"
-                    Y2="30"
-                    VerticalOptions="EndAndExpand" />
-                <Line
-                    Margin="0,0,0,0"
-                    X1="37"
-                    Y1="0"
-                    X2="70"
-                    Y2="0"
-                    VerticalOptions="EndAndExpand" />
+                <Line Margin="0,0,0,0"
+                      X1="40"
+                      Y1="3"
+                      X2="40"
+                      Y2="30"
+                      VerticalOptions="EndAndExpand" />
+                <Line Margin="0,0,0,0"
+                      X1="37"
+                      Y1="0"
+                      X2="70"
+                      Y2="0"
+                      VerticalOptions="EndAndExpand" />
 
             </Grid>
 
@@ -159,102 +149,93 @@
 
                 <!--  top right  -->
                 <!--  Top  X  -->
-                <Line
-                    X1="37"
-                    Y1="0"
-                    X2="70"
-                    Y2="0"
-                    HorizontalOptions="End" />
+                <Line X1="37"
+                      Y1="0"
+                      X2="70"
+                      Y2="0"
+                      HorizontalOptions="End" />
                 <!--  Top Y  -->
-                <Line
-                    Margin="0,0,0,0"
-                    X1="70"
-                    Y1="3"
-                    X2="70"
-                    Y2="30"
-                    HorizontalOptions="End" />
+                <Line Margin="0,0,0,0"
+                      X1="70"
+                      Y1="3"
+                      X2="70"
+                      Y2="30"
+                      HorizontalOptions="End" />
 
                 <!--  bottom right  -->
-                <Line
-                    Margin="0"
-                    X1="70"
-                    Y1="5"
-                    X2="70"
-                    Y2="30"
-                    HorizontalOptions="End"
-                    VerticalOptions="EndAndExpand" />
+                <Line Margin="0"
+                      X1="70"
+                      Y1="5"
+                      X2="70"
+                      Y2="30"
+                      HorizontalOptions="End"
+                      VerticalOptions="EndAndExpand" />
                 <!--  X  -->
-                <Line
-                    Margin="0"
-                    X1="40"
-                    Y1="0"
-                    X2="70"
-                    Y2="0"
-                    HorizontalOptions="End"
-                    VerticalOptions="EndAndExpand" />
+                <Line Margin="0"
+                      X1="40"
+                      Y1="0"
+                      X2="70"
+                      Y2="0"
+                      HorizontalOptions="End"
+                      VerticalOptions="EndAndExpand" />
             </Grid>
         </Grid>
 
         <!--  ===================================================================================================================  -->
         <!--  Data Content  -->
-        <Grid
-            x:Name="gridData"
-            Grid.Row="1"
-            Grid.RowSpan="4"
-            IsVisible="True"
-            ZIndex="1"
-            BackgroundColor="White"
-            RowDefinitions="Auto,*">
+        <Grid x:Name="gridData"
+              Grid.Row="1"
+              Grid.RowSpan="4"
+              IsVisible="True"
+              ZIndex="1"
+              BackgroundColor="White"
+              RowDefinitions="Auto,*">
 
             <!--  Product Name and Barcod  -->
             <VerticalStackLayout Grid.Row="0">
 
                 <!--  Name EN  -->
-                <Label
-                    Padding="20,0"
-                    Text="{Binding NameEn}"
-                    FlowDirection="LeftToRight"
-                    FontSize="24"
-                    TextColor="{StaticResource Primary800}" />
+                <Label Padding="20,0"
+                       Text="{Binding NameEn}"
+                       FlowDirection="LeftToRight"
+                       FontSize="24"
+                       TextColor="{StaticResource Primary800}" />
 
                 <!--  Name AR  -->
-                <Label
-                    Margin="0,-5,0,0"
-                    Padding="20,0"
-                    Text="{Binding NameAr}"
-                    FlowDirection="RightToLeft"
-                    FontSize="15"
-                    TextColor="{StaticResource Primary300}"
-                    BackgroundColor="Transparent" />
+                <Label Margin="0,-5,0,0"
+                       Padding="20,0"
+                       Text="{Binding NameAr}"
+                       FlowDirection="RightToLeft"
+                       FontSize="15"
+                       TextColor="{StaticResource Primary300}"
+                       BackgroundColor="Transparent" />
 
                 <!--  Barcod Section  -->
-                <HorizontalStackLayout
-                    Padding="20,0"
-                    Spacing="10"
-                    BackgroundColor="{StaticResource Primary800}">
+                <HorizontalStackLayout Padding="20,0" Spacing="10" BackgroundColor="{StaticResource Primary800}">
                     <!--  barcod Icon  -->
-                    <Label
-                        Text="{x:Static icon:IconFont.BarcodeScan}"
-                        FontFamily="{StaticResource IconFont}"
-                        TextColor="{StaticResource Primary050}"
-                        VerticalTextAlignment="Center" />
+                    <Label Text="{x:Static icon:IconFont.BarcodeScan}"
+                           FontFamily="{StaticResource IconFont}"
+                           TextColor="{StaticResource Primary050}"
+                           VerticalTextAlignment="Center" />
                     <!--  code number  -->
-                    <Label Text="{Binding Barcode}" TextColor="{StaticResource Primary050}" />
+                    <Label x:Name="lblBarcodeNumber" Text="{Binding Barcode}" TextColor="{StaticResource Primary050}" />
+                    <HorizontalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                    </HorizontalStackLayout.GestureRecognizers>
 
                 </HorizontalStackLayout>
             </VerticalStackLayout>
 
             <!--  DataTemplateStockDetails  -->
             <ScrollView Grid.Row="1">
-                <FlexLayout
-                    x:Name="flexLayoutItems"
-                    Padding="0"
-                    BindableLayout.ItemsSource="{Binding ListOfStoc}"
-                    IsClippedToBounds="True"
-                    Direction="Column"
-                    HorizontalOptions="Center"
-                    Wrap="NoWrap"
-                    JustifyContent="Start">
+                <FlexLayout x:Name="flexLayoutItems"
+                            Padding="0"
+                            BindableLayout.ItemsSource="{Binding ListOfStoc}"
+                            IsClippedToBounds="True"
+                            Direction="Column"
+                            HorizontalOptions="Center"
+                            Wrap="NoWrap"
+                            JustifyContent="Start">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
                             <VerticalStackLayout>
@@ -263,19 +244,15 @@
                                     <!--  Left Make Inventory  -->
                                     <SwipeView.LeftItems>
                                         <SwipeItems Mode="Execute">
-                                            <SwipeItemView
-                                                BackgroundColor="{StaticResource Primary950}"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PickingViewModel}}, Path=MakeInventoryCommand}"
-                                                CommandParameter="{Binding .}">
-                                                <Label
-                                                    x:Name="checkIcon"
-                                                    Margin="50,0"
-                                                    HorizontalOptions="Center"
-                                                    FontSize="24"
-                                                    TextColor="{StaticResource Primary050}"
-                                                    Text="{x:Static icon:IconFont.Check}"
-                                                    FontFamily="{StaticResource IconFont}"
-                                                    VerticalOptions="Center" />
+                                            <SwipeItemView BackgroundColor="{StaticResource Primary950}" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PickingViewModel}}, Path=MakeInventoryCommand}" CommandParameter="{Binding .}">
+                                                <Label x:Name="checkIcon"
+                                                       Margin="50,0"
+                                                       HorizontalOptions="Center"
+                                                       FontSize="24"
+                                                       TextColor="{StaticResource Primary050}"
+                                                       Text="{x:Static icon:IconFont.Check}"
+                                                       FontFamily="{StaticResource IconFont}"
+                                                       VerticalOptions="Center" />
                                             </SwipeItemView>
                                         </SwipeItems>
                                     </SwipeView.LeftItems>
@@ -284,37 +261,31 @@
                                     <SwipeView.RightItems>
                                         <SwipeItems SwipeBehaviorOnInvoked="Close">
                                             <SwipeItemView BackgroundColor="{StaticResource Primary950}">
-                                                <Button
-                                                    Margin="5,0"
-                                                    Padding="30,15"
-                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PickingViewModel}}, Path=CopyProductCommand}"
-                                                    CommandParameter="{Binding .}"
-                                                    Text="نسخ"
-                                                    VerticalOptions="Center" />
+                                                <Button Margin="5,0"
+                                                        Padding="30,15"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PickingViewModel}}, Path=CopyProductCommand}"
+                                                        CommandParameter="{Binding .}"
+                                                        Text="نسخ"
+                                                        VerticalOptions="Center" />
                                             </SwipeItemView>
                                         </SwipeItems>
                                     </SwipeView.RightItems>
 
                                     <!--  Content  -->
-                                    <Grid
-                                        Grid.Row="2"
-                                        ColumnDefinitions="45,*,45"
-                                        RowDefinitions="*,1"
-                                        BackgroundColor="{StaticResource White}">
+                                    <Grid Grid.Row="2"
+                                          ColumnDefinitions="45,*,45"
+                                          RowDefinitions="*,1"
+                                          BackgroundColor="{StaticResource White}">
 
                                         <!--  checkbox icon  -->
-                                        <Label
-                                            Margin="10,0"
-                                            InputTransparent="True"
-                                            Text="{x:Static icon:IconFont.CheckboxBlankCircle}"
-                                            Style="{StaticResource Iconline}"
-                                            TextColor="{StaticResource Primary200}"
-                                            VerticalOptions="Center">
+                                        <Label Margin="10,0"
+                                               InputTransparent="True"
+                                               Text="{x:Static icon:IconFont.CheckboxBlankCircle}"
+                                               Style="{StaticResource Iconline}"
+                                               TextColor="{StaticResource Primary200}"
+                                               VerticalOptions="Center">
                                             <Label.Triggers>
-                                                <DataTrigger
-                                                    TargetType="Label"
-                                                    Binding="{Binding IsInventoried}"
-                                                    Value="1">
+                                                <DataTrigger TargetType="Label" Binding="{Binding IsInventoried}" Value="1">
                                                     <Setter Property="Text" Value="{x:Static icon:IconFont.CheckboxMarkedCircle}" />
                                                     <Setter Property="TextColor" Value="{StaticResource Primary700}" />
                                                     <!--  Multiple Setter elements are allowed  -->
@@ -323,54 +294,39 @@
                                         </Label>
 
                                         <!--  Data  -->
-                                        <VerticalStackLayout
-                                            Grid.Column="1"
-                                            InputTransparent="True"
-                                            Spacing="0">
+                                        <VerticalStackLayout Grid.Column="1" InputTransparent="True" Spacing="0">
                                             <!--  Date Binding="{Binding Text.Length, Source={x:Reference dataLabel}}"  -->
                                             <!--  dd, mm, yyyy  ,StringFormat='{}{0:dd-MM-yyyy}'  -->
-                                            <Label
-                                                x:Name="dataLabel"
-                                                BackgroundColor="Transparent"
-                                                InputTransparent="True"
-                                                Text="{Binding ExpDate, StringFormat='{}{0:dd-MM-yyyy}'}"
-                                                FlowDirection="LeftToRight"
-                                                FontSize="23"
-                                                TextColor="{StaticResource Primary800}">
+                                            <Label x:Name="dataLabel"
+                                                   BackgroundColor="Transparent"
+                                                   InputTransparent="True"
+                                                   Text="{Binding ExpDate, StringFormat='{}{0:dd-MM-yyyy}'}"
+                                                   FlowDirection="LeftToRight"
+                                                   FontSize="23"
+                                                   TextColor="{StaticResource Primary800}">
                                                 <Label.Triggers>
-                                                    <DataTrigger
-                                                        TargetType="Label"
-                                                        Binding="{Binding ProductHasExpire}"
-                                                        Value="0">
+                                                    <DataTrigger TargetType="Label" Binding="{Binding ProductHasExpire}" Value="0">
                                                         <Setter Property="IsVisible" Value="False" />
                                                     </DataTrigger>
                                                 </Label.Triggers>
                                             </Label>
 
-                                            <HorizontalStackLayout
-                                                Margin="0,10,0,0"
-                                                Spacing="15"
-                                                InputTransparent="True">
+                                            <HorizontalStackLayout Margin="0,10,0,0" Spacing="15" InputTransparent="True">
 
                                                 <!--  Quantity  -->
-                                                <Frame
-                                                    Padding="15,0"
-                                                    InputTransparent="True"
-                                                    HasShadow="False"
-                                                    BackgroundColor="{StaticResource Primary100}"
-                                                    CornerRadius="6">
+                                                <Frame Padding="15,0"
+                                                       InputTransparent="True"
+                                                       HasShadow="False"
+                                                       BackgroundColor="{StaticResource Primary100}"
+                                                       CornerRadius="6">
                                                     <HorizontalStackLayout Spacing="3">
-                                                        <Label
-                                                            Margin="0"
-                                                            Padding="0,5"
-                                                            FontSize="22"
-                                                            Text="{Binding FormattedQuantity}"
-                                                            FontFamily="{StaticResource OpenSansRegular}"
-                                                            VerticalTextAlignment="End" />
-                                                        <Label
-                                                            Text="Stock"
-                                                            VerticalTextAlignment="End"
-                                                            FontSize="10" />
+                                                        <Label Margin="0"
+                                                               Padding="0,5"
+                                                               FontSize="22"
+                                                               Text="{Binding FormattedQuantity}"
+                                                               FontFamily="{StaticResource OpenSansRegular}"
+                                                               VerticalTextAlignment="End" />
+                                                        <Label Text="Stock" VerticalTextAlignment="End" FontSize="10" />
                                                     </HorizontalStackLayout>
                                                 </Frame>
 
@@ -378,59 +334,48 @@
                                             <StackLayout Orientation="Horizontal" InputTransparent="True">
 
                                                 <!--  Distributor  -->
-                                                <Label
-                                                    Margin="0,8,0,3"
-                                                    InputTransparent="True"
-                                                    Text="{Binding VendorNameAr}"
-                                                    FontSize="9"
-                                                    VerticalOptions="End" />
+                                                <Label Margin="0,8,0,3"
+                                                       InputTransparent="True"
+                                                       Text="{Binding VendorNameAr}"
+                                                       FontSize="9"
+                                                       VerticalOptions="End" />
                                                 <!--  Price  -->
-                                                <Frame
-                                                    Padding="15,0"
-                                                    InputTransparent="True"
-                                                    HorizontalOptions="EndAndExpand"
-                                                    HasShadow="False"
-                                                    BackgroundColor="Transparent"
-                                                    CornerRadius="6">
+                                                <Frame Padding="15,0"
+                                                       InputTransparent="True"
+                                                       HorizontalOptions="EndAndExpand"
+                                                       HasShadow="False"
+                                                       BackgroundColor="Transparent"
+                                                       CornerRadius="6">
                                                     <HorizontalStackLayout Spacing="3">
-                                                        <Label
-                                                            Margin="0"
-                                                            Padding="0"
-                                                            Text="{Binding FormattedPrice}"
-                                                            FontSize="18"
-                                                            VerticalTextAlignment="End" />
-                                                        <Label
-                                                            Text="L.E"
-                                                            VerticalTextAlignment="End"
-                                                            FontSize="10" />
+                                                        <Label Margin="0"
+                                                               Padding="0"
+                                                               Text="{Binding FormattedPrice}"
+                                                               FontSize="18"
+                                                               VerticalTextAlignment="End" />
+                                                        <Label Text="L.E" VerticalTextAlignment="End" FontSize="10" />
                                                     </HorizontalStackLayout>
                                                 </Frame>
                                             </StackLayout>
                                         </VerticalStackLayout>
                                         <!--  Edit Icon  -->
-                                        <Label
-                                            Grid.Column="2"
-                                            Margin="0"
-                                            InputTransparent="True"
-                                            Text="{x:Static icon:IconFont.SquareEditOutline}"
-                                            FontFamily="{StaticResource IconFont}"
-                                            FontSize="18"
-                                            VerticalTextAlignment="Center"
-                                            HorizontalOptions="Start" />
+                                        <Label Grid.Column="2"
+                                               Margin="0"
+                                               InputTransparent="True"
+                                               Text="{x:Static icon:IconFont.SquareEditOutline}"
+                                               FontFamily="{StaticResource IconFont}"
+                                               FontSize="18"
+                                               VerticalTextAlignment="Center"
+                                               HorizontalOptions="Start" />
                                         <!--  line separator  -->
-                                        <BoxView
-                                            Grid.Row="1"
-                                            Grid.ColumnSpan="3"
-                                            InputTransparent="True"
-                                            HeightRequest="0.5"
-                                            Color="{StaticResource Primary300}" />
+                                        <BoxView Grid.Row="1"
+                                                 Grid.ColumnSpan="3"
+                                                 InputTransparent="True"
+                                                 HeightRequest="0.5"
+                                                 Color="{StaticResource Primary300}" />
 
                                         <!--  Trigger for switch selected store  -->
                                         <Grid.Triggers>
-                                            <DataTrigger
-                                                TargetType="Grid"
-                                                Binding="{Binding IsSelected}"
-                                                Value="True">
+                                            <DataTrigger TargetType="Grid" Binding="{Binding IsSelected}" Value="True">
                                                 <Setter Property="BackgroundColor" Value="{StaticResource Primary200}" />
 
                                             </DataTrigger>
@@ -449,104 +394,101 @@
                 </FlexLayout>
             </ScrollView>
 
-            <StackLayout
-                Grid.RowSpan="2"
-                IsVisible="{Binding IsEmptyViewVisible}"
-                HorizontalOptions="Center"
-                VerticalOptions="Center">
+            <StackLayout Grid.RowSpan="2"
+                         IsVisible="{Binding IsEmptyViewVisible}"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center">
                 <Label Text="لا يوجد كميات لعرضها" FontSize="20" />
             </StackLayout>
         </Grid>
 
         <!--#region  Floats-->
-        <Grid
-            x:Name="popup"
-            Grid.Row="0"
-            Grid.RowSpan="4"
-            ZIndex="2"
-            IsVisible="{Binding IsEditPopupVisible}"
-            BackgroundColor="{StaticResource BackgroundTransparence}">
+        <Grid x:Name="popup"
+              Grid.Row="0"
+              Grid.RowSpan="4"
+              ZIndex="2"
+              IsVisible="{Binding IsEditPopupVisible}"
+              BackgroundColor="{StaticResource BackgroundTransparence}">
 
-            <Border
-                Margin="10,0"
-                VerticalOptions="Center"
-                MinimumHeightRequest="350"
-                Stroke="#00C49B33"
-                StrokeThickness="1"
-                FlowDirection="RightToLeft"
-                StrokeShape="RoundRectangle 6"
-                InputTransparent="False"
-                BackgroundColor="{AppThemeBinding Light={StaticResource Primary050},
-                                                  Dark={StaticResource Primary950}}">
-                <VerticalStackLayout
-                    Padding="25"
-                    Spacing="10"
+            <Border Margin="10,0"
                     VerticalOptions="Center"
-                    FlowDirection="LeftToRight">
+                    MinimumHeightRequest="350"
+                    Stroke="#00C49B33"
+                    StrokeThickness="1"
+                    FlowDirection="RightToLeft"
+                    StrokeShape="RoundRectangle 6"
+                    InputTransparent="False"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary050},
+                                                      Dark={StaticResource Primary950}}">
+                <VerticalStackLayout Padding="25"
+                                     Spacing="10"
+                                     VerticalOptions="Center"
+                                     FlowDirection="LeftToRight">
 
                     <!--  Quantity Section  -->
                     <Label Text="الكمية" Style="{StaticResource CentralLabel}" />
+
+
+
                     <!--  StepperS  -->
-                    <template:StepperField
+                    <!--<template:StepperField
                         x:Name="stepper"
                         Text="{Binding ModifiedQuantity}"
-                        HorizontalOptions="CenterAndExpand" />
+                        HorizontalOptions="CenterAndExpand" />-->
+
+
+
+                    <!--  ================================  -->
+                    <!--  Quntity Section  -->
+                    <!--  ================================  -->
+                    <VerticalStackLayout Grid.Row="2"
+                                         Margin="20,10"
+                                         Spacing="0"
+                                         FlowDirection="RightToLeft">
+                        <templateV2:StepperField x:Name="stepper" Title="الوحدة الكــبــرى" Text="{Binding LargUnitQuantity}" />
+                        <templateV2:StepperField Title="الوحدة المتوسطة"
+                                                 Margin="0,10,0,0"
+                                                 IsVisible="{Binding MediumUnitQuantityIsVisible}"
+                                                 Description="{Binding DescriptionUnit}"
+                                                 Text="{Binding MediumUnitQuantity}" />
+                    </VerticalStackLayout>
 
                     <!--  ExpiryDate Section  -->
                     <VerticalStackLayout IsVisible="{Binding IsExpiryDateFrameInPopupVisible}">
 
                         <!--  Title  -->
-                        <Label
-                            Margin="0,10,0,0"
-                            Text="تاريخ إنتهاء الصلاحية"
-                            Style="{StaticResource CentralLabel}" />
+                        <Label Margin="0,10,0,0" Text="تاريخ إنتهاء الصلاحية" Style="{StaticResource CentralLabel}" />
 
                         <!--  ExpiryDate Entry inside border  -->
-                        <Grid
-                            x:Name="yearMonthDayStack"
-                            ColumnDefinitions="*,*,*"
-                            ColumnSpacing="10">
-                            <template:UpDownStepper
-                                Text="{Binding Year}"
-                                MinimumValue="2020"
-                                TextPlaceholder="السنة" />
-                            <template:UpDownStepper
-                                Grid.Column="1"
-                                Text="{Binding Month}"
-                                MaximumValue="12"
-                                TextPlaceholder="الشهر" />
-                            <template:UpDownStepper
-                                Grid.Column="2"
-                                Text="{Binding Day}"
-                                MaximumValue="31"
-                                TextPlaceholder="اليوم" />
+                        <Grid x:Name="yearMonthDayStack" ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                            <template:UpDownStepper Text="{Binding Year}" MinimumValue="2020" TextPlaceholder="السنة" />
+                            <template:UpDownStepper Grid.Column="1"
+                                                    Text="{Binding Month}"
+                                                    MaximumValue="12"
+                                                    TextPlaceholder="الشهر" />
+                            <template:UpDownStepper Grid.Column="2"
+                                                    Text="{Binding Day}"
+                                                    MaximumValue="31"
+                                                    TextPlaceholder="اليوم" />
                         </Grid>
                     </VerticalStackLayout>
 
                     <!--  Save Button  -->
-                    <Button
-                        Margin="0,0,0,0"
-                        Text="حفظ التعديلات"
-                        Command="{Binding SaveChangesCommand}">
+                    <Button Margin="0,0,0,0" Text="حفظ التعديلات" Command="{Binding SaveChangesCommand}">
                         <Button.Triggers>
-                            <DataTrigger
-                                TargetType="Button"
-                                Binding="{Binding PopupType}"
-                                Value="editAndCopy">
+                            <DataTrigger TargetType="Button" Binding="{Binding PopupType}" Value="editAndCopy">
                                 <Setter Property="Text" Value="حفظ كـنسخة مختلفة" />
                                 <Setter Property="BackgroundColor" Value="{StaticResource Secondary900}" />
                             </DataTrigger>
                         </Button.Triggers>
                     </Button>
+
                 </VerticalStackLayout>
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="Popup_HideSoftInput_Tapped" />
                 </Border.GestureRecognizers>
                 <Border.Triggers>
-                    <DataTrigger
-                        TargetType="Border"
-                        Binding="{Binding PopupType}"
-                        Value="editAndCopy">
+                    <DataTrigger TargetType="Border" Binding="{Binding PopupType}" Value="editAndCopy">
                         <Setter Property="BackgroundColor" Value="{StaticResource Primary200}" />
                     </DataTrigger>
                 </Border.Triggers>
@@ -557,19 +499,15 @@
             </Grid.GestureRecognizers>
         </Grid>
 
-        <ActivityIndicator
-            Grid.Row="0"
-            Grid.RowSpan="4"
-            VerticalOptions="Center"
-            ZIndex="4"
-            IsRunning="{Binding ActivityIndicatorRunning}"
-            Color="{StaticResource Primary600}" />
-        
+        <ActivityIndicator Grid.Row="0"
+                           Grid.RowSpan="4"
+                           VerticalOptions="Center"
+                           ZIndex="4"
+                           IsRunning="{Binding ActivityIndicatorRunning}"
+                           Color="{StaticResource Primary600}" />
+
         <!--#endregion-->
-        <template:NotificationTemplate
-            x:Name="notification"
-            Grid.RowSpan="5"
-            ZIndex="5" />
+        <template:NotificationTemplate x:Name="notification" Grid.RowSpan="5" ZIndex="5" />
     </Grid>
 
 </ContentPage>

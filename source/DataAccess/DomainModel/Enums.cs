@@ -63,6 +63,10 @@ public enum ErrorCode
 
     // Database Errors
     DatabaseConnectionFailed = 4000,
+
+    ExpDateIsExist = 50,
+    PriceNotEqual = 51
+
 }
 
 public enum InputType

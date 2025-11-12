@@ -8,6 +8,7 @@ using DataAccess.Services;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.Models;
+using PharmaStoreInventory.Models.Parameters;
 using PharmaStoreInventory.Models.User;
 
 namespace PharmaStoreInventory.Services;
@@ -202,7 +203,7 @@ public static class ApiServices
                 {
                     if (response.User != null)
                     {
-                        AppPreferences.LocalDbUserId = response.User.Id;
+                        AppPreferences.LocalDbUserId = response.Employee != null ? response.Employee.Id : 0000;
                         AppPreferences.Token = "Bearer " + response.AccessToken;
                         return (ConnectionErrorCode.Success, string.Empty);
                     }
@@ -355,6 +356,130 @@ public static class ApiServices
         var model = new EmailVerificationParameters(evcId, code);
         return await RequestProvider.PutAsync<Result, EmailVerificationParameters>(url, model);
     }
+    #endregion
+
+    #region StartStock
+    public static async Task<PagedResult<ProductUnitsDto>> GetAllProductsWithUnitsAsync(string? searchTerm , bool isBarcod)
+    {
+        try
+        {
+            // إعداد المعاملات (Query Parameters)
+            var queryParams = new Dictionary<string, string?>
+            {
+                { "PageSize", "100" },
+                { "IsBarcod", isBarcod.ToString() },
+                { "SearchTerm", searchTerm }
+            };
+
+            // بناء الرابط
+            var url = $"{AppValues.LocalBaseURI}/v2/Products/find-with-units" + await BuildQueryString(queryParams);
+
+            // تنفيذ الطلب
+            var response = await RequestProvider.GetAllAsync<ProductUnitsDto>(url, AppPreferences.Token);
+
+            // التحقق من النتيجة
+            if (response == null)
+                return PagedResult<ProductUnitsDto>.Failure("No response from server.");
+
+            // إذا فشل الطلب
+            if (response.IsSuccess == false)
+            {
+                //WeakReferenceMessenger.Default.Send(new NotificationMessage(new ErrorMessage() { Body =  response.Message }));
+                //await Alerts.DisplaySnackBar("GetProducts failed: " + response.Message);
+                return response;
+            }
+
+            // نجاح الطلب
+            //WeakReferenceMessenger.Default.Send(new NotificationMessage("Products fetched successfully."));
+            //await Alerts.DisplaySnackBar("Products loaded successfully.");
+            return response;
+        }
+        catch (Exception ex)
+        {
+            // في حالة حدوث خطأ غير متوقع
+            var errorMessage = $"GetProducts error: {ex.Message}";
+            //WeakReferenceMessenger.Default.Send(new NotificationMessage(errorMessage));
+            await Alerts.DisplaySnackBar(errorMessage);
+            return PagedResult<ProductUnitsDto>.Failure(errorMessage);
+        }
+    }
+
+
+    public static async Task<Result<ProductDetailsDto?>> GetByProductAndStoreAndExpDateAsync(ProductExistParameters param)
+    {
+        try
+        {
+            // إعداد المعاملات (Query Parameters)
+            var queryParams = new Dictionary<string, string?>
+            {
+                { "productId", param.ProductId.ToString() },
+                { "storeId", param.StoreId.ToString() },
+                { "expDate", param.ExpDate.ToString("yyyy-MM-dd") }
+            };
+
+            // بناء الرابط
+            var url = $"{AppValues.LocalBaseURI}/v2/StartStock/get_by_product_Store_ExpDate" + await BuildQueryString(queryParams);
+
+            // تنفيذ الطلب
+            var response = await RequestProvider.GetSingleAsync<Result<ProductDetailsDto?>>(url);
+
+            // التحقق من النتيجة
+            if (response == null)
+                return Result<ProductDetailsDto?>.Failure("No response from server.");
+
+            // إذا فشل الطلب
+            if (response.IsSuccess == false)
+            {
+                //WeakReferenceMessenger.Default.Send(new NotificationMessage(new ErrorMessage() { Body =  response.Message }));
+                await Alerts.DisplaySnackBar("GetProducts failed: " + response.Message);
+                return response;
+            }
+
+            // نجاح الطلب
+            // WeakReferenceMessenger.Default.Send(new NotificationMessage("Products fetched successfully."));
+            await Alerts.DisplaySnackBar("Products loaded successfully.");
+            return response;
+        }
+        catch (Exception ex)
+        {
+            // في حالة حدوث خطأ غير متوقع
+            var errorMessage = $"GetProducts error: {ex.Message}";
+            // WeakReferenceMessenger.Default.Send(new NotificationMessage(errorMessage));
+            await Alerts.DisplaySnackBar(errorMessage);
+            return Result<ProductDetailsDto?>.Failure(errorMessage);
+        }
+    }
+
+    public static async Task<Result<decimal>?> CreatStartStockHeaderAsync(StartStockHeader model)
+    {
+        var url = AppValues.LocalBaseURI + "/v2/StartStock";
+        var (content, error) = await RequestProvider.PostSingleAsync<Result<decimal>, StartStockHeader>(url, model);
+        
+        if (error != null)
+        {
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
+        }
+        return content;
+    }
+
+    public static async Task<Result<ProductDetailsDto>?> CreatStartStockDetailsAsync(CreateStartStockDetails model)
+    {
+        var url = AppValues.LocalBaseURI + "/v2/StartStock/details";
+        var (content, error) = await RequestProvider.PostSingleAsync<Result<ProductDetailsDto>, CreateStartStockDetails>(url, model);
+        
+        if (error != null)
+        {
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
+        }
+        return content;
+    }
+
+    public static async Task<Result?> UpdateProductQuantityWithHistoryAsync(UpdateStartStockDetails model)
+    {
+        var url = AppValues.LocalBaseURI + "/v2/StartStock/update";
+        return await RequestProvider.PutAsync<Result, UpdateStartStockDetails>(url, model);
+    }
+
     #endregion
 
     // BuildQueryString

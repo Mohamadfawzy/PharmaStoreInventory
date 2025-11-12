@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="PharmaStoreInventory.Views.EditProAmountView"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:templateV2="clr-namespace:PharmaStoreInventory.Views.Templates.V2"
+             xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates"
+             xmlns:vm="clr-namespace:PharmaStoreInventory.ViewModels"
+             Title="EditProAmountView"
+             x:DataType="vm:EditProAmountViewModel">
+
+    <!--<ContentPage.BindingContext>
+        <vm:EditProAmountViewModel/>
+    </ContentPage.BindingContext>-->
+
+    <Grid>
+
+        <!--  Content  -->
+        <ScrollView>
+            <Grid BackgroundColor="White" RowDefinitions="Auto,Auto,Auto,Auto,Auto,*">
+
+                <!--  ================================  -->
+                <!--  Row 0 Title & Colse Icon  -->
+                <!--  ================================  -->
+
+                <!--  Close icon  -->
+                <ImageButton Margin="20"
+                             Padding="0"
+                             BackgroundColor="WhiteSmoke"
+                             Source="close_red.svg"
+                             Aspect="Center"
+                             HeightRequest="40"
+                             WidthRequest="40"
+                             CornerRadius="40"
+                             VerticalOptions="Start"
+                             HorizontalOptions="End"
+                             Clicked="OnCloseClicked" />
+
+                <!--  Title  -->
+                <Label Margin="10,0"
+                       Text="اضافة صنف"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start" />
+
+                <!--  ================================  -->
+                <!--  Row 1 Product Name  -->
+                <!--  ================================  -->
+                <VerticalStackLayout Grid.Row="1">
+                    <Label Margin="20,0"
+                           Text="{Binding ProductName}"
+                           HorizontalTextAlignment="Center"
+                           FontSize="16" />
+                    <Label Margin="20,0"
+                           Text="{Binding Barcode, StringFormat='#{0}'}"
+                           HorizontalTextAlignment="Center"
+                           FontSize="14" />
+                </VerticalStackLayout>
+
+
+                <!--  ================================  -->
+                <!--  Row 2 Quntity Section  -->
+                <!--  ================================  -->
+                <VerticalStackLayout Grid.Row="2" Margin="20,10" Spacing="0">
+                    <Label Margin="10,0"
+                           Text="الكمية"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Start" />
+                    <templateV2:StepperField Title="الوحدة الكــبــرى" Text="{Binding LargUnitQuantity}" />
+                    <templateV2:StepperField Title="الوحدة المتوسطة"
+                                             Margin="0,10,0,0"
+                                             IsVisible="{Binding MediumUnitQuantityIsVisible}"
+                                             Description="{Binding DescriptionUnit}"
+                                             Text="{Binding MediumUnitQuantity}" />
+                </VerticalStackLayout>
+
+                <!--  ================================  -->
+                <!--  Row 3 Price Section  -->
+                <!--  ================================  -->
+                <Grid Grid.Row="3"
+                      Margin="20"
+                      ColumnDefinitions="*,*"
+                      RowDefinitions="Auto,Auto"
+                      ColumnSpacing="10">
+
+                    <!--  Price input  -->
+                    <VerticalStackLayout Grid.ColumnSpan="2">
+                        <Label Text="السعر" />
+                        <Border Padding="20,0" StrokeShape="RoundRectangle 16">
+                            <Grid>
+                                <Entry FontSize="18"
+                                       Text="{Binding Price}"
+                                       Keyboard="Numeric"
+                                       HorizontalTextAlignment="Center" />
+                                <Label Grid.Row="0"
+                                       Grid.Column="1"
+                                       Text="جنيه"
+                                       HorizontalOptions="End"
+                                       VerticalTextAlignment="Center" />
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!--  VendorDiscountRate input  -->
+                    <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+                        <Label Text="نسبة الخصم" />
+                        <Border Padding="20,0" StrokeShape="RoundRectangle 16">
+                            <Grid>
+                                <Entry FontSize="18" Text="{Binding VendorDiscountRate}" Keyboard="Numeric" />
+                                <Label Grid.Row="0"
+                                       Grid.Column="1"
+                                       Text="%"
+                                       HorizontalOptions="End"
+                                       VerticalTextAlignment="Center" />
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!--  Tax Price input  -->
+                    <VerticalStackLayout Grid.Row="1" Grid.Column="0">
+                        <Label Text="الضريبة" />
+                        <Border Padding="20,0" StrokeShape="RoundRectangle 16">
+                            <Grid>
+                                <Entry FontSize="18" Text="{Binding TaxPrice}" Keyboard="Numeric" />
+                                <Label Grid.Row="0"
+                                       Grid.Column="1"
+                                       Text="جنيه"
+                                       HorizontalOptions="End"
+                                       VerticalTextAlignment="Center" />
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+
+                </Grid>
+
+                <!--  ================================  -->
+                <!--  Row 4 ExpryDate Section  -->
+                <!--  ================================  -->
+
+                <Grid x:Name="yearMonthDayStack"
+                      Grid.Row="4"
+                      Margin="20"
+                      ColumnDefinitions="*,*,*"
+                      ColumnSpacing="10"
+                      IsVisible="{Binding IsExpiryDateFrameInPopupVisible}">
+                    <template:UpDownStepper Text="{Binding Year}" MinimumValue="2020" TextPlaceholder="السنة" />
+                    <template:UpDownStepper Grid.Column="1"
+                                            Text="{Binding Month}"
+                                            MaximumValue="12"
+                                            TextPlaceholder="الشهر" />
+                    <template:UpDownStepper Grid.Column="2"
+                                            Text="{Binding Day}"
+                                            MaximumValue="31"
+                                            TextPlaceholder="اليوم" />
+                </Grid>
+
+                <!--  ================================  -->
+                <!--  Row 5 Submit Button  -->
+                <!--  ================================  -->
+
+                <Button Grid.Row="5"
+                        Margin="20,5,20,30"
+                        VerticalOptions="Start"
+                        Text="save"
+                        Command="{Binding SubmitCommand}" />
+
+                <Grid.Triggers>
+                    <DataTrigger TargetType="Grid" Binding="{Binding ContentInputTransparent}" Value="true">
+                        <Setter Property="InputTransparent" Value="True" />
+                    </DataTrigger>
+
+                </Grid.Triggers>
+            </Grid>
+        </ScrollView>
+
+        <!--  ================================  -->
+        <!--  Row span Popups  -->
+        <!--  ================================  -->
+
+        <!--  Confirm Edit quntity  -->
+        <Grid Grid.Row="0"
+              Grid.RowSpan="6"
+              BackgroundColor="{StaticResource BackgroundTransparence}"
+              IsVisible="{Binding ConfirmEditQuntityVisible}">
+            <Border Margin="20"
+                    Padding="20"
+                    VerticalOptions="Center"
+                    BackgroundColor="White"
+                    StrokeShape="RoundRectangle 16">
+                <VerticalStackLayout>
+                    <!--  Close icon  -->
+                    <ImageButton Margin="0"
+                                 Padding="0"
+                                 BackgroundColor="WhiteSmoke"
+                                 Source="close_red.svg"
+                                 Aspect="Center"
+                                 HeightRequest="40"
+                                 WidthRequest="40"
+                                 CornerRadius="40"
+                                 VerticalOptions="Start"
+                                 HorizontalOptions="End"
+                                 Command="{Binding ToggleConfirmEditQuntityCommand}" />
+                    <Label Padding="0,0,0,30" Text="{Binding MessageInPopupConfirmEditQuntity}" />
+                    <Button Text="تعديل الكمية فقط" Command="{Binding EditQuntityCommand}" />
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
+        <!--  Notification  -->
+        <template:NotificationTemplate x:Name="notification" Grid.RowSpan="5" />
+
+        <!--  Activity Indicator  -->
+        <ActivityIndicator Margin="40" IsRunning="{Binding IsBusy}" VerticalOptions="Start" />
+    </Grid>
+</ContentPage>

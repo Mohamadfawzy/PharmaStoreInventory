@@ -1,12 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <?xaml-comp compile="true" ?>
-<ResourceDictionary
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-    xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
-    xmlns:res="clr-namespace:PharmaStoreInventory.Languages"
-    xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                    xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
+                    xmlns:res="clr-namespace:PharmaStoreInventory.Languages"
+                    xmlns:template="clr-namespace:PharmaStoreInventory.Views.Templates">
 
     <!--  Custom Control styles  -->
 
@@ -17,14 +16,13 @@
         <Setter Property="InputBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Primary950}}" />
     </Style>
     <!--  End Custom Control styles  -->
-    <FontImageSource
-        x:Key="ArrowNextIconImageSource"
-        FontAutoScalingEnabled="True"
-        FontFamily="{StaticResource IconFont}"
-        Size="22"
-        Glyph="{x:Static icon:IconFont.ChevronDoubleLeft}"
-        Color="{AppThemeBinding Light=White,
-                                Dark=White}" />
+    <FontImageSource x:Key="ArrowNextIconImageSource"
+                     FontAutoScalingEnabled="True"
+                     FontFamily="{StaticResource IconFont}"
+                     Size="22"
+                     Glyph="{x:Static icon:IconFont.ChevronDoubleLeft}"
+                     Color="{AppThemeBinding Light=White,
+                                             Dark=White}" />
 
     <Style TargetType="ActivityIndicator">
         <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary600}, Dark={StaticResource White}}" />

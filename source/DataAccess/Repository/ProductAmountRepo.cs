@@ -116,12 +116,12 @@ public class ProductAmountRepo(AppDb context)
          */
     }
 
-    public async Task<ProductDetailsDto?> GetProductById(int id)
-    {
-        var pro = await context.Product_Amount
-            .FirstOrDefaultAsync(x => x.Pa_id == id);
-        return (ProductDetailsDto?)pro;
-    }
+    //public async Task<ProductDetailsDto?> GetProductById(int id)
+    //{
+    //    var pro = await context.Product_Amount
+    //        .FirstOrDefaultAsync(x => x.Pa_id == id);
+    //    return (ProductDetailsDto?)pro;
+    //}
 
     public async Task<Result> UpdateInventoryStatus(bool allOneTime, string status, int productId, int expiryBatchID)
     {

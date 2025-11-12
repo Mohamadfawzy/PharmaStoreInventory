@@ -14,4 +14,6 @@ internal static class AppValues
     public static bool LeftScanIcon = false;
     public static bool ProductHasQuantityOnly = false;
     public static bool IsDevelopment = false;
+    //public static decimal StartStockId = 0;
+    //public static decimal StartStockDetailsId = 0;
 }

@@ -1,15 +1,19 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using DataAccess.DomainModel;
 using DataAccess.Dtos;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.Models;
 using PharmaStoreInventory.Services;
+using PharmaStoreInventory.Views;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 namespace PharmaStoreInventory.ViewModels;
 
-public class DashboardViewModel : BaseViewModel
+public partial class DashboardViewModel : BaseViewModel
 {
     //###########*Fields*###############
     #region Private Fields
@@ -27,6 +31,7 @@ public class DashboardViewModel : BaseViewModel
     public DashboardViewModel()
     {
         storeId = AppPreferences.StoreId;
+        GetLatestStartStockDate();
         Task.Run(OnStart);
     }
 
@@ -55,6 +60,12 @@ public class DashboardViewModel : BaseViewModel
         get => confirmNewInventoryVisibility;
         set => SetProperty(ref confirmNewInventoryVisibility, value);
     }
+
+    public bool ConfirmStartStockExecutionVisibility
+    {
+        get => confirmNewInventoryVisibility;
+        set => SetProperty(ref confirmNewInventoryVisibility, value);
+    }
     public bool IsStoresPopupVisible
     {
         get => isStoresPopupVisible;
@@ -64,6 +75,9 @@ public class DashboardViewModel : BaseViewModel
     public int CountAllExpiredProducts { get; set; }
     public int CountAllProductsWillExpireAfter3Months { get; set; }
     public int CountAllIsInventoryed { get; set; }
+
+    [ObservableProperty]
+    private string latestStartStockDate;
     #endregion
 
     //############*Commands*############
@@ -73,8 +87,10 @@ public class DashboardViewModel : BaseViewModel
     public ICommand StoreSelectionChangedCommand => new Command<SortModel>(ExecuteStoreSelectionChanged);
     public ICommand ToggleStoresPopupVisibilityCommand => new Command<string>(ExecuteToggleStoresPopupVisibility);
     public ICommand ToggleConfirmNewInventoryVisibilityCommand => new Command(() => ConfirmNewInventoryExecutionVisibility = !ConfirmNewInventoryExecutionVisibility);
+    public ICommand ToggleConfirmStartStockVisibilityCommand => new Command(() => ConfirmStartStockExecutionVisibility = !ConfirmStartStockExecutionVisibility);
     public ICommand SubmitStoreSelectionChangedCommand => new Command(ExecuteSubmitStoreSelectionChanged);
     public ICommand StartNewInventoryCommand => new Command<string>(ExecuteStartNewInventory);
+    public ICommand CreateStartStockCommand => new Command<string>(ExecuteCreateStartStock);
     public ICommand TryToRefreshCommand => new Command(ExecuteTryToRefresh);
     #endregion
 
@@ -177,6 +193,35 @@ public class DashboardViewModel : BaseViewModel
     }
     #endregion
 
+
+    [RelayCommand]
+    public async void GoToProductSearchPage()
+    {
+        if(!CanBeginStartStock())
+        {
+            Notfication("لا يوجد اي فاتورة ارصدة", "قم بإنشاء فاتورة ارصدة أولا");
+            return;
+        }
+
+        if (Application.Current != null && Application.Current.MainPage != null)
+        {
+            await Application.Current.MainPage.Navigation.PushAsync(new ProductSearchView());
+        }
+    }
+
+    [RelayCommand]
+    public async Task GoToPickingProductsPage()
+    {
+        if (!CanBeginStartStock())
+        {
+            Notfication("لا يوجد اي فاتورة ارصدة", "قم بإنشاء فاتورة ارصدة أولا");
+            return;
+        }
+        if (Application.Current != null && Application.Current.MainPage != null)
+        {
+            await Application.Current.MainPage.Navigation.PushAsync(new PickingProductsView());
+        }
+    }
     //#########*ExecuteMethods*#########
     #region Exectue Methods
     private async void ExecuteCRefresh()
@@ -233,6 +278,7 @@ public class DashboardViewModel : BaseViewModel
         }
     }
 
+
     private async void ExecuteStartNewInventory(string commandParameter)
     {
         try
@@ -271,6 +317,64 @@ public class DashboardViewModel : BaseViewModel
             await Helpers.Alerts.DisplaySnackBar(ex.Message, 7);
         }
     }
+
+    private async void ExecuteCreateStartStock(string commandParameter)
+    {
+        try
+        {
+            ActivityIndicatorRunning = true;
+            if (commandParameter == "init")
+            {
+                ConfirmStartStockExecutionVisibility = true;
+                return;
+            }
+
+            if (commandParameter == "new")
+            {
+                var startStockHeader = new StartStockHeader
+                {
+                    Store_id = AppPreferences.StoreId,
+                    Product_number = 0,
+                    Total_bill = 0m,
+                    Cashier_id = AppPreferences.LocalDbUserId,
+                    Notes = "Stock initialized from mobile",
+                    Insert_uid = AppPreferences.LocalDbUserId,
+                    Insert_date = DateTime.Now
+                };
+
+                var result = await ApiServices.CreatStartStockHeaderAsync(startStockHeader);
+                if (result == null || !result.IsSuccess)
+                {
+                    WeakReferenceMessenger.Default
+                   .Send(new DashboardViewNotification(new ErrorMessage("خطأ في النظام", "لم يتم إنشاء فاتورة جديدة")));
+                    return;
+
+                }
+                AppPreferences.StartStockId = (int)result.Data;
+            }
+
+            AppPreferences.LatestStartStockDate = DateTime.Now.ToString("dd-MM-yyyy");
+            WeakReferenceMessenger.Default.Send(new DashboardViewNotification
+            (new ErrorMessage("انشاء فاتورة", $"تم انشاء فاتورة أرصدة افتاحية جديدة برقم  {AppPreferences.StartStockId}")));
+            GetLatestStartStockDate();
+
+            //if (Application.Current != null && Application.Current.MainPage != null)
+            //{
+            //    await Application.Current.MainPage.Navigation.PushAsync(new PickingProductsView());
+            //}
+            ConfirmStartStockExecutionVisibility = false;
+        }
+        catch (Exception ex)
+        {
+            await Helpers.Alerts.DisplaySnackBar(ex.Message, 7);
+        }
+        finally
+        {
+            ActivityIndicatorRunning = false;
+        }
+    }
+
+
     #endregion
 
     //###########*Processors*###########
@@ -294,6 +398,29 @@ public class DashboardViewModel : BaseViewModel
         var t3 = GetProductCountsAsync();
         await Task.WhenAll(t0, t1, t2, t3);
         //ActivityIndicatorRunning = false;
+    }
+
+    private void GetLatestStartStockDate()
+    {
+        if (string.IsNullOrEmpty(AppPreferences.LatestStartStockDate))
+        {
+            LatestStartStockDate = "لا يوجد اي فاتورة أرصدة";
+        }
+        else
+            LatestStartStockDate = "تاريخ آخر فاتورة أرصدة" + " " + AppPreferences.LatestStartStockDate;
+    }
+
+    bool CanBeginStartStock()
+    {
+
+        if (AppPreferences.StartStockId == 0)
+           return false;
+        return true;
+    }
+
+    private void Notfication(string title, string body)
+    {
+        WeakReferenceMessenger.Default.Send(new DashboardViewNotification(new ErrorMessage(title, body)));
     }
     #endregion
 }
