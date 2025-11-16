@@ -36,10 +36,15 @@
                              Clicked="OnCloseClicked" />
 
                 <!--  Title  -->
-                <Label Margin="10,0"
-                       Text="اضافة صنف"
-                       VerticalOptions="Center"
-                       HorizontalOptions="Start" />
+                <HorizontalStackLayout>
+                    <Label Margin="10,0" Text="اضافة صنف" VerticalOptions="Center" />
+                    <Label Margin="10,0"
+                           TextColor="{StaticResource Primary500}"
+                           Text="{Binding Barcode, StringFormat='#{0}'}"
+                           HorizontalTextAlignment="Center"
+                           VerticalOptions="Center"
+                           FontSize="14" />
+                </HorizontalStackLayout>
 
                 <!--  ================================  -->
                 <!--  Row 1 Product Name  -->
@@ -49,10 +54,18 @@
                            Text="{Binding ProductName}"
                            HorizontalTextAlignment="Center"
                            FontSize="16" />
-                    <Label Margin="20,0"
-                           Text="{Binding Barcode, StringFormat='#{0}'}"
-                           HorizontalTextAlignment="Center"
-                           FontSize="14" />
+                    <HorizontalStackLayout HorizontalOptions="Center">
+                        <Label Margin="10,0"
+                               TextColor="{StaticResource Gray400}"
+                               Text="الرصيد المتاح"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Start" />
+                        <Label Margin="10,0"
+                               TextColor="{StaticResource Gray400}"
+                               Text="{Binding TotalQuantitiesProduct}"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Start" />
+                    </HorizontalStackLayout>
                 </VerticalStackLayout>
 
 

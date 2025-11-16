@@ -195,7 +195,7 @@
                                                               BorderColor="#A71113"
                                                               Number="{Binding StatisticsModel.ExpiredProducts}" />
 
-                            <template:DashboardNumberTemplate Title="تنتهي صلاحيتها بعد 3 أشهر"
+                            <template:DashboardNumberTemplate Title="تنتهي صلاحيتها خلال 3 أشهر"
                                                               Grid.Row="1"
                                                               Grid.Column="1"
                                                               BorderColor="#F8A23A"

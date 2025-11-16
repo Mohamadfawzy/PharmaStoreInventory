@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using DataAccess.DomainModel;
 using DataAccess.Dtos;
+using DataAccess.Entities;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.Models;
@@ -18,6 +19,7 @@ public partial class EditProAmountViewModel : ObservableObject
     {
         SelectedProduct = product;
         Init();
+        GetTotalAmount();
     }
 
     [ObservableProperty]
@@ -49,6 +51,9 @@ public partial class EditProAmountViewModel : ObservableObject
     private string barcode;
     [ObservableProperty]
     private string messageInPopupConfirmEditQuntity = "";
+
+    [ObservableProperty]
+    private string? totalQuantitiesProduct;
 
     [ObservableProperty]
     private string descriptionUnit;
@@ -144,7 +149,7 @@ public partial class EditProAmountViewModel : ObservableObject
                 InType = "1",
                 FormType = 6,
             };
-            CurrnetCreateStartStockDetails.ExpiryDate = CurrentExpiryDate.HasValue ? CurrentExpiryDate.Value : null ;
+            CurrnetCreateStartStockDetails.ExpiryDate = CurrentExpiryDate.HasValue ? CurrentExpiryDate.Value : null;
 
             var respose = await ApiServices.CreatStartStockDetailsAsync(CurrnetCreateStartStockDetails);
 
@@ -154,22 +159,22 @@ public partial class EditProAmountViewModel : ObservableObject
                 return;
             }
 
+            if (respose.IsSuccess)
+            {
+                await Application.Current.MainPage.Navigation.PopModalAsync();
+                return;
+            }
+
             if (respose.Data == null)
             {
                 Notfication("فقد في البيانات", "لم يتم العثور علي المنتج");
                 return;
             }
-
-
             ResponseProduct = respose.Data;
 
-            if (respose.IsSuccess)
+            if (respose.ErrorCode == ErrorCode.ExpDateIsExist && SelectedProduct.ProductHasExpire == "0")
             {
-                await Application.Current.MainPage.Navigation.PopModalAsync();
-            }
-            else if(respose.ErrorCode == ErrorCode.ExpDateIsExist && SelectedProduct.ProductHasExpire == "0")
-            {
-                Notfication("المنتج له كمية","يمكنك تعديل الكمية");
+                Notfication("المنتج له كمية", "يمكنك تعديل الكمية");
                 MessageInPopupConfirmEditQuntity = "يوجد رصيد لهذه المنتج يمكنكك تعديل الكمية";
                 ConfirmEditQuntityVisible = true;
             }
@@ -212,7 +217,7 @@ public partial class EditProAmountViewModel : ObservableObject
                 ProductId = ResponseProduct.ProductId,
                 OldQuantity = ResponseProduct.Quantity,
                 NewQuantity = ModifiedQuantity + ResponseProduct.Quantity,
-                
+
                 ProductUnit1 = ResponseProduct.ProductUnit1,
                 Notes = "from post mobile",
                 EmpId = AppPreferences.LocalDbUserId.ToString(),
@@ -255,6 +260,8 @@ public partial class EditProAmountViewModel : ObservableObject
         finally
         {
             IsBusy = false;
+            ConfirmEditQuntityVisible = false;
+            ContentInputTransparent = false;
         }
     }
 
@@ -265,6 +272,24 @@ public partial class EditProAmountViewModel : ObservableObject
         ContentInputTransparent = false;
     }
 
+
+    private async void GetTotalAmount()
+    {
+        try
+        {
+            var result = await ApiServices.GetTotalAmountAsync(AppPreferences.StoreId, SelectedProduct.ProductId);
+            
+            if (result != null && result.IsSuccess && result.Data != null)
+            {
+                TotalQuantitiesProduct = result.Data.ToString();
+
+            }
+        }
+        catch (Exception ex)
+        {
+            await Helpers.Alerts.DisplaySnackBar(ex.Message, 7);
+        }
+    }
     void AggregationExpiryDate()
     {
         if (Year < 1) return;
@@ -276,4 +301,7 @@ public partial class EditProAmountViewModel : ObservableObject
         WeakReferenceMessenger.Default.Send(new NotificationMessage(new ErrorMessage(title, body)));
 
     }
+
+
+
 }

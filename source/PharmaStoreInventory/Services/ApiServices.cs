@@ -450,6 +450,20 @@ public static class ApiServices
         }
     }
 
+    public static async Task<Result<decimal?>?> GetTotalAmountAsync(int storeId, decimal productId)
+    {
+        try
+        {
+            var url = $"{AppValues.LocalBaseURI}/v2/Products/total-amount/{storeId}/{productId}";
+
+            return await RequestProvider.GetSingleAsync<Result<decimal?>>(url);
+        }
+        catch (Exception ex)
+        {
+            return Result<decimal?>.Failure(ex.Message);
+        }
+    }
+
     public static async Task<Result<decimal>?> CreatStartStockHeaderAsync(StartStockHeader model)
     {
         var url = AppValues.LocalBaseURI + "/v2/StartStock";
@@ -479,7 +493,6 @@ public static class ApiServices
         var url = AppValues.LocalBaseURI + "/v2/StartStock/update";
         return await RequestProvider.PutAsync<Result, UpdateStartStockDetails>(url, model);
     }
-
     #endregion
 
     // BuildQueryString

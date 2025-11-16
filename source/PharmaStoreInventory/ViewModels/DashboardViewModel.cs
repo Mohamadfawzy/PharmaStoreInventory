@@ -199,7 +199,7 @@ public partial class DashboardViewModel : BaseViewModel
     {
         if(!CanBeginStartStock())
         {
-            Notfication("لا يوجد اي فاتورة ارصدة", "قم بإنشاء فاتورة ارصدة أولا");
+            Notfication("لا يوجد فاتورة أرصدة نشطة", "قم بإنشاء فاتورة ارصدة أولا");
             return;
         }
 
@@ -214,7 +214,7 @@ public partial class DashboardViewModel : BaseViewModel
     {
         if (!CanBeginStartStock())
         {
-            Notfication("لا يوجد اي فاتورة ارصدة", "قم بإنشاء فاتورة ارصدة أولا");
+            Notfication("لا يوجد فاتورة أرصدة نشطة", "قم بإنشاء فاتورة ارصدة أولا");
             return;
         }
         if (Application.Current != null && Application.Current.MainPage != null)
@@ -309,6 +309,7 @@ public partial class DashboardViewModel : BaseViewModel
 
                     }
                 });
+                ExecuteCRefresh();
                 ConfirmNewInventoryExecutionVisibility = false;
             }
         }

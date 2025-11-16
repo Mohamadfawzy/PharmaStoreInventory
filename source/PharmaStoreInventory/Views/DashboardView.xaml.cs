@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Messages;
 using PharmaStoreInventory.ViewModels;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace PharmaStoreInventory.Views;
@@ -52,6 +53,11 @@ public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotifi
 
             }
         });
+        if (IsLatestStartStockDateNotToday())
+        {
+            AppPreferences.StartStockId = 0;
+        }
+        ;
             //mode = "inventory";
             //SwetchBetwwen2Tabps();
             //ResetAllStyles();
@@ -221,5 +227,29 @@ public partial class DashboardView : ContentPage, IRecipient<DashboardViewNotifi
         }
     }
 
-   
+
+    public static bool IsLatestStartStockDateNotToday()
+    {
+        // إذا لم يكن هناك تاريخ محفوظ
+        if (string.IsNullOrWhiteSpace(AppPreferences.LatestStartStockDate))
+            return true;
+
+        // محاولة تحويل النص إلى تاريخ
+        if (!DateTime.TryParseExact(
+                AppPreferences.LatestStartStockDate,
+                "dd-MM-yyyy",
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out DateTime savedDate))
+        {
+            // إذا حدث خطأ في التحويل اعتبره ليس تاريخ اليوم
+            return true;
+        }
+
+        // مقارنة التاريخ المحفوظ بتاريخ اليوم (بدون وقت)
+        return savedDate.Date != DateTime.Now.Date;
+    }
+
+
+
 }

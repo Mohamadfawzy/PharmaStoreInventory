@@ -1,63 +1,57 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView
-    x:Class="PharmaStoreInventory.Views.Templates.AnimatedInput"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
-    x:Name="ThisPage">
-    <Grid
-        x:Name="container"
-        Padding="0,0,0,15"
-        RowDefinitions="*,Auto"
-        BindingContext="{x:Reference ThisPage}">
+<ContentView x:Class="PharmaStoreInventory.Views.Templates.AnimatedInput"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:icon="clr-namespace:DrasatHealthMobile.Helpers"
+             x:Name="ThisPage">
+    <Grid x:Name="container"
+          Padding="0,0,0,15"
+          RowDefinitions="*,Auto"
+          BindingContext="{x:Reference ThisPage}">
 
         <!--  InvalidMessage  -->
-        <Label
-            x:Name="error"
-            Grid.Row="1"
-            Margin="10,0"
-            TextColor="{StaticResource ErrorColor}"
-            HorizontalOptions="Start"
-            VerticalOptions="End"
-            Opacity="0"
-            HeightRequest="0"
-            FontFamily="{StaticResource KufiRegular}"
-            FontSize="{StaticResource Small}"
-            IsVisible="False"
-            Text="{Binding ErrorMessage}" />
+        <Label x:Name="error"
+               Grid.Row="1"
+               Margin="10,0"
+               TextColor="{StaticResource ErrorColor}"
+               HorizontalOptions="Start"
+               VerticalOptions="End"
+               Opacity="0"
+               HeightRequest="0"
+               FontFamily="{StaticResource KufiRegular}"
+               FontSize="{StaticResource Small}"
+               IsVisible="False"
+               Text="{Binding ErrorMessage}" />
 
-        <Border
-            x:Name="border"
-            Stroke="{Binding UnFocusColor}"
-            StrokeThickness="1"
-            StrokeShape="RoundRectangle 10"
-            HorizontalOptions="Fill"
-            VerticalOptions="Center"
-            BackgroundColor="{Binding InputBackgroundColor}"
-            HeightRequest="{Binding BorderHeight}">
+        <Border x:Name="border"
+                Stroke="{Binding UnFocusColor}"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 10"
+                HorizontalOptions="Fill"
+                VerticalOptions="Center"
+                BackgroundColor="{Binding InputBackgroundColor}"
+                HeightRequest="{Binding BorderHeight}">
             <StackLayout Orientation="Horizontal">
-                <Entry
-                    x:Name="entry"
-                    Margin="10,0"
-                    HorizontalOptions="FillAndExpand"
-                    TextChanged="InputTextChanged"
-                    VerticalTextAlignment="Center"
-                    VerticalOptions="Center"
-                    Text="{Binding InputText}"
-                    IsPassword="{Binding IsPassword}"
-                    Focused="Entry_Focused"
-                    Unfocused="Entry_Unfocused" />
+                <Entry x:Name="entry"
+                       Margin="10,0"
+                       HorizontalOptions="FillAndExpand"
+                       TextChanged="InputTextChanged"
+                       VerticalTextAlignment="Center"
+                       VerticalOptions="Center"
+                       Text="{Binding InputText}"
+                       IsPassword="{Binding IsPassword}"
+                       Focused="Entry_Focused"
+                       Unfocused="Entry_Unfocused" />
                 <!--  Eye Icon  -->
-                <Label
-                    x:Name="eyeIcon"
-                    Padding="20,00"
-                    IsVisible="{Binding HasEyeIcon}"
-                    FontFamily="IconFontMaterial"
-                    TextColor="{Binding UnFocusColor}"
-                    Text="{x:Static icon:IconFont.EyeOutline}"
-                    FontSize="20"
-                    VerticalTextAlignment="Center"
-                    VerticalOptions="Fill">
+                <Label x:Name="eyeIcon"
+                       Padding="20,00"
+                       IsVisible="{Binding HasEyeIcon}"
+                       FontFamily="IconFontMaterial"
+                       TextColor="{Binding UnFocusColor}"
+                       Text="{x:Static icon:IconFont.EyeOutline}"
+                       FontSize="20"
+                       VerticalTextAlignment="Center"
+                       VerticalOptions="Fill">
 
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Tapped="TogglePasswordVisibility" />
@@ -66,17 +60,16 @@
             </StackLayout>
         </Border>
         <!--  Placeholder Label  -->
-        <Label
-            x:Name="placeholder"
-            Margin="20,0"
-            Text="{Binding InputPlaceholder}"
-            TextColor="{Binding UnFocusColor}"
-            BackgroundColor="{Binding InputBackgroundColor}"
-            HorizontalOptions="Start"
-            VerticalOptions="Center"
-            VerticalTextAlignment="Center"
-            FontFamily="{StaticResource KufiRegular}"
-            FontSize="{StaticResource Body}" />
+        <Label x:Name="placeholder"
+               Margin="20,0"
+               Text="{Binding InputPlaceholder}"
+               TextColor="{Binding UnFocusColor}"
+               BackgroundColor="{Binding InputBackgroundColor}"
+               HorizontalOptions="Start"
+               VerticalOptions="Center"
+               VerticalTextAlignment="Center"
+               FontFamily="{StaticResource KufiRegular}"
+               FontSize="{StaticResource Body}" />
 
 
     </Grid>

@@ -1,5 +1,4 @@
 ﻿namespace PharmaStoreInventory.Views.Templates;
-using CommunityToolkit.Maui.Core.Platform;
 using Microsoft.Maui.Controls;
 using PharmaStoreInventory.Helpers;
 using PharmaStoreInventory.Validations;

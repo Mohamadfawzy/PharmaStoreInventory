@@ -20,7 +20,7 @@ public partial class EditProAmountView : ContentPage, IRecipient<NotificationMes
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            notification.Display(message.Value);
+            notification.Display(message.Value, true);
         });
     }
 
